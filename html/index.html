@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>餐厅应用</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!-- 1. 登录注册界面 -->
+    <div class="screen active" id="login">
+        <div class="login-container">
+            <div class="login-card">
+                <h1 class="login-title">欢迎回来</h1>
+                <div class="text-field">
+                    <input type="email" placeholder=" " id="email">
+                    <label>邮箱</label>
+                </div>
+                <div class="text-field">
+                    <input type="password" placeholder=" " id="password">
+                    <label>密码</label>
+                </div>
+                <div class="login-buttons">
+                    <button class="btn btn-primary" onclick="showScreen('shops')">登录</button>
+                    <button class="btn btn-outlined">注册</button>
+                    <button class="btn btn-secondary">忘记密码？</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 店铺列表界面 -->
+    <div class="screen" id="shops">
+        <div class="app-bar">
+            <span class="title">附近店铺</span>
+            <span class="material-icons">search</span>
+        </div>
+        <div class="content">
+            <div class="grid">
+                <div class="card" onclick="showScreen('shopDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">川</div>
+                        <div>
+                            <div class="card-title">川味轩</div>
+                            <div class="card-subtitle">川菜 · 500m</div>
+                        </div>
+                    </div>
+                    <p>正宗川菜，麻辣鲜香，环境优雅</p>
+                </div>
+                
+                <div class="card" onclick="showScreen('shopDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">粤</div>
+                        <div>
+                            <div class="card-title">粤港茶餐厅</div>
+                            <div class="card-subtitle">粤菜 · 800m</div>
+                        </div>
+                    </div>
+                    <p>地道港式茶餐厅，点心精美</p>
+                </div>
+                
+                <div class="card" onclick="showScreen('shopDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">意</div>
+                        <div>
+                            <div class="card-title">意大利餐厅</div>
+                            <div class="card-subtitle">西餐 · 1.2km</div>
+                        </div>
+                    </div>
+                    <p>正宗意大利风味，浪漫用餐环境</p>
+                </div>
+                
+                <div class="card" onclick="showScreen('shopDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">日</div>
+                        <div>
+                            <div class="card-title">和风料理</div>
+                            <div class="card-subtitle">日料 · 600m</div>
+                        </div>
+                    </div>
+                    <p>新鲜刺身，精致日式料理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 店铺详情界面 -->
+    <div class="screen" id="shopDetail">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('shops')">arrow_back</span>
+            <span class="title">川味轩</span>
+        </div>
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-avatar">川</div>
+                    <div>
+                        <div class="card-title">川味轩</div>
+                        <div class="card-subtitle">川菜 · 营业中</div>
+                    </div>
+                </div>
+                <p>正宗川菜，麻辣鲜香，环境优雅。本店自1995年创立以来，一直坚持传统工艺，选用优质食材，为顾客提供最地道的川菜体验。</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">店铺信息</h3>
+                <div class="list-item">
+                    <span class="material-icons list-item-icon">location_on</span>
+                    <div class="list-item-text">
+                        <div>地址：市中心街道123号</div>
+                        <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">距离您500m</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <span class="material-icons list-item-icon">schedule</span>
+                    <div class="list-item-text">
+                        <div>营业时间：10:00 - 22:00</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <span class="material-icons list-item-icon">phone</span>
+                    <div class="list-item-text">
+                        <div>电话：(021) 1234-5678</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">推荐菜品</h3>
+                <div class="grid">
+                    <div style="padding: 8px; border-radius: 8px; background-color: var(--md-sys-color-surface-variant);">
+                        <div style="font-weight: 500;">宫保鸡丁</div>
+                        <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">经典川菜</div>
+                    </div>
+                    <div style="padding: 8px; border-radius: 8px; background-color: var(--md-sys-color-surface-variant);">
+                        <div style="font-weight: 500;">麻婆豆腐</div>
+                        <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant);">招牌菜品</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; margin-top: 24px;">
+                <button class="btn btn-primary" onclick="showScreen('shopFeatures')" style="flex: 1;">
+                    <span class="material-icons">store</span>
+                    进入店铺
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 店铺功能界面 -->
+    <div class="screen" id="shopFeatures">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('shopDetail')">arrow_back</span>
+            <span class="title">川味轩</span>
+        </div>
+        <div class="content">
+            <div class="grid">
+                <div class="card" onclick="showScreen('reviews')">
+                    <div class="card-header">
+                        <span class="material-icons" style="font-size: 32px; color: var(--md-sys-color-primary);">star</span>
+                        <div>
+                            <div class="card-title">查看评论</div>
+                            <div class="card-subtitle">4.8分 · 128条评论</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" onclick="showScreen('chatVerify')">
+                    <div class="card-header">
+                        <span class="material-icons" style="font-size: 32px; color: var(--md-sys-color-primary);">chat</span>
+                        <div>
+                            <div class="card-title">即时聊天</div>
+                            <div class="card-subtitle">与店员实时交流</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" onclick="showScreen('staff')">
+                    <div class="card-header">
+                        <span class="material-icons" style="font-size: 32px; color: var(--md-sys-color-primary);">people</span>
+                        <div>
+                            <div class="card-title">查看店员</div>
+                            <div class="card-subtitle">在线店员列表</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="material-icons" style="font-size: 32px; color: var(--md-sys-color-primary);">restaurant_menu</span>
+                        <div>
+                            <div class="card-title">查看菜单</div>
+                            <div class="card-subtitle">浏览所有菜品</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 店铺评论界面 -->
+    <div class="screen" id="reviews">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('shopFeatures')">arrow_back</span>
+            <span class="title">用户评论</span>
+        </div>
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-avatar">李</div>
+                    <div>
+                        <div class="card-title">李先生</div>
+                        <div class="card-subtitle">
+                            <span style="color: #ff9800;">★★★★★</span> 
+                            2024-01-15
+                        </div>
+                    </div>
+                </div>
+                <p>味道很正宗，服务态度也很好，环境优雅，会再次光临！</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-avatar">王</div>
+                    <div>
+                        <div class="card-title">王女士</div>
+                        <div class="card-subtitle">
+                            <span style="color: #ff9800;">★★★★☆</span> 
+                            2024-01-14
+                        </div>
+                    </div>
+                </div>
+                <p>菜品分量足，价格合理，就是上菜速度稍慢，总体满意。</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-avatar">张</div>
+                    <div>
+                        <div class="card-title">张同学</div>
+                        <div class="card-subtitle">
+                            <span style="color: #ff9800;">★★★★★</span> 
+                            2024-01-13
+                        </div>
+                    </div>
+                </div>
+                <p>第一次来这家店，宫保鸡丁做得特别好，下次还会带朋友来。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. 店员列表界面 -->
+    <div class="screen" id="staff">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('shopFeatures')">arrow_back</span>
+            <span class="title">店员列表</span>
+        </div>
+        <div class="content">
+            <div class="grid">
+                <div class="card" onclick="showScreen('staffDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">小</div>
+                        <div>
+                            <div class="card-title">小张</div>
+                            <div class="card-subtitle">服务员 · 在线</div>
+                        </div>
+                    </div>
+                    <p>工作经验3年，熟悉所有菜品，服务热情</p>
+                </div>
+                
+                <div class="card" onclick="showScreen('staffDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">小</div>
+                        <div>
+                            <div class="card-title">小李</div>
+                            <div class="card-subtitle">领班 · 在线</div>
+                        </div>
+                    </div>
+                    <p>工作经验5年，可以为您推荐最适合的菜品</p>
+                </div>
+                
+                <div class="card" onclick="showScreen('staffDetail')">
+                    <div class="card-header">
+                        <div class="card-avatar">小</div>
+                        <div>
+                            <div class="card-title">小王</div>
+                            <div class="card-subtitle">服务员 · 忙碌</div>
+                        </div>
+                    </div>
+                    <p>工作经验2年，专业细致，深受顾客好评</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. 聊天验证界面 -->
+    <div class="screen" id="chatVerify">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('shopFeatures')">arrow_back</span>
+            <span class="title">聊天验证</span>
+        </div>
+        <div class="content">
+            <div class="login-card" style="margin-top: 80px;">
+                <h2 style="text-align: center; margin-bottom: 24px;">请输入验证码</h2>
+                <p style="text-align: center; color: var(--md-sys-color-on-surface-variant); margin-bottom: 32px;">
+                    验证码已发送到您的手机
+                </p>
+                <div class="text-field">
+                    <input type="text" placeholder=" " id="verifyCode" maxlength="6">
+                    <label>验证码</label>
+                </div>
+                <button class="btn btn-primary" onclick="showScreen('chat')" style="width: 100%; margin-top: 16px;">
+                    验证并进入聊天
+                </button>
+                <button class="btn btn-outlined" style="width: 100%; margin-top: 16px;">
+                    重新发送验证码
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. 即时聊天界面 -->
+    <div class="screen" id="chat">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('shopFeatures')">arrow_back</span>
+            <span class="title">与小张聊天</span>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message received">
+                    您好！欢迎来到川味轩，请问有什么可以帮您的吗？
+                </div>
+                <div class="message sent">
+                    你好，我想了解一下你们店的招牌菜
+                </div>
+                <div class="message received">
+                    我们的招牌菜有宫保鸡丁、麻婆豆腐、水煮鱼等，都是正宗的川菜做法，您比较喜欢哪种口味呢？
+                </div>
+                <div class="message sent">
+                    我比较喜欢不太辣的
+                </div>
+                <div class="message received">
+                    那我推荐您试试我们的糖醋里脊和口水鸡，这两道菜相对温和一些，味道也很不错。
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="输入消息..." id="messageInput">
+                <button onclick="sendMessage()">
+                    <span class="material-icons">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. 店员详情界面 -->
+    <div class="screen" id="staffDetail">
+        <div class="app-bar">
+            <span class="material-icons" onclick="showScreen('staff')">arrow_back</span>
+            <span class="title">店员详情</span>
+        </div>
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-avatar" style="width: 80px; height: 80px; font-size: 32px;">小</div>
+                    <div>
+                        <div class="card-title" style="font-size: 24px;">小张</div>
+                        <div class="card-subtitle">服务员 · 在线</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">个人信息</h3>
+                <div class="list-item">
+                    <span class="material-icons list-item-icon">work</span>
+                    <div class="list-item-text">
+                        <div>工作经验：3年</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <span class="material-icons list-item-icon">star</span>
+                    <div class="list-item-text">
+                        <div>服务评分：4.9分</div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <span class="material-icons list-item-icon">language</span>
+                    <div class="list-item-text">
+                        <div>语言：中文、英文</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">专业技能</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span style="padding: 4px 12px; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: 16px; font-size: 12px;">菜品推荐</span>
+                    <span style="padding: 4px 12px; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: 16px; font-size: 12px;">过敏咨询</span>
+                    <span style="padding: 4px 12px; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: 16px; font-size: 12px;">口味调整</span>
+                    <span style="padding: 4px 12px; background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: 16px; font-size: 12px;">订座服务</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">服务评价</h3>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 4px;">顾客评价</div>
+                    <div style="font-size: 16px;">"服务很棒，推荐的菜品都很合我口味！"</div>
+                    <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">- 王女士</div>
+                </div>
+                <div>
+                    <div style="font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 4px;">顾客评价</div>
+                    <div style="font-size: 16px;">"很专业，解答了我关于菜品的所有疑问。"</div>
+                    <div style="font-size: 12px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px;">- 李先生</div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 16px; margin-top: 24px;">
+                <button class="btn btn-primary" onclick="showScreen('chatVerify')" style="flex: 1;">
+                    <span class="material-icons">chat</span>
+                    开始聊天
+                </button>
+                <button class="btn btn-outlined" style="flex: 1;">
+                    <span class="material-icons">star</span>
+                    收藏
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 屏幕切换功能
+        function showScreen(screenId) {
+            // 隐藏所有屏幕
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // 显示指定屏幕
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // 发送消息功能
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const message = messageInput.value.trim();
+            
+            if (message) {
+                // 添加发送的消息
+                const sentMessage = document.createElement('div');
+                sentMessage.className = 'message sent';
+                sentMessage.textContent = message;
+                chatMessages.appendChild(sentMessage);
+                
+                // 清空输入框
+                messageInput.value = '';
+                
+                // 模拟接收回复
+                setTimeout(() => {
+                    const receivedMessage = document.createElement('div');
+                    receivedMessage.className = 'message received';
+                    receivedMessage.textContent = '好的，我已经记录了您的需求，稍后为您安排。';
+                    chatMessages.appendChild(receivedMessage);
+                    
+                    // 滚动到底部
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // 回车发送消息
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        // 添加一些交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有按钮添加点击效果
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 100);
+                });
+            });
+
+            // 为卡片添加点击效果
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

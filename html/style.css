@@ -1,0 +1,367 @@
+ * {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+ }
+
+ body {
+   font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+   background-color: #fef7ff;
+   color: #1d1b20;
+   line-height: 1.5;
+ }
+
+ /* Material 3 Color Tokens */
+ :root {
+   --md-sys-color-primary: #6750a4;
+   --md-sys-color-on-primary: #ffffff;
+   --md-sys-color-primary-container: #eaddff;
+   --md-sys-color-on-primary-container: #21005d;
+   --md-sys-color-secondary: #625b71;
+   --md-sys-color-on-secondary: #ffffff;
+   --md-sys-color-secondary-container: #e8def8;
+   --md-sys-color-on-secondary-container: #1d192b;
+   --md-sys-color-surface: #fef7ff;
+   --md-sys-color-on-surface: #1d1b20;
+   --md-sys-color-surface-variant: #e7e0ec;
+   --md-sys-color-on-surface-variant: #49454f;
+   --md-sys-color-outline: #79747e;
+   --md-sys-color-outline-variant: #cab6cf;
+ }
+
+ .screen {
+   display: none;
+   min-height: 100vh;
+   background-color: var(--md-sys-color-surface);
+ }
+
+ .screen.active {
+   display: flex;
+   flex-direction: column;
+ }
+
+ /* Top App Bar */
+ .app-bar {
+   background-color: var(--md-sys-color-surface);
+   padding: 16px 24px;
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   z-index: 100;
+ }
+
+ .app-bar .material-icons {
+   font-size: 24px;
+   color: var(--md-sys-color-on-surface);
+   cursor: pointer;
+ }
+
+ .app-bar .title {
+   font-size: 22px;
+   font-weight: 400;
+   color: var(--md-sys-color-on-surface);
+   flex: 1;
+ }
+
+ /* Content Area */
+ .content {
+   flex: 1;
+   padding: 24px;
+   overflow-y: auto;
+ }
+
+ /* Buttons */
+ .btn {
+   padding: 10px 24px;
+   border: none;
+   border-radius: 20px;
+   font-size: 14px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   justify-content: center;
+   min-height: 40px;
+ }
+
+ .btn-primary {
+   background-color: var(--md-sys-color-primary);
+   color: var(--md-sys-color-on-primary);
+ }
+
+ .btn-primary:hover {
+   background-color: #5a4297;
+   box-shadow: 0 2px 8px rgba(103, 80, 164, 0.3);
+ }
+
+ .btn-secondary {
+   background-color: var(--md-sys-color-secondary-container);
+   color: var(--md-sys-color-on-secondary-container);
+ }
+
+ .btn-outlined {
+   background-color: transparent;
+   color: var(--md-sys-color-primary);
+   border: 1px solid var(--md-sys-color-outline);
+ }
+
+ /* Text Fields */
+ .text-field {
+   position: relative;
+   margin-bottom: 16px;
+ }
+
+ .text-field input {
+   width: 100%;
+   padding: 16px 16px 16px 16px;
+   border: 1px solid var(--md-sys-color-outline);
+   border-radius: 4px;
+   font-size: 16px;
+   background-color: var(--md-sys-color-surface);
+   color: var(--md-sys-color-on-surface);
+   transition: border-color 0.2s ease;
+ }
+
+ .text-field input:focus {
+   outline: none;
+   border-color: var(--md-sys-color-primary);
+   border-width: 2px;
+ }
+
+ .text-field label {
+   position: absolute;
+   left: 16px;
+   top: 16px;
+   font-size: 16px;
+   color: var(--md-sys-color-on-surface-variant);
+   transition: all 0.2s ease;
+   pointer-events: none;
+ }
+
+ .text-field input:focus+label,
+ .text-field input:not(:placeholder-shown)+label {
+   top: -8px;
+   left: 12px;
+   font-size: 12px;
+   color: var(--md-sys-color-primary);
+   background-color: var(--md-sys-color-surface);
+   padding: 0 4px;
+ }
+
+ /* Cards */
+ .card {
+   background-color: var(--md-sys-color-surface);
+   border-radius: 12px;
+   padding: 16px;
+   margin-bottom: 16px;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+   transition: box-shadow 0.2s ease;
+   cursor: pointer;
+ }
+
+ .card:hover {
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+ }
+
+ .card-header {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   margin-bottom: 12px;
+ }
+
+ .card-avatar {
+   width: 48px;
+   height: 48px;
+   border-radius: 24px;
+   background-color: var(--md-sys-color-primary-container);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: var(--md-sys-color-on-primary-container);
+   font-size: 20px;
+   font-weight: 500;
+ }
+
+ .card-title {
+   font-size: 16px;
+   font-weight: 500;
+   color: var(--md-sys-color-on-surface);
+ }
+
+ .card-subtitle {
+   font-size: 14px;
+   color: var(--md-sys-color-on-surface-variant);
+ }
+
+ /* List Items */
+ .list-item {
+   display: flex;
+   align-items: center;
+   gap: 16px;
+   padding: 16px;
+   border-radius: 8px;
+   cursor: pointer;
+   transition: background-color 0.2s ease;
+ }
+
+ .list-item:hover {
+   background-color: var(--md-sys-color-surface-variant);
+ }
+
+ .list-item-icon {
+   width: 24px;
+   height: 24px;
+   color: var(--md-sys-color-on-surface-variant);
+ }
+
+ .list-item-text {
+   flex: 1;
+ }
+
+ /* Grid */
+ .grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+   gap: 16px;
+ }
+
+ /* Chat */
+ .chat-container {
+   flex: 1;
+   display: flex;
+   flex-direction: column;
+   background-color: var(--md-sys-color-surface);
+ }
+
+ .chat-messages {
+   flex: 1;
+   padding: 16px;
+   overflow-y: auto;
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+ }
+
+ .message {
+   max-width: 70%;
+   padding: 12px 16px;
+   border-radius: 18px;
+   font-size: 14px;
+   line-height: 1.4;
+ }
+
+ .message.sent {
+   align-self: flex-end;
+   background-color: var(--md-sys-color-primary);
+   color: var(--md-sys-color-on-primary);
+ }
+
+ .message.received {
+   align-self: flex-start;
+   background-color: var(--md-sys-color-surface-variant);
+   color: var(--md-sys-color-on-surface);
+ }
+
+ .chat-input {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   padding: 16px;
+   background-color: var(--md-sys-color-surface);
+   border-top: 1px solid var(--md-sys-color-outline-variant);
+ }
+
+ .chat-input input {
+   flex: 1;
+   padding: 12px 16px;
+   border: 1px solid var(--md-sys-color-outline);
+   border-radius: 24px;
+   font-size: 14px;
+   background-color: var(--md-sys-color-surface);
+ }
+
+ .chat-input button {
+   width: 48px;
+   height: 48px;
+   border-radius: 24px;
+   border: none;
+   background-color: var(--md-sys-color-primary);
+   color: var(--md-sys-color-on-primary);
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ /* Login Screen Specific */
+ .login-container {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   min-height: 100vh;
+   padding: 24px;
+ }
+
+ .login-card {
+   width: 100%;
+   max-width: 400px;
+   background-color: var(--md-sys-color-surface);
+   border-radius: 16px;
+   padding: 32px;
+   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+ }
+
+ .login-title {
+   font-size: 28px;
+   font-weight: 400;
+   color: var(--md-sys-color-on-surface);
+   text-align: center;
+   margin-bottom: 32px;
+ }
+
+ .login-buttons {
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+   margin-top: 24px;
+ }
+
+ /* Floating Action Button */
+ .fab {
+   position: fixed;
+   bottom: 24px;
+   right: 24px;
+   width: 56px;
+   height: 56px;
+   border-radius: 16px;
+   background-color: var(--md-sys-color-primary);
+   color: var(--md-sys-color-on-primary);
+   border: none;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 24px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   transition: all 0.2s ease;
+ }
+
+ .fab:hover {
+   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+ }
+
+ /* Responsive */
+ @media (max-width: 768px) {
+   .content {
+     padding: 16px;
+   }
+
+   .grid {
+     grid-template-columns: 1fr;
+   }
+ }

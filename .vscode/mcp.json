@@ -1,0 +1,23 @@
+{
+	"servers": {
+		"API文档": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"apifox-mcp-server@0.0.16",
+				"--project-id=6459698"
+			],
+			"env": {
+				"APIFOX_ACCESS_TOKEN": "${input:apifox_access_token}"
+			},
+			"type": "stdio"
+		}
+	},
+	"inputs": [
+		{
+			"id": "apifox_access_token",
+			"type": "promptString",
+			"description": "请输入 Apifox API 访问令牌 (Access Token)"
+		}
+	]
+}
