@@ -62,13 +62,13 @@ class TextFieldWidgetState extends State<TextFieldWidget> {
         readOnly: widget.readOnly,
         onTap: widget.onTap,
         validator: widget.validator,
-        style: AppTextStyles.bodyMedium,
+        style: AppTextStyles.inputText,
         decoration: InputDecoration(
           labelText: widget.label,
-          labelStyle: TextStyle(
+          labelStyle: AppTextStyles.inputLabel.copyWith(
             color: _focusNode.hasFocus ? AppColors.primary : AppColors.onSurfaceVariant,
           ),
-          floatingLabelStyle: TextStyle(
+          floatingLabelStyle: AppTextStyles.inputLabel.copyWith(
             color: AppColors.primary,
           ),
           prefixIcon: widget.prefixIcon != null
@@ -81,26 +81,27 @@ class TextFieldWidgetState extends State<TextFieldWidget> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.outlineVariant, width: 1),
+            borderSide: const BorderSide(color: AppColors.outlineVariant, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.primary, width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.outlineVariant, width: 1),
+            borderSide: const BorderSide(color: AppColors.outlineVariant, width: 1),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.error, width: 1),
+            borderSide: const BorderSide(color: AppColors.error, width: 1),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.error, width: 2),
+            borderSide: const BorderSide(color: AppColors.error, width: 2),
           ),
-          fillColor: AppColors.surface,
+          fillColor: AppColors.grey100, // 使用浅灰色填充
           filled: true,
+          hintStyle: AppTextStyles.inputHint,
         ),
       ),
     );

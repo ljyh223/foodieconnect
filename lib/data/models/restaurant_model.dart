@@ -10,8 +10,11 @@ class Restaurant {
   final double rating;
   final int reviewCount;
   final bool isOpen;
-  final String avatar;
+  final String? avatar; // 改为可空类型，与API保持一致
   final List<String> recommendedDishes;
+  final double? averagePrice;
+  final String? createdAt;
+  final String? updatedAt;
   
   Restaurant({
     required this.id,
@@ -25,8 +28,11 @@ class Restaurant {
     required this.rating,
     required this.reviewCount,
     required this.isOpen,
-    required this.avatar,
+    this.avatar, // 改为可选参数
     required this.recommendedDishes,
+    this.averagePrice, // 人均消费价格，可选参数
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -48,19 +54,22 @@ class Restaurant {
     }
 
     return Restaurant(
-      id: json['id'],
-      name: json['name'] ?? '',
-      type: json['type'] ?? '',
-      distance: json['distance'] ?? '',
-      description: json['description'] ?? '',
-      address: json['address'] ?? '',
-      phone: json['phone'] ?? '',
-      hours: json['hours'] ?? '',
+      id: json['id'], // 提供默认值
+      name: json['name'],
+      type: json['type'],
+      distance: json['distance'],
+      description: json['description'],
+      address: json['address'],
+      phone: json['phone'] ,
+      hours: json['hours'],
       rating: (json['rating'] ?? 0.0).toDouble(),
       reviewCount: json['reviewCount'] ?? 0,
       isOpen: json['isOpen'] ?? false,
-      avatar: json['avatar'] ?? '',
+      avatar: json['avatar'], // 直接使用，允许为null
       recommendedDishes: recommendedDishes,
+      averagePrice: json['averagePrice']?.toDouble(), // 从API获取人均消费价格
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 
@@ -79,6 +88,9 @@ class Restaurant {
       'isOpen': isOpen,
       'avatar': avatar,
       'recommendedDishes': recommendedDishes,
+      'averagePrice': averagePrice,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
@@ -96,6 +108,9 @@ class Restaurant {
     bool? isOpen,
     String? avatar,
     List<String>? recommendedDishes,
+    double? averagePrice,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return Restaurant(
       id: id ?? this.id,
@@ -111,6 +126,9 @@ class Restaurant {
       isOpen: isOpen ?? this.isOpen,
       avatar: avatar ?? this.avatar,
       recommendedDishes: recommendedDishes ?? this.recommendedDishes,
+      averagePrice: averagePrice ?? this.averagePrice,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

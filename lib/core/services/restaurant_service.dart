@@ -35,18 +35,31 @@ class RestaurantService {
     final dynamic payload = res['data'] ?? res;
     if (payload is! Map<String, dynamic>) throw Exception('获取餐厅详情失败');
     
-    // 根据API文档，data字段包含restaurant和recommendedDishes两个字段
-    if (payload.containsKey('restaurant')) {
-      final restaurantData = payload['restaurant'] as Map<String, dynamic>;
-      // 如果API返回了recommendedDishes，将其合并到餐厅数据中
-      if (payload.containsKey('recommendedDishes')) {
-        restaurantData['recommendedDishes'] = payload['recommendedDishes'];
+    // 根据API文档，data字段包含餐厅信息
+    // 尝试获取推荐菜品（如果API返回了）
+    List<String> recommendedDishes = [];
+    if (payload.containsKey('recommendedDishes')) {
+      final dishes = payload['recommendedDishes'] as List<dynamic>?;
+      if (dishes != null) {
+        for (var dish in dishes) {
+          if (dish is String) {
+            recommendedDishes.add(dish);
+          } else if (dish is Map<String, dynamic>) {
+            // 如果是对象，尝试提取name字段
+            final name = dish['name'] ?? dish['dishName'] ?? '';
+            if (name.isNotEmpty) {
+              recommendedDishes.add(name);
+            }
+          }
+        }
       }
-      return Restaurant.fromJson(restaurantData);
-    } else {
-      // 如果没有restaurant字段，假设payload本身就是餐厅数据（向后兼容）
-      return Restaurant.fromJson(payload);
     }
+    
+    // 创建餐厅对象，并添加推荐菜品
+    final restaurantData = Map<String, dynamic>.from(payload['restaurant']);
+    restaurantData['recommendedDishes'] = recommendedDishes;
+    
+    return Restaurant.fromJson(restaurantData);
   }
 
   /// 获取热门餐厅
@@ -55,5 +68,57 @@ class RestaurantService {
     final dynamic payload = (res is Map<String, dynamic> && res.containsKey('data')) ? res['data'] : res;
     final List<dynamic> list = payload is List ? payload : (payload is Map<String, dynamic> ? (payload['content'] as List<dynamic>? ?? []) : []);
     return list.map((e) => Restaurant.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  /// 获取餐厅菜单
+  static Future<Map<String, dynamic>> getMenu(String restaurantId) async {
+    try {
+      final res = await _api.get('${AppConstants.restaurantsEndpoint}/$restaurantId/menu');
+      final dynamic payload = res['data'] ?? res;
+      if (payload is! Map<String, dynamic>) throw Exception('获取餐厅菜单失败');
+      return payload;
+    } catch (e) {
+      // 如果菜单API不存在或失败，返回空数据
+      throw Exception('菜单功能暂未开放');
+    }
+  }
+
+  /// 获取餐厅推荐菜品
+  static Future<List<String>> getRecommendedDishes(String restaurantId) async {
+    try {
+      final res = await _api.get('${AppConstants.restaurantsEndpoint}/$restaurantId/recommended-dishes');
+      final dynamic payload = res['data'] ?? res;
+      
+      if (payload is List) {
+        // 如果返回的是列表，直接处理
+        final List<String> result = payload.map((item) {
+          if (item is String) return item;
+          if (item is Map<String, dynamic>) {
+            return item['name'] ?? item['dishName'] ?? '';
+          }
+          return '';
+        }).where((name) => name.isNotEmpty).cast<String>().toList();
+        return result;
+      } else if (payload is Map<String, dynamic>) {
+        // 如果返回的是对象，尝试提取菜品列表
+        final dishes = payload['dishes'] ?? payload['recommendedDishes'] ?? [];
+        if (dishes is List) {
+          final List<String> result = dishes.map((item) {
+            if (item is String) return item;
+            if (item is Map<String, dynamic>) {
+              return item['name'] ?? item['dishName'] ?? '';
+            }
+            return '';
+          }).where((name) => name.isNotEmpty).cast<String>().toList();
+          return result;
+        }
+      }
+      
+      // 如果没有返回推荐菜品，返回空列表
+      return [];
+    } catch (e) {
+      // 如果推荐菜品API不存在或失败，返回空列表
+      return [];
+    }
   }
 }

@@ -10,6 +10,8 @@ import '../screens/chat_verify_screen.dart';
 import '../screens/chat_screen.dart';
 import '../screens/staff_detail_screen.dart';
 import '../screens/register_screen.dart';
+import '../screens/restaurant_info_screen.dart';
+import '../screens/create_review_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -54,6 +56,16 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder: (_) => StaffDetailScreen(staffId: args?['staffId']),
+        );
+      case '/restaurant_info':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => RestaurantInfoScreen(restaurantId: args?['restaurantId']),
+        );
+      case '/create_review':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => CreateReviewScreen(restaurantId: args?['restaurantId']),
         );
       default:
         return MaterialPageRoute(

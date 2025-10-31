@@ -1,18 +1,1 @@
-{
-  "mcpServers": {
-    "个人项目 - API 文档": {
-      "command": "cmd",
-      "args": [
-        "/c",
-        "npx",
-        "-y",
-        "apifox-mcp-server@latest",
-        "--project-id=6459698"
-      ],
-      "env": {
-        "APIFOX_ACCESS_TOKEN": "APS-6au6z1l04co9yTZC5uu7UIHqPZyiFHQ3"
-      },
-      "alwaysAllow": []
-    }
-  }
-}
+{"mcpServers":{"个人项目 - API 文档":{"command":"cmd","args":["/c","npx","-y","apifox-mcp-server@latest","--project-id=6459698"],"env":{"APIFOX_ACCESS_TOKEN":"APS-6au6z1l04co9yTZC5uu7UIHqPZyiFHQ3"},"alwaysAllow":["read_project_oas_ref_resources_yblknk","read_project_oas_cbjsyq","read_project_oas_ref_resources_cbjsyq"]}}}

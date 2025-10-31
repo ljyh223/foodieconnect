@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabletalk/core/services/api_service.dart';
+import '../data/models/review_model.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
@@ -35,6 +37,17 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
       appBar: AppBarWidget(
         title: '用户评论',
         showBackButton: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.send, color: Colors.black),
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                '/create_review',
+                arguments: {'restaurantId': widget.restaurantId},
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -112,16 +125,17 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                 review.comment,
                                 style: AppTextStyles.bodyMedium,
                               ),
+                              // 显示评价图片
+                              if (review.images.isNotEmpty) ...[
+                                const SizedBox(height: 12),
+                                _buildImageGrid(review.images),
+                              ],
                             ],
                           ),
                         );
                       },
                     ),
                   ),
-
-                  // 评论输入区
-                  const SizedBox(height: 12),
-                  _CommentInputSection(restaurantId: widget.restaurantId),
                 ],
               );
             },
@@ -144,78 +158,234 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     }
     return stars;
   }
-}
 
-class _CommentInputSection extends StatefulWidget {
-  final String? restaurantId;
-  const _CommentInputSection({this.restaurantId});
-
-  @override
-  State<_CommentInputSection> createState() => _CommentInputSectionState();
-}
-
-class _CommentInputSectionState extends State<_CommentInputSection> {
-  final TextEditingController _controller = TextEditingController();
-  double _rating = 5.0;
-  bool _submitting = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardWidget(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                const Text('评分：'),
-                Expanded(
-                  child: Slider(
-                    value: _rating,
-                    min: 1,
-                    max: 5,
-                    divisions: 4,
-                    label: _rating.toString(),
-                    onChanged: (v) => setState(() => _rating = v),
+  // 构建图片网格显示
+  Widget _buildImageGrid(List<ReviewImage> images) {
+    final int imageCount = images.length;
+    final List<String> imageUrls = images.map((image) => image.imageUrl).toList();
+    
+    if (imageCount == 1) {
+      // 单张图片，显示较大尺寸
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Image.network(
+          ApiService.getFullImageUrl(imageUrls[0]),
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              height: 200,
+              color: AppColors.surfaceVariant,
+              child: const Center(
+                child: Icon(Icons.broken_image, color: Colors.grey),
+              ),
+            );
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              height: 200,
+              color: AppColors.surfaceVariant,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        ),
+      );
+    } else if (imageCount <= 3) {
+      // 2-3张图片，水平排列
+      return SizedBox(
+        height: 120,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: imageCount,
+          separatorBuilder: (context, index) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.network(
+                ApiService.getFullImageUrl(imageUrls[index]),
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 120,
+                    height: 120,
+                    color: AppColors.surfaceVariant,
+                    child: const Center(
+                      child: Icon(Icons.broken_image, color: Colors.grey),
+                    ),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    width: 120,
+                    height: 120,
+                    color: AppColors.surfaceVariant,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      // 多张图片，使用网格布局
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 1.0,
+        ),
+        itemCount: imageCount > 9 ? 9 : imageCount,
+        itemBuilder: (context, index) {
+          if (index == 8 && imageCount > 9) {
+            // 第9个位置显示剩余图片数量
+            return GestureDetector(
+              onTap: () {
+                _showImageViewer(context, imageUrls, index);
+              },
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.6),
+                child: Center(
+                  child: Text(
+                    '+${imageCount - 9}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(_rating.toStringAsFixed(0)),
-              ],
+              ),
+            );
+          }
+          
+          return GestureDetector(
+            onTap: () {
+              _showImageViewer(context, imageUrls, index);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.network(
+                ApiService.getFullImageUrl(imageUrls[index]),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: AppColors.surfaceVariant,
+                    child: const Center(
+                      child: Icon(Icons.broken_image, color: Colors.grey),
+                    ),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    color: AppColors.surfaceVariant,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              ),
             ),
-            TextField(
-              controller: _controller,
-              minLines: 1,
-              maxLines: 4,
-              decoration: const InputDecoration(hintText: '写下你的评论...'),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: _submitting ? null : _submit,
-              child: _submitting ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)) : const Text('发布评论'),
-            ),
-          ],
+          );
+        },
+      );
+    }
+  }
+
+  // 显示图片查看器
+  void _showImageViewer(BuildContext context, List<String> images, int initialIndex) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => _ImageViewerScreen(
+          images: images,
+          initialIndex: initialIndex,
         ),
       ),
     );
   }
+}
 
-  Future<void> _submit() async {
-    final text = _controller.text.trim();
-    final restaurantId = widget.restaurantId;
-    if (restaurantId == null || restaurantId.isEmpty) return;
-    if (text.isEmpty) return;
+// 图片查看器页面
+class _ImageViewerScreen extends StatefulWidget {
+  final List<String> images;
+  final int initialIndex;
 
-    setState(() => _submitting = true);
-    try {
-      await Provider.of<ReviewProvider>(context, listen: false).postReview(restaurantId, _rating.toInt(), text);
-      _controller.clear();
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('评论已发布')));
-    } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('发布失败：${e.toString()}')));
-    } finally {
-      setState(() => _submitting = false);
-    }
+  const _ImageViewerScreen({
+    required this.images,
+    required this.initialIndex,
+  });
+
+  @override
+  State<_ImageViewerScreen> createState() => _ImageViewerScreenState();
+}
+
+class _ImageViewerScreenState extends State<_ImageViewerScreen> {
+  late PageController _pageController;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+    _pageController = PageController(initialPage: widget.initialIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        title: Text('${_currentIndex + 1} / ${widget.images.length}'),
+      ),
+      body: PageView.builder(
+        controller: _pageController,
+        itemCount: widget.images.length,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        itemBuilder: (context, index) {
+          return Center(
+            child: InteractiveViewer(
+              child: Image.network(
+                ApiService.getFullImageUrl(widget.images[index]),
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      color: Colors.white,
+                      size: 64,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

@@ -30,10 +30,14 @@ class CardWidget extends StatelessWidget {
         onTap: onTap,
         borderRadius: borderRadius ?? BorderRadius.circular(12),
         child: Card(
-          elevation: elevation ?? 1,
+          elevation: 0, // 扁平化设计，无阴影
           color: color ?? AppColors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
+            side: const BorderSide(
+              color: AppColors.outlineVariant, // 添加浅灰色边框
+              width: 1,
+            ),
           ),
           child: Padding(
             padding: padding ?? const EdgeInsets.all(16),
@@ -69,15 +73,20 @@ class CardHeader extends StatelessWidget {
           width: avatarSize,
           height: avatarSize,
           decoration: BoxDecoration(
-            color: avatarColor ?? AppColors.primaryContainer,
+            color: avatarColor ?? AppColors.grey200, // 使用浅灰色背景
             shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.outlineVariant, // 添加浅灰色边框
+              width: 1,
+            ),
           ),
           child: Center(
             child: Text(
               avatarText,
               style: AppTextStyles.titleMedium.copyWith(
-                color: AppColors.onPrimaryContainer,
+                color: AppColors.grey800, // 使用深灰色文字
                 fontSize: avatarSize * 0.4,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -129,13 +138,20 @@ class ListItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: AppColors.outlineVariant, // 添加浅灰色边框
+            width: 1,
+          ),
+        ),
         child: Row(
           children: [
             Icon(
               icon,
-              color: iconColor ?? AppColors.onSurfaceVariant,
+              color: iconColor ?? AppColors.grey600, // 使用中灰色图标
               size: 24,
             ),
             const SizedBox(width: 16),

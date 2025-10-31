@@ -6,7 +6,7 @@ class Staff {
   final String experience;
   final double rating;
   final String? restaurantId;
-  final String? avatarUrl;
+  final String? avatarUrl; // 头像URL字段，与API保持一致
   final List<String> skills;
   final List<String> languages;
   final List<StaffReview> reviews;
@@ -34,7 +34,7 @@ class Staff {
       experience: json['experience'] ?? '',
       rating: (json['rating'] ?? 0.0).toDouble(),
       restaurantId: (json['restaurantId'] ?? '').toString(),
-      avatarUrl: json['avatarUrl'],
+      avatarUrl: json['avatarUrl'], // 直接使用API返回的avatarUrl字段
       skills: List<String>.from(json['skills'] ?? []),
       languages: List<String>.from(json['languages'] ?? []),
       reviews: (json['reviews'] as List<dynamic>?)

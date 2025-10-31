@@ -2,14 +2,44 @@ import 'package:flutter/material.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../data/models/restaurant_model.dart';
-import '../presentation/widgets/app_bar_widget.dart';
-import '../presentation/widgets/card_widget.dart';
+import '../data/models/review_model.dart';
+import '../data/models/staff_model.dart';
 import '../core/services/restaurant_service.dart';
+import '../core/services/review_service.dart';
+import '../core/services/staff_service.dart';
+import '../core/services/api_service.dart';
+import 'dart:math';
 
 class ShopDetailScreen extends StatelessWidget {
   final String? restaurantId;
+  final Random _random = Random();
+  
+  // 随机在线图片列表
+  final List<String> _randomImages = [
+    'https://picsum.photos/seed/restaurant1/400/300.jpg',
+    'https://picsum.photos/seed/restaurant2/400/300.jpg',
+    'https://picsum.photos/seed/restaurant3/400/300.jpg',
+    'https://picsum.photos/seed/restaurant4/400/300.jpg',
+    'https://picsum.photos/seed/restaurant5/400/300.jpg',
+    'https://picsum.photos/seed/restaurant6/400/300.jpg',
+    'https://picsum.photos/seed/restaurant7/400/300.jpg',
+    'https://picsum.photos/seed/restaurant8/400/300.jpg',
+  ];
 
-  const ShopDetailScreen({super.key, this.restaurantId});
+  ShopDetailScreen({super.key, this.restaurantId});
+
+  /// 获取随机图片URL
+  String _getRandomImageUrl() {
+    return _randomImages[_random.nextInt(_randomImages.length)];
+  }
+
+  /// 获取餐厅图片URL，如果没有则使用随机图片
+  String _getRestaurantImageUrl(String? avatar) {
+    if (avatar != null && avatar.isNotEmpty) {
+      return ApiService.getFullImageUrl(avatar);
+    }
+    return _getRandomImageUrl();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +53,7 @@ class ShopDetailScreen extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
+          print('获取店铺信息失败：${snapshot.error}');
           return Scaffold(body: Center(child: Text('获取店铺信息失败：${snapshot.error}')));
         }
 
@@ -32,154 +63,598 @@ class ShopDetailScreen extends StatelessWidget {
           Navigator.pushNamed(
             context,
             '/shop_features',
-            arguments: {'restaurantId': restaurant.id},
+            arguments: {'restaurantId': restaurant.id.toString()},
+          );
+        }
+
+        void navigateToReviews() {
+          Navigator.pushNamed(
+            context,
+            '/reviews',
+            arguments: {'restaurantId': restaurant.id.toString()},
+          );
+        }
+
+        void navigateToChat() {
+          Navigator.pushNamed(
+            context,
+            '/chat',
+            arguments: {'restaurantId': restaurant.id.toString()},
+          );
+        }
+
+        void navigateToStaff() {
+          Navigator.pushNamed(
+            context,
+            '/staff',
+            arguments: {'restaurantId': restaurant.id.toString()},
+          );
+        }
+
+        void navigateToRestaurantInfo() {
+          Navigator.pushNamed(
+            context,
+            '/restaurant_info',
+            arguments: {'restaurantId': restaurant.id.toString()},
           );
         }
 
         return Scaffold(
-          backgroundColor: AppColors.surface,
-          appBar: AppBarWidget(
-            title: restaurant.name,
-            showBackButton: true,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true, // 店名居中
+            title: Text(
+              restaurant.name,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
           body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    CardWidget(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // 餐厅大图
+                  Container(
+                    width: double.infinity,
+                    height: 200,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(16),
+                      ),
+                      child: Image.network(
+                        _getRestaurantImageUrl(restaurant.avatar),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[200],
+                            child: Center(
+                              child: Text(
+                                restaurant.name.isNotEmpty ? restaurant.name.substring(0, 1) : '',
+                                style: const TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // 基础信息模块 - 无边框
+                  GestureDetector(
+                    onTap: navigateToRestaurantInfo,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              Container(
-                                width: 48,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryContainer,
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    restaurant.avatar,
-                                    style: TextStyle(
-                                      color: AppColors.onPrimaryContainer,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                              Icon(
+                                Icons.info_outline,
+                                color: Colors.black,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                '基础信息',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    restaurant.name,
-                                    style: AppTextStyles.titleMedium,
-                                  ),
-                                  Text(
-                                    '${restaurant.type} · ${restaurant.isOpen ? '营业中' : '已打烊'}',
-                                    style: AppTextStyles.bodySmall.copyWith(
-                                      color: AppColors.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ],
+                              const Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey[600],
+                                size: 16,
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            restaurant.description,
-                            style: AppTextStyles.bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    CardWidget(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            '店铺信息',
-                            style: AppTextStyles.titleMedium,
-                            textAlign: TextAlign.left,
-                          ),
-                          const SizedBox(height: 16),
-                          ListTile(
-                            leading: const Icon(Icons.location_on, size: 20),
-                            title: Text(restaurant.address),
-                            subtitle: Text('距离您${restaurant.distance}'),
-                            contentPadding: const EdgeInsets.all(0),
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.schedule, size: 20),
-                            title: Text('营业时间：${restaurant.hours}'),
-                            contentPadding: const EdgeInsets.all(0),
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.phone, size: 20),
-                            title: Text('电话：${restaurant.phone}'),
-                            contentPadding: const EdgeInsets.all(0),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    CardWidget(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            '推荐菜品',
-                            style: AppTextStyles.titleMedium,
-                            textAlign: TextAlign.left,
-                          ),
-                          const SizedBox(height: 16),
-                          Wrap(
-                            spacing: 8,
-                            children: restaurant.recommendedDishes.map((dish) {
-                              return Chip(
-                                label: Text(dish),
-                                backgroundColor: AppColors.surfaceVariant,
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: navigateToShopFeatures,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                        const SizedBox(height: 12),
+                        _buildInfoRow(
+                          icon: Icons.location_on,
+                          label: '地址',
+                          value: restaurant.address,
+                          subtitle: '距离您${restaurant.distance}',
                         ),
+                        _buildInfoRow(
+                          icon: Icons.schedule,
+                          label: '营业时间',
+                          value: restaurant.hours,
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.phone,
+                          label: '电话',
+                          value: restaurant.phone,
+                        ),
+                        _buildInfoRow(
+                          icon: Icons.star,
+                          label: '评分',
+                          value: '${restaurant.rating}/5.0',
+                          subtitle: '共${restaurant.reviewCount}条评价',
+                        ),
+                        ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // 菜肴点评模块 - 从接口获取
+                  GestureDetector(
+                    onTap: navigateToReviews,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.store, color: AppColors.onPrimary),
-                          const SizedBox(width: 8),
-                          Text(
-                            '进入店铺',
-                            style: TextStyle(
-                              color: AppColors.onPrimary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.menu_book,
+                                color: Colors.black,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                '菜肴点评',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.grey[600],
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        const SizedBox(height: 12),
+                        FutureBuilder<List<Review>>(
+                          future: ReviewService.listByRestaurant(restaurant.id.toString()),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            
+                            if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                              return const Text(
+                                '暂无评价',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            }
+                            
+                            final reviews = snapshot.data!.take(3).toList(); // 只显示前3条
+                            
+                            return Column(
+                              children: reviews.map((review) {
+                                return Container(
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // 用户头像
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(20),
+                                          child: review.userAvatar.isNotEmpty
+                                              ? Image.network(
+                                                  ApiService.getFullImageUrl(review.userAvatar),
+                                                  width: 40,
+                                                  height: 40,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return Center(
+                                                      child: Text(
+                                                        review.userName.isNotEmpty ? review.userName.substring(0, 1) : '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              : Center(
+                                                  child: Text(
+                                                    review.userName.isNotEmpty ? review.userName.substring(0, 1) : '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      
+                                      // 评价内容
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  review.userName,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Row(
+                                                  children: List.generate(5, (index) {
+                                                    return Icon(
+                                                      index < review.rating ? Icons.star : Icons.star_border,
+                                                      color: Colors.orange,
+                                                      size: 14,
+                                                    );
+                                                  }),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              review.comment,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black87,
+                                                height: 1.4,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // 聊天室模块 - 无边框
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.chat_bubble_outline,
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              '聊天室',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          '与店员实时沟通，了解更多详情',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: navigateToChat,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black, // 使用一致的颜色
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text(
+                              '进入聊天室',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // 店员评价模块 - 无边框
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.sentiment_neutral_outlined,
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              '店员评价',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        FutureBuilder<List<Staff>>(
+                          future: StaffService.listByRestaurant(restaurant.id.toString()),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            
+                            if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                              return Column(
+                                children: [
+                                  const Text(
+                                    '暂无店员信息',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: navigateToStaff,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '查看所有店员',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                            
+                            final staffList = snapshot.data!.take(3).toList(); // 只显示前3个店员
+                            
+                            return Column(
+                              children: [
+                                // 显示前3个店员
+                                ...staffList.map((staff) {
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // 店员头像
+                                        Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(20),
+                                            child: staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
+                                                ? Image.network(
+                                                    ApiService.getFullImageUrl(staff.avatarUrl!),
+                                                    width: 40,
+                                                    height: 40,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context, error, stackTrace) {
+                                                      return Center(
+                                                        child: Text(
+                                                          staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                      staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        
+                                        // 店员信息
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    staff.name,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    staff.position,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Row(
+                                                    children: List.generate(5, (index) {
+                                                      return Icon(
+                                                        index < staff.rating ? Icons.star : Icons.star_border,
+                                                        color: Colors.orange,
+                                                        size: 14,
+                                                      );
+                                                    }),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    '${staff.rating.toStringAsFixed(1)}',
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              if (staff.experience.isNotEmpty) ...[
+                                                const SizedBox(height: 2),
+                                                Text(
+                                                  '经验：${staff.experience}',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey[600],
+                                                  ),
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                                
+                                const SizedBox(height: 12),
+                                
+                                // 查看所有店员按钮
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: navigateToStaff,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '查看所有店员',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 20),
+                ],
               ),
             ),
           ),
@@ -187,4 +662,52 @@ class ShopDetailScreen extends StatelessWidget {
       },
     );
   }
+
+  /// 构建信息行
+  Widget _buildInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+    String? subtitle,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            icon,
+            size: 20,
+            color: Colors.grey[600],
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$label：$value',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }

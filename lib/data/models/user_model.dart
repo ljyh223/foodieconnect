@@ -3,7 +3,7 @@ class User {
   final String email;
   final String? phone;
   final String? displayName;
-  final String? avatarUrl;
+  final String? avatarUrl; // 头像URL字段，与API保持一致
   
   User({
     required this.id,
@@ -15,11 +15,11 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'] ?? '',
+      id: json['id'] ?? 0, // 修复：id应该是int类型
       email: json['email'] ?? '',
       phone: json['phone'],
       displayName: json['displayName'],
-      avatarUrl: json['avatarUrl'],
+      avatarUrl: json['avatarUrl'], // 直接使用API返回的avatarUrl字段
     );
   }
 

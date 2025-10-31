@@ -30,8 +30,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       centerTitle: false,
-      elevation: 0,
+      elevation: 0, // 扁平化设计，无阴影
       backgroundColor: backgroundColor ?? AppColors.surface,
+      surfaceTintColor: Colors.transparent, // 移除表面着色
       leading: showBackButton
           ? IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -40,6 +41,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       actions: actions,
+      // 添加底部边框以增强扁平化设计的层次感
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
+        child: Container(
+          height: 1,
+          color: AppColors.outlineVariant,
+        ),
+      ),
     );
   }
 

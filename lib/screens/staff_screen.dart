@@ -5,6 +5,7 @@ import '../data/models/staff_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../core/services/staff_service.dart';
+import '../core/services/api_service.dart';
 
 class StaffScreen extends StatefulWidget {
   final String? restaurantId;
@@ -145,15 +146,37 @@ class _StaffScreenState extends State<StaffScreen> {
                       color: AppColors.primaryContainer,
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    child: Center(
-                      child: Text(
-                        staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
-                        style: TextStyle(
-                          color: AppColors.onPrimaryContainer,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
+                          ? Image.network(
+                              ApiService.getFullImageUrl(staff.avatarUrl),
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Text(
+                                    staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                    style: TextStyle(
+                                      color: AppColors.onPrimaryContainer,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                                staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                style: TextStyle(
+                                  color: AppColors.onPrimaryContainer,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(width: 16),

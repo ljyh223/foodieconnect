@@ -8,6 +8,7 @@ import 'presentation/providers/restaurant_provider.dart';
 import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/staff_provider.dart';
 import 'presentation/providers/chat_provider.dart';
+import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,29 +40,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TableTalk',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6750A4),
-          primary: const Color(0xFF6750A4),
-          onPrimary: Colors.white,
-          primaryContainer: const Color(0xFFEADDFF),
-          onPrimaryContainer: const Color(0xFF21005D),
-          secondary: const Color(0xFF625B71),
-          onSecondary: Colors.white,
-          secondaryContainer: const Color(0xFFE8DEF8),
-          onSecondaryContainer: const Color(0xFF1D192B),
-          surface: const Color(0xFFFEF7FF),
-          onSurface: const Color(0xFF1D1B20),
-          surfaceContainerHighest: const Color(0xFFE7E0EC),
-          onSurfaceVariant: const Color(0xFF49454F),
-          outline: const Color(0xFF79747E),
-          outlineVariant: const Color(0xFFCAB6CF),
-        ),
-        useMaterial3: false,
-      ),
+      title: 'Foodie Connect', // 更新应用名称为 Foodie Connect
+      theme: AppTheme.lightTheme, // 使用新的简约黑白主题
+      darkTheme: AppTheme.darkTheme, // 可选的暗色主题
+      themeMode: ThemeMode.system, // 跟随系统主题设置
       initialRoute: '/splash',
       onGenerateRoute: AppRouter.generateRoute,
+      debugShowCheckedModeBanner: false, // 隐藏调试横幅
     );
   }
 }

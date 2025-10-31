@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../../data/models/review_model.dart';
 import '../../core/services/review_service.dart';
+import 'dart:io';
 
 class ReviewProvider with ChangeNotifier {
   List<Review> _reviews = [];
@@ -29,6 +30,34 @@ class ReviewProvider with ChangeNotifier {
     _error = null;
     try {
       final review = await ReviewService.post(restaurantId, rating, comment);
+      _reviews.insert(0, review);
+    } catch (e) {
+      _error = '发布评论失败：${e.toString()}';
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// 发布带图片的评价
+  Future<void> postReviewWithImages(String restaurantId, int rating, String comment, List<String> imageUrls) async {
+    _setLoading(true);
+    _error = null;
+    try {
+      final review = await ReviewService.postWithImages(restaurantId, rating, comment, imageUrls);
+      _reviews.insert(0, review);
+    } catch (e) {
+      _error = '发布评论失败：${e.toString()}';
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// 上传图片并发布评价
+  Future<void> postReviewWithImageFiles(String restaurantId, int rating, String comment, List<File> imageFiles) async {
+    _setLoading(true);
+    _error = null;
+    try {
+      final review = await ReviewService.postWithImageFiles(restaurantId, rating, comment, imageFiles);
       _reviews.insert(0, review);
     } catch (e) {
       _error = '发布评论失败：${e.toString()}';
