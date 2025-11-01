@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../core/constants/app_colors.dart';
-import '../core/constants/app_text_styles.dart';
 import '../presentation/providers/restaurant_provider.dart';
 import '../core/services/api_service.dart';
 import 'dart:math';
@@ -238,8 +236,8 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: restaurant.isOpen
-                                      ? Colors.green.withOpacity(0.1)
-                                      : Colors.grey.withOpacity(0.1),
+                                      ? Colors.green.withValues(alpha: 0.1)
+                                      : Colors.grey.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(

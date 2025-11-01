@@ -6,6 +6,7 @@ class AppConstants {
   // API Endpoints
   // 请根据实际部署替换 BASE_API_URL（默认使用示例域名）
   static const String baseUrl = 'http://192.168.3.4:8080/api/v1';
+  static const String wsBaseUrl = 'ws://192.168.3.4:8080';
 
   // Auth
   static const String loginEndpoint = '/auth/login';

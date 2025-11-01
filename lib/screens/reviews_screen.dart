@@ -7,7 +7,6 @@ import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/review_provider.dart';
-import '../data/models/review_model.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final String? restaurantId;

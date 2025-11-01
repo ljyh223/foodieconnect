@@ -350,7 +350,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     } catch (e) {
       // 处理图片选择错误
       if (mounted) {
-        print("拍照失败$e");
+        debugPrint("拍照失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('拍照失败：${e.toString()}')),
         );
@@ -384,7 +384,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     } catch (e) {
       // 处理图片选择错误
       if (mounted) {
-        print("选择图片失败$e");
+        debugPrint("选择图片失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('选择图片失败：${e.toString()}')),
         );

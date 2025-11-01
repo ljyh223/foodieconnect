@@ -1,4 +1,4 @@
-import 'dart:developer' as Logger;
+import 'dart:developer' as logger;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +53,7 @@ class AuthProvider with ChangeNotifier {
       _error = null;
     } catch (e) {
       // 回退到模拟行为：保持原来的体验
-      Logger.log('登录失败：${e.toString()}');
+      logger.log('登录失败：${e.toString()}');
 
       if (email == 'user@example.com' && password == 'password123') {
         _user = User(
@@ -123,7 +123,7 @@ class AuthProvider with ChangeNotifier {
       }
     } catch (e) {
       // 不阻塞启动，仅记录错误
-      Logger.log('恢复登录状态失败：${e.toString()}');
+      logger.log('恢复登录状态失败：${e.toString()}');
       _error = '恢复登录状态失败：${e.toString()}';
     } finally {
       _setLoading(false);

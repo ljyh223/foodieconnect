@@ -3,7 +3,6 @@ import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../data/models/staff_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
-import '../presentation/widgets/card_widget.dart';
 import '../core/services/staff_service.dart';
 import '../core/services/api_service.dart';
 
@@ -227,16 +226,4 @@ class _StaffScreenState extends State<StaffScreen> {
     );
   }
 
-  String _getStatusText(String status) {
-    switch (status) {
-      case 'ONLINE':
-        return '在线';
-      case 'OFFLINE':
-        return '离线';
-      case 'BUSY':
-        return '忙碌';
-      default:
-        return status;
-    }
-  }
 }

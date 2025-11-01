@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/foundation.dart';
 import '../../data/models/review_model.dart';
 import '../../core/services/review_service.dart';

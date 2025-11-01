@@ -48,7 +48,7 @@ class AuthService {
       'phone': phone,
     };
     final res = await _apiService.post(AppConstants.registerEndpoint, body: payload);
-    final dynamic regPayload = (res is Map<String, dynamic> && res.containsKey('data')) ? res['data'] : res;
+    final dynamic regPayload = res['data'] ?? res;
     if (regPayload is! Map<String, dynamic>) throw Exception('注册返回数据格式异常');
     // 注册通常不会返回 token，这里只返回 user
     return User.fromJson(regPayload);
@@ -59,7 +59,7 @@ class AuthService {
     // 将 refresh token 临时放入 ApiService 的 Authorization（按后端约定）
   _apiService.setToken(refreshToken);
     final res = await _apiService.post(AppConstants.refreshEndpoint);
-    final dynamic refPayload = (res is Map<String, dynamic> && res.containsKey('data')) ? res['data'] : res;
+    final dynamic refPayload = res['data'] ?? res;
     if (refPayload is! Map<String, dynamic>) throw Exception('刷新返回数据异常');
   final token = (refPayload['token'] as String?) ?? (refPayload['accessToken'] as String?);
   final refresh = refPayload['refreshToken'] as String?;
@@ -71,7 +71,7 @@ class AuthService {
   /// 获取当前用户信息
   static Future<User> me() async {
     final res = await _apiService.get(AppConstants.meEndpoint);
-    final dynamic mePayload = (res is Map<String, dynamic> && res.containsKey('data')) ? res['data'] : res;
+    final dynamic mePayload = res['data'] ?? res;
     if (mePayload is! Map<String, dynamic>) throw Exception('获取用户信息失败');
     return User.fromJson(mePayload);
   }

@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-// chat_message_model is not used directly in this screen
 import '../data/models/staff_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/providers/chat_provider.dart';
+import '../core/services/chat_service.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? staffId;
@@ -50,6 +50,9 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<ChatProvider>(context, listen: false);
 
+      // 初始化WebSocket连接
+      await provider.initialize();
+
       // 如果有房间ID，直接获取消息
       if (_roomId != null) {
         await provider.fetchMessages(_roomId!);
@@ -58,22 +61,23 @@ class _ChatScreenState extends State<ChatScreen> {
       else if (_restaurantId != null) {
         try {
           final roomInfo = await ChatService.getRestaurantChatRoom(_restaurantId!);
-          if (roomInfo['success'] == true && roomInfo['data'] != null) {
-            final roomData = roomInfo['data'];
-            _roomId = roomData['id']?.toString();
-            _roomName = roomData['name'] ?? '餐厅聊天室';
+          final roomData = roomInfo['data'] ?? roomInfo;
+          _roomId = roomData['id']?.toString();
+          _roomName = roomData['name'] ?? '餐厅聊天室';
+          if (_roomId != null) {
             await provider.fetchMessages(_roomId!);
           }
         } catch (e) {
           debugPrint('获取餐厅聊天室失败: $e');
         }
       }
-      // 如果有店员ID，保持原有逻辑
+      // 如果有店员ID，保持原有逻辑（兼容性）
       else if (widget.staffId != null) {
-        await provider.fetchSessionsForUser(widget.staffId!);
-        if (provider.sessions.isNotEmpty) {
-          final sessionId = provider.sessions.first.id;
-          await provider.fetchMessages(sessionId);
+        // 店员聊天功能已移除，显示提示信息
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('店员聊天功能已迁移至餐厅聊天室')),
+          );
         }
       }
 
@@ -103,20 +107,25 @@ class _ChatScreenState extends State<ChatScreen> {
     if (messageContent.isEmpty) return;
 
     final provider = Provider.of<ChatProvider>(context, listen: false);
-    final sessionId = provider.sessions.isNotEmpty ? provider.sessions.first.id : null;
-    if (sessionId == null) {
+    
+    // 使用房间ID发送消息
+    if (_roomId != null) {
+      await provider.sendMessage(_roomId!, messageContent);
       _messageController.clear();
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('当前无可用会话')));
-      return;
+      
+      // WebSocket会自动推送消息，不需要重新获取
+      
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) _scrollToBottom();
+      });
+    } else {
+      _messageController.clear();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('当前无可用聊天室')),
+        );
+      }
     }
-
-    await provider.sendMessage(sessionId, messageContent);
-    _messageController.clear();
-    await provider.fetchMessages(sessionId);
-
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (mounted) _scrollToBottom();
-    });
   }
 
   @override
@@ -124,43 +133,32 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: _roomName ?? _staff.name,
+        title: _roomName ?? '聊天',
         showBackButton: true,
         actions: [
-          Row(
-            children: [
-              if (_roomId != null) ...[
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: AppColors.onlineStatus,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '聊天室',
-                  style: AppTextStyles.bodySmall,
-                ),
-                const SizedBox(width: 16),
-              ] else ...[
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: _staff.status == '在线' ? AppColors.onlineStatus : AppColors.offlineStatus,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  _staff.status,
-                  style: AppTextStyles.bodySmall,
-                ),
-                const SizedBox(width: 16),
-              ],
-            ],
+          Consumer<ChatProvider>(
+            builder: (context, provider, _) {
+              return Row(
+                children: [
+                  if (_roomId != null) ...[
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: provider.isConnected ? AppColors.onlineStatus : AppColors.offlineStatus,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      provider.isConnected ? '已连接' : '未连接',
+                      style: AppTextStyles.bodySmall,
+                    ),
+                    const SizedBox(width: 16),
+                  ],
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -174,6 +172,26 @@ class _ChatScreenState extends State<ChatScreen> {
                   if (provider.error != null) return Center(child: Text(provider.error!));
 
                   final messages = provider.messages;
+                  if (messages.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            '暂无消息，开始聊天吧！',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          const SizedBox(height: 8),
+                          if (!provider.isConnected)
+                            const Text(
+                              'WebSocket未连接',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                        ],
+                      ),
+                    );
+                  }
+                  
                   return ListView.builder(
                     controller: _scrollController,
                     itemCount: messages.length,
@@ -191,16 +209,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                 decoration: BoxDecoration(
                                   color: AppColors.primaryContainer,
                                   borderRadius: BorderRadius.circular(18),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    message.staffName?.substring(0, 1) ?? '',
-                                    style: TextStyle(
-                                      color: AppColors.onPrimaryContainer,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
                                 ),
                               ),
                             const SizedBox(width: 8),

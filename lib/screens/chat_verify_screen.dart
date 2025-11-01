@@ -1,24 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
+import '../presentation/providers/chat_provider.dart';
 
-class ChatVerifyScreen extends StatelessWidget {
+class ChatVerifyScreen extends StatefulWidget {
   const ChatVerifyScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<ChatVerifyScreen> createState() => _ChatVerifyScreenState();
+}
 
+class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
+  final TextEditingController _restaurantController = TextEditingController();
+  final TextEditingController _verificationController = TextEditingController();
+  bool _isLoading = false;
+  String? _error;
 
-    void handleVerification(BuildContext context) {
-      Navigator.pushNamed(
-        context,
-        '/chat',
-        arguments: {'staffId': '1'},
-      );
+  @override
+  void dispose() {
+    _restaurantController.dispose();
+    _verificationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> handleVerification(BuildContext context) async {
+    if (_restaurantController.text.isEmpty || _verificationController.text.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _error = '请填写完整信息';
+        });
+      }
+      return;
     }
 
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+    }
+
+    try {
+      final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+      
+      // 确保WebSocket已连接
+      if (!chatProvider.isConnected) {
+        await chatProvider.initialize();
+      }
+      
+      await chatProvider.joinRestaurantChat(
+        _restaurantController.text.trim(),
+        _verificationController.text.trim(),
+      );
+
+      if (chatProvider.currentRoomId != null && mounted) {
+        Navigator.pushNamed(
+          context,
+          '/chat',
+          arguments: {'roomId': chatProvider.currentRoomId},
+        );
+      } else if (mounted) {
+        setState(() {
+          _error = '验证失败，请检查餐厅ID和验证码';
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = '验证失败：${e.toString()}';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
@@ -62,14 +127,14 @@ class ChatVerifyScreen extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       maxLength: 6,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, letterSpacing: 4),
+                      style: const TextStyle(fontSize: 20, letterSpacing: 4),
                     ),
                     
                     if (_error != null) ...[
                       const SizedBox(height: 16),
                       Text(
                         _error!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.red,
                           fontSize: 14,
                         ),
@@ -94,7 +159,7 @@ class ChatVerifyScreen extends StatelessWidget {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AppColors.onPrimary,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : Text(

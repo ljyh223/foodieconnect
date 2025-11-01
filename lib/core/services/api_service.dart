@@ -89,8 +89,10 @@ class ApiService {
     final uri = Uri.parse('$_baseUrl$endpoint');
     final headers = _getHeaders();
     try {
-      final masked = headers['Authorization'] != null ? ('Bearer ' + (headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*'))) : 'none';
-      logger.log('ApiService.POST -> $uri | Authorization=$masked | body=${body != null ? json.encode(body).substring(0, json.encode(body).length > 200 ? 200 : json.encode(body).length) : 'null'}');
+      final masked = headers['Authorization'] != null ? 'Bearer ${headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}' : 'none';
+      final encodedBody = body != null ? json.encode(body) : 'null';
+      final truncatedBody = encodedBody.length > 200 ? encodedBody.substring(0, 200) : encodedBody;
+      logger.log('ApiService.POST -> $uri | Authorization=$masked | body=$truncatedBody');
     } catch (_) {}
     final response = await http.post(
       uri,
@@ -107,7 +109,7 @@ class ApiService {
     final uri = Uri.parse('$_baseUrl$endpoint');
     final headers = _getHeaders();
     try {
-      final masked = headers['Authorization'] != null ? ('Bearer ' + (headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*'))) : 'none';
+      final masked = headers['Authorization'] != null ? 'Bearer ${headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}' : 'none';
       logger.log('ApiService.PUT -> $uri | Authorization=$masked');
     } catch (_) {}
     final response = await http.put(
@@ -125,7 +127,7 @@ class ApiService {
     final uri = Uri.parse('$_baseUrl$endpoint');
     final headers = _getHeaders();
     try {
-      final masked = headers['Authorization'] != null ? ('Bearer ' + (headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*'))) : 'none';
+      final masked = headers['Authorization'] != null ? 'Bearer ${headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}' : 'none';
       logger.log('ApiService.DELETE -> $uri | Authorization=$masked');
     } catch (_) {}
     final response = await http.delete(
@@ -201,7 +203,7 @@ class ApiService {
     
     try {
       final masked = uploadHeaders['Authorization'] != null ?
-          ('Bearer ' + (uploadHeaders['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*'))) : 'none';
+          'Bearer ${uploadHeaders['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}' : 'none';
       logger.log('ApiService.UPLOAD_BATCH -> $uri | Authorization=$masked | files=${imageFiles.length}');
     } catch (_) {}
     

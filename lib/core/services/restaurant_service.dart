@@ -65,7 +65,7 @@ class RestaurantService {
   /// 获取热门餐厅
   static Future<List<Restaurant>> popular() async {
     final res = await _api.get('${AppConstants.restaurantsEndpoint}/popular');
-    final dynamic payload = (res is Map<String, dynamic> && res.containsKey('data')) ? res['data'] : res;
+    final dynamic payload = res['data'] ?? res;
     final List<dynamic> list = payload is List ? payload : (payload is Map<String, dynamic> ? (payload['content'] as List<dynamic>? ?? []) : []);
     return list.map((e) => Restaurant.fromJson(e as Map<String, dynamic>)).toList();
   }

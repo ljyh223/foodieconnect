@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants/app_colors.dart';
+// import '../constants/app_colors.dart'); // 未使用的导入
 
 /// Foodie Connect 应用主题配置
 /// 简约主义和扁平化设计风格
@@ -33,12 +33,9 @@ class AppTheme {
         errorContainer: Color(0xFFFDADF2),   // 错误容器色
         onErrorContainer: Color(0xFF410002), // 错误容器上的文字
         
-        background: Color(0xFFFFFFFF),       // 白色背景
-        onBackground: Color(0xFF000000),     // 背景上的文字为黑色
-        
         surface: Color(0xFFFFFFFF),          // 白色表面
         onSurface: Color(0xFF000000),        // 表面上的文字为黑色
-        surfaceVariant: Color(0xFFF5F5F5),   // 表面变体为浅灰色
+        surfaceContainerHighest: Color(0xFFF5F5F5),   // 表面容器最高层为浅灰色
         onSurfaceVariant: Color(0xFF757575), // 表面变体上的文字为中灰色
         
         outline: Color(0xFFBDBDBD),          // 边框线为浅灰色
@@ -332,14 +329,14 @@ class AppTheme {
       
       // 开关主题
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF000000);   // 黑色拇指（选中）
           }
           return const Color(0xFFBDBDBD);     // 浅灰色拇指（未选中）
         }),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF757575);   // 中灰色轨道（选中）
           }
           return const Color(0xFFE0E0E0);     // 浅灰色轨道（未选中）
@@ -348,13 +345,13 @@ class AppTheme {
       
       // 复选框主题
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF000000);   // 黑色填充（选中）
           }
           return Colors.transparent;          // 透明填充（未选中）
         }),
-        checkColor: MaterialStateProperty.all(const Color(0xFFFFFFFF)), // 白色勾选标记
+        checkColor: WidgetStateProperty.all(const Color(0xFFFFFFFF)), // 白色勾选标记
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -366,8 +363,8 @@ class AppTheme {
       
       // 单选按钮主题
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF000000);   // 黑色填充（选中）
           }
           return const Color(0xFF757575);     // 中灰色填充（未选中）
@@ -450,12 +447,9 @@ class AppTheme {
         errorContainer: Color(0xFFB00020),   // 错误容器色
         onErrorContainer: Color(0xFFFFFFFF), // 错误容器上的文字
         
-        background: Color(0xFF121212),       // 深灰色背景
-        onBackground: Color(0xFFFFFFFF),     // 背景上的文字为白色
-        
         surface: Color(0xFF1E1E1E),          // 深灰色表面
         onSurface: Color(0xFFFFFFFF),        // 表面上的文字为白色
-        surfaceVariant: Color(0xFF2C2C2C),   // 表面变体为深灰色
+        surfaceContainerHighest: Color(0xFF2C2C2C),   // 表面容器最高层为深灰色
         onSurfaceVariant: Color(0xFFB3B3B3), // 表面变体上的文字为浅灰色
         
         outline: Color(0xFF757575),          // 边框线为中灰色

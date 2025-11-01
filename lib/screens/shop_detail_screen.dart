@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../core/constants/app_colors.dart';
-import '../core/constants/app_text_styles.dart';
 import '../data/models/restaurant_model.dart';
 import '../data/models/review_model.dart';
 import '../data/models/staff_model.dart';
@@ -43,29 +41,21 @@ class ShopDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final id = restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String? ?? '1';
+    final restaurantId = this.restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String? ?? '1';
 
     return FutureBuilder<Restaurant>(
-      future: RestaurantService.get(id),
+      future: RestaurantService.get(restaurantId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
 
         if (snapshot.hasError) {
-          print('获取店铺信息失败：${snapshot.error}');
+          debugPrint('获取店铺信息失败：${snapshot.error}');
           return Scaffold(body: Center(child: Text('获取店铺信息失败：${snapshot.error}')));
         }
 
         final restaurant = snapshot.data!;
-
-        void navigateToShopFeatures() {
-          Navigator.pushNamed(
-            context,
-            '/shop_features',
-            arguments: {'restaurantId': restaurant.id.toString()},
-          );
-        }
 
         void navigateToReviews() {
           Navigator.pushNamed(
@@ -595,7 +585,7 @@ class ShopDetailScreen extends StatelessWidget {
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text(
-                                                    '${staff.rating.toStringAsFixed(1)}',
+                                                    staff.rating.toStringAsFixed(1),
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       color: Colors.grey,
