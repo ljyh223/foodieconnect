@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as logger;
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../constants/app_constants.dart';
 
 class ApiService {
@@ -165,12 +166,7 @@ class ApiService {
     // 移除Content-Type，让http包自动设置multipart/form-data边界
     final uploadHeaders = Map<String, String>.from(headers);
     uploadHeaders.remove('Content-Type');
-    
-    try {
-      final masked = uploadHeaders['Authorization'] != null ?
-          ('Bearer ' + (uploadHeaders['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*'))) : 'none';
-      logger.log('ApiService.UPLOAD -> $uri | Authorization=$masked | file=${imageFile.path.split('/').last}');
-    } catch (_) {}
+
     
     // 创建multipart请求
     final request = http.MultipartRequest('POST', uri)
@@ -213,48 +209,82 @@ class ApiService {
     final request = http.MultipartRequest('POST', uri)
       ..headers.addAll(uploadHeaders);
     
-    // 添加多个文件
-    for (final imageFile in imageFiles) {
+    // 添加多个文件，确保正确的字段名和内容类型
+    for (int i = 0; i < imageFiles.length; i++) {
+      final imageFile = imageFiles[i];
+      final fileName = imageFile.path.split('/').last;
+      
+      // 确保文件扩展名为.jpg或.jpeg
+      final finalFileName = fileName.toLowerCase().endsWith('.jpg') || fileName.toLowerCase().endsWith('.jpeg') 
+          ? fileName 
+          : '${fileName.split('.')[0]}.jpg';
+      
       request.files.add(await http.MultipartFile.fromPath(
-        'files', // 字段名，根据后端API调整
+        'files', // 批量上传的字段名
         imageFile.path,
+        filename: finalFileName,
+        contentType: MediaType('image', 'jpeg'),
       ));
+      
+      logger.log('添加文件到批量上传: $finalFileName');
     }
     
-    // 发送请求
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-    
     try {
+      // 发送请求
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      
       logger.log('ApiService.UPLOAD_BATCH <- ${response.statusCode} ${response.body.length} bytes');
-    } catch (_) {}
-    
-    final responseData = await _handleResponse(response);
-    List<String> imageUrls = [];
-    
-    // 解析响应数据，提取URL列表
-    if (responseData['data'] != null) {
-      final data = responseData['data'];
-      if (data is Map<String, dynamic>) {
-        // 如果是Map，提取所有URL值
-        data.forEach((key, value) {
-          if (value is String) {
-            imageUrls.add(value);
+      logger.log('Response body: ${response.body}');
+      
+      final responseData = await _handleResponse(response);
+      List<String> imageUrls = [];
+      
+      // 解析响应数据，提取URL列表
+      if (responseData['data'] != null) {
+        final data = responseData['data'];
+        logger.log('解析响应数据: $data');
+        
+        // 检查是否有success字段（包含成功上传的图片URL）
+        if (data is Map<String, dynamic>) {
+          // 优先检查success字段
+          if (data.containsKey('success') && data['success'] is Map<String, dynamic>) {
+            final successData = data['success'] as Map<String, dynamic>;
+            successData.forEach((key, value) {
+              if (value is String) {
+                imageUrls.add(value);
+                logger.log('从success字段中提取URL: $key -> $value');
+              }
+            });
+          } else {
+            // 如果没有success字段，直接提取所有URL值
+            data.forEach((key, value) {
+              if (value is String) {
+                imageUrls.add(value);
+                logger.log('从Map中提取URL: $key -> $value');
+              }
+            });
           }
-        });
-      } else if (data is List) {
-        // 如果是List，提取所有URL
-        for (final item in data) {
-          if (item is String) {
-            imageUrls.add(item);
-          } else if (item is Map<String, dynamic> && item['url'] is String) {
-            imageUrls.add(item['url'] as String);
+        } else if (data is List) {
+          // 如果是List，提取所有URL
+          for (final item in data) {
+            if (item is String) {
+              imageUrls.add(item);
+              logger.log('从List中提取URL: $item');
+            } else if (item is Map<String, dynamic> && item['url'] is String) {
+              imageUrls.add(item['url'] as String);
+              logger.log('从对象中提取URL: ${item['url']}');
+            }
           }
         }
       }
+      
+      logger.log('最终提取的URL列表: $imageUrls');
+      return imageUrls;
+    } catch (e) {
+      logger.log('批量上传过程中发生错误: $e');
+      rethrow;
     }
-    
-    return imageUrls;
   }
 
 }

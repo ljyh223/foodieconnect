@@ -22,7 +22,7 @@ class ChatVerifyScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: '聊天验证',
+        title: '餐厅聊天验证',
         showBackButton: true,
       ),
       body: SafeArea(
@@ -36,29 +36,50 @@ class ChatVerifyScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: Icon(
-                        Icons.security,
+                        Icons.restaurant,
                         size: 80,
                         color: AppColors.primary,
                       ),
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      '为了保障您的聊天体验，请输入下方验证码进行验证。',
+                      '请输入餐厅ID和验证码以加入聊天室',
                       style: AppTextStyles.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
 
                     const SizedBox(height: 24),
                     TextFieldWidget(
-                      label: '请输入验证码',
+                      controller: _restaurantController,
+                      label: '餐厅ID',
                       keyboardType: TextInputType.number,
-                      maxLength: 4,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 24, letterSpacing: 8),
+                      maxLength: 10,
                     ),
+                    const SizedBox(height: 16),
+                    TextFieldWidget(
+                      controller: _verificationController,
+                      label: '验证码',
+                      keyboardType: TextInputType.number,
+                      maxLength: 6,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20, letterSpacing: 4),
+                    ),
+                    
+                    if (_error != null) ...[
+                      const SizedBox(height: 16),
+                      Text(
+                        _error!,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                    
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: () => handleVerification(context),
+                      onPressed: _isLoading ? null : () => handleVerification(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.onPrimary,
@@ -67,10 +88,19 @@ class ChatVerifyScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
-                        '验证并开始聊天',
-                        style: AppTextStyles.titleSmall,
-                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AppColors.onPrimary,
+                              ),
+                            )
+                          : Text(
+                              '验证并开始聊天',
+                              style: AppTextStyles.titleSmall,
+                            ),
                     ),
                   ],
                 ),

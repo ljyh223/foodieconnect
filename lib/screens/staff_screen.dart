@@ -126,33 +126,30 @@ class _StaffScreenState extends State<StaffScreen> {
           return const Center(child: Text('暂无店员信息'));
         }
 
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            childAspectRatio: 3,
-            mainAxisSpacing: 16,
-          ),
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: staffList.length,
           itemBuilder: (context, index) {
             final staff = staffList[index];
-            return CardWidget(
-              onTap: () => navigateToStaffDetail(staff.id),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
+                  // 头像
                   Container(
-                    width: 48,
-                    height: 48,
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
                       color: AppColors.primaryContainer,
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(30),
                       child: staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
                           ? Image.network(
                               ApiService.getFullImageUrl(staff.avatarUrl),
-                              width: 48,
-                              height: 48,
+                              width: 60,
+                              height: 60,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Center(
@@ -160,7 +157,7 @@ class _StaffScreenState extends State<StaffScreen> {
                                     staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
                                     style: TextStyle(
                                       color: AppColors.onPrimaryContainer,
-                                      fontSize: 20,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -172,7 +169,7 @@ class _StaffScreenState extends State<StaffScreen> {
                                 staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
                                 style: TextStyle(
                                   color: AppColors.onPrimaryContainer,
-                                  fontSize: 20,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -180,29 +177,45 @@ class _StaffScreenState extends State<StaffScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
+                  // 名字和职位信息
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           staff.name,
-                          style: AppTextStyles.titleMedium,
-                        ),
-                        Text(
-                          '${staff.position} · ${_getStatusText(staff.status)}',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.onSurfaceVariant,
+                          style: AppTextStyles.titleMedium.copyWith(
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '工作经验${staff.experience}，评分${staff.rating}',
-                          style: AppTextStyles.bodySmall,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          staff.position,
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.onSurfaceVariant,
+                          ),
                         ),
                       ],
+                    ),
+                  ),
+                  // Review按钮
+                  ElevatedButton(
+                    onPressed: () => navigateToStaffDetail(staff.id),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'Review',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                 ],

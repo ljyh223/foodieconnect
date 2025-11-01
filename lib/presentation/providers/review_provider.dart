@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/foundation.dart';
 import '../../data/models/review_model.dart';
 import '../../core/services/review_service.dart';
@@ -39,7 +41,7 @@ class ReviewProvider with ChangeNotifier {
   }
 
   /// 发布带图片的评价
-  Future<void> postReviewWithImages(String restaurantId, int rating, String comment, List<String> imageUrls) async {
+  Future<void> postReviewWithImages(String restaurantId, int rating, String comment, List<String> imageUrls, int userId) async {
     _setLoading(true);
     _error = null;
     try {
@@ -53,7 +55,7 @@ class ReviewProvider with ChangeNotifier {
   }
 
   /// 上传图片并发布评价
-  Future<void> postReviewWithImageFiles(String restaurantId, int rating, String comment, List<File> imageFiles) async {
+  Future<void> postReviewWithImageFiles(String restaurantId, int rating, String comment, List<File> imageFiles, int userId) async {
     _setLoading(true);
     _error = null;
     try {

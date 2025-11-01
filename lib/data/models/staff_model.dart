@@ -93,23 +93,35 @@ class StaffReview {
   final String userName;
   final String content;
   final double rating;
-  final DateTime date;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final String staffId;
+  final String userId;
+  final String? userAvatar;
   
   StaffReview({
     required this.id,
     required this.userName,
     required this.content,
     required this.rating,
-    required this.date,
+    required this.createdAt,
+    this.updatedAt,
+    required this.staffId,
+    required this.userId,
+    this.userAvatar,
   });
 
   factory StaffReview.fromJson(Map<String, dynamic> json) {
     return StaffReview(
-      id: json['id'] ?? '',
+      id: json['id']?.toString() ?? '',
       userName: json['userName'] ?? '',
       content: json['content'] ?? '',
       rating: (json['rating'] ?? 0.0).toDouble(),
-      date: DateTime.parse(json['date'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
+      staffId: json['staffId']?.toString() ?? '',
+      userId: json['userId']?.toString() ?? '',
+      userAvatar: json['userAvatar'],
     );
   }
 
@@ -119,7 +131,11 @@ class StaffReview {
       'userName': userName,
       'content': content,
       'rating': rating,
-      'date': date.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      'staffId': staffId,
+      'userId': userId,
+      'userAvatar': userAvatar,
     };
   }
 }

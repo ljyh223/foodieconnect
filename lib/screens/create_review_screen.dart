@@ -3,7 +3,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../core/constants/app_colors.dart';
 import '../presentation/providers/review_provider.dart';
+import '../presentation/providers/auth_provider.dart';
 import 'dart:io';
+import 'package:path/path.dart' as path;
+import 'package:image/image.dart' as img;
 
 class CreateReviewScreen extends StatefulWidget {
   final String? restaurantId;
@@ -25,6 +28,18 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  // 获取当前用户ID
+  Future<int?> _getCurrentUserId() async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final userId = await authProvider.getCurrentUserId();
+      return userId;
+    } catch (e) {
+      debugPrint('获取用户ID失败: $e');
+      return null;
+    }
   }
 
   @override
@@ -320,11 +335,17 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.camera,
         imageQuality: 80,
+        // 强制使用JPEG格式
+        preferredCameraDevice: CameraDevice.rear,
       );
       if (image != null) {
-        setState(() {
-          _images.add(File(image.path));
-        });
+        // 确保图片格式为JPEG
+        final processedImage = await _processImageFile(File(image.path));
+        if (processedImage != null) {
+          setState(() {
+            _images.add(processedImage);
+          });
+        }
       }
     } catch (e) {
       // 处理图片选择错误
@@ -344,11 +365,20 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
         imageQuality: 80,
       );
       if (images != null) {
+        // 处理每个选中的图片，确保格式正确
+        final List<File> processedImages = [];
+        
+        for (final xFile in images) {
+          if (processedImages.length >= (9 - _images.length)) break;
+          
+          final processedImage = await _processImageFile(File(xFile.path));
+          if (processedImage != null) {
+            processedImages.add(processedImage);
+          }
+        }
+        
         setState(() {
-          // 限制最多9张图片
-          final remainingSlots = 9 - _images.length;
-          final imagesToAdd = images.take(remainingSlots).map((xFile) => File(xFile.path)).toList();
-          _images.addAll(imagesToAdd);
+          _images.addAll(processedImages);
         });
       }
     } catch (e) {
@@ -357,7 +387,6 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
         print("选择图片失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('选择图片失败：${e.toString()}')),
-
         );
       }
     }
@@ -406,7 +435,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     try {
       // 发布评价（包含图片上传）
       await Provider.of<ReviewProvider>(context, listen: false)
-          .postReviewWithImageFiles(restaurantId, _rating.toInt(), text, _images);
+          .postReviewWithImageFiles(restaurantId, _rating.toInt(), text, _images, await _getCurrentUserId() ?? 1);
       
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -423,6 +452,43 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (mounted) {
         setState(() => _submitting = false);
       }
+    }
+  }
+
+  // 处理图片文件，确保格式为JPEG
+  Future<File?> _processImageFile(File imageFile) async {
+    try {
+      // 获取文件扩展名
+      final fileExtension = path.extension(imageFile.path).toLowerCase();
+      
+      // 如果已经是JPEG格式，直接返回
+      if (fileExtension == '.jpg' || fileExtension == '.jpeg') {
+        return imageFile;
+      }
+      
+      // 读取图片
+      final imageBytes = await imageFile.readAsBytes();
+      final originalImage = img.decodeImage(imageBytes);
+      
+      if (originalImage == null) {
+        debugPrint('无法解码图片文件');
+        return imageFile; // 返回原文件，让服务器处理
+      }
+      
+      // 创建临时JPEG文件
+      final tempDir = Directory.systemTemp;
+      final jpegFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final jpegFile = File(path.join(tempDir.path, jpegFileName));
+      
+      // 将图片保存为JPEG格式
+      final jpegBytes = img.encodeJpg(originalImage, quality: 85);
+      await jpegFile.writeAsBytes(jpegBytes);
+      
+      debugPrint('图片格式已转换为JPEG: ${jpegFile.path}');
+      return jpegFile;
+    } catch (e) {
+      debugPrint('处理图片格式失败: $e');
+      return imageFile; // 返回原文件，让服务器处理
     }
   }
 

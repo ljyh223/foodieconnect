@@ -7,6 +7,7 @@ class ChatProvider with ChangeNotifier {
   List<ChatMessage> _messages = [];
   bool _isLoading = false;
   String? _error;
+  String? _currentRoomId; // 当前聊天室ID
 
   List<ChatSession> get sessions => _sessions;
   List<ChatMessage> get messages => _messages;

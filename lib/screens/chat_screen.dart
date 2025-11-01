@@ -10,8 +10,10 @@ import '../presentation/providers/chat_provider.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? staffId;
+  final String? restaurantId;
+  final String? roomId;
 
-  const ChatScreen({super.key, this.staffId});
+  const ChatScreen({super.key, this.staffId, this.restaurantId, this.roomId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -21,10 +23,17 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late Staff _staff;
+  String? _restaurantId;
+  String? _roomId;
+  String? _roomName;
 
   @override
   void initState() {
     super.initState();
+    
+    // 设置餐厅ID和房间ID
+    _restaurantId = widget.restaurantId;
+    _roomId = widget.roomId;
 
     _staff = Staff(
       id: '1',
@@ -41,7 +50,26 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<ChatProvider>(context, listen: false);
 
-      if (widget.staffId != null) {
+      // 如果有房间ID，直接获取消息
+      if (_roomId != null) {
+        await provider.fetchMessages(_roomId!);
+      }
+      // 如果有餐厅ID，获取餐厅聊天室
+      else if (_restaurantId != null) {
+        try {
+          final roomInfo = await ChatService.getRestaurantChatRoom(_restaurantId!);
+          if (roomInfo['success'] == true && roomInfo['data'] != null) {
+            final roomData = roomInfo['data'];
+            _roomId = roomData['id']?.toString();
+            _roomName = roomData['name'] ?? '餐厅聊天室';
+            await provider.fetchMessages(_roomId!);
+          }
+        } catch (e) {
+          debugPrint('获取餐厅聊天室失败: $e');
+        }
+      }
+      // 如果有店员ID，保持原有逻辑
+      else if (widget.staffId != null) {
         await provider.fetchSessionsForUser(widget.staffId!);
         if (provider.sessions.isNotEmpty) {
           final sessionId = provider.sessions.first.id;
@@ -96,25 +124,42 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: _staff.name,
+        title: _roomName ?? _staff.name,
         showBackButton: true,
         actions: [
           Row(
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: _staff.status == '在线' ? AppColors.onlineStatus : AppColors.offlineStatus,
-                  borderRadius: BorderRadius.circular(4),
+              if (_roomId != null) ...[
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: AppColors.onlineStatus,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                _staff.status,
-                style: AppTextStyles.bodySmall,
-              ),
-              const SizedBox(width: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '聊天室',
+                  style: AppTextStyles.bodySmall,
+                ),
+                const SizedBox(width: 16),
+              ] else ...[
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: _staff.status == '在线' ? AppColors.onlineStatus : AppColors.offlineStatus,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  _staff.status,
+                  style: AppTextStyles.bodySmall,
+                ),
+                const SizedBox(width: 16),
+              ],
             ],
           ),
         ],

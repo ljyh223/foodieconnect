@@ -13,6 +13,31 @@ class AuthProvider with ChangeNotifier {
   String? _error;
 
   User? get user => _user;
+
+  /// 获取当前用户ID（从本地存储获取）
+  Future<int?> getCurrentUserId() async {
+    try {
+      // 优先从本地存储获取用户ID
+      final userId = await AuthService.getCurrentUserId();
+      if (userId != null) {
+        return userId;
+      }
+      
+      // 如果本地没有，尝试从当前用户对象获取
+      if (_user != null) {
+        return _user!.id;
+      }
+      
+      // 如果都没有，尝试从API获取并缓存
+      debugPrint('本地无用户ID，尝试从API获取');
+      final user = await AuthService.me();
+      _user = user;
+      return user.id;
+    } catch (e) {
+      debugPrint('获取当前用户ID失败: $e');
+      return null;
+    }
+  }
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get isAuthenticated => _user != null;
@@ -38,6 +63,8 @@ class AuthProvider with ChangeNotifier {
           phone: '13800138000',
           avatarUrl: null,
         );
+        // 在模拟登录时也保存用户ID到本地存储
+        await TokenStorage.saveUserId(_user!.id);
         _error = null;
       } else {
         _error = '邮箱或密码错误';
@@ -55,6 +82,8 @@ class AuthProvider with ChangeNotifier {
     try {
       final user = await AuthService.register(email, password, displayName, phone);
       _user = user;
+      // 注册成功后保存用户ID到本地存储
+      await TokenStorage.saveUserId(user.id);
       _error = null;
     } catch (e) {
       _error = '注册失败：${e.toString()}';
@@ -89,6 +118,8 @@ class AuthProvider with ChangeNotifier {
         // 尝试从后端恢复当前用户
         final user = await AuthService.me();
         _user = user;
+        // 确保用户ID也被保存到本地存储
+        await TokenStorage.saveUserId(user.id);
       }
     } catch (e) {
       // 不阻塞启动，仅记录错误
@@ -112,6 +143,8 @@ class AuthProvider with ChangeNotifier {
           phone: phone,
           avatarUrl: avatarUrl,
         );
+        // 确保用户ID在本地存储中保持最新
+        await TokenStorage.saveUserId(_user!.id);
       }
     } catch (e) {
       _error = '更新失败，请稍后重试';

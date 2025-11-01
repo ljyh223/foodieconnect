@@ -20,6 +20,10 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
   late Future<Staff> _staffFuture;
   bool _isLoading = true;
   String? _error;
+  List<StaffReview> _reviews = [];
+  bool _isLoadingReviews = false;
+  int _reviewPage = 0;
+  final int _reviewPageSize = 5;
 
   @override
   void initState() {
@@ -34,7 +38,10 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
     });
 
     try {
-      final staffId = widget.staffId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['staffId'] as String?;
+      final staffId =
+          widget.staffId ??
+          (ModalRoute.of(context)?.settings.arguments as Map?)?['staffId']
+              as String?;
       if (staffId != null) {
         _staffFuture = StaffService.getById(staffId);
       } else {
@@ -51,6 +58,46 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
     }
   }
 
+  /// 加载店员评价
+  Future<void> _loadStaffReviews(
+    String staffId, {
+    bool isRefresh = false,
+  }) async {
+    if (isRefresh) {
+      setState(() {
+        _reviewPage = 0;
+        _isLoadingReviews = true;
+      });
+    } else {
+      setState(() {
+        _isLoadingReviews = true;
+      });
+    }
+
+    try {
+      final newReviews = await StaffService.getStaffReviews(
+        staffId,
+        page: _reviewPage,
+        size: _reviewPageSize,
+      );
+
+      setState(() {
+        if (isRefresh) {
+          _reviews = newReviews;
+        } else {
+          _reviews.addAll(newReviews);
+        }
+        _reviewPage++;
+      });
+    } catch (e) {
+      debugPrint('加载店员评价失败: $e');
+    } finally {
+      setState(() {
+        _isLoadingReviews = false;
+      });
+    }
+  }
+
   void startChat(BuildContext context) {
     Navigator.pushNamed(
       context,
@@ -63,13 +110,8 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBarWidget(
-        title: '店员详情',
-        showBackButton: true,
-      ),
-      body: SafeArea(
-        child: _buildContent(),
-      ),
+      appBar: AppBarWidget(title: '店员详情', showBackButton: true),
+      body: SafeArea(child: _buildContent()),
     );
   }
 
@@ -85,10 +127,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
           children: [
             Text('加载失败：$_error'),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadStaff,
-              child: const Text('重试'),
-            ),
+            ElevatedButton(onPressed: _loadStaff, child: const Text('重试')),
           ],
         ),
       );
@@ -108,10 +147,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
               children: [
                 Text('获取店员详情失败：${snapshot.error}'),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _loadStaff,
-                  child: const Text('重试'),
-                ),
+                ElevatedButton(onPressed: _loadStaff, child: const Text('重试')),
               ],
             ),
           );
@@ -122,209 +158,211 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
           return const Center(child: Text('店员信息不存在'));
         }
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              CardWidget(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryContainer,
-                        borderRadius: BorderRadius.circular(60),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
-                        child: staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
-                            ? Image.network(
-                                ApiService.getFullImageUrl(staff.avatarUrl),
-                                width: 120,
-                                height: 120,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Center(
-                                    child: Text(
-                                      staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
-                                      style: TextStyle(
-                                        color: AppColors.onPrimaryContainer,
-                                        fontSize: 48,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+        // 加载店员评价
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_reviews.isEmpty && !_isLoadingReviews) {
+            _loadStaffReviews(staff.id, isRefresh: true);
+          }
+        });
+
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scrollInfo) {
+            if (scrollInfo is ScrollEndNotification &&
+                !_isLoadingReviews &&
+                scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent - 100) {
+              _loadStaffReviews(staff.id);
+            }
+            return false;
+          },
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // 大圆形头像 - 屏幕宽度的2/3
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 2 / 3,
+                    height: MediaQuery.of(context).size.width * 2 / 3,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryContainer,
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipOval(
+                      child:
+                          staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
+                          ? Image.network(
+                              ApiService.getFullImageUrl(staff.avatarUrl),
+                              width: MediaQuery.of(context).size.width * 2 / 3,
+                              height: MediaQuery.of(context).size.width * 2 / 3,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Text(
+                                    staff.name.isNotEmpty
+                                        ? staff.name.substring(0, 1)
+                                        : '',
+                                    style: TextStyle(
+                                      color: AppColors.onPrimaryContainer,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width / 6,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Text(
-                                  staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
-                                  style: TextStyle(
-                                    color: AppColors.onPrimaryContainer,
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.w500,
                                   ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                                staff.name.isNotEmpty
+                                    ? staff.name.substring(0, 1)
+                                    : '',
+                                style: TextStyle(
+                                  color: AppColors.onPrimaryContainer,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width / 6,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                      ),
+                            ),
                     ),
-                    const SizedBox(height: 16),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // 3行文字说明信息
+                Column(
+                  children: [
                     Text(
                       staff.name,
-                      style: AppTextStyles.headlineSmall,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          staff.position,
-                          style: AppTextStyles.bodyMedium,
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(staff.status),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _getStatusText(staff.status),
-                          style: AppTextStyles.bodyMedium,
-                        ),
-                      ],
+                      style: AppTextStyles.headlineSmall.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${staff.experience}经验 · 评分 ${staff.rating}/5.0',
-                      style: AppTextStyles.bodySmall.copyWith(
+                      staff.position,
+                      style: AppTextStyles.bodyLarge.copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => startChat(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: AppColors.onPrimary,
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text(
-                            '立即咨询',
-                            style: AppTextStyles.titleSmall,
-                          ),
-                        ),
-                      ],
+                    const SizedBox(height: 4),
+                    Text(
+                      '评分 ${staff.rating}/5.0 · ${staff.experience}经验',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              CardWidget(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      '专业技能',
-                      style: AppTextStyles.titleMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: staff.skills.map((skill) {
-                        return Chip(
-                          label: Text(skill),
-                          backgroundColor: AppColors.secondaryContainer,
-                          labelStyle: TextStyle(
-                            color: AppColors.onSecondaryContainer,
-                            fontSize: 14,
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      '语言能力',
-                      style: AppTextStyles.titleMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: staff.languages.map((language) {
-                        return Chip(
-                          label: Text(language),
-                          backgroundColor: AppColors.tertiaryContainer,
-                          labelStyle: TextStyle(
-                            color: AppColors.onTertiaryContainer,
-                            fontSize: 14,
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (staff.reviews.isNotEmpty)
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                const SizedBox(height: 32),
+
+                // 用户评价列表
+                if (_reviews.isNotEmpty) ...[
+                  Row(
                     children: [
                       Text(
-                        '顾客评价',
-                        style: AppTextStyles.titleMedium,
+                        '用户评价',
+                        style: AppTextStyles.titleMedium.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      ...staff.reviews.map((review) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                      const Spacer(),
+                      Text(
+                        '${_reviews.length}条评价',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  ..._reviews.map((review) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    review.userName,
-                                    style: AppTextStyles.bodyMedium,
-                                  ),
-                                  Text(
-                                    _buildRatingStars(review.rating),
-                                    style: TextStyle(
-                                      color: AppColors.ratingStar,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
+                              // 用户头像（带占位符）
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryContainer,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: ClipOval(
+                                  child: review.userAvatar != null && review.userAvatar!.isNotEmpty
+                                      ? Image.network(
+                                          ApiService.getFullImageUrl(review.userAvatar!),
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return _buildUserAvatarPlaceholder(review.userName);
+                                          },
+                                        )
+                                      : _buildUserAvatarPlaceholder(review.userName),
+                                ),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                review.content,
-                                style: AppTextStyles.bodySmall,
+                              const SizedBox(width: 12),
+                              // 用户名和评分
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          review.userName,
+                                          style: AppTextStyles.bodyMedium.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          _buildRatingStars(review.rating),
+                                          style: TextStyle(
+                                            color: AppColors.ratingStar,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
-              const SizedBox(height: 32),
-            ],
+                          const SizedBox(height: 8),
+                          Text(review.content, style: AppTextStyles.bodyMedium),
+                          const SizedBox(height: 4),
+                          Text(
+                            review.createdAt.toIso8601String().split('T')[0],
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  if (_isLoadingReviews)
+                    const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                ],
+              ],
+            ),
           ),
         );
       },
@@ -367,5 +405,27 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
       }
     }
     return stars;
+  }
+
+  /// 构建用户头像占位符
+  Widget _buildUserAvatarPlaceholder(String userName) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: AppColors.primaryContainer,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          userName.isNotEmpty ? userName.substring(0, 1) : '',
+          style: TextStyle(
+            color: AppColors.onPrimaryContainer,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
   }
 }

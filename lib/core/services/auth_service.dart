@@ -28,10 +28,15 @@ class AuthService {
   _apiService.setToken(token);
   // persist tokens
     await TokenStorage.saveTokens(accessToken: token, refreshToken: payload['refreshToken'] as String?);
+    
+    // 持久化用户ID
+    final user = User.fromJson(userMap);
+    await TokenStorage.saveUserId(user.id);
+    
     try {
-      logger.log('AuthService.login: token persisted and injected');
+      logger.log('AuthService.login: token and userId persisted and injected');
     } catch (_) {}
-    return User.fromJson(userMap);
+    return user;
   }
 
   /// 注册，返回 User
@@ -75,5 +80,10 @@ class AuthService {
   static Future<void> logout() async {
     _apiService.clearToken();
     await TokenStorage.deleteAll();
+  }
+
+  /// 获取本地存储的用户ID
+  static Future<int?> getCurrentUserId() async {
+    return await TokenStorage.readUserId();
   }
 }

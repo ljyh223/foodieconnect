@@ -61,7 +61,7 @@ class ReviewService {
     final body = {
       'rating': rating,
       'comment': comment,
-      'imageUrls': imageUrls.isNotEmpty ? imageUrls.join(',') : null, // 图片URL列表，多个URL用逗号分隔
+      'imageUrls': imageUrls, // 图片URL列表，多个URL用逗号分隔
     };
     final res = await _api.post(endpoint, body: body);
     final dynamic payload = res['data'] ?? res;
