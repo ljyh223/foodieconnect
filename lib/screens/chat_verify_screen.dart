@@ -5,32 +5,41 @@ import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/chat_provider.dart';
+import '../core/services/auth_service.dart';
 
 class ChatVerifyScreen extends StatefulWidget {
-  const ChatVerifyScreen({super.key});
+  final String? restaurantId;
+  
+  const ChatVerifyScreen({super.key, this.restaurantId});
 
   @override
   State<ChatVerifyScreen> createState() => _ChatVerifyScreenState();
 }
 
 class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
-  final TextEditingController _restaurantController = TextEditingController();
   final TextEditingController _verificationController = TextEditingController();
   bool _isLoading = false;
   String? _error;
+  String? _restaurantId;
+
+  @override
+  void initState() {
+    super.initState();
+    // 优先使用构造函数参数，如果没有则从路由参数获取
+    _restaurantId = widget.restaurantId ?? ModalRoute.of(context)?.settings.arguments as String?;
+  }
 
   @override
   void dispose() {
-    _restaurantController.dispose();
     _verificationController.dispose();
     super.dispose();
   }
 
   Future<void> handleVerification(BuildContext context) async {
-    if (_restaurantController.text.isEmpty || _verificationController.text.isEmpty) {
+    if ( _verificationController.text.isEmpty) {
       if (mounted) {
         setState(() {
-          _error = '请填写完整信息';
+          _error = '请填写验证码';
         });
       }
       return;
@@ -48,11 +57,17 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
       
       // 确保WebSocket已连接
       if (!chatProvider.isConnected) {
-        await chatProvider.initialize();
+        // 获取用户ID
+        final userId = await AuthService.getCurrentUserId();
+        final userIdStr = userId?.toString();
+        
+        // 注意：现在initialize方法需要tempToken参数，这里先传空字符串
+        // 实际使用时需要从认证服务获取token
+        await chatProvider.initialize('', userId: userIdStr);
       }
       
-      await chatProvider.joinRestaurantChat(
-        _restaurantController.text.trim(),
+      await chatProvider.verifyAndJoinChatRoom(
+        _restaurantId!, // 使用从路由参数获取的餐厅ID
         _verificationController.text.trim(),
       );
 
@@ -60,7 +75,10 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         Navigator.pushNamed(
           context,
           '/chat',
-          arguments: {'roomId': chatProvider.currentRoomId},
+          arguments: {
+            'restaurantId': _restaurantId!,
+            'roomId': chatProvider.currentRoomId!,
+          },
         );
       } else if (mounted) {
         setState(() {
@@ -113,13 +131,6 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                       textAlign: TextAlign.center,
                     ),
 
-                    const SizedBox(height: 24),
-                    TextFieldWidget(
-                      controller: _restaurantController,
-                      label: '餐厅ID',
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
-                    ),
                     const SizedBox(height: 16),
                     TextFieldWidget(
                       controller: _verificationController,
@@ -164,23 +175,9 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                             )
                           : Text(
                               '验证并开始聊天',
-                              style: AppTextStyles.titleSmall,
                             ),
                     ),
                   ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  // 重新获取验证码的逻辑
-                },
-                child: Text(
-                  '重新获取验证码',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
                 ),
               ),
             ],

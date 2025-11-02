@@ -64,7 +64,9 @@ class _AppInitializerState extends State<AppInitializer> {
     try {
       // 获取ChatProvider并初始化WebSocket连接
       final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-      await chatProvider.initialize();
+      // 注意：现在initialize方法需要tempToken参数，这里先传空字符串
+      // 实际使用时需要从认证服务获取token
+      await chatProvider.initialize('');
       
       // 获取当前用户ID并订阅通知
       final authProvider = Provider.of<AuthProvider>(context, listen: false);

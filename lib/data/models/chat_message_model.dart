@@ -1,63 +1,83 @@
 class ChatMessage {
   final String id;
+  final String roomId;
   final String senderId;
   final String content;
-  final DateTime timestamp;
-  final bool isSentByUser;
-  final String? staffName;
-  final String? staffAvatar;
+  final String messageType; // TEXT, IMAGE, SYSTEM
+  final String senderName;
+  final String? senderAvatar;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final bool isSentByUser; // 用于UI判断，不是后端字段
   
   ChatMessage({
     required this.id,
+    required this.roomId,
     required this.senderId,
     required this.content,
-    required this.timestamp,
-    required this.isSentByUser,
-    this.staffName,
-    this.staffAvatar,
+    required this.messageType,
+    required this.senderName,
+    this.senderAvatar,
+    required this.createdAt,
+    required this.updatedAt,
+    this.isSentByUser = false,
   });
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+  factory ChatMessage.fromJson(Map<String, dynamic> json, {String? currentUserId}) {
+    // 如果提供了当前用户ID，用于判断是否为当前用户发送的消息
+    final userId = currentUserId ?? '';
+    
     return ChatMessage(
-      id: json['id'] ?? '',
-      senderId: json['senderId'] ?? '',
+      id: json['id']?.toString() ?? '',
+      roomId: json['roomId']?.toString() ?? '',
+      senderId: json['senderId']?.toString() ?? '',
       content: json['content'] ?? '',
-      timestamp: DateTime.parse(json['timestamp'] ?? DateTime.now().toIso8601String()),
-      isSentByUser: json['isSentByUser'] ?? false,
-      staffName: json['staffName'],
-      staffAvatar: json['staffAvatar'],
+      messageType: json['messageType'] ?? 'TEXT',
+      senderName: json['senderName'] ?? '',
+      senderAvatar: json['senderAvatar'],
+      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      updatedAt: DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
+      isSentByUser: json['senderId']?.toString() == userId,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'roomId': roomId,
       'senderId': senderId,
       'content': content,
-      'timestamp': timestamp.toIso8601String(),
-      'isSentByUser': isSentByUser,
-      'staffName': staffName,
-      'staffAvatar': staffAvatar,
+      'messageType': messageType,
+      'senderName': senderName,
+      'senderAvatar': senderAvatar,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
   ChatMessage copyWith({
     String? id,
+    String? roomId,
     String? senderId,
     String? content,
-    DateTime? timestamp,
+    String? messageType,
+    String? senderName,
+    String? senderAvatar,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     bool? isSentByUser,
-    String? staffName,
-    String? staffAvatar,
   }) {
     return ChatMessage(
       id: id ?? this.id,
+      roomId: roomId ?? this.roomId,
       senderId: senderId ?? this.senderId,
       content: content ?? this.content,
-      timestamp: timestamp ?? this.timestamp,
+      messageType: messageType ?? this.messageType,
+      senderName: senderName ?? this.senderName,
+      senderAvatar: senderAvatar ?? this.senderAvatar,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
       isSentByUser: isSentByUser ?? this.isSentByUser,
-      staffName: staffName ?? this.staffName,
-      staffAvatar: staffAvatar ?? this.staffAvatar,
     );
   }
 }

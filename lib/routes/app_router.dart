@@ -46,11 +46,17 @@ class AppRouter {
           builder: (_) => StaffScreen(restaurantId: args?['restaurantId']),
         );
       case '/chat_verify':
-        return MaterialPageRoute(builder: (_) => const ChatVerifyScreen());
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => ChatVerifyScreen(restaurantId: args?['restaurantId']),
+        );
       case '/chat':
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
-          builder: (_) => ChatScreen(staffId: args?['staffId']),
+          builder: (_) => ChatScreen(
+            restaurantId: args?['restaurantId'],
+            roomId: args?['roomId'],
+          ),
         );
       case '/staff_detail':
         final args = settings.arguments as Map<String, dynamic>?;

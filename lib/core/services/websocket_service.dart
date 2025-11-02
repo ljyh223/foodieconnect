@@ -55,7 +55,7 @@ class WebSocketService {
     _channel = null;
     _currentRoomId = null;
     _currentUserId = null;
-    print('WebSocket已断开连接');
+    debugPrint('WebSocket已断开连接');
   }
 
   /// 处理接收到的消息
@@ -64,22 +64,39 @@ class WebSocketService {
       final data = jsonDecode(message);
       
       if (data is Map<String, dynamic>) {
-        // 处理聊天室消息
-        if (data.containsKey('type') && data['type'] == 'chat_message') {
-          final chatMessage = ChatMessage.fromJson(data['data']);
-          _messageStreamController.add(chatMessage);
+        // 处理聊天室消息 - 根据API文档，消息可能直接包含在body中
+        if (data.containsKey('destination') && data['destination'].toString().contains('/topic/chat-room/')) {
+          final messageBody = data['body'];
+          if (messageBody is String) {
+            final messageData = jsonDecode(messageBody);
+            final chatMessage = ChatMessage.fromJson(messageData);
+            _messageStreamController.add(chatMessage);
+          } else if (messageBody is Map<String, dynamic>) {
+            final chatMessage = ChatMessage.fromJson(messageBody);
+            _messageStreamController.add(chatMessage);
+          }
         }
-        // 处理通知
-        else if (data.containsKey('type') && data['type'] == 'notification') {
-          _notificationStreamController.add(data['data']);
+        // 处理个人通知
+        else if (data.containsKey('destination') && data['destination'].toString().contains('/queue/notifications')) {
+          final notificationBody = data['body'];
+          if (notificationBody is String) {
+            final notificationData = jsonDecode(notificationBody);
+            _notificationStreamController.add(notificationData);
+          } else if (notificationBody is Map<String, dynamic>) {
+            _notificationStreamController.add(notificationBody);
+          }
         }
         // 处理系统消息
         else if (data.containsKey('type') && data['type'] == 'system') {
-          print('系统消息: ${data['message']}');
+          debugPrint('系统消息: ${data['message']}');
+        }
+        // 处理连接确认消息
+        else if (data.containsKey('command') && data['command'] == 'connect') {
+          debugPrint('WebSocket连接确认');
         }
       }
     } catch (e) {
-      print('解析WebSocket消息失败: $e');
+      debugPrint('解析WebSocket消息失败: $e');
     }
   }
 
@@ -89,12 +106,13 @@ class WebSocketService {
       throw Exception('WebSocket未连接');
     }
 
+    // 根据API文档，使用正确的消息格式
     final message = {
       'destination': '/app/chat-room.sendMessage',
-      'data': {
+      'body': jsonEncode({
         'roomId': int.tryParse(roomId) ?? 0,
         'content': content,
-      },
+      }),
     };
 
     _channel!.sink.add(jsonEncode(message));
@@ -108,17 +126,15 @@ class WebSocketService {
 
     _currentRoomId = roomId;
 
+    // 根据API文档，使用正确的消息格式
     final message = {
       'destination': '/app/chat-room.join',
-      'data': {
+      'body': jsonEncode({
         'roomId': int.tryParse(roomId) ?? 0,
-      },
+      }),
     };
 
     _channel!.sink.add(jsonEncode(message));
-    
-    // 订阅聊天室消息
-    _subscribeToRoom(roomId);
   }
 
   /// 离开聊天室
@@ -127,17 +143,15 @@ class WebSocketService {
       throw Exception('WebSocket未连接');
     }
 
+    // 根据API文档，使用正确的消息格式
     final message = {
       'destination': '/app/chat-room.leave',
-      'data': {
+      'body': jsonEncode({
         'roomId': int.tryParse(roomId) ?? 0,
-      },
+      }),
     };
 
     _channel!.sink.add(jsonEncode(message));
-    
-    // 取消订阅聊天室消息
-    _unsubscribeFromRoom(roomId);
     
     if (_currentRoomId == roomId) {
       _currentRoomId = null;
@@ -145,9 +159,10 @@ class WebSocketService {
   }
 
   /// 订阅聊天室消息
-  static void _subscribeToRoom(String roomId) {
+  static void subscribeToRoom(String roomId) {
     if (_channel == null) return;
 
+    // 根据API文档，使用正确的订阅格式
     final message = {
       'destination': '/topic/chat-room/$roomId',
     };
@@ -156,14 +171,14 @@ class WebSocketService {
   }
 
   /// 取消订阅聊天室消息
-  static void _unsubscribeFromRoom(String roomId) {
+  static void unsubscribeFromRoom(String roomId) {
     if (_channel == null) return;
 
     final message = {
       'destination': '/unsubscribe',
-      'data': {
-        'topic': '/topic/chat-room/$roomId',
-      },
+      'body': jsonEncode({
+        'destination': '/topic/chat-room/$roomId',
+      }),
     };
 
     _channel!.sink.add(jsonEncode(message));
@@ -177,6 +192,7 @@ class WebSocketService {
 
     _currentUserId = userId;
 
+    // 根据API文档，使用正确的订阅格式
     final message = {
       'destination': '/user/$userId/queue/notifications',
     };
@@ -190,9 +206,9 @@ class WebSocketService {
 
     final message = {
       'destination': '/unsubscribe',
-      'data': {
-        'topic': '/user/$_currentUserId/queue/notifications',
-      },
+      'body': jsonEncode({
+        'destination': '/user/$_currentUserId/queue/notifications',
+      }),
     };
 
     _channel!.sink.add(jsonEncode(message));

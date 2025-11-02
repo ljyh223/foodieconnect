@@ -68,7 +68,7 @@ class ShopDetailScreen extends StatelessWidget {
         void navigateToChat() {
           Navigator.pushNamed(
             context,
-            '/chat',
+            '/chat_verify',
             arguments: {'restaurantId': restaurant.id.toString()},
           );
         }
@@ -113,7 +113,7 @@ class ShopDetailScreen extends StatelessWidget {
               child: Column(
                 children: [
                   // 餐厅大图
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: 200,
                     child: ClipRRect(
