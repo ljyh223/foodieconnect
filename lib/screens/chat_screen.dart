@@ -5,6 +5,9 @@ import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/providers/chat_provider.dart';
+import '../presentation/widgets/chat_message_widget.dart';
+import '../presentation/widgets/new_message_indicator.dart';
+import '../presentation/utils/chat_time_formatter.dart';
 import '../core/services/chat_service.dart';
 import '../core/services/auth_service.dart';
 
@@ -24,6 +27,11 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   String? _restaurantId;
   String? _roomName;
+  
+  // 新消息提示相关状态
+  bool _showNewMessageIndicator = false;
+  int _unreadMessageCount = 0;
+  bool _isAtBottom = true;
 
   @override
   void initState() {
@@ -31,6 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
     
     // 设置餐厅ID
     _restaurantId = widget.restaurantId;
+    
+    // 监听滚动位置变化
+    _scrollController.addListener(_scrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = Provider.of<ChatProvider>(context, listen: false);
@@ -76,34 +87,47 @@ class _ChatScreenState extends State<ChatScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-
-  void _scrollToBottom() {
+  
+  // 监听滚动位置变化
+  void _scrollListener() {
     if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.position.pixels;
+      final delta = 50.0; // 距离底部50px内视为在底部
+      
+      final wasAtBottom = _isAtBottom;
+      _isAtBottom = (maxScroll - currentScroll) <= delta;
+      
+      // 如果用户滚动到底部，隐藏新消息提示
+      if (_isAtBottom && !wasAtBottom) {
+        setState(() {
+          _showNewMessageIndicator = false;
+          _unreadMessageCount = 0;
+        });
+      }
     }
   }
 
-  // 格式化消息时间显示
-  String _formatTime(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inMinutes < 1) {
-      return '刚刚';
-    } else if (difference.inHours < 1) {
-      return '${difference.inMinutes}分钟前';
-    } else if (difference.inDays < 1) {
-      return '${difference.inHours}小时前';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays}天前';
-    } else {
-      // 超过一周显示具体日期
-      return '${dateTime.month}/${dateTime.day}';
-    }
+  void _scrollToBottom() {
+    // 使用延迟确保UI完全更新后再滚动
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _scrollController.hasClients) {
+        // 强制重新计算布局
+        _scrollController.position.notifyListeners();
+        
+        // 直接跳转到底部，不使用动画
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        
+        // 多次延迟确保滚动到真正的底部
+        for (int i = 0; i < 3; i++) {
+          Future.delayed(Duration(milliseconds: 100 * (i + 1)), () {
+            if (mounted && _scrollController.hasClients) {
+              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            }
+          });
+        }
+      }
+    });
   }
 
   Future<void> _initializeChatWithRoom(ChatProvider provider, String roomId) async {
@@ -116,6 +140,9 @@ class _ChatScreenState extends State<ChatScreen> {
       final roomInfo = await ChatService.getChatRoomInfo(roomId);
       final roomData = roomInfo['data'] ?? roomInfo;
       _roomName = roomData['name'] ?? '餐厅聊天室';
+      
+      // 设置新消息回调
+      provider.setNewMessageCallback(_handleNewMessages);
       
       // 如果WebSocket已经连接且消息已加载，不需要重复获取
       if (provider.isConnected && provider.messages.isNotEmpty) {
@@ -160,9 +187,8 @@ class _ChatScreenState extends State<ChatScreen> {
       await provider.sendMessage(provider.currentRoomId!, messageContent);
       _messageController.clear();
       
-      // STOMP WebSocket会自动推送消息，不需要重新获取
-      
-      Future.delayed(const Duration(milliseconds: 100), () {
+      // 发送消息后滚动到底部
+      Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) _scrollToBottom();
       });
     } else {
@@ -173,6 +199,50 @@ class _ChatScreenState extends State<ChatScreen> {
         );
       }
     }
+  }
+  
+  // 处理新消息提示
+  void _handleNewMessages() {
+    if (!_isAtBottom && mounted) {
+      setState(() {
+        _showNewMessageIndicator = true;
+        _unreadMessageCount++;
+      });
+    } else {
+      // 如果在底部，直接滚动到最新消息
+      // 使用更长的延迟确保消息列表完全更新
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) _scrollToBottom();
+      });
+    }
+  }
+  
+  // 点击新消息提示，滚动到底部
+  void _scrollToBottomAndClearIndicator() {
+    setState(() {
+      _showNewMessageIndicator = false;
+      _unreadMessageCount = 0;
+    });
+    
+    // 使用延迟确保状态更新后再滚动
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _scrollController.hasClients) {
+        // 强制重新计算布局
+        _scrollController.position.notifyListeners();
+        
+        // 直接跳转到底部，不使用动画
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        
+        // 多次延迟确保滚动到真正的底部
+        for (int i = 0; i < 3; i++) {
+          Future.delayed(Duration(milliseconds: 100 * (i + 1)), () {
+            if (mounted && _scrollController.hasClients) {
+              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+            }
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -192,7 +262,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: provider.isConnected ? AppColors.onlineStatus : AppColors.offlineStatus,
+                        color: provider.isConnected ? AppColors.online : AppColors.offline,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -210,239 +280,147 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: Consumer<ChatProvider>(
-                builder: (context, provider, _) {
-                  if (provider.isLoading) return const Center(child: CircularProgressIndicator());
-                  if (provider.error != null) return Center(child: Text(provider.error!));
+            Column(
+              children: [
+                Expanded(
+                  child: Consumer<ChatProvider>(
+                    builder: (context, provider, _) {
+                      // 监听消息变化，触发新消息提示
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (provider.messages.isNotEmpty && _isAtBottom) {
+                          // 如果在底部，自动滚动到最新消息
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            if (mounted) _scrollToBottom();
+                          });
+                        }
+                      });
+                      
+                      if (provider.isLoading) return const Center(child: CircularProgressIndicator());
+                      if (provider.error != null) return Center(child: Text(provider.error!));
 
-                  final messages = provider.messages;
-                  if (messages.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            '暂无消息，开始聊天吧！',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 8),
-                          if (!provider.isConnected)
-                            const Text(
-                              'WebSocket未连接',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                        ],
-                      ),
-                    );
-                  }
-                  
-                  return ListView.builder(
-                    controller: _scrollController,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final message = messages[index];
-                      
-                      // 获取发送者信息，确保不为空
-                      final senderName = message.senderName.isNotEmpty ? message.senderName : '匿名用户';
-                      final senderAvatar = message.senderAvatar?.isNotEmpty == true ? message.senderAvatar : null;
-                      
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: message.isSentByUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                          children: [
-                            // 显示发送者昵称（非自己发送的消息）
-                            if (!message.isSentByUser) ...[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 44, bottom: 4),
-                                child: Text(
-                                  senderName,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                      final messages = provider.messages;
+                      if (messages.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                '暂无消息，开始聊天吧！',
+                                style: TextStyle(color: Colors.grey),
                               ),
-                            ],
-                            Row(
-                              mainAxisAlignment: message.isSentByUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-                              children: [
-                                if (!message.isSentByUser) ...[
-                                  // 显示发送者头像
-                                  Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryContainer,
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(18),
-                                      child: senderAvatar != null
-                                          ? Image.network(
-                                              senderAvatar,
-                                              width: 36,
-                                              height: 36,
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return Container(
-                                                  color: AppColors.primaryContainer,
-                                                  child: Center(
-                                                    child: Text(
-                                                      senderName.isNotEmpty ? senderName.substring(0, 1).toUpperCase() : '?',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              loadingBuilder: (context, child, loadingProgress) {
-                                                if (loadingProgress == null) return child;
-                                                return Container(
-                                                  color: AppColors.primaryContainer,
-                                                  child: const Center(
-                                                    child: SizedBox(
-                                                      width: 16,
-                                                      height: 16,
-                                                      child: CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                          : Center(
-                                              child: Text(
-                                                senderName.isNotEmpty ? senderName.substring(0, 1).toUpperCase() : '?',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                ],
-                                Flexible(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: message.isSentByUser ? AppColors.primary : AppColors.surfaceVariant,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(12),
-                                        topRight: const Radius.circular(12),
-                                        bottomLeft: message.isSentByUser ? const Radius.circular(12) : const Radius.circular(0),
-                                        bottomRight: message.isSentByUser ? const Radius.circular(0) : const Radius.circular(12),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          message.content,
-                                          style: TextStyle(
-                                            color: message.isSentByUser ? AppColors.onPrimary : AppColors.onSurface,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          _formatTime(message.createdAt),
-                                          style: TextStyle(
-                                            color: message.isSentByUser
-                                                ? AppColors.onPrimary.withOpacity(0.7)
-                                                : AppColors.onSurface.withOpacity(0.6),
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                              const SizedBox(height: 8),
+                              if (!provider.isConnected)
+                                const Text(
+                                  'WebSocket未连接',
+                                  style: TextStyle(color: Colors.red),
                                 ),
-                                if (message.isSentByUser) ...[
-                                  const SizedBox(width: 8),
-                                  // 自己的头像（显示用户头像）
-                                  Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                    child: const Icon(
-                                      Icons.person,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
+                        );
+                      }
+                      
+                      return NotificationListener<ScrollNotification>(
+                        onNotification: (scrollNotification) {
+                          // 当有新消息且不在底部时，显示新消息提示
+                          if (scrollNotification is ScrollUpdateNotification) {
+                            // 这里可以添加额外的滚动处理逻辑
+                          }
+                          return false;
+                        },
+                        child: ListView.builder(
+                          key: ValueKey(messages.length),
+                          controller: _scrollController,
+                          itemCount: messages.length,
+                          reverse: false,
+                          shrinkWrap: false,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final message = messages[index];
+                            
+                            // 检查是否需要显示时间分隔（当前消息与上一条消息时间差超过10分钟）
+                            bool showTimeSeparator = false;
+                            String? timeSeparatorText;
+                            
+                            if (index > 0) {
+                              final prevMessage = messages[index - 1];
+                              final timeDiff = message.createdAt.difference(prevMessage.createdAt);
+                              showTimeSeparator = timeDiff.inMinutes > 10;
+                            } else {
+                              // 第一条消息总是显示时间
+                              showTimeSeparator = true;
+                            }
+                            
+                            if (showTimeSeparator) {
+                              timeSeparatorText = ChatTimeFormatter.formatDateForSeparator(message.createdAt);
+                            }
+                            
+                            return ChatMessageWidget(
+                              message: message,
+                              showTimeSeparator: showTimeSeparator,
+                              timeSeparatorText: timeSeparatorText,
+                            );
+                          },
                         ),
                       );
                     },
-                  );
-                },
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceVariant,
-                border: Border(top: BorderSide(color: AppColors.outline)),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.image_outlined, color: AppColors.onSurfaceVariant),
-                    onPressed: () {
-                      // 选择图片的逻辑
-                    },
                   ),
-                  Expanded(
-                    child: TextField(
-                      controller: _messageController,
-                      decoration: InputDecoration(
-                        hintText: '输入消息...',
-                        filled: true,
-                        fillColor: AppColors.surface,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceVariant,
+                    border: Border(top: BorderSide(color: AppColors.outline)),
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.image_outlined, color: AppColors.onSurfaceVariant),
+                        onPressed: () {
+                          // 选择图片的逻辑
+                        },
                       ),
-                      onSubmitted: (_) => _sendMessage(),
-                    ),
+                      Expanded(
+                        child: TextField(
+                          controller: _messageController,
+                          decoration: InputDecoration(
+                            hintText: '输入消息...',
+                            filled: true,
+                            fillColor: AppColors.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          ),
+                          onSubmitted: (_) => _sendMessage(),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.send, color: AppColors.onPrimary),
+                          onPressed: () => _sendMessage(),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.send, color: AppColors.onPrimary),
-                      onPressed: () => _sendMessage(),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+            // 新消息提示浮动按钮
+            if (_showNewMessageIndicator)
+              NewMessageIndicator(
+                unreadCount: _unreadMessageCount,
+                onTap: _scrollToBottomAndClearIndicator,
+              ),
           ],
         ),
       ),

@@ -43,9 +43,9 @@ class AppColors {
   // 评分颜色 - 保持橙色以突出显示
   static const Color ratingStar = Color(0xFFFF9800);
   
-  // 状态颜色 - 使用灰色系
-  static const Color online = Color(0xFF424242);           // 在线状态使用深灰色
-  static const Color offline = Color(0xFFBDBDBD);          // 离线状态使用浅灰色
+  // 状态颜色 - 使用绿色和灰色
+  static const Color online = Color(0xFF4CAF50);           // 在线状态使用绿色
+  static const Color offline = Color(0xFF9E9E9E);          // 离线状态使用灰色
   static const Color busy = Color(0xFF757575);            // 忙碌状态使用中灰色
   
   // 额外的灰色调

@@ -14,6 +14,10 @@ class ChatProvider with ChangeNotifier {
   bool _isConnected = false;
   StreamSubscription<ChatMessage>? _messageSubscription;
   StreamSubscription<Map<String, dynamic>>? _notificationSubscription;
+  
+  // 新消息回调函数
+  Function()? _newMessageCallback;
+  String? _currentUserId; // 当前用户ID
 
   List<ChatMessage> get messages => _messages;
   bool get isLoading => _isLoading;
@@ -24,6 +28,9 @@ class ChatProvider with ChangeNotifier {
   /// 初始化STOMP WebSocket连接
   Future<void> initialize(String tempToken, {String? userId}) async {
     try {
+      // 保存当前用户ID
+      _currentUserId = userId;
+      
       // 连接STOMP WebSocket
       StompWebSocketService.connect(tempToken, userId: userId);
       
@@ -42,7 +49,17 @@ class ChatProvider with ChangeNotifier {
         if (message.roomId == _currentRoomId &&
             !_messages.any((existing) => existing.id == message.id)) {
           _messages.add(message);
+          
+          // 检查是否为新消息（不是自己发送的消息）
+          final isNotOwnMessage = message.senderId != _currentUserId;
+          
           notifyListeners();
+          
+          // 如果不是自己发送的消息，触发新消息提示
+          if (isNotOwnMessage) {
+            // 调用新消息回调函数
+            _newMessageCallback?.call();
+          }
         }
       });
       
@@ -63,6 +80,7 @@ class ChatProvider with ChangeNotifier {
     await _notificationSubscription?.cancel();
     StompWebSocketService.disconnect();
     _isConnected = false;
+    _currentUserId = null;
     notifyListeners();
   }
 
@@ -89,6 +107,15 @@ class ChatProvider with ChangeNotifier {
         
         // 使用临时token初始化WebSocket连接
         await initialize(tempToken, userId: userIdStr);
+        
+        // 等待WebSocket连接完成
+        await _waitForConnection();
+        
+        if (!_isConnected) {
+          _error = 'WebSocket连接超时，请检查网络连接';
+          notifyListeners();
+          return;
+        }
         
         // 获取历史消息
         await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
@@ -218,11 +245,28 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// 设置新消息回调函数
+  void setNewMessageCallback(Function() callback) {
+    _newMessageCallback = callback;
+  }
+  
+  /// 等待WebSocket连接完成
+  Future<void> _waitForConnection() async {
+    int retryCount = 0;
+    while (!_isConnected && retryCount < 20) {
+      await Future.delayed(const Duration(milliseconds: 200));
+      retryCount++;
+      debugPrint('等待WebSocket连接... (${retryCount}/20)');
+    }
+  }
+
   @override
   void dispose() {
     _messageSubscription?.cancel();
     _notificationSubscription?.cancel();
     StompWebSocketService.disconnect();
+    _newMessageCallback = null;
+    _currentUserId = null;
     super.dispose();
   }
 }
