@@ -5,6 +5,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
+import '../../generated/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -30,16 +31,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) return '请输入邮箱地址';
+    if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseEnterEmail;
     // 修复：原来的正则在结尾处多了一个转义符号，导致校验异常
     final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(value)) return '请输入有效的邮箱地址';
+    if (!emailRegex.hasMatch(value)) return AppLocalizations.of(context).pleaseEnterValidEmail;
     return null;
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return '请输入密码';
-    if (value.length < 6) return '密码至少需要6位字符';
+    if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseEnterPassword;
+    if (value.length < 6) return AppLocalizations.of(context).passwordMinLength;
     return null;
   }
 
@@ -98,14 +99,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    '创建账号',
+                    AppLocalizations.of(context).createAccount,
                     style: AppTextStyles.headlineSmall.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '加入TableTalk，发现更多美食',
+                    AppLocalizations.of(context).joinTableTalk,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -135,14 +136,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       TextFieldWidget(
                         controller: _displayNameController,
-                        label: '显示名称',
+                        label: AppLocalizations.of(context).displayName,
                         prefixIcon: Icons.person_outline,
                       ),
                       const SizedBox(height: 16),
                       
                       TextFieldWidget(
                         controller: _emailController,
-                        label: '邮箱地址',
+                        label: AppLocalizations.of(context).email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -151,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       
                       TextFieldWidget(
                         controller: _phoneController,
-                        label: '手机号码',
+                        label: AppLocalizations.of(context).phoneNumber,
                         keyboardType: TextInputType.phone,
                         prefixIcon: Icons.phone_outlined,
                       ),
@@ -159,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: '密码',
+                        label: AppLocalizations.of(context).password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -189,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   )
                                 : Text(
-                                    '注册',
+                                    AppLocalizations.of(context).register,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -210,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '已有账号？',
+                    AppLocalizations.of(context).alreadyHaveAccount,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -224,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      '立即登录',
+                      AppLocalizations.of(context).loginNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

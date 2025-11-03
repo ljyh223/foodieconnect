@@ -1,0 +1,649 @@
+{
+  "@@locale": "zh",
+  "@@context": "TableTalk应用简体中文本地化文件",
+  
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "应用标题"
+  },
+  
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "应用英文名称"
+  },
+  
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "应用中文名称"
+  },
+  
+  "discoverFoodShareExperience": "发现美食，分享体验",
+  "@discoverFoodShareExperience": {
+    "description": "应用副标题"
+  },
+  
+  "login": "登录",
+  "@login": {
+    "description": "登录按钮文本"
+  },
+  
+  "register": "注册",
+  "@register": {
+    "description": "注册按钮文本"
+  },
+  
+  "email": "邮箱地址",
+  "@email": {
+    "description": "邮箱输入框标签"
+  },
+  
+  "password": "密码",
+  "@password": {
+    "description": "密码输入框标签"
+  },
+  
+  "displayName": "显示名称",
+  "@displayName": {
+    "description": "显示名称输入框标签"
+  },
+  
+  "phoneNumber": "手机号码",
+  "@phoneNumber": {
+    "description": "手机号码输入框标签"
+  },
+  
+  "pleaseEnterEmail": "请输入邮箱地址",
+  "@pleaseEnterEmail": {
+    "description": "邮箱验证错误信息"
+  },
+  
+  "pleaseEnterValidEmail": "请输入有效的邮箱地址",
+  "@pleaseEnterValidEmail": {
+    "description": "邮箱格式验证错误信息"
+  },
+  
+  "pleaseEnterPassword": "请输入密码",
+  "@pleaseEnterPassword": {
+    "description": "密码验证错误信息"
+  },
+  
+  "passwordMinLength": "密码至少需要6位字符",
+  "@passwordMinLength": {
+    "description": "密码长度验证错误信息"
+  },
+  
+  "forgotPassword": "忘记密码？",
+  "@forgotPassword": {
+    "description": "忘记密码链接文本"
+  },
+  
+  "noAccountYet": "还没有账号？",
+  "@noAccountYet": {
+    "description": "没有账号提示文本"
+  },
+  
+  "registerNow": "立即注册",
+  "@registerNow": {
+    "description": "立即注册链接文本"
+  },
+  
+  "alreadyHaveAccount": "已有账号？",
+  "@alreadyHaveAccount": {
+    "description": "已有账号提示文本"
+  },
+  
+  "loginNow": "立即登录",
+  "@loginNow": {
+    "description": "立即登录链接文本"
+  },
+  
+  "createAccount": "创建账号",
+  "@createAccount": {
+    "description": "创建账号标题"
+  },
+  
+  "joinTableTalk": "加入TableTalk，发现更多美食",
+  "@joinTableTalk": {
+    "description": "注册页面副标题"
+  },
+  
+  "loginFailed": "登录失败，请稍后重试",
+  "@loginFailed": {
+    "description": "登录失败提示"
+  },
+  
+  "checkingLoginStatus": "正在检查登录状态...",
+  "@checkingLoginStatus": {
+    "description": "检查登录状态提示"
+  },
+  
+  "authCheckFailed": "认证检查失败",
+  "@authCheckFailed": {
+    "description": "认证检查失败提示"
+  },
+  
+  "authCheckTimeout": "认证检查超时",
+  "@authCheckTimeout": {
+    "description": "认证检查超时提示"
+  },
+  
+  "search": "搜索",
+  "@search": {
+    "description": "搜索框提示文本"
+  },
+  
+  "noRestaurants": "暂无餐厅信息",
+  "@noRestaurants": {
+    "description": "无餐厅信息提示"
+  },
+  
+  "loadingFailed": "加载失败",
+  "@loadingFailed": {
+    "description": "加载失败提示"
+  },
+  
+  "retry": "重试",
+  "@retry": {
+    "description": "重试按钮文本"
+  },
+  
+  "open": "营业中",
+  "@open": {
+    "description": "营业状态"
+  },
+  
+  "closed": "已打烊",
+  "@closed": {
+    "description": "打烊状态"
+  },
+  
+  "basicInfo": "基础信息",
+  "@basicInfo": {
+    "description": "基础信息标题"
+  },
+  
+  "address": "地址",
+  "@address": {
+    "description": "地址标签"
+  },
+  
+  "distanceFromYou": "距离您{distance}",
+  "@distanceFromYou": {
+    "description": "距离提示",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "businessHours": "营业时间",
+  "@businessHours": {
+    "description": "营业时间标签"
+  },
+  
+  "phone": "电话",
+  "@phone": {
+    "description": "电话标签"
+  },
+  
+  "rating": "评分",
+  "@rating": {
+    "description": "评分标签"
+  },
+  
+  "totalReviews": "共{count}条评价",
+  "@totalReviews": {
+    "description": "评价数量提示",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "dishReviews": "菜肴点评",
+  "@dishReviews": {
+    "description": "菜肴点评标题"
+  },
+  
+  "noReviews": "暂无评价",
+  "@noReviews": {
+    "description": "无评价提示"
+  },
+  
+  "chatRoom": "聊天室",
+  "@chatRoom": {
+    "description": "聊天室标题"
+  },
+  
+  "chatWithStaff": "与店员实时沟通，了解更多详情",
+  "@chatWithStaff": {
+    "description": "聊天室描述"
+  },
+  
+  "enterChatRoom": "进入聊天室",
+  "@enterChatRoom": {
+    "description": "进入聊天室按钮"
+  },
+  
+  "staffReviews": "店员评价",
+  "@staffReviews": {
+    "description": "店员评价标题"
+  },
+  
+  "noStaffInfo": "暂无店员信息",
+  "@noStaffInfo": {
+    "description": "无店员信息提示"
+  },
+  
+  "viewAllStaff": "查看所有店员",
+  "@viewAllStaff": {
+    "description": "查看所有店员按钮"
+  },
+  
+  "experience": "经验",
+  "@experience": {
+    "description": "经验标签"
+  },
+  
+  "restaurantImages": "餐厅图片",
+  "@restaurantImages": {
+    "description": "餐厅图片标题"
+  },
+  
+  "averagePrice": "人均消费",
+  "@averagePrice": {
+    "description": "人均消费标题"
+  },
+  
+  "recommendedDishes": "推荐菜品",
+  "@recommendedDishes": {
+    "description": "推荐菜品标题"
+  },
+  
+  "loading": "加载中...",
+  "@loading": {
+    "description": "加载中提示"
+  },
+  
+  "menu": "菜单",
+  "@menu": {
+    "description": "菜单标题"
+  },
+  
+  "viewFullMenu": "查看完整菜单",
+  "@viewFullMenu": {
+    "description": "查看完整菜单文本"
+  },
+  
+  "viewMenu": "查看菜单",
+  "@viewMenu": {
+    "description": "查看菜单按钮"
+  },
+  
+  "menuFeatureInDevelopment": "菜单功能开发中",
+  "@menuFeatureInDevelopment": {
+    "description": "菜单功能开发中提示"
+  },
+  
+  "getMenuFailed": "获取菜单失败",
+  "@getMenuFailed": {
+    "description": "获取菜单失败提示"
+  },
+  
+  "getShopInfoFailed": "获取店铺信息失败",
+  "@getShopInfoFailed": {
+    "description": "获取店铺信息失败提示"
+  },
+  
+  "userComments": "用户评论",
+  "@userComments": {
+    "description": "用户评论标题"
+  },
+  
+  "publishReview": "发布评价",
+  "@publishReview": {
+    "description": "发布评价按钮"
+  },
+  
+  "ratingScore": "评分",
+  "@ratingScore": {
+    "description": "评分标签"
+  },
+  
+  "reviewContent": "评价内容",
+  "@reviewContent": {
+    "description": "评价内容标签"
+  },
+  
+  "shareDiningExperience": "分享你的用餐体验...",
+  "@shareDiningExperience": {
+    "description": "评价内容输入框提示"
+  },
+  
+  "addImages": "添加图片",
+  "@addImages": {
+    "description": "添加图片标题"
+  },
+  
+  "takePhoto": "拍照",
+  "@takePhoto": {
+    "description": "拍照按钮"
+  },
+  
+  "selectFromGallery": "相册",
+  "@selectFromGallery": {
+    "description": "相册按钮"
+  },
+  
+  "selectFromAlbum": "从相册选择",
+  "@selectFromAlbum": {
+    "description": "从相册选择文本"
+  },
+  
+  "addImage": "添加图片",
+  "@addImage": {
+    "description": "添加图片提示"
+  },
+  
+  "publish": "发布",
+  "@publish": {
+    "description": "发布按钮"
+  },
+  
+  "restaurantInfoInvalid": "餐厅信息无效",
+  "@restaurantInfoInvalid": {
+    "description": "餐厅信息无效提示"
+  },
+  
+  "pleaseEnterReviewContent": "请输入评价内容",
+  "@pleaseEnterReviewContent": {
+    "description": "请输入评价内容提示"
+  },
+  
+  "reviewPublished": "评价已发布",
+  "@reviewPublished": {
+    "description": "评价已发布提示"
+  },
+  
+  "publishFailed": "发布失败",
+  "@publishFailed": {
+    "description": "发布失败提示"
+  },
+  
+  "takePhotoFailed": "拍照失败",
+  "@takePhotoFailed": {
+    "description": "拍照失败提示"
+  },
+  
+  "selectImageFailed": "选择图片失败",
+  "@selectImageFailed": {
+    "description": "选择图片失败提示"
+  },
+  
+  "staffList": "店员列表",
+  "@staffList": {
+    "description": "店员列表标题"
+  },
+  
+  "getStaffListFailed": "获取店员列表失败",
+  "@getStaffListFailed": {
+    "description": "获取店员列表失败提示"
+  },
+  
+  "noStaff": "暂无店员信息",
+  "@noStaff": {
+    "description": "无店员信息提示"
+  },
+  
+  "staffDetails": "店员详情",
+  "@staffDetails": {
+    "description": "店员详情标题"
+  },
+  
+  "staffInfoNotExists": "店员信息不存在",
+  "@staffInfoNotExists": {
+    "description": "店员信息不存在提示"
+  },
+  
+  "getStaffDetailsFailed": "获取店员详情失败",
+  "@getStaffDetailsFailed": {
+    "description": "获取店员详情失败提示"
+  },
+  
+  "loadStaffReviewsFailed": "加载店员评价失败",
+  "@loadStaffReviewsFailed": {
+    "description": "加载店员评价失败提示"
+  },
+  
+  "userReviews": "用户评价",
+  "@userReviews": {
+    "description": "用户评价标题"
+  },
+  
+  "reviewCount": "{count}条评价",
+  "@reviewCount": {
+    "description": "评价数量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "shopFeatures": "店铺功能",
+  "@shopFeatures": {
+    "description": "店铺功能标题"
+  },
+  
+  "viewComments": "查看评论",
+  "@viewComments": {
+    "description": "查看评论功能标题"
+  },
+  
+  "viewUserReviews": "查看用户评价",
+  "@viewUserReviews": {
+    "description": "查看用户评价描述"
+  },
+  
+  "instantChat": "即时聊天",
+  "@instantChat": {
+    "description": "即时聊天功能标题"
+  },
+  
+  "chatWithStaffRealtime": "与店员实时交流",
+  "@chatWithStaffRealtime": {
+    "description": "与店员实时交流描述"
+  },
+  
+  "viewStaff": "查看店员",
+  "@viewStaff": {
+    "description": "查看店员功能标题"
+  },
+  
+  "onlineStaffList": "在线店员列表",
+  "@onlineStaffList": {
+    "description": "在线店员列表描述"
+  },
+  
+  "viewMenuDishes": "查看菜单",
+  "@viewMenuDishes": {
+    "description": "查看菜单功能标题"
+  },
+  
+  "browseAllDishes": "浏览所有菜品",
+  "@browseAllDishes": {
+    "description": "浏览所有菜品描述"
+  },
+  
+  "chat": "聊天",
+  "@chat": {
+    "description": "聊天标题"
+  },
+  
+  "restaurantChatVerification": "餐厅聊天验证",
+  "@restaurantChatVerification": {
+    "description": "餐厅聊天验证标题"
+  },
+  
+  "enterRestaurantIdAndCode": "请输入餐厅ID和验证码以加入聊天室",
+  "@enterRestaurantIdAndCode": {
+    "description": "输入餐厅ID和验证码提示"
+  },
+  
+  "verificationCode": "验证码",
+  "@verificationCode": {
+    "description": "验证码标签"
+  },
+  
+  "pleaseEnterVerificationCode": "请填写验证码",
+  "@pleaseEnterVerificationCode": {
+    "description": "请填写验证码提示"
+  },
+  
+  "verificationFailed": "验证失败，请检查餐厅ID和验证码",
+  "@verificationFailed": {
+    "description": "验证失败提示"
+  },
+  
+  "verificationError": "验证失败：{error}",
+  "@verificationError": {
+    "description": "验证错误提示",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "verifyAndStartChat": "验证并开始聊天",
+  "@verifyAndStartChat": {
+    "description": "验证并开始聊天按钮"
+  },
+  
+  "pleaseVerifyFirst": "请先通过验证界面加入聊天室",
+  "@pleaseVerifyFirst": {
+    "description": "请先验证提示"
+  },
+  
+  "staffChatFeatureMoved": "店员聊天功能已迁移至餐厅聊天室",
+  "@staffChatFeatureMoved": {
+    "description": "店员聊天功能迁移提示"
+  },
+  
+  "restaurantChatRoom": "餐厅聊天室",
+  "@restaurantChatRoom": {
+    "description": "餐厅聊天室名称"
+  },
+  
+  "initializeChatRoomFailed": "初始化聊天室失败",
+  "@initializeChatRoomFailed": {
+    "description": "初始化聊天室失败提示"
+  },
+  
+  "initializeChatRoomError": "初始化聊天室失败: {error}",
+  "@initializeChatRoomError": {
+    "description": "初始化聊天室错误提示",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "noAvailableChatRoom": "当前无可用聊天室",
+  "@noAvailableChatRoom": {
+    "description": "无可用聊天室提示"
+  },
+  
+  "noMessagesStartChat": "暂无消息，开始聊天吧！",
+  "@noMessagesStartChat": {
+    "description": "无消息提示"
+  },
+  
+  "websocketNotConnected": "WebSocket未连接",
+  "@websocketNotConnected": {
+    "description": "WebSocket未连接提示"
+  },
+  
+  "connected": "已连接",
+  "@connected": {
+    "description": "已连接状态"
+  },
+  
+  "disconnected": "未连接",
+  "@disconnected": {
+    "description": "未连接状态"
+  },
+  
+  "enterMessage": "输入消息...",
+  "@enterMessage": {
+    "description": "输入消息提示"
+  },
+  
+  "newMessages": "新消息",
+  "@newMessages": {
+    "description": "新消息提示"
+  },
+  
+  "selectLanguage": "选择语言",
+  "@selectLanguage": {
+    "description": "选择语言标题"
+  },
+  
+  "close": "关闭",
+  "@close": {
+    "description": "关闭按钮文本"
+  },
+  
+  "settings": "设置",
+  "@settings": {
+    "description": "设置标题"
+  },
+  
+  "languageSettings": "语言设置",
+  "@languageSettings": {
+    "description": "语言设置标题"
+  },
+  
+  "currentLanguage": "当前语言",
+  "@currentLanguage": {
+    "description": "当前语言标签"
+  },
+  
+  "accountSettings": "账户设置",
+  "@accountSettings": {
+    "description": "账户设置标题"
+  },
+  
+  "profile": "个人资料",
+  "@profile": {
+    "description": "个人资料"
+  },
+  
+  "privacy": "隐私设置",
+  "@privacy": {
+    "description": "隐私设置"
+  },
+  
+  "notifications": "通知设置",
+  "@notifications": {
+    "description": "通知设置"
+  },
+  
+  "about": "关于",
+  "@about": {
+    "description": "关于"
+  },
+  
+  "version": "版本",
+  "@version": {
+    "description": "版本"
+  },
+  
+  "logout": "退出登录",
+  "@logout": {
+    "description": "退出登录"
+  }
+}

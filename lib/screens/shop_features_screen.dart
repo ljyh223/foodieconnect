@@ -5,6 +5,7 @@ import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../core/services/restaurant_service.dart';
 import '../data/models/restaurant_model.dart';
+import '../../generated/app_localizations.dart';
 
 class ShopFeaturesScreen extends StatefulWidget {
   final String? restaurantId;
@@ -83,7 +84,7 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: '店铺功能',
+        title: AppLocalizations.of(context).shopFeatures,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -111,11 +112,11 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('加载失败：$_error'),
+            Text('${AppLocalizations.of(context).loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadRestaurant,
-              child: const Text('重试'),
+              child: Text(AppLocalizations.of(context).retry),
             ),
           ],
         ),
@@ -134,11 +135,11 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('获取店铺信息失败：${snapshot.error}'),
+                Text('${AppLocalizations.of(context).getShopInfoFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadRestaurant,
-                  child: const Text('重试'),
+                  child: Text(AppLocalizations.of(context).retry),
                 ),
               ],
             ),
@@ -158,29 +159,29 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
               case 0:
                 return FeatureCard(
                   icon: Icons.star,
-                  title: '查看评论',
-                  subtitle: '查看用户评价',
+                  title: AppLocalizations.of(context).viewComments,
+                  subtitle: AppLocalizations.of(context).viewUserReviews,
                   onTap: navigateToReviews,
                 );
               case 1:
                 return FeatureCard(
                   icon: Icons.chat,
-                  title: '即时聊天',
-                  subtitle: '与店员实时交流',
+                  title: AppLocalizations.of(context).instantChat,
+                  subtitle: AppLocalizations.of(context).chatWithStaffRealtime,
                   onTap: navigateToChatVerify,
                 );
               case 2:
                 return FeatureCard(
                   icon: Icons.people,
-                  title: '查看店员',
-                  subtitle: '在线店员列表',
+                  title: AppLocalizations.of(context).viewStaff,
+                  subtitle: AppLocalizations.of(context).onlineStaffList,
                   onTap: navigateToStaff,
                 );
               case 3:
                 return FeatureCard(
                   icon: Icons.restaurant_menu,
-                  title: '查看菜单',
-                  subtitle: '浏览所有菜品',
+                  title: AppLocalizations.of(context).viewMenu,
+                  subtitle: AppLocalizations.of(context).browseAllDishes,
                   onTap: navigateToMenu,
                 );
               default:

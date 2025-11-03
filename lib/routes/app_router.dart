@@ -12,6 +12,7 @@ import '../screens/staff_detail_screen.dart';
 import '../screens/register_screen.dart';
 import '../screens/restaurant_info_screen.dart';
 import '../screens/create_review_screen.dart';
+import '../screens/settings_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -73,6 +74,8 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => CreateReviewScreen(restaurantId: args?['restaurantId']),
         );
+      case '/settings':
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

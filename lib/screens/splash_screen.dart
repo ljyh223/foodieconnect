@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
+import '../../generated/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('认证检查失败: $error'),
+          content: Text('${AppLocalizations.of(context).authCheckFailed}: $error'),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -66,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final completer = Completer<void>();
       final timer = Timer(timeoutDuration, () {
         if (!completer.isCompleted) {
-          completer.completeError(TimeoutException('认证检查超时'));
+          completer.completeError(TimeoutException(AppLocalizations.of(context).authCheckTimeout));
         }
       });
       
@@ -138,7 +139,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             // 应用名称
             Text(
-              'TableTalk',
+              AppLocalizations.of(context).tableTalk,
               style: AppTextStyles.headlineMedium.copyWith(
                 color: AppColors.onPrimary,
               ),
@@ -156,7 +157,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 16),
             // 加载文本
             Text(
-              '正在检查登录状态...',
+              AppLocalizations.of(context).checkingLoginStatus,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onPrimary.withAlpha(204), // 80% opacity
               ),

@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/restaurant_provider.dart';
 import '../core/services/api_service.dart';
 import 'dart:math';
+import '../../generated/app_localizations.dart';
+import '../presentation/widgets/language_selector_widget.dart';
 
 class ShopsScreen extends StatefulWidget {
   const ShopsScreen({super.key});
@@ -71,28 +73,46 @@ class _ShopsScreenState extends State<ShopsScreen> {
         elevation: 0,
         automaticallyImplyLeading: false, // 移除返回按钮
         titleSpacing: 0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              hintText: 'Search',
-              hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
-              prefixIcon: const Icon(Icons.search, color: Colors.grey),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+        title: Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context).search,
+                hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[100],
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                isDense: true, // 减少垂直空间
               ),
-              filled: true,
-              fillColor: Colors.grey[100],
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: navigateToUserProfile,
-            icon: const Icon(Icons.person, color: Colors.grey),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/settings');
+              },
+              icon: const Icon(Icons.settings, color: Colors.grey),
+              iconSize: 20,
+              tooltip: AppLocalizations.of(context).settings,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: IconButton(
+              onPressed: navigateToUserProfile,
+              icon: const Icon(Icons.person, color: Colors.grey),
+              iconSize: 20, // 减小图标大小
+            ),
           ),
         ],
       ),
@@ -114,9 +134,9 @@ class _ShopsScreenState extends State<ShopsScreen> {
           final restaurants = provider.restaurants;
 
           if (restaurants.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                '暂无餐厅信息',
+                AppLocalizations.of(context).noRestaurants,
                 style: TextStyle(fontSize: 16, color: Colors.black54),
               ),
             );
@@ -241,7 +261,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
-                                  restaurant.isOpen ? '营业中' : '已打烊',
+                                  restaurant.isOpen ? AppLocalizations.of(context).open : AppLocalizations.of(context).closed,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: restaurant.isOpen ? Colors.green : Colors.grey,

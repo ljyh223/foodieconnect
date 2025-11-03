@@ -7,6 +7,7 @@ import '../presentation/providers/auth_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as img;
+import '../../generated/app_localizations.dart';
 
 class CreateReviewScreen extends StatefulWidget {
   final String? restaurantId;
@@ -49,9 +50,9 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          '发布评价',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context).publishReview,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -70,7 +71,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Text('发布'),
+                : Text(AppLocalizations.of(context).publish),
           ),
         ],
       ),
@@ -88,9 +89,9 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '评分',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).ratingScore,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
@@ -128,13 +129,13 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '评价内容',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        Text(
+                          AppLocalizations.of(context).reviewContent,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
+                      ),
                         const SizedBox(height: 8),
                         Expanded(
                           child: TextField(
@@ -142,9 +143,9 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                             maxLines: null,
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
-                            decoration: const InputDecoration(
-                              hintText: '分享你的用餐体验...',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              hintText: AppLocalizations.of(context).shareDiningExperience,
+                              border: const OutlineInputBorder(),
                             ),
                           ),
                         ),
@@ -163,9 +164,9 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '添加图片',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).addImages,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
@@ -183,7 +184,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                               child: OutlinedButton.icon(
                                 onPressed: _pickImageFromCamera,
                                 icon: const Icon(Icons.camera_alt),
-                                label: const Text('拍照'),
+                                label: Text(AppLocalizations.of(context).takePhoto),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -191,7 +192,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                               child: OutlinedButton.icon(
                                 onPressed: _pickImageFromGallery,
                                 icon: const Icon(Icons.photo_library),
-                                label: const Text('相册'),
+                                label: Text(AppLocalizations.of(context).selectFromGallery),
                               ),
                             ),
                           ],
@@ -217,13 +218,13 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add_photo_alternate, size: 32, color: Colors.grey),
-              SizedBox(height: 4),
-              Text('添加图片', style: TextStyle(color: Colors.grey)),
+              const Icon(Icons.add_photo_alternate, size: 32, color: Colors.grey),
+              const SizedBox(height: 4),
+              Text(AppLocalizations.of(context).addImage, style: const TextStyle(color: Colors.grey)),
             ],
           ),
         ),
@@ -309,7 +310,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text('拍照'),
+              title: Text(AppLocalizations.of(context).takePhoto),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromCamera();
@@ -317,7 +318,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('从相册选择'),
+              title: Text(AppLocalizations.of(context).selectFromAlbum),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromGallery();
@@ -352,7 +353,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (mounted) {
         debugPrint("拍照失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('拍照失败：${e.toString()}')),
+          SnackBar(content: Text('${AppLocalizations.of(context).takePhotoFailed}${e.toString()}')),
         );
       }
     }
@@ -386,7 +387,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (mounted) {
         debugPrint("选择图片失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('选择图片失败：${e.toString()}')),
+          SnackBar(content: Text('${AppLocalizations.of(context).selectImageFailed}${e.toString()}')),
         );
       }
     }
@@ -418,14 +419,14 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     
     if (restaurantId == null || restaurantId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('餐厅信息无效')),
+        SnackBar(content: Text(AppLocalizations.of(context).restaurantInfoInvalid)),
       );
       return;
     }
     
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请输入评价内容')),
+        SnackBar(content: Text(AppLocalizations.of(context).pleaseEnterReviewContent)),
       );
       return;
     }
@@ -439,13 +440,13 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('评价已发布')),
+        SnackBar(content: Text(AppLocalizations.of(context).reviewPublished)),
       );
       Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('发布失败：${e.toString()}')),
+          SnackBar(content: Text('${AppLocalizations.of(context).publishFailed}${e.toString()}')),
         );
       }
     } finally {

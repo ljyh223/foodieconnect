@@ -6,6 +6,7 @@ import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/chat_provider.dart';
 import '../core/services/auth_service.dart';
+import '../../generated/app_localizations.dart';
 
 class ChatVerifyScreen extends StatefulWidget {
   final String? restaurantId;
@@ -39,7 +40,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     if ( _verificationController.text.isEmpty) {
       if (mounted) {
         setState(() {
-          _error = '请填写验证码';
+          _error = AppLocalizations.of(context).pleaseEnterVerificationCode;
         });
       }
       return;
@@ -82,13 +83,13 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         );
       } else if (mounted) {
         setState(() {
-          _error = '验证失败，请检查餐厅ID和验证码';
+          _error = AppLocalizations.of(context).verificationFailed;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = '验证失败：${e.toString()}';
+          _error = '${AppLocalizations.of(context).verificationError}${e.toString()}';
         });
       }
     } finally {
@@ -105,7 +106,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: '餐厅聊天验证',
+        title: AppLocalizations.of(context).restaurantChatVerification,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -126,7 +127,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      '请输入餐厅ID和验证码以加入聊天室',
+                      AppLocalizations.of(context).enterRestaurantIdAndCode,
                       style: AppTextStyles.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -134,7 +135,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     const SizedBox(height: 16),
                     TextFieldWidget(
                       controller: _verificationController,
-                      label: '验证码',
+                      label: AppLocalizations.of(context).verificationCode,
                       keyboardType: TextInputType.number,
                       maxLength: 6,
                       textAlign: TextAlign.center,
@@ -174,7 +175,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                               ),
                             )
                           : Text(
-                              '验证并开始聊天',
+                              AppLocalizations.of(context).verifyAndStartChat,
                             ),
                     ),
                   ],

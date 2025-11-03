@@ -5,6 +5,7 @@ import '../data/models/staff_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../core/services/staff_service.dart';
 import '../core/services/api_service.dart';
+import '../../generated/app_localizations.dart';
 
 class StaffDetailScreen extends StatefulWidget {
   final String? staffId;
@@ -109,7 +110,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBarWidget(title: '店员详情', showBackButton: true),
+      appBar: AppBarWidget(title: AppLocalizations.of(context).staffDetails, showBackButton: true),
       body: SafeArea(child: _buildContent()),
     );
   }
@@ -124,9 +125,9 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('加载失败：$_error'),
+            Text('${AppLocalizations.of(context).loadingFailed}：$_error'),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: _loadStaff, child: const Text('重试')),
+            ElevatedButton(onPressed: _loadStaff, child: Text(AppLocalizations.of(context).retry)),
           ],
         ),
       );
@@ -144,9 +145,9 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('获取店员详情失败：${snapshot.error}'),
+                Text('${AppLocalizations.of(context).getStaffDetailsFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
-                ElevatedButton(onPressed: _loadStaff, child: const Text('重试')),
+                ElevatedButton(onPressed: _loadStaff, child: Text(AppLocalizations.of(context).retry)),
               ],
             ),
           );
@@ -154,7 +155,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
 
         final staff = snapshot.data;
         if (staff == null) {
-          return const Center(child: Text('店员信息不存在'));
+          return Center(child: Text(AppLocalizations.of(context).staffInfoNotExists));
         }
 
         // 加载店员评价
@@ -250,7 +251,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '评分 ${staff.rating}/5.0 · ${staff.experience}经验',
+                      '${AppLocalizations.of(context).rating} ${staff.rating}/5.0 · ${staff.experience}${AppLocalizations.of(context).experience}',
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -266,14 +267,14 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                   Row(
                     children: [
                       Text(
-                        '用户评价',
+                        AppLocalizations.of(context).userReviews,
                         style: AppTextStyles.titleMedium.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       const Spacer(),
                       Text(
-                        '${_reviews.length}条评价',
+                        AppLocalizations.of(context).reviewCount(_reviews.length),
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:tabletalk/generated/app_localizations.dart';
 import '../data/models/restaurant_model.dart';
 import '../core/services/restaurant_service.dart';
 import '../core/services/api_service.dart';
@@ -74,14 +75,14 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       // TODO: 实现菜单显示界面
       // 这里可以导航到一个新的菜单页面或显示底部弹窗
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('菜单功能开发中')),
+        SnackBar(content: Text(AppLocalizations.of(context).menuFeatureInDevelopment)),
       );
     } catch (e) {
       // 关闭加载指示器（如果还在显示）
       Navigator.of(context).pop();
       
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('获取菜单失败：$e')),
+        SnackBar(content: Text('${AppLocalizations.of(context).getMenuFailed}$e')),
       );
     }
   }
@@ -98,7 +99,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         }
 
         if (snapshot.hasError) {
-          return Scaffold(body: Center(child: Text('获取店铺信息失败：${snapshot.error}')));
+          return Scaffold(body: Center(child: Text('${AppLocalizations.of(context).getShopInfoFailed}${snapshot.error}')));
         }
 
         final restaurant = snapshot.data!;
@@ -133,11 +134,11 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
                         child: Text(
-                          '餐厅图片',
-                          style: TextStyle(
+                          AppLocalizations.of(context).restaurantImages,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.black,
@@ -185,9 +186,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '营业时间',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).businessHours,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -224,9 +225,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '餐厅地址',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).address,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -254,7 +255,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '距离您${restaurant.distance}',
+                                  AppLocalizations.of(context).distanceFromYou(restaurant.distance),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey[600],
@@ -276,9 +277,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '人均消费',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).averagePrice,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -316,9 +317,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '推荐菜品',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).recommendedDishes,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -340,7 +341,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 List<String> dishes = [];
                                 
                                 if (dishesSnapshot.connectionState == ConnectionState.waiting) {
-                                  dishes = ['加载中...'];
+                                  dishes = [AppLocalizations.of(context).loading];
                                 } else if (dishesSnapshot.hasError || dishesSnapshot.data == null || dishesSnapshot.data!.isEmpty) {
                                   // 如果API调用失败或没有数据，使用餐厅模型中的推荐菜品或默认菜品
                                   dishes = restaurant.recommendedDishes.isNotEmpty
@@ -377,9 +378,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '菜单',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context).menu,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -398,9 +399,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  '查看完整菜单',
-                                  style: TextStyle(
+                                Text(
+                                  AppLocalizations.of(context).viewFullMenu,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.black87,
                                   ),
@@ -421,9 +422,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: const Text(
-                                      '查看菜单',
-                                      style: TextStyle(
+                                    child: Text(
+                                      AppLocalizations.of(context).viewMenu,
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),

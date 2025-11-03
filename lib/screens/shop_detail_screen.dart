@@ -7,6 +7,7 @@ import '../core/services/review_service.dart';
 import '../core/services/staff_service.dart';
 import '../core/services/api_service.dart';
 import 'dart:math';
+import '../../generated/app_localizations.dart';
 
 class ShopDetailScreen extends StatelessWidget {
   final String? restaurantId;
@@ -52,7 +53,7 @@ class ShopDetailScreen extends StatelessWidget {
 
         if (snapshot.hasError) {
           debugPrint('获取店铺信息失败：${snapshot.error}');
-          return Scaffold(body: Center(child: Text('获取店铺信息失败：${snapshot.error}')));
+          return Scaffold(body: Center(child: Text('${AppLocalizations.of(context).getShopInfoFailed}${snapshot.error}')));
         }
 
         final restaurant = snapshot.data!;
@@ -161,9 +162,9 @@ class ShopDetailScreen extends StatelessWidget {
                                 size: 24,
                               ),
                               const SizedBox(width: 8),
-                              const Text(
-                                '基础信息',
-                                style: TextStyle(
+                              Text(
+                                AppLocalizations.of(context).basicInfo,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.black,
@@ -180,25 +181,25 @@ class ShopDetailScreen extends StatelessWidget {
                         const SizedBox(height: 12),
                         _buildInfoRow(
                           icon: Icons.location_on,
-                          label: '地址',
+                          label: AppLocalizations.of(context).address,
                           value: restaurant.address,
-                          subtitle: '距离您${restaurant.distance}',
+                          subtitle: AppLocalizations.of(context).distanceFromYou(restaurant.distance),
                         ),
                         _buildInfoRow(
                           icon: Icons.schedule,
-                          label: '营业时间',
+                          label: AppLocalizations.of(context).businessHours,
                           value: restaurant.hours,
                         ),
                         _buildInfoRow(
                           icon: Icons.phone,
-                          label: '电话',
+                          label: AppLocalizations.of(context).phone,
                           value: restaurant.phone,
                         ),
                         _buildInfoRow(
                           icon: Icons.star,
-                          label: '评分',
+                          label: AppLocalizations.of(context).rating,
                           value: '${restaurant.rating}/5.0',
-                          subtitle: '共${restaurant.reviewCount}条评价',
+                          subtitle: AppLocalizations.of(context).totalReviews(restaurant.reviewCount),
                         ),
                         ],
                       ),
@@ -223,9 +224,9 @@ class ShopDetailScreen extends StatelessWidget {
                                 size: 24,
                               ),
                               const SizedBox(width: 8),
-                              const Text(
-                                '菜肴点评',
-                                style: TextStyle(
+                              Text(
+                                AppLocalizations.of(context).dishReviews,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.black,
@@ -248,9 +249,9 @@ class ShopDetailScreen extends StatelessWidget {
                             }
                             
                             if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                              return const Text(
-                                '暂无评价',
-                                style: TextStyle(
+                              return Text(
+                                AppLocalizations.of(context).noReviews,
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
                                 ),
@@ -378,9 +379,9 @@ class ShopDetailScreen extends StatelessWidget {
                               size: 24,
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              '聊天室',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context).chatRoom,
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
@@ -389,9 +390,9 @@ class ShopDetailScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        const Text(
-                          '与店员实时沟通，了解更多详情',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context).chatWithStaff,
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black87,
                           ),
@@ -409,9 +410,9 @@ class ShopDetailScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
-                              '进入聊天室',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context).enterChatRoom,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -438,9 +439,9 @@ class ShopDetailScreen extends StatelessWidget {
                               size: 24,
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              '店员评价',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context).staffReviews,
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
@@ -459,9 +460,9 @@ class ShopDetailScreen extends StatelessWidget {
                             if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
                               return Column(
                                 children: [
-                                  const Text(
-                                    '暂无店员信息',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context).noStaffInfo,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
                                     ),
@@ -479,9 +480,9 @@ class ShopDetailScreen extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                       ),
-                                      child: const Text(
-                                        '查看所有店员',
-                                        style: TextStyle(
+                                      child: Text(
+                                        AppLocalizations.of(context).viewAllStaff,
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -596,7 +597,7 @@ class ShopDetailScreen extends StatelessWidget {
                                               if (staff.experience.isNotEmpty) ...[
                                                 const SizedBox(height: 2),
                                                 Text(
-                                                  '经验：${staff.experience}',
+                                                  '${AppLocalizations.of(context).experience}：${staff.experience}',
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.grey[600],
@@ -626,9 +627,9 @@ class ShopDetailScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    child: const Text(
-                                      '查看所有店员',
-                                      style: TextStyle(
+                                    child: Text(
+                                      AppLocalizations.of(context).viewAllStaff,
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),

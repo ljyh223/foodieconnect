@@ -8,7 +8,9 @@ import 'presentation/providers/restaurant_provider.dart';
 import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/staff_provider.dart';
 import 'presentation/providers/chat_provider.dart';
+import 'presentation/providers/language_provider.dart';
 import 'core/theme/app_theme.dart';
+import 'generated/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +30,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ReviewProvider()),
         ChangeNotifierProvider(create: (_) => StaffProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()..init()),
       ],
       child: const MyApp(),
     ),
@@ -92,16 +95,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppInitializer(
-      child: MaterialApp(
-        title: 'Foodie Connect', // 更新应用名称为 Foodie Connect
-        theme: AppTheme.lightTheme, // 使用新的简约黑白主题
-        darkTheme: AppTheme.darkTheme, // 可选的暗色主题
-        themeMode: ThemeMode.system, // 跟随系统主题设置
-        initialRoute: '/splash',
-        onGenerateRoute: AppRouter.generateRoute,
-        debugShowCheckedModeBanner: false, // 隐藏调试横幅
-      ),
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, child) {
+        return AppInitializer(
+          child: MaterialApp(
+            title: 'Foodie Connect', // 更新应用名称为 Foodie Connect
+            theme: AppTheme.lightTheme, // 使用新的简约黑白主题
+            darkTheme: AppTheme.darkTheme, // 可选的暗色主题
+            themeMode: ThemeMode.system, // 跟随系统主题设置
+            locale: languageProvider.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            initialRoute: '/splash',
+            onGenerateRoute: AppRouter.generateRoute,
+            debugShowCheckedModeBanner: false, // 隐藏调试横幅
+          ),
+        );
+      },
     );
   }
 }

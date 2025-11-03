@@ -1,0 +1,649 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk應用繁體中文本地化文件",
+  
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "應用標題"
+  },
+  
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "應用英文名稱"
+  },
+  
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "應用中文名稱"
+  },
+  
+  "discoverFoodShareExperience": "發現美食，分享體驗",
+  "@discoverFoodShareExperience": {
+    "description": "應用副標題"
+  },
+  
+  "login": "登入",
+  "@login": {
+    "description": "登入按鈕文本"
+  },
+  
+  "register": "註冊",
+  "@register": {
+    "description": "註冊按鈕文本"
+  },
+  
+  "email": "郵箱地址",
+  "@email": {
+    "description": "郵箱輸入框標籤"
+  },
+  
+  "password": "密碼",
+  "@password": {
+    "description": "密碼輸入框標籤"
+  },
+  
+  "displayName": "顯示名稱",
+  "@displayName": {
+    "description": "顯示名稱輸入框標籤"
+  },
+  
+  "phoneNumber": "手機號碼",
+  "@phoneNumber": {
+    "description": "手機號碼輸入框標籤"
+  },
+  
+  "pleaseEnterEmail": "請輸入郵箱地址",
+  "@pleaseEnterEmail": {
+    "description": "郵箱驗證錯誤信息"
+  },
+  
+  "pleaseEnterValidEmail": "請輸入有效的郵箱地址",
+  "@pleaseEnterValidEmail": {
+    "description": "郵箱格式驗證錯誤信息"
+  },
+  
+  "pleaseEnterPassword": "請輸入密碼",
+  "@pleaseEnterPassword": {
+    "description": "密碼驗證錯誤信息"
+  },
+  
+  "passwordMinLength": "密碼至少需要6位字符",
+  "@passwordMinLength": {
+    "description": "密碼長度驗證錯誤信息"
+  },
+  
+  "forgotPassword": "忘記密碼？",
+  "@forgotPassword": {
+    "description": "忘記密碼鏈接文本"
+  },
+  
+  "noAccountYet": "還沒有帳號？",
+  "@noAccountYet": {
+    "description": "沒有帳號提示文本"
+  },
+  
+  "registerNow": "立即註冊",
+  "@registerNow": {
+    "description": "立即註冊鏈接文本"
+  },
+  
+  "alreadyHaveAccount": "已有帳號？",
+  "@alreadyHaveAccount": {
+    "description": "已有帳號提示文本"
+  },
+  
+  "loginNow": "立即登入",
+  "@loginNow": {
+    "description": "立即登入鏈接文本"
+  },
+  
+  "createAccount": "創建帳號",
+  "@createAccount": {
+    "description": "創建帳號標題"
+  },
+  
+  "joinTableTalk": "加入TableTalk，發現更多美食",
+  "@joinTableTalk": {
+    "description": "註冊頁面副標題"
+  },
+  
+  "loginFailed": "登入失敗，請稍後重試",
+  "@loginFailed": {
+    "description": "登入失敗提示"
+  },
+  
+  "checkingLoginStatus": "正在檢查登入狀態...",
+  "@checkingLoginStatus": {
+    "description": "檢查登入狀態提示"
+  },
+  
+  "authCheckFailed": "認證檢查失敗",
+  "@authCheckFailed": {
+    "description": "認證檢查失敗提示"
+  },
+  
+  "authCheckTimeout": "認證檢查超時",
+  "@authCheckTimeout": {
+    "description": "認證檢查超時提示"
+  },
+  
+  "search": "搜尋",
+  "@search": {
+    "description": "搜尋框提示文本"
+  },
+  
+  "noRestaurants": "暫無餐廳信息",
+  "@noRestaurants": {
+    "description": "無餐廳信息提示"
+  },
+  
+  "loadingFailed": "載入失敗",
+  "@loadingFailed": {
+    "description": "載入失敗提示"
+  },
+  
+  "retry": "重試",
+  "@retry": {
+    "description": "重試按鈕文本"
+  },
+  
+  "open": "營業中",
+  "@open": {
+    "description": "營業狀態"
+  },
+  
+  "closed": "已打烊",
+  "@closed": {
+    "description": "打烊狀態"
+  },
+  
+  "basicInfo": "基礎信息",
+  "@basicInfo": {
+    "description": "基礎信息標題"
+  },
+  
+  "address": "地址",
+  "@address": {
+    "description": "地址標籤"
+  },
+  
+  "distanceFromYou": "距離您{distance}",
+  "@distanceFromYou": {
+    "description": "距離提示",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "businessHours": "營業時間",
+  "@businessHours": {
+    "description": "營業時間標籤"
+  },
+  
+  "phone": "電話",
+  "@phone": {
+    "description": "電話標籤"
+  },
+  
+  "rating": "評分",
+  "@rating": {
+    "description": "評分標籤"
+  },
+  
+  "totalReviews": "共{count}條評價",
+  "@totalReviews": {
+    "description": "評價數量提示",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "dishReviews": "菜肴點評",
+  "@dishReviews": {
+    "description": "菜肴點評標題"
+  },
+  
+  "noReviews": "暫無評價",
+  "@noReviews": {
+    "description": "無評價提示"
+  },
+  
+  "chatRoom": "聊天室",
+  "@chatRoom": {
+    "description": "聊天室標題"
+  },
+  
+  "chatWithStaff": "與店員即時溝通，了解更多詳情",
+  "@chatWithStaff": {
+    "description": "聊天室描述"
+  },
+  
+  "enterChatRoom": "進入聊天室",
+  "@enterChatRoom": {
+    "description": "進入聊天室按鈕"
+  },
+  
+  "staffReviews": "店員評價",
+  "@staffReviews": {
+    "description": "店員評價標題"
+  },
+  
+  "noStaffInfo": "暫無店員信息",
+  "@noStaffInfo": {
+    "description": "無店員信息提示"
+  },
+  
+  "viewAllStaff": "查看所有店員",
+  "@viewAllStaff": {
+    "description": "查看所有店員按鈕"
+  },
+  
+  "experience": "經驗",
+  "@experience": {
+    "description": "經驗標籤"
+  },
+  
+  "restaurantImages": "餐廳圖片",
+  "@restaurantImages": {
+    "description": "餐廳圖片標題"
+  },
+  
+  "averagePrice": "人均消費",
+  "@averagePrice": {
+    "description": "人均消費標題"
+  },
+  
+  "recommendedDishes": "推薦菜品",
+  "@recommendedDishes": {
+    "description": "推薦菜品標題"
+  },
+  
+  "loading": "載入中...",
+  "@loading": {
+    "description": "載入中提示"
+  },
+  
+  "menu": "菜單",
+  "@menu": {
+    "description": "菜單標題"
+  },
+  
+  "viewFullMenu": "查看完整菜單",
+  "@viewFullMenu": {
+    "description": "查看完整菜單文本"
+  },
+  
+  "viewMenu": "查看菜單",
+  "@viewMenu": {
+    "description": "查看菜單按鈕"
+  },
+  
+  "menuFeatureInDevelopment": "菜單功能開發中",
+  "@menuFeatureInDevelopment": {
+    "description": "菜單功能開發中提示"
+  },
+  
+  "getMenuFailed": "獲取菜單失敗",
+  "@getMenuFailed": {
+    "description": "獲取菜單失敗提示"
+  },
+  
+  "getShopInfoFailed": "獲取店鋪信息失敗",
+  "@getShopInfoFailed": {
+    "description": "獲取店鋪信息失敗提示"
+  },
+  
+  "userComments": "用戶評論",
+  "@userComments": {
+    "description": "用戶評論標題"
+  },
+  
+  "publishReview": "發布評價",
+  "@publishReview": {
+    "description": "發布評價按鈕"
+  },
+  
+  "ratingScore": "評分",
+  "@ratingScore": {
+    "description": "評分標籤"
+  },
+  
+  "reviewContent": "評價內容",
+  "@reviewContent": {
+    "description": "評價內容標籤"
+  },
+  
+  "shareDiningExperience": "分享你的用餐體驗...",
+  "@shareDiningExperience": {
+    "description": "評價內容輸入框提示"
+  },
+  
+  "addImages": "添加圖片",
+  "@addImages": {
+    "description": "添加圖片標題"
+  },
+  
+  "takePhoto": "拍照",
+  "@takePhoto": {
+    "description": "拍照按鈕"
+  },
+  
+  "selectFromGallery": "相冊",
+  "@selectFromGallery": {
+    "description": "相冊按鈕"
+  },
+  
+  "selectFromAlbum": "從相冊選擇",
+  "@selectFromAlbum": {
+    "description": "從相冊選擇文本"
+  },
+  
+  "addImage": "添加圖片",
+  "@addImage": {
+    "description": "添加圖片提示"
+  },
+  
+  "publish": "發布",
+  "@publish": {
+    "description": "發布按鈕"
+  },
+  
+  "restaurantInfoInvalid": "餐廳信息無效",
+  "@restaurantInfoInvalid": {
+    "description": "餐廳信息無效提示"
+  },
+  
+  "pleaseEnterReviewContent": "請輸入評價內容",
+  "@pleaseEnterReviewContent": {
+    "description": "請輸入評價內容提示"
+  },
+  
+  "reviewPublished": "評價已發布",
+  "@reviewPublished": {
+    "description": "評價已發布提示"
+  },
+  
+  "publishFailed": "發布失敗",
+  "@publishFailed": {
+    "description": "發布失敗提示"
+  },
+  
+  "takePhotoFailed": "拍照失敗",
+  "@takePhotoFailed": {
+    "description": "拍照失敗提示"
+  },
+  
+  "selectImageFailed": "選擇圖片失敗",
+  "@selectImageFailed": {
+    "description": "選擇圖片失敗提示"
+  },
+  
+  "staffList": "店員列表",
+  "@staffList": {
+    "description": "店員列表標題"
+  },
+  
+  "getStaffListFailed": "獲取店員列表失敗",
+  "@getStaffListFailed": {
+    "description": "獲取店員列表失敗提示"
+  },
+  
+  "noStaff": "暫無店員信息",
+  "@noStaff": {
+    "description": "無店員信息提示"
+  },
+  
+  "staffDetails": "店員詳情",
+  "@staffDetails": {
+    "description": "店員詳情標題"
+  },
+  
+  "staffInfoNotExists": "店員信息不存在",
+  "@staffInfoNotExists": {
+    "description": "店員信息不存在提示"
+  },
+  
+  "getStaffDetailsFailed": "獲取店員詳情失敗",
+  "@getStaffDetailsFailed": {
+    "description": "獲取店員詳情失敗提示"
+  },
+  
+  "loadStaffReviewsFailed": "載入店員評價失敗",
+  "@loadStaffReviewsFailed": {
+    "description": "載入店員評價失敗提示"
+  },
+  
+  "userReviews": "用戶評價",
+  "@userReviews": {
+    "description": "用戶評價標題"
+  },
+  
+  "reviewCount": "{count}條評價",
+  "@reviewCount": {
+    "description": "評價數量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  
+  "shopFeatures": "店鋪功能",
+  "@shopFeatures": {
+    "description": "店鋪功能標題"
+  },
+  
+  "viewComments": "查看評論",
+  "@viewComments": {
+    "description": "查看評論功能標題"
+  },
+  
+  "viewUserReviews": "查看用戶評價",
+  "@viewUserReviews": {
+    "description": "查看用戶評價描述"
+  },
+  
+  "instantChat": "即時聊天",
+  "@instantChat": {
+    "description": "即時聊天功能標題"
+  },
+  
+  "chatWithStaffRealtime": "與店員即時交流",
+  "@chatWithStaffRealtime": {
+    "description": "與店員即時交流描述"
+  },
+  
+  "viewStaff": "查看店員",
+  "@viewStaff": {
+    "description": "查看店員功能標題"
+  },
+  
+  "onlineStaffList": "在線店員列表",
+  "@onlineStaffList": {
+    "description": "在線店員列表描述"
+  },
+  
+  "viewMenuDishes": "查看菜單",
+  "@viewMenuDishes": {
+    "description": "查看菜單功能標題"
+  },
+  
+  "browseAllDishes": "瀏覽所有菜品",
+  "@browseAllDishes": {
+    "description": "瀏覽所有菜品描述"
+  },
+  
+  "chat": "聊天",
+  "@chat": {
+    "description": "聊天標題"
+  },
+  
+  "restaurantChatVerification": "餐廳聊天驗證",
+  "@restaurantChatVerification": {
+    "description": "餐廳聊天驗證標題"
+  },
+  
+  "enterRestaurantIdAndCode": "請輸入餐廳ID和驗證碼以加入聊天室",
+  "@enterRestaurantIdAndCode": {
+    "description": "輸入餐廳ID和驗證碼提示"
+  },
+  
+  "verificationCode": "驗證碼",
+  "@verificationCode": {
+    "description": "驗證碼標籤"
+  },
+  
+  "pleaseEnterVerificationCode": "請填寫驗證碼",
+  "@pleaseEnterVerificationCode": {
+    "description": "請填寫驗證碼提示"
+  },
+  
+  "verificationFailed": "驗證失敗，請檢查餐廳ID和驗證碼",
+  "@verificationFailed": {
+    "description": "驗證失敗提示"
+  },
+  
+  "verificationError": "驗證失敗：{error}",
+  "@verificationError": {
+    "description": "驗證錯誤提示",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "verifyAndStartChat": "驗證並開始聊天",
+  "@verifyAndStartChat": {
+    "description": "驗證並開始聊天按鈕"
+  },
+  
+  "pleaseVerifyFirst": "請先通過驗證界面加入聊天室",
+  "@pleaseVerifyFirst": {
+    "description": "請先驗證提示"
+  },
+  
+  "staffChatFeatureMoved": "店員聊天功能已遷移至餐廳聊天室",
+  "@staffChatFeatureMoved": {
+    "description": "店員聊天功能遷移提示"
+  },
+  
+  "restaurantChatRoom": "餐廳聊天室",
+  "@restaurantChatRoom": {
+    "description": "餐廳聊天室名稱"
+  },
+  
+  "initializeChatRoomFailed": "初始化聊天室失敗",
+  "@initializeChatRoomFailed": {
+    "description": "初始化聊天室失敗提示"
+  },
+  
+  "initializeChatRoomError": "初始化聊天室失敗: {error}",
+  "@initializeChatRoomError": {
+    "description": "初始化聊天室錯誤提示",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "noAvailableChatRoom": "當前無可用聊天室",
+  "@noAvailableChatRoom": {
+    "description": "無可用聊天室提示"
+  },
+  
+  "noMessagesStartChat": "暫無消息，開始聊天吧！",
+  "@noMessagesStartChat": {
+    "description": "無消息提示"
+  },
+  
+  "websocketNotConnected": "WebSocket未連接",
+  "@websocketNotConnected": {
+    "description": "WebSocket未連接提示"
+  },
+  
+  "connected": "已連接",
+  "@connected": {
+    "description": "已連接狀態"
+  },
+  
+  "disconnected": "未連接",
+  "@disconnected": {
+    "description": "未連接狀態"
+  },
+  
+  "enterMessage": "輸入消息...",
+  "@enterMessage": {
+    "description": "輸入消息提示"
+  },
+  
+  "newMessages": "新消息",
+  "@newMessages": {
+    "description": "新消息提示"
+  },
+  
+  "selectLanguage": "選擇語言",
+  "@selectLanguage": {
+    "description": "選擇語言標題"
+  },
+  
+  "close": "關閉",
+  "@close": {
+    "description": "關閉按鈕文本"
+  },
+  
+  "settings": "設定",
+  "@settings": {
+    "description": "設定標題"
+  },
+  
+  "languageSettings": "語言設定",
+  "@languageSettings": {
+    "description": "語言設定標題"
+  },
+  
+  "currentLanguage": "當前語言",
+  "@currentLanguage": {
+    "description": "當前語言標籤"
+  },
+  
+  "accountSettings": "帳戶設定",
+  "@accountSettings": {
+    "description": "帳戶設定標題"
+  },
+  
+  "profile": "個人資料",
+  "@profile": {
+    "description": "個人資料"
+  },
+  
+  "privacy": "隱私設定",
+  "@privacy": {
+    "description": "隱私設定"
+  },
+  
+  "notifications": "通知設定",
+  "@notifications": {
+    "description": "通知設定"
+  },
+  
+  "about": "關於",
+  "@about": {
+    "description": "關於"
+  },
+  
+  "version": "版本",
+  "@version": {
+    "description": "版本"
+  },
+  
+  "logout": "登出",
+  "@logout": {
+    "description": "登出"
+  }
+}

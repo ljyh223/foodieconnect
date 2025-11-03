@@ -5,6 +5,7 @@ import '../data/models/staff_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../core/services/staff_service.dart';
 import '../core/services/api_service.dart';
+import '../../generated/app_localizations.dart';
 
 class StaffScreen extends StatefulWidget {
   final String? restaurantId;
@@ -63,7 +64,7 @@ class _StaffScreenState extends State<StaffScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: '店员列表',
+        title: AppLocalizations.of(context).staffList,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -85,11 +86,11 @@ class _StaffScreenState extends State<StaffScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('加载失败：$_error'),
+            Text('${AppLocalizations.of(context).loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadStaff,
-              child: const Text('重试'),
+              child: Text(AppLocalizations.of(context).retry),
             ),
           ],
         ),
@@ -108,11 +109,11 @@ class _StaffScreenState extends State<StaffScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('获取店员列表失败：${snapshot.error}'),
+                Text('${AppLocalizations.of(context).getStaffListFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadStaff,
-                  child: const Text('重试'),
+                  child: Text(AppLocalizations.of(context).retry),
                 ),
               ],
             ),
@@ -122,7 +123,7 @@ class _StaffScreenState extends State<StaffScreen> {
         final staffList = snapshot.data ?? [];
 
         if (staffList.isEmpty) {
-          return const Center(child: Text('暂无店员信息'));
+          return Center(child: Text(AppLocalizations.of(context).noStaff));
         }
 
         return ListView.builder(
@@ -209,9 +210,9 @@ class _StaffScreenState extends State<StaffScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Review',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                       ),

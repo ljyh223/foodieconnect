@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabletalk/generated/app_localizations.dart';
 
 import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
@@ -43,28 +44,28 @@ class _LoginScreenState extends State<LoginScreen> {
     if (auth.isAuthenticated) {
       _navigateToShops();
     } else {
-      final msg = auth.error ?? '登录失败，请稍后重试';
+      final msg = auth.error ?? AppLocalizations.of(context).loginFailed;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return '请输入邮箱地址';
+      return AppLocalizations.of(context).pleaseEnterEmail;
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return '请输入有效的邮箱地址';
+      return AppLocalizations.of(context).pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return '请输入密码';
+      return AppLocalizations.of(context).pleaseEnterPassword;
     }
     if (value.length < 6) {
-      return '密码至少需要6位字符';
+      return AppLocalizations.of(context).passwordMinLength;
     }
     return null;
   }
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'TableTalk',
+                    AppLocalizations.of(context).tableTalk,
                     style: AppTextStyles.headlineMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -115,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '发现美食，分享体验',
+                    AppLocalizations.of(context).discoverFoodShareExperience,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -144,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        '登录',
+                        AppLocalizations.of(context).login,
                         style: AppTextStyles.headlineSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                       TextFieldWidget(
                         controller: _emailController,
-                        label: '邮箱地址',
+                        label: AppLocalizations.of(context).email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -163,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: '密码',
+                        label: AppLocalizations.of(context).password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -180,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            '忘记密码？',
+                            AppLocalizations.of(context).forgotPassword,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                             ),
@@ -212,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   )
                                 : Text(
-                                    '登录',
+                                    AppLocalizations.of(context).login,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -233,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '还没有账号？',
+                    AppLocalizations.of(context).noAccountYet,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -247,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      '立即注册',
+                      AppLocalizations.of(context).registerNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

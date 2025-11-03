@@ -10,6 +10,7 @@ import '../presentation/widgets/new_message_indicator.dart';
 import '../presentation/utils/chat_time_formatter.dart';
 import '../core/services/chat_service.dart';
 import '../core/services/auth_service.dart';
+import '../../generated/app_localizations.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? staffId;
@@ -62,9 +63,9 @@ class _ChatScreenState extends State<ChatScreen> {
       else if (_restaurantId != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('请先通过验证界面加入聊天室'),
-              duration: Duration(seconds: 3),
+            SnackBar(
+              content: Text(AppLocalizations.of(context).pleaseVerifyFirst),
+              duration: const Duration(seconds: 3),
             ),
           );
         }
@@ -74,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // 店员聊天功能已移除，显示提示信息
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('店员聊天功能已迁移至餐厅聊天室')),
+            SnackBar(content: Text(AppLocalizations.of(context).staffChatFeatureMoved)),
           );
         }
       }
@@ -139,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
       // 获取聊天室信息
       final roomInfo = await ChatService.getChatRoomInfo(roomId);
       final roomData = roomInfo['data'] ?? roomInfo;
-      _roomName = roomData['name'] ?? '餐厅聊天室';
+      _roomName = roomData['name'] ?? AppLocalizations.of(context).restaurantChatRoom;
       
       // 设置新消息回调
       provider.setNewMessageCallback(_handleNewMessages);
@@ -170,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
       debugPrint('初始化聊天室失败: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('初始化聊天室失败: $e')),
+          SnackBar(content: Text('${AppLocalizations.of(context).initializeChatRoomError}$e')),
         );
       }
     }
@@ -195,7 +196,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _messageController.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('当前无可用聊天室')),
+          SnackBar(content: Text(AppLocalizations.of(context).noAvailableChatRoom)),
         );
       }
     }
@@ -250,7 +251,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: _roomName ?? '聊天',
+        title: _roomName ?? AppLocalizations.of(context).chat,
         showBackButton: true,
         actions: [
           Consumer<ChatProvider>(
@@ -268,7 +269,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      provider.isConnected ? '已连接' : '未连接',
+                      provider.isConnected ? AppLocalizations.of(context).connected : AppLocalizations.of(context).disconnected,
                       style: AppTextStyles.bodySmall,
                     ),
                     const SizedBox(width: 16),
@@ -306,15 +307,15 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                '暂无消息，开始聊天吧！',
-                                style: TextStyle(color: Colors.grey),
+                              Text(
+                                AppLocalizations.of(context).noMessagesStartChat,
+                                style: const TextStyle(color: Colors.grey),
                               ),
                               const SizedBox(height: 8),
                               if (!provider.isConnected)
-                                const Text(
-                                  'WebSocket未连接',
-                                  style: TextStyle(color: Colors.red),
+                                Text(
+                                  AppLocalizations.of(context).websocketNotConnected,
+                                  style: const TextStyle(color: Colors.red),
                                 ),
                             ],
                           ),
@@ -385,7 +386,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: TextField(
                           controller: _messageController,
                           decoration: InputDecoration(
-                            hintText: '输入消息...',
+                            hintText: AppLocalizations.of(context).enterMessage,
                             filled: true,
                             fillColor: AppColors.surface,
                             border: OutlineInputBorder(
