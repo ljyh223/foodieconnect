@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabletalk/generated/app_localizations.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
@@ -10,7 +11,6 @@ import '../presentation/widgets/new_message_indicator.dart';
 import '../presentation/utils/chat_time_formatter.dart';
 import '../core/services/chat_service.dart';
 import '../core/services/auth_service.dart';
-import '../../generated/app_localizations.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? staffId;
@@ -354,7 +354,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             }
                             
                             if (showTimeSeparator) {
-                              timeSeparatorText = ChatTimeFormatter.formatDateForSeparator(message.createdAt);
+                              timeSeparatorText = ChatTimeFormatter.formatDateForSeparator(context, message.createdAt);
                             }
                             
                             return ChatMessageWidget(

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-import '../../generated/app_localizations.dart';
+import '../core/services/localization_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.setContext(context);
     
     try {
       // 设置超时机制，最多等待5秒
@@ -43,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${AppLocalizations.of(context).authCheckFailed}: $error'),
+          content: Text('${LocalizationService.I.isInitialized ? LocalizationService.I.authCheckFailed : 'Authentication check failed'}: $error'),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -67,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final completer = Completer<void>();
       final timer = Timer(timeoutDuration, () {
         if (!completer.isCompleted) {
-          completer.completeError(TimeoutException(AppLocalizations.of(context).authCheckTimeout));
+          completer.completeError(TimeoutException(LocalizationService.I.isInitialized ? LocalizationService.I.authCheckTimeout : 'Authentication check timeout'));
         }
       });
       
@@ -139,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             // 应用名称
             Text(
-              AppLocalizations.of(context).tableTalk,
+              LocalizationService.I.isInitialized ? LocalizationService.I.tableTalk : 'TableTalk',
               style: AppTextStyles.headlineMedium.copyWith(
                 color: AppColors.onPrimary,
               ),
@@ -157,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 16),
             // 加载文本
             Text(
-              AppLocalizations.of(context).checkingLoginStatus,
+              LocalizationService.I.isInitialized ? LocalizationService.I.checkingLoginStatus : 'Checking login status...',
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onPrimary.withAlpha(204), // 80% opacity
               ),

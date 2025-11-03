@@ -103,7 +103,7 @@ class WebSocketService {
   /// 发送消息到聊天室
   static Future<void> sendChatMessage(String roomId, String content) async {
     if (_channel == null) {
-      throw Exception('WebSocket未连接');
+      throw Exception('WebSocket not connected');
     }
 
     // 根据API文档，使用正确的消息格式
@@ -121,7 +121,7 @@ class WebSocketService {
   /// 加入聊天室
   static Future<void> joinRoom(String roomId) async {
     if (_channel == null) {
-      throw Exception('WebSocket未连接');
+      throw Exception('WebSocket not connected');
     }
 
     _currentRoomId = roomId;

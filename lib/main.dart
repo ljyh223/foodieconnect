@@ -11,6 +11,7 @@ import 'presentation/providers/chat_provider.dart';
 import 'presentation/providers/language_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'generated/app_localizations.dart';
+import 'core/services/localization_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +74,7 @@ class _AppInitializerState extends State<AppInitializer> {
       
       // 获取当前用户ID并订阅通知
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.setContext(context);
       final userId = await authProvider.getCurrentUserId();
       if (userId != null) {
         await chatProvider.subscribeToNotifications(userId.toString());
@@ -109,6 +111,11 @@ class MyApp extends StatelessWidget {
             initialRoute: '/splash',
             onGenerateRoute: AppRouter.generateRoute,
             debugShowCheckedModeBanner: false, // 隐藏调试横幅
+            builder: (context, child) {
+              // 🔥 每次语言切换时会重新触发，自动更新LocalizationService
+              LocalizationService.update(context);
+              return child!;
+            },
           ),
         );
       },

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../../data/models/restaurant_model.dart';
 import '../../core/services/restaurant_service.dart';
 
@@ -40,24 +41,7 @@ class RestaurantProvider with ChangeNotifier {
       }
     } catch (e) {
       // 回退到模拟数据，保持页面在无后端情况下可用
-      _error = '获取餐厅失败，使用本地数据回退：${e.toString()}';
-      _restaurants = [
-        Restaurant(
-          id: 1,
-          name: '川味轩',
-          type: '川菜',
-          distance: '500m',
-          description: '正宗川菜，麻辣鲜香，环境优雅',
-          address: '市中心街道123号',
-          phone: '(021) 1234-5678',
-          hours: '10:00 - 22:00',
-          rating: 4.8,
-          reviewCount: 128,
-          isOpen: true,
-          avatar: '川',
-          recommendedDishes: ['宫保鸡丁', '麻婆豆腐'],
-        ),
-      ];
+      _error = LocalizationService.I.loadRestaurantFail(e.toString());
     } finally {
       _setLoading(false);
     }

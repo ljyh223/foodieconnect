@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../constants/app_constants.dart';
 import '../../data/models/chat_message_model.dart';
 
@@ -57,9 +58,10 @@ class StompWebSocketService {
       debugPrint('STOMP WebSocket连接已启动');
     } catch (e) {
       debugPrint('STOMP WebSocket连接失败: $e');
+
       _connectionStateController.add({
         'connected': false,
-        'error': e.toString(),
+        'error': LocalizationService.I.stompConnectFailed(e.toString()),
       });
       rethrow;
     }
@@ -70,7 +72,7 @@ class StompWebSocketService {
     debugPrint('STOMP WebSocket连接成功');
     _connectionStateController.add({
       'connected': true,
-      'message': '连接成功',
+      'message': LocalizationService.I.stompConnected,
     });
     
     // 如果已加入聊天室，重新订阅
@@ -89,7 +91,7 @@ class StompWebSocketService {
     debugPrint('STOMP WebSocket连接已断开');
     _connectionStateController.add({
       'connected': false,
-      'message': '连接已断开',
+      'message': LocalizationService.I.stompDisconnected,
     });
   }
 
@@ -99,8 +101,9 @@ class StompWebSocketService {
     debugPrint('WebSocket错误: $error');
     _connectionStateController.add({
       'connected': false,
-      'error': error.toString(),
+      'error': LocalizationService.I.stompConnectFailed(error.toString()),
     });
+
   }
 
   /// 断开STOMP连接
@@ -133,7 +136,7 @@ class StompWebSocketService {
       debugPrint('发送消息到聊天室 $roomId: $content');
     } else {
       debugPrint('STOMP未连接，无法发送消息');
-      throw Exception('STOMP未连接，无法发送消息');
+      throw Exception(LocalizationService.I.stompNotConnected);
     }
   }
 
@@ -154,7 +157,7 @@ class StompWebSocketService {
       debugPrint('加入聊天室: $roomId');
     } else {
       debugPrint('STOMP未连接，无法加入聊天室');
-      throw Exception('STOMP未连接，无法加入聊天室');
+      throw Exception(LocalizationService.I.stompNotConnected);
     }
   }
 
@@ -251,6 +254,10 @@ class StompWebSocketService {
               _notificationStreamController.add(notificationData);
             } catch (e) {
               debugPrint('解析个人通知失败: $e');
+              _connectionStateController.add({
+                'connected': false,
+                'error': LocalizationService.I.msgParseFailed,
+              });
             }
           }
         },

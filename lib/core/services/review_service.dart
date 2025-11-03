@@ -52,7 +52,7 @@ class ReviewService {
     final res = await _api.post(endpoint, body: body);
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) return Review.fromJson(payload);
-    throw Exception('发布评论失败');
+    throw Exception('Comment failed to post');
   }
 
   /// 发布带图片的评论
@@ -66,7 +66,7 @@ class ReviewService {
     final res = await _api.post(endpoint, body: body);
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) return Review.fromJson(payload);
-    throw Exception('发布评论失败');
+    throw Exception('Comment failed to post');
   }
 
   /// 上传图片并发布评论

@@ -645,5 +645,84 @@
   "logout": "登出",
   "@logout": {
     "description": "登出"
-  }
+  },
+
+  "today": "今天",
+  "@today": {"description": "Label for today in chat time separator"},
+  "yesterday": "昨天",
+  "@yesterday": {"description": "Label for yesterday in chat time separator"},
+  "dateFormatThisYear": "{month}月{day}日",
+  "@dateFormatThisYear": {
+    "description": "Date format when message is from this year",
+    "placeholders": {
+      "month": {"type": "int"},
+      "day": {"type": "int"}
+    }
+  },
+  "dateFormatOtherYear": "{year}年{month}月{day}日",
+  "@dateFormatOtherYear": {
+    "description": "Date format when message is from another year",
+    "placeholders": {
+      "year": {"type": "int"},
+      "month": {"type": "int"},
+      "day": {"type": "int"}
+    }
+  },
+  "timeFormat": "{hour}:{minute}",
+  "@timeFormat": {
+    "description": "Time format used after today/yesterday labels",
+    "placeholders": {
+      "hour": {"type": "String"},
+      "minute": {"type": "String"}
+    }
+  },
+  "invalidEmailOrPassword": "信箱或密碼錯誤",
+  "@invalidEmailOrPassword": {"description": "Error message shown to user"},
+  "registrationFailed": "註冊失敗",
+  "@registrationFailed": {"description": "Prefix when registration throws"},
+  "logoutFailed": "登出失敗",
+  "@logoutFailed": {"description": "Error message shown to user"},
+  "restoreLoginFailed": "恢復登入狀態失敗",
+  "@restoreLoginFailed": {"description": "Error message shown to user"},
+  "updateFailed": "更新失敗，請稍後再試",
+  "@updateFailed": {"description": "Error message shown to user"},
+
+  "stompConnectionError": "STOMP連線錯誤：{error}",
+  "@stompConnectionError": {"placeholders": {"error": {"type": "String"}}},
+  "stompConnectFail": "STOMP WebSocket連線失敗：{error}",
+  "@stompConnectFail": {"placeholders": {"error": {"type": "String"}}},
+  "websocketTimeout": "WebSocket連線逾時，請檢查網路連線",
+  "@websocketTimeout": {},
+  "verifyFailNoRoomOrToken": "驗證失敗：未取得聊天室ID或臨時令牌",
+  "@verifyFailNoRoomOrToken": {},
+  "verifyRoomFail": "驗證聊天室失敗：{error}",
+  "@verifyRoomFail": {"placeholders": {"error": {"type": "String"}}},
+  "joinRoomFail": "加入聊天室失敗：{error}",
+  "@joinRoomFail": {"placeholders": {"error": {"type": "String"}}},
+  "loadMessageFail": "取得訊息失敗：{error}",
+  "@loadMessageFail": {"placeholders": {"error": {"type": "String"}}},
+  "notConnectedCantSend": "STOMP WebSocket未連線，無法發送訊息",
+  "@notConnectedCantSend": {},
+  "sendMessageFail": "發送訊息失敗：{error}",
+  "@sendMessageFail": {"placeholders": {"error": {"type": "String"}}},
+  "leaveRoomFail": "離開聊天室失敗：{error}",
+  "@leaveRoomFail": {"placeholders": {"error": {"type": "String"}}},
+  "subscribeNotificationFail": "訂閱通知失敗：{error}",
+  "@subscribeNotificationFail": {"placeholders": {"error": {"type": "String"}}},
+
+  "loadRestaurantFail": "取得餐廳失敗：{error}",
+
+  "loadReviewFail": "取得評論失敗：{error}",
+  "postReviewFail": "發布評論失敗：{error}",
+
+  "loadStaffFail": "取得店員失敗：{error}",
+  "loadStaffDetailFail": "取得店員詳情失敗：{error}",
+
+
+  "stompNotConnected": "未連線，請等待 WebSocket 完成連線",
+  "stompConnectFailed": "WebSocket 連線失敗：{error}",
+  "stompConnected": "已連線",
+  "stompDisconnected": "連線已斷開",
+  "msgParseFailed": "解析訊息失敗",
+  "notificationParseFailed": "解析通知失敗"
 }

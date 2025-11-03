@@ -59,14 +59,14 @@ class ApiService {
         if (parsed['success'] == true) {
           return parsed;
         } else {
-          throw Exception(parsed['error']?['message'] ?? '请求失败');
+          throw Exception(parsed['error']?['message'] ?? 'Request failed');
         }
       }
 
       // 否则直接返回解析后的顶层对象（方便兼容不包含 success 的接口）
       return parsed;
     } else {
-      throw Exception(parsed['error']?['message'] ?? '网络请求失败');
+      throw Exception(parsed['error']?['message'] ?? 'Network request failed');
     }
   }
 

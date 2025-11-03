@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../../data/models/chat_message_model.dart';
 import '../../core/services/chat_service.dart';
 import '../../core/services/stomp_websocket_service.dart';
@@ -38,7 +39,7 @@ class ChatProvider with ChangeNotifier {
       StompWebSocketService.connectionStateStream.listen((state) {
         _isConnected = state['connected'] ?? false;
         if (state['error'] != null) {
-          _error = 'STOMP连接错误：${state['error']}';
+          _error = LocalizationService.I.stompConnectionError(state['error']);
         }
         notifyListeners();
       });
@@ -69,7 +70,7 @@ class ChatProvider with ChangeNotifier {
         debugPrint('收到通知: $notification');
       });
     } catch (e) {
-      _error = 'STOMP WebSocket连接失败：${e.toString()}';
+      _error = LocalizationService.I.stompConnectFail(e.toString());
       notifyListeners();
     }
   }
@@ -112,7 +113,7 @@ class ChatProvider with ChangeNotifier {
         await _waitForConnection();
         
         if (!_isConnected) {
-          _error = 'WebSocket连接超时，请检查网络连接';
+          _error = LocalizationService.I.websocketTimeout;
           notifyListeners();
           return;
         }
@@ -125,12 +126,12 @@ class ChatProvider with ChangeNotifier {
         // 订阅聊天室消息以接收实时更新
         StompWebSocketService.subscribeToRoom(_currentRoomId!);
       } else {
-        _error = '验证失败：未获取到聊天室ID或临时令牌';
+        _error = LocalizationService.I.verifyFailNoRoomOrToken;
       }
       
       notifyListeners();
     } catch (e) {
-      _error = '验证聊天室失败：${e.toString()}';
+      _error = LocalizationService.I.verifyRoomFail(e.toString());
       debugPrint('验证聊天室失败: $e');
     } finally {
       _setLoading(false);
@@ -149,7 +150,7 @@ class ChatProvider with ChangeNotifier {
       StompWebSocketService.joinRoom(roomId);
       StompWebSocketService.subscribeToRoom(roomId);
     } catch (e) {
-      _error = '加入聊天室失败：${e.toString()}';
+      _error = LocalizationService.I.joinRoomFail(e.toString());
       notifyListeners();
     }
   }
@@ -180,7 +181,7 @@ class ChatProvider with ChangeNotifier {
       debugPrint('成功加载 ${_messages.length} 条消息');
       notifyListeners();
     } catch (e) {
-      _error = '获取消息失败：${e.toString()}';
+      _error = LocalizationService.I.loadMessageFail(e.toString());
       _messages = [];
       debugPrint('获取消息失败: $e');
     } finally {
@@ -191,7 +192,8 @@ class ChatProvider with ChangeNotifier {
   /// 发送聊天室消息（使用STOMP WebSocket）
   Future<void> sendMessage(String roomId, String content) async {
     if (!_isConnected) {
-      _error = 'STOMP WebSocket未连接，无法发送消息';
+      _error = LocalizationService.I.stompConnectionError("connect is null");
+      // _error = 'STOMP WebSocket未连接，无法发送消息';
       notifyListeners();
       return;
     }
@@ -204,7 +206,7 @@ class ChatProvider with ChangeNotifier {
       StompWebSocketService.sendMessage(roomId, content);
       // 不需要手动添加消息，因为WebSocket会推送回来
     } catch (e) {
-      _error = '发送消息失败：${e.toString()}';
+      _error = LocalizationService.I.sendMessageFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -224,7 +226,7 @@ class ChatProvider with ChangeNotifier {
       _messages.clear();
       notifyListeners();
     } catch (e) {
-      _error = '离开聊天室失败：${e.toString()}';
+      _error = LocalizationService.I.leaveRoomFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -235,7 +237,7 @@ class ChatProvider with ChangeNotifier {
     try {
       StompWebSocketService.subscribeToNotifications(userId);
     } catch (e) {
-      _error = '订阅通知失败：${e.toString()}';
+      _error = LocalizationService.I.subscribeNotificationFail(e.toString());
       notifyListeners();
     }
   }
@@ -256,7 +258,7 @@ class ChatProvider with ChangeNotifier {
     while (!_isConnected && retryCount < 20) {
       await Future.delayed(const Duration(milliseconds: 200));
       retryCount++;
-      debugPrint('等待WebSocket连接... (${retryCount}/20)');
+      debugPrint('等待WebSocket连接... ($retryCount/20)');
     }
   }
 

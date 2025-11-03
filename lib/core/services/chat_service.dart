@@ -15,7 +15,7 @@ class ChatService {
     if (payload is Map<String, dynamic>) {
       return payload;
     }
-    throw Exception('验证聊天室失败');
+    throw Exception('Chat room verification failed');
   }
 
 
@@ -26,7 +26,7 @@ class ChatService {
     if (payload is Map<String, dynamic>) {
       return payload;
     }
-    throw Exception('获取聊天室信息失败');
+    throw Exception('Failed to retrieve chat room information');
   }
 
   /// 获取聊天室消息列表
@@ -52,7 +52,7 @@ class ChatService {
     });
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) return ChatMessage.fromJson(payload);
-    throw Exception('发送消息失败');
+    throw Exception('Message sending failed');
   }
 
   /// 离开聊天室
@@ -67,7 +67,7 @@ class ChatService {
     if (payload is Map<String, dynamic>) {
       return payload;
     }
-    throw Exception('获取聊天室信息失败');
+    throw Exception('Failed to retrieve chat room information');
   }
 
   /// 获取聊天室成员列表

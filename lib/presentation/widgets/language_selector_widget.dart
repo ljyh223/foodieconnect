@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/generated/app_localizations.dart';
 import '../providers/language_provider.dart';
+import '../../core/services/localization_service.dart';
 
 /// 语言选择器组件
 class LanguageSelectorWidget extends StatelessWidget {
@@ -12,7 +12,7 @@ class LanguageSelectorWidget extends StatelessWidget {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
         return PopupMenuButton<Locale>(
-          tooltip: AppLocalizations.of(context).selectLanguage,
+          tooltip: LocalizationService.I.selectLanguage,
           onSelected: (Locale locale) {
             languageProvider.changeLanguage(locale);
           },
@@ -173,7 +173,7 @@ class LanguageSelectorDialog extends StatelessWidget {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).selectLanguage),
+          title: Text(LocalizationService.I.selectLanguage),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: LanguageProvider.supportedLocales.map((Locale locale) {
@@ -204,7 +204,7 @@ class LanguageSelectorDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(AppLocalizations.of(context).close),
+              child: Text(LocalizationService.I.close),
             ),
           ],
         );

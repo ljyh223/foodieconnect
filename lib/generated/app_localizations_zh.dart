@@ -389,6 +389,136 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get logout => '退出登录';
+
+  @override
+  String get today => '今天';
+
+  @override
+  String get yesterday => '昨天';
+
+  @override
+  String dateFormatThisYear(int month, int day) {
+    return '$month月$day日';
+  }
+
+  @override
+  String dateFormatOtherYear(int year, int month, int day) {
+    return '$year年$month月$day日';
+  }
+
+  @override
+  String timeFormat(String hour, String minute) {
+    return '$hour:$minute';
+  }
+
+  @override
+  String get invalidEmailOrPassword => '邮箱或密码错误';
+
+  @override
+  String get registrationFailed => '注册失败';
+
+  @override
+  String get logoutFailed => '登出失败';
+
+  @override
+  String get restoreLoginFailed => '恢复登录状态失败';
+
+  @override
+  String get updateFailed => '更新失败，请稍后重试';
+
+  @override
+  String stompConnectionError(String error) {
+    return 'STOMP连接错误：$error';
+  }
+
+  @override
+  String stompConnectFail(String error) {
+    return 'STOMP WebSocket连接失败：$error';
+  }
+
+  @override
+  String get websocketTimeout => 'WebSocket连接超时，请检查网络连接';
+
+  @override
+  String get verifyFailNoRoomOrToken => '验证失败：未获取到聊天室ID或临时令牌';
+
+  @override
+  String verifyRoomFail(String error) {
+    return '验证聊天室失败：$error';
+  }
+
+  @override
+  String joinRoomFail(String error) {
+    return '加入聊天室失败：$error';
+  }
+
+  @override
+  String loadMessageFail(String error) {
+    return '获取消息失败：$error';
+  }
+
+  @override
+  String get notConnectedCantSend => 'STOMP WebSocket未连接，无法发送消息';
+
+  @override
+  String sendMessageFail(String error) {
+    return '发送消息失败：$error';
+  }
+
+  @override
+  String leaveRoomFail(String error) {
+    return '离开聊天室失败：$error';
+  }
+
+  @override
+  String subscribeNotificationFail(String error) {
+    return '订阅通知失败：$error';
+  }
+
+  @override
+  String loadRestaurantFail(String error) {
+    return '获取餐厅失败：$error';
+  }
+
+  @override
+  String loadReviewFail(String error) {
+    return '获取评论失败：$error';
+  }
+
+  @override
+  String postReviewFail(String error) {
+    return '发布评论失败：$error';
+  }
+
+  @override
+  String loadStaffFail(String error) {
+    return '获取店员失败：$error';
+  }
+
+  @override
+  String loadStaffDetailFail(String error) {
+    return '获取店员详情失败：$error';
+  }
+
+  @override
+  String get stompNotConnected => '未连接，请等待 WebSocket 完成连接';
+
+  @override
+  String stompConnectFailed(String error) {
+    return 'WebSocket 连接失败：$error';
+  }
+
+  @override
+  String get stompConnected => '已连接';
+
+  @override
+  String get stompDisconnected => '连接已断开';
+
+  @override
+  String get msgParseFailed => '解析消息失败';
+
+  @override
+  String get notificationParseFailed => '解析通知失败';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -776,4 +906,134 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get logout => '登出';
+
+  @override
+  String get today => '今天';
+
+  @override
+  String get yesterday => '昨天';
+
+  @override
+  String dateFormatThisYear(int month, int day) {
+    return '$month月$day日';
+  }
+
+  @override
+  String dateFormatOtherYear(int year, int month, int day) {
+    return '$year年$month月$day日';
+  }
+
+  @override
+  String timeFormat(String hour, String minute) {
+    return '$hour:$minute';
+  }
+
+  @override
+  String get invalidEmailOrPassword => '信箱或密碼錯誤';
+
+  @override
+  String get registrationFailed => '註冊失敗';
+
+  @override
+  String get logoutFailed => '登出失敗';
+
+  @override
+  String get restoreLoginFailed => '恢復登入狀態失敗';
+
+  @override
+  String get updateFailed => '更新失敗，請稍後再試';
+
+  @override
+  String stompConnectionError(String error) {
+    return 'STOMP連線錯誤：$error';
+  }
+
+  @override
+  String stompConnectFail(String error) {
+    return 'STOMP WebSocket連線失敗：$error';
+  }
+
+  @override
+  String get websocketTimeout => 'WebSocket連線逾時，請檢查網路連線';
+
+  @override
+  String get verifyFailNoRoomOrToken => '驗證失敗：未取得聊天室ID或臨時令牌';
+
+  @override
+  String verifyRoomFail(String error) {
+    return '驗證聊天室失敗：$error';
+  }
+
+  @override
+  String joinRoomFail(String error) {
+    return '加入聊天室失敗：$error';
+  }
+
+  @override
+  String loadMessageFail(String error) {
+    return '取得訊息失敗：$error';
+  }
+
+  @override
+  String get notConnectedCantSend => 'STOMP WebSocket未連線，無法發送訊息';
+
+  @override
+  String sendMessageFail(String error) {
+    return '發送訊息失敗：$error';
+  }
+
+  @override
+  String leaveRoomFail(String error) {
+    return '離開聊天室失敗：$error';
+  }
+
+  @override
+  String subscribeNotificationFail(String error) {
+    return '訂閱通知失敗：$error';
+  }
+
+  @override
+  String loadRestaurantFail(String error) {
+    return '取得餐廳失敗：$error';
+  }
+
+  @override
+  String loadReviewFail(String error) {
+    return '取得評論失敗：$error';
+  }
+
+  @override
+  String postReviewFail(String error) {
+    return '發布評論失敗：$error';
+  }
+
+  @override
+  String loadStaffFail(String error) {
+    return '取得店員失敗：$error';
+  }
+
+  @override
+  String loadStaffDetailFail(String error) {
+    return '取得店員詳情失敗：$error';
+  }
+
+  @override
+  String get stompNotConnected => '未連線，請等待 WebSocket 完成連線';
+
+  @override
+  String stompConnectFailed(String error) {
+    return 'WebSocket 連線失敗：$error';
+  }
+
+  @override
+  String get stompConnected => '已連線';
+
+  @override
+  String get stompDisconnected => '連線已斷開';
+
+  @override
+  String get msgParseFailed => '解析訊息失敗';
+
+  @override
+  String get notificationParseFailed => '解析通知失敗';
 }

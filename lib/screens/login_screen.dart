@@ -6,6 +6,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
+import '../core/services/localization_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    auth.setContext(context);
     if (auth.isLoading) return; // 防止重复提交
 
     await auth.login(_emailController.text.trim(), _passwordController.text);
@@ -44,28 +46,28 @@ class _LoginScreenState extends State<LoginScreen> {
     if (auth.isAuthenticated) {
       _navigateToShops();
     } else {
-      final msg = auth.error ?? AppLocalizations.of(context).loginFailed;
+      final msg = auth.error ?? (LocalizationService.I.isInitialized ? LocalizationService.I.loginFailed : AppLocalizations.of(context).loginFailed);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context).pleaseEnterEmail;
+      return LocalizationService.I.isInitialized ? LocalizationService.I.pleaseEnterEmail : AppLocalizations.of(context).pleaseEnterEmail;
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return AppLocalizations.of(context).pleaseEnterValidEmail;
+      return LocalizationService.I.isInitialized ? LocalizationService.I.pleaseEnterValidEmail : AppLocalizations.of(context).pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return AppLocalizations.of(context).pleaseEnterPassword;
+      return LocalizationService.I.isInitialized ? LocalizationService.I.pleaseEnterPassword : AppLocalizations.of(context).pleaseEnterPassword;
     }
     if (value.length < 6) {
-      return AppLocalizations.of(context).passwordMinLength;
+      return LocalizationService.I.isInitialized ? LocalizationService.I.passwordMinLength : AppLocalizations.of(context).passwordMinLength;
     }
     return null;
   }
@@ -108,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    AppLocalizations.of(context).tableTalk,
+                    LocalizationService.I.isInitialized ? LocalizationService.I.tableTalk : AppLocalizations.of(context).tableTalk,
                     style: AppTextStyles.headlineMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -116,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    AppLocalizations.of(context).discoverFoodShareExperience,
+                    LocalizationService.I.isInitialized ? LocalizationService.I.discoverFoodShareExperience : AppLocalizations.of(context).discoverFoodShareExperience,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -145,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        AppLocalizations.of(context).login,
+                        LocalizationService.I.isInitialized ? LocalizationService.I.login : AppLocalizations.of(context).login,
                         style: AppTextStyles.headlineSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -155,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                       TextFieldWidget(
                         controller: _emailController,
-                        label: AppLocalizations.of(context).email,
+                        label: LocalizationService.I.isInitialized ? LocalizationService.I.email : AppLocalizations.of(context).email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -164,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: AppLocalizations.of(context).password,
+                        label: LocalizationService.I.isInitialized ? LocalizationService.I.password : AppLocalizations.of(context).password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -181,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            AppLocalizations.of(context).forgotPassword,
+                            LocalizationService.I.isInitialized ? LocalizationService.I.forgotPassword : AppLocalizations.of(context).forgotPassword,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                             ),
@@ -213,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   )
                                 : Text(
-                                    AppLocalizations.of(context).login,
+                                    LocalizationService.I.isInitialized ? LocalizationService.I.login : AppLocalizations.of(context).login,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -234,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppLocalizations.of(context).noAccountYet,
+                    LocalizationService.I.isInitialized ? LocalizationService.I.noAccountYet : AppLocalizations.of(context).noAccountYet,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -248,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      AppLocalizations.of(context).registerNow,
+                      LocalizationService.I.isInitialized ? LocalizationService.I.registerNow : AppLocalizations.of(context).registerNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

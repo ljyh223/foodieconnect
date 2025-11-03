@@ -393,4 +393,138 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logout => 'Logout';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String dateFormatThisYear(int month, int day) {
+    return '$month/$day';
+  }
+
+  @override
+  String dateFormatOtherYear(int year, int month, int day) {
+    return '$year/$month/$day';
+  }
+
+  @override
+  String timeFormat(String hour, String minute) {
+    return '$hour:$minute';
+  }
+
+  @override
+  String get invalidEmailOrPassword => 'Invalid email or password';
+
+  @override
+  String get registrationFailed => 'Registration failed';
+
+  @override
+  String get logoutFailed => 'Logout failed';
+
+  @override
+  String get restoreLoginFailed => 'Failed to restore login status';
+
+  @override
+  String get updateFailed => 'Update failed, please try again later';
+
+  @override
+  String stompConnectionError(String error) {
+    return 'STOMP connection error：$error';
+  }
+
+  @override
+  String stompConnectFail(String error) {
+    return 'STOMP WebSocket connection failed：$error';
+  }
+
+  @override
+  String get websocketTimeout =>
+      'WebSocket connection timeout，please check network';
+
+  @override
+  String get verifyFailNoRoomOrToken =>
+      'Verification failed：roomId or tempToken missing';
+
+  @override
+  String verifyRoomFail(String error) {
+    return 'Verify room failed：$error';
+  }
+
+  @override
+  String joinRoomFail(String error) {
+    return 'Join room failed：$error';
+  }
+
+  @override
+  String loadMessageFail(String error) {
+    return 'Load messages failed：$error';
+  }
+
+  @override
+  String get notConnectedCantSend =>
+      'STOMP WebSocket not connected，can not send message';
+
+  @override
+  String sendMessageFail(String error) {
+    return 'Send message failed：$error';
+  }
+
+  @override
+  String leaveRoomFail(String error) {
+    return 'Leave room failed：$error';
+  }
+
+  @override
+  String subscribeNotificationFail(String error) {
+    return 'Subscribe notification failed：$error';
+  }
+
+  @override
+  String loadRestaurantFail(String error) {
+    return 'Failed to load restaurants: $error';
+  }
+
+  @override
+  String loadReviewFail(String error) {
+    return 'Failed to load reviews: $error';
+  }
+
+  @override
+  String postReviewFail(String error) {
+    return 'Failed to post review: $error';
+  }
+
+  @override
+  String loadStaffFail(String error) {
+    return 'Failed to load staff list: $error';
+  }
+
+  @override
+  String loadStaffDetailFail(String error) {
+    return 'Failed to load staff details: $error';
+  }
+
+  @override
+  String get stompNotConnected =>
+      'Not connected, please wait for WebSocket to complete';
+
+  @override
+  String stompConnectFailed(String error) {
+    return 'WebSocket connection failed: $error';
+  }
+
+  @override
+  String get stompConnected => 'Connected';
+
+  @override
+  String get stompDisconnected => 'Disconnected';
+
+  @override
+  String get msgParseFailed => 'Failed to parse message';
+
+  @override
+  String get notificationParseFailed => 'Failed to parse notification';
 }

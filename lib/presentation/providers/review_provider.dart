@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../../data/models/review_model.dart';
 import '../../core/services/review_service.dart';
 import 'dart:io';
@@ -18,8 +19,7 @@ class ReviewProvider with ChangeNotifier {
     try {
       _reviews = await ReviewService.listByRestaurant(restaurantId);
     } catch (e) {
-      _error = '获取评论失败，使用本地回退：${e.toString()}';
-      _reviews = [];
+      _error = LocalizationService.I.loadReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -32,7 +32,7 @@ class ReviewProvider with ChangeNotifier {
       final review = await ReviewService.post(restaurantId, rating, comment);
       _reviews.insert(0, review);
     } catch (e) {
-      _error = '发布评论失败：${e.toString()}';
+      _error = LocalizationService.I.postReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -46,7 +46,7 @@ class ReviewProvider with ChangeNotifier {
       final review = await ReviewService.postWithImages(restaurantId, rating, comment, imageUrls);
       _reviews.insert(0, review);
     } catch (e) {
-      _error = '发布评论失败：${e.toString()}';
+      _error = LocalizationService.I.postReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -60,7 +60,7 @@ class ReviewProvider with ChangeNotifier {
       final review = await ReviewService.postWithImageFiles(restaurantId, rating, comment, imageFiles);
       _reviews.insert(0, review);
     } catch (e) {
-      _error = '发布评论失败：${e.toString()}';
+      _error = LocalizationService.I.postReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }

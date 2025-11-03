@@ -33,7 +33,7 @@ class RestaurantService {
   static Future<Restaurant> get(String id) async {
     final res = await _api.get('${AppConstants.restaurantsEndpoint}/$id');
     final dynamic payload = res['data'] ?? res;
-    if (payload is! Map<String, dynamic>) throw Exception('获取餐厅详情失败');
+    if (payload is! Map<String, dynamic>) throw Exception('Failed to retrieve restaurant details');
     
     // 根据API文档，data字段包含餐厅信息
     // 尝试获取推荐菜品（如果API返回了）
@@ -75,11 +75,11 @@ class RestaurantService {
     try {
       final res = await _api.get('${AppConstants.restaurantsEndpoint}/$restaurantId/menu');
       final dynamic payload = res['data'] ?? res;
-      if (payload is! Map<String, dynamic>) throw Exception('获取餐厅菜单失败');
+      if (payload is! Map<String, dynamic>) throw Exception('Failed to retrieve restaurant menu');
       return payload;
     } catch (e) {
       // 如果菜单API不存在或失败，返回空数据
-      throw Exception('菜单功能暂未开放');
+      throw Exception('Menu function is not yet available.');
     }
   }
 
@@ -113,11 +113,9 @@ class RestaurantService {
           return result;
         }
       }
-      
-      // 如果没有返回推荐菜品，返回空列表
+
       return [];
     } catch (e) {
-      // 如果推荐菜品API不存在或失败，返回空列表
       return [];
     }
   }

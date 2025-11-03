@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../presentation/providers/language_provider.dart';
 import '../presentation/providers/auth_provider.dart';
-import '../generated/app_localizations.dart';
 import '../presentation/widgets/language_selector_widget.dart';
+import '../core/services/localization_service.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -12,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).settings),
+        title: Text(LocalizationService.I.settings),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,
@@ -23,13 +23,13 @@ class SettingsScreen extends StatelessWidget {
           // 语言设置部分
           _buildSection(
             context,
-            title: AppLocalizations.of(context).languageSettings,
+            title: LocalizationService.I.languageSettings,
             children: [
               Consumer<LanguageProvider>(
                 builder: (context, languageProvider, child) {
                   return ListTile(
                     leading: const Icon(Icons.language, color: Colors.blue),
-                    title: Text(AppLocalizations.of(context).currentLanguage),
+                    title: Text(LocalizationService.I.currentLanguage),
                     subtitle: Text(languageProvider.currentLanguageName),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
@@ -49,38 +49,38 @@ class SettingsScreen extends StatelessWidget {
           // 账户设置部分
           _buildSection(
             context,
-            title: AppLocalizations.of(context).accountSettings,
+            title: LocalizationService.I.accountSettings,
             children: [
               ListTile(
                 leading: const Icon(Icons.person, color: Colors.green),
-                title: Text(AppLocalizations.of(context).profile),
+                title: Text(LocalizationService.I.profile),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到个人资料页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(AppLocalizations.of(context).profile)),
+                    SnackBar(content: Text(LocalizationService.I.profile)),
                   );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.lock, color: Colors.orange),
-                title: Text(AppLocalizations.of(context).privacy),
+                title: Text(LocalizationService.I.privacy),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到隐私设置页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(AppLocalizations.of(context).privacy)),
+                    SnackBar(content: Text(LocalizationService.I.privacy)),
                   );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.notifications, color: Colors.purple),
-                title: Text(AppLocalizations.of(context).notifications),
+                title: Text(LocalizationService.I.notifications),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到通知设置页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(AppLocalizations.of(context).notifications)),
+                    SnackBar(content: Text(LocalizationService.I.notifications)),
                   );
                 },
               ),
@@ -90,11 +90,11 @@ class SettingsScreen extends StatelessWidget {
           // 关于部分
           _buildSection(
             context,
-            title: AppLocalizations.of(context).about,
+            title: LocalizationService.I.about,
             children: [
               ListTile(
                 leading: const Icon(Icons.info, color: Colors.grey),
-                title: Text(AppLocalizations.of(context).version),
+                title: Text(LocalizationService.I.version),
                 subtitle: const Text('1.0.0'),
               ),
             ],
@@ -116,7 +116,7 @@ class SettingsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(AppLocalizations.of(context).logout),
+              child: Text(LocalizationService.I.logout),
             ),
           ),
           const SizedBox(height: 20),
@@ -156,22 +156,24 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).logout),
+          title: Text(LocalizationService.I.logout),
           content: const Text('确定要退出登录吗？'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(AppLocalizations.of(context).close),
+              child: Text(LocalizationService.I.close),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Provider.of<AuthProvider>(context, listen: false).logout();
+                var auth =Provider.of<AuthProvider>(context, listen: false);
+                auth.setContext(context);
+                auth.logout();
                 Navigator.pushReplacementNamed(context, '/login');
               },
-              child: Text(AppLocalizations.of(context).logout),
+              child: Text(LocalizationService.I.logout),
             ),
           ],
         );
@@ -188,7 +190,7 @@ class LanguageSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).languageSettings),
+        title: Text(LocalizationService.I.languageSettings),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,

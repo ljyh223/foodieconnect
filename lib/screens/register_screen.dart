@@ -5,7 +5,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
-import '../../generated/app_localizations.dart';
+import '../core/services/localization_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -31,22 +31,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseEnterEmail;
+    if (value == null || value.isEmpty)
+      return LocalizationService.I.pleaseEnterEmail;
     // 修复：原来的正则在结尾处多了一个转义符号，导致校验异常
     final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(value)) return AppLocalizations.of(context).pleaseEnterValidEmail;
+    if (!emailRegex.hasMatch(value))
+      return LocalizationService.I.pleaseEnterValidEmail;
     return null;
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return AppLocalizations.of(context).pleaseEnterPassword;
-    if (value.length < 6) return AppLocalizations.of(context).passwordMinLength;
+    if (value == null || value.isEmpty)
+      return LocalizationService.I.pleaseEnterPassword;
+    if (value.length < 6) return LocalizationService.I.passwordMinLength;
     return null;
   }
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    auth.setContext(context);
     await auth.register(
       _emailController.text.trim(),
       _passwordController.text,
@@ -57,7 +61,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!mounted) return;
 
     if (auth.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(auth.error!)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(auth.error!)));
     } else {
       // 注册成功，直接回到登录页或跳转到商店页
       Navigator.pop(context);
@@ -99,14 +105,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    AppLocalizations.of(context).createAccount,
+                    LocalizationService.I.createAccount,
                     style: AppTextStyles.headlineSmall.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    AppLocalizations.of(context).joinTableTalk,
+                    LocalizationService.I.joinTableTalk,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -114,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
               const SizedBox(height: 32),
-              
+
               // Registration Form
               Container(
                 padding: const EdgeInsets.all(24),
@@ -123,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                    color: Colors.black.withAlpha(13),
+                      color: Colors.black.withAlpha(13),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -136,37 +142,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       TextFieldWidget(
                         controller: _displayNameController,
-                        label: AppLocalizations.of(context).displayName,
+                        label: LocalizationService.I.displayName,
                         prefixIcon: Icons.person_outline,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       TextFieldWidget(
                         controller: _emailController,
-                        label: AppLocalizations.of(context).email,
+                        label: LocalizationService.I.email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       TextFieldWidget(
                         controller: _phoneController,
-                        label: AppLocalizations.of(context).phoneNumber,
+                        label: LocalizationService.I.phoneNumber,
                         keyboardType: TextInputType.phone,
                         prefixIcon: Icons.phone_outlined,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: AppLocalizations.of(context).password,
+                        label: LocalizationService.I.password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
                       ),
                       const SizedBox(height: 24),
-                      
+
                       Consumer<AuthProvider>(
                         builder: (context, auth, _) {
                           return ElevatedButton(
@@ -186,11 +192,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.onPrimary),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.onPrimary,
+                                      ),
                                     ),
                                   )
                                 : Text(
-                                    AppLocalizations.of(context).register,
+                                    LocalizationService.I.register,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -203,15 +211,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Login Link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppLocalizations.of(context).alreadyHaveAccount,
+                    LocalizationService.I.alreadyHaveAccount,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -225,7 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      AppLocalizations.of(context).loginNow,
+                      LocalizationService.I.loginNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

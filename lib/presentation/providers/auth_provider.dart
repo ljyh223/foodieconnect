@@ -1,11 +1,11 @@
 import 'dart:developer' as logger;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../data/models/user_model.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/api_service.dart';
 import '../../core/utils/token_storage.dart';
+import '../../core/services/localization_service.dart';
 
 class AuthProvider with ChangeNotifier {
   User? _user;
@@ -13,6 +13,8 @@ class AuthProvider with ChangeNotifier {
   String? _error;
 
   User? get user => _user;
+
+  late BuildContext context;
 
   /// 获取当前用户ID（从本地存储获取）
   Future<int?> getCurrentUserId() async {
@@ -42,7 +44,6 @@ class AuthProvider with ChangeNotifier {
   String? get error => _error;
   bool get isAuthenticated => _user != null;
 
-  // 使用真实 API 登录，失败时回退到本地模拟（保持开发友好）
   Future<void> login(String email, String password) async {
     _setLoading(true);
     _error = null;
@@ -52,23 +53,9 @@ class AuthProvider with ChangeNotifier {
       _user = user;
       _error = null;
     } catch (e) {
-      // 回退到模拟行为：保持原来的体验
       logger.log('登录失败：${e.toString()}');
-
-      if (email == 'user@example.com' && password == 'password123') {
-        _user = User(
-          id: 1,
-          email: email,
-          displayName: '测试用户',
-          phone: '13800138000',
-          avatarUrl: null,
-        );
-        // 在模拟登录时也保存用户ID到本地存储
-        await TokenStorage.saveUserId(_user!.id);
-        _error = null;
-      } else {
-        _error = '邮箱或密码错误';
-      }
+      // 直接使用LocalizationService，无需检查初始化状态
+      _error = LocalizationService.I.invalidEmailOrPassword;
     } finally {
       _setLoading(false);
     }
@@ -86,7 +73,8 @@ class AuthProvider with ChangeNotifier {
       await TokenStorage.saveUserId(user.id);
       _error = null;
     } catch (e) {
-      _error = '注册失败：${e.toString()}';
+      // 直接使用LocalizationService，无需检查初始化状态
+      _error = '${LocalizationService.I.registrationFailed}：${e.toString()}';
     } finally {
       _setLoading(false);
     }
@@ -102,7 +90,8 @@ class AuthProvider with ChangeNotifier {
       _user = null;
       _error = null;
     } catch (e) {
-      _error = '登出失败';
+      // 直接使用LocalizationService，无需检查初始化状态
+      _error = LocalizationService.I.logoutFailed;
     } finally {
       _setLoading(false);
     }
@@ -124,7 +113,8 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       // 不阻塞启动，仅记录错误
       logger.log('恢复登录状态失败：${e.toString()}');
-      _error = '恢复登录状态失败：${e.toString()}';
+      // 直接使用LocalizationService，无需检查初始化状态
+      _error = '${LocalizationService.I.restoreLoginFailed}：${e.toString()}';
     } finally {
       _setLoading(false);
     }
@@ -147,7 +137,8 @@ class AuthProvider with ChangeNotifier {
         await TokenStorage.saveUserId(_user!.id);
       }
     } catch (e) {
-      _error = '更新失败，请稍后重试';
+      // 直接使用LocalizationService，无需检查初始化状态
+      _error = LocalizationService.I.updateFailed;
     } finally {
       _setLoading(false);
     }
@@ -161,5 +152,9 @@ class AuthProvider with ChangeNotifier {
   void _setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
+  }
+
+  void setContext(BuildContext context) {
+    this.context = context;
   }
 }

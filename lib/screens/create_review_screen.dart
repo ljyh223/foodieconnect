@@ -35,6 +35,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
   Future<int?> _getCurrentUserId() async {
     try {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.setContext(context);
       final userId = await authProvider.getCurrentUserId();
       return userId;
     } catch (e) {

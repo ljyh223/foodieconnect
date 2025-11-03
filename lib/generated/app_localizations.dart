@@ -842,6 +842,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get logout;
+
+  /// Label for today in chat time separator
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Label for yesterday in chat time separator
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// Date format when message is from this year
+  ///
+  /// In en, this message translates to:
+  /// **'{month}/{day}'**
+  String dateFormatThisYear(int month, int day);
+
+  /// Date format when message is from another year
+  ///
+  /// In en, this message translates to:
+  /// **'{year}/{month}/{day}'**
+  String dateFormatOtherYear(int year, int month, int day);
+
+  /// Time format used after today/yesterday labels
+  ///
+  /// In en, this message translates to:
+  /// **'{hour}:{minute}'**
+  String timeFormat(String hour, String minute);
+
+  /// Error message shown to user
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get invalidEmailOrPassword;
+
+  /// Prefix when registration throws
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed'**
+  String get registrationFailed;
+
+  /// Error message shown to user
+  ///
+  /// In en, this message translates to:
+  /// **'Logout failed'**
+  String get logoutFailed;
+
+  /// Error message shown to user
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to restore login status'**
+  String get restoreLoginFailed;
+
+  /// Error message shown to user
+  ///
+  /// In en, this message translates to:
+  /// **'Update failed, please try again later'**
+  String get updateFailed;
+
+  /// Error hint when STOMP connection fails
+  ///
+  /// In en, this message translates to:
+  /// **'STOMP connection error：{error}'**
+  String stompConnectionError(String error);
+
+  /// Toast when initial connect throws
+  ///
+  /// In en, this message translates to:
+  /// **'STOMP WebSocket connection failed：{error}'**
+  String stompConnectFail(String error);
+
+  /// Hint when waiting for connection timeout
+  ///
+  /// In en, this message translates to:
+  /// **'WebSocket connection timeout，please check network'**
+  String get websocketTimeout;
+
+  /// Hint when back-end does not return roomId/tempToken
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed：roomId or tempToken missing'**
+  String get verifyFailNoRoomOrToken;
+
+  /// Toast when verifyChatRoom API throws
+  ///
+  /// In en, this message translates to:
+  /// **'Verify room failed：{error}'**
+  String verifyRoomFail(String error);
+
+  /// Toast when STOMP joinRoom throws
+  ///
+  /// In en, this message translates to:
+  /// **'Join room failed：{error}'**
+  String joinRoomFail(String error);
+
+  /// Toast when fetchMessages API throws
+  ///
+  /// In en, this message translates to:
+  /// **'Load messages failed：{error}'**
+  String loadMessageFail(String error);
+
+  /// Toast when sendMessage but socket disconnected
+  ///
+  /// In en, this message translates to:
+  /// **'STOMP WebSocket not connected，can not send message'**
+  String get notConnectedCantSend;
+
+  /// Toast when sendMessage API throws
+  ///
+  /// In en, this message translates to:
+  /// **'Send message failed：{error}'**
+  String sendMessageFail(String error);
+
+  /// Toast when leaveRoom API throws
+  ///
+  /// In en, this message translates to:
+  /// **'Leave room failed：{error}'**
+  String leaveRoomFail(String error);
+
+  /// Toast when subscribeToNotifications throws
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe notification failed：{error}'**
+  String subscribeNotificationFail(String error);
+
+  /// Hint when RestaurantService.list throws
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load restaurants: {error}'**
+  String loadRestaurantFail(String error);
+
+  /// Error hint when listByRestaurant throws
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load reviews: {error}'**
+  String loadReviewFail(String error);
+
+  /// Error hint when postReview/postWithImages/postWithImageFiles throws
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to post review: {error}'**
+  String postReviewFail(String error);
+
+  /// Error when listByRestaurant throws
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load staff list: {error}'**
+  String loadStaffFail(String error);
+
+  /// Error when getById throws
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load staff details: {error}'**
+  String loadStaffDetailFail(String error);
+
+  /// Thrown when send/join is called before connected
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected, please wait for WebSocket to complete'**
+  String get stompNotConnected;
+
+  /// Connection exception text pushed to connectionStateController
+  ///
+  /// In en, this message translates to:
+  /// **'WebSocket connection failed: {error}'**
+  String stompConnectFailed(String error);
+
+  /// No description provided for @stompConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get stompConnected;
+
+  /// No description provided for @stompDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get stompDisconnected;
+
+  /// No description provided for @msgParseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse message'**
+  String get msgParseFailed;
+
+  /// No description provided for @notificationParseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse notification'**
+  String get notificationParseFailed;
 }
 
 class _AppLocalizationsDelegate

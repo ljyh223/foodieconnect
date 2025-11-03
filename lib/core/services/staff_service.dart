@@ -9,7 +9,7 @@ class StaffService {
   static Future<Staff> getById(String id) async {
   final res = await _api.get('${AppConstants.staffEndpoint}/$id');
   final dynamic payload = res['data'] ?? res;
-    if (payload is! Map<String, dynamic> || payload.isEmpty) throw Exception('获取店员详情失败');
+    if (payload is! Map<String, dynamic> || payload.isEmpty) throw Exception('Failed to retrieve employee details');
     return Staff.fromJson(payload);
   }
 
