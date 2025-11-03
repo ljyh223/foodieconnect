@@ -1,0 +1,56 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk 設定模組繁體中文本地化",
+  "selectLanguage": "選擇語言",
+  "@selectLanguage": {
+    "description": "選擇語言標題"
+  },
+  "close": "關閉",
+  "@close": {
+    "description": "關閉按鈕文本"
+  },
+  "settings": "設定",
+  "@settings": {
+    "description": "設定標題"
+  },
+  "languageSettings": "語言設定",
+  "@languageSettings": {
+    "description": "語言設定標題"
+  },
+  "currentLanguage": "當前語言",
+  "@currentLanguage": {
+    "description": "當前語言標籤"
+  },
+  "accountSettings": "帳戶設定",
+  "@accountSettings": {
+    "description": "帳戶設定標題"
+  },
+  "profile": "個人資料",
+  "@profile": {
+    "description": "個人資料"
+  },
+  "privacy": "隱私設定",
+  "@privacy": {
+    "description": "隱私設定"
+  },
+  "notifications": "通知設定",
+  "@notifications": {
+    "description": "通知設定"
+  },
+  "about": "關於",
+  "@about": {
+    "description": "關於"
+  },
+  "version": "版本",
+  "@version": {
+    "description": "版本"
+  },
+  "logout": "登出",
+  "@logout": {
+    "description": "登出"
+  },
+  "sureLogout": "確定要退出登錄嗎？",
+  "@sureLogout": {
+    "description": "確定退出登錄提示"
+  }
+}

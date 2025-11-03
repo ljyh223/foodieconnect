@@ -1,0 +1,195 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk chat room localization",
+  "chatRoom": "Chat Room",
+  "@chatRoom": {
+    "description": "Chat room title"
+  },
+  "chatWithStaff": "Chat with staff in real-time for more details",
+  "@chatWithStaff": {
+    "description": "Chat room description"
+  },
+  "enterChatRoom": "Enter Chat Room",
+  "@enterChatRoom": {
+    "description": "Enter chat room button"
+  },
+  "restaurantChatVerification": "Restaurant Chat Verification",
+  "@restaurantChatVerification": {
+    "description": "Restaurant chat verification title"
+  },
+  "enterRestaurantIdAndCode": "Please enter restaurant ID and verification code to join the chat room",
+  "@enterRestaurantIdAndCode": {
+    "description": "Enter restaurant ID and verification code prompt"
+  },
+  "verificationCode": "Verification Code",
+  "@verificationCode": {
+    "description": "Verification code label"
+  },
+  "pleaseEnterVerificationCode": "Please enter verification code",
+  "@pleaseEnterVerificationCode": {
+    "description": "Please enter verification code prompt"
+  },
+  "verificationFailed": "Verification failed, please check restaurant ID and verification code",
+  "@verificationFailed": {
+    "description": "Verification failed prompt"
+  },
+  "verificationError": "Verification failed: {error}",
+  "@verificationError": {
+    "description": "Verification error prompt",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "verifyAndStartChat": "Verify and Start Chat",
+  "@verifyAndStartChat": {
+    "description": "Verify and start chat button"
+  },
+  "pleaseVerifyFirst": "Please join the chat room through the verification interface first",
+  "@pleaseVerifyFirst": {
+    "description": "Please verify first prompt"
+  },
+  "staffChatFeatureMoved": "Staff chat feature has been moved to restaurant chat room",
+  "@staffChatFeatureMoved": {
+    "description": "Staff chat feature moved prompt"
+  },
+  "restaurantChatRoom": "Restaurant Chat Room",
+  "@restaurantChatRoom": {
+    "description": "Restaurant chat room name"
+  },
+  "initializeChatRoomFailed": "Failed to initialize chat room",
+  "@initializeChatRoomFailed": {
+    "description": "Failed to initialize chat room prompt"
+  },
+  "initializeChatRoomError": "Failed to initialize chat room: {error}",
+  "@initializeChatRoomError": {
+    "description": "Failed to initialize chat room error prompt",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "noAvailableChatRoom": "No available chat room currently",
+  "@noAvailableChatRoom": {
+    "description": "No available chat room prompt"
+  },
+  "noMessagesStartChat": "No messages yet, start chatting!",
+  "@noMessagesStartChat": {
+    "description": "No messages prompt"
+  },
+  "websocketNotConnected": "WebSocket not connected",
+  "@websocketNotConnected": {
+    "description": "WebSocket not connected prompt"
+  },
+  "connected": "Connected",
+  "@connected": {
+    "description": "Connected status"
+  },
+  "disconnected": "Disconnected",
+  "@disconnected": {
+    "description": "Disconnected status"
+  },
+  "enterMessage": "Enter message...",
+  "@enterMessage": {
+    "description": "Enter message prompt"
+  },
+  "newMessages": "New Messages",
+  "@newMessages": {
+    "description": "New messages prompt"
+  },
+  "chat": "Chat",
+  "@chat": {
+    "description": "Chat title"
+  },
+
+  "today": "Today",
+  "@today": {
+    "description": "Label for today in chat time separator"
+  },
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Label for yesterday in chat time separator"
+  },
+  "dateFormatThisYear": "{month}/{day}",
+  "@dateFormatThisYear": {
+    "description": "Date format when message is from this year",
+    "placeholders": {
+      "month": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "dateFormatOtherYear": "{year}/{month}/{day}",
+  "@dateFormatOtherYear": {
+    "description": "Date format when message is from another year",
+    "placeholders": {
+      "year": { "type": "int" },
+      "month": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "timeFormat": "{hour}:{minute}",
+  "@timeFormat": {
+    "description": "Time format used after today/yesterday labels",
+    "placeholders": {
+      "hour": { "type": "String" },
+      "minute": { "type": "String" }
+    }
+  },
+
+  "stompConnectionError": "STOMP connection error：{error}",
+  "@stompConnectionError": {
+    "description": "Error hint when STOMP connection fails",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompConnectFail": "STOMP WebSocket connection failed：{error}",
+  "@stompConnectFail": {
+    "description": "Toast when initial connect throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "websocketTimeout": "WebSocket connection timeout，please check network",
+  "@websocketTimeout": {
+    "description": "Hint when waiting for connection timeout"
+  },
+  "verifyFailNoRoomOrToken": "Verification failed：roomId or tempToken missing",
+  "@verifyFailNoRoomOrToken": {
+    "description": "Hint when back-end does not return roomId/tempToken"
+  },
+  "verifyRoomFail": "Verify room failed：{error}",
+  "@verifyRoomFail": {
+    "description": "Toast when verifyChatRoom API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "joinRoomFail": "Join room failed：{error}",
+  "@joinRoomFail": {
+    "description": "Toast when STOMP joinRoom throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "loadMessageFail": "Load messages failed：{error}",
+  "@loadMessageFail": {
+    "description": "Toast when fetchMessages API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "notConnectedCantSend": "STOMP WebSocket not connected，can not send message",
+  "@notConnectedCantSend": {
+    "description": "Toast when sendMessage but socket disconnected"
+  },
+  "sendMessageFail": "Send message failed：{error}",
+  "@sendMessageFail": {
+    "description": "Toast when sendMessage API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "leaveRoomFail": "Leave room failed：{error}",
+  "@leaveRoomFail": {
+    "description": "Toast when leaveRoom API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "subscribeNotificationFail": "Subscribe notification failed：{error}",
+  "@subscribeNotificationFail": {
+    "description": "Toast when subscribeToNotifications throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompNotConnected": "Not connected, please wait for WebSocket to complete",
+  "@stompNotConnected": {
+    "description": "Thrown when send/join is called before connected"
+  },
+  "stompConnectFailed": "WebSocket connection failed: {error}",
+  "@stompConnectFailed": {
+    "description":

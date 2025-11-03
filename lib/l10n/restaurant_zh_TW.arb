@@ -1,0 +1,123 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk 餐廳詳情繁體中文本地化",
+  "noRestaurants": "暫無餐廳信息",
+  "@noRestaurants": {
+    "description": "無餐廳信息提示"
+  },
+  "basicInfo": "基礎信息",
+  "@basicInfo": {
+    "description": "基礎信息標題"
+  },
+  "address": "地址",
+  "@address": {
+    "description": "地址標籤"
+  },
+  "distanceFromYou": "距離您{distance}",
+  "@distanceFromYou": {
+    "description": "距離提示",
+    "placeholders": {
+      "distance": { "type": "String" }
+    }
+  },
+  "businessHours": "營業時間",
+  "@businessHours": {
+    "description": "營業時間標籤"
+  },
+  "phone": "電話",
+  "@phone": {
+    "description": "電話標籤"
+  },
+  "rating": "評分",
+  "@rating": {
+    "description": "評分標籤"
+  },
+  "totalReviews": "共{count}條評價",
+  "@totalReviews": {
+    "description": "評價數量提示",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "restaurantImages": "餐廳圖片",
+  "@restaurantImages": {
+    "description": "餐廳圖片標題"
+  },
+  "averagePrice": "人均消費",
+  "@averagePrice": {
+    "description": "人均消費標題"
+  },
+  "recommendedDishes": "推薦菜品",
+  "@recommendedDishes": {
+    "description": "推薦菜品標題"
+  },
+  "menu": "菜單",
+  "@menu": {
+    "description": "菜單標題"
+  },
+  "viewFullMenu": "查看完整菜單",
+  "@viewFullMenu": {
+    "description": "查看完整菜單文本"
+  },
+  "viewMenu": "查看菜單",
+  "@viewMenu": {
+    "description": "查看菜單按鈕"
+  },
+  "menuFeatureInDevelopment": "菜單功能開發中",
+  "@menuFeatureInDevelopment": {
+    "description": "菜單功能開發中提示"
+  },
+  "getMenuFailed": "獲取菜單失敗",
+  "@getMenuFailed": {
+    "description": "獲取菜單失敗提示"
+  },
+  "getShopInfoFailed": "獲取店鋪信息失敗",
+  "@getShopInfoFailed": {
+    "description": "獲取店鋪信息失敗提示"
+  },
+  "restaurantInfoInvalid": "餐廳信息無效",
+  "@restaurantInfoInvalid": {
+    "description": "餐廳信息無效提示"
+  },
+  "shopFeatures": "店鋪功能",
+  "@shopFeatures": {
+    "description": "店鋪功能標題"
+  },
+  "viewComments": "查看評論",
+  "@viewComments": {
+    "description": "查看評論功能標題"
+  },
+  "viewUserReviews": "查看用戶評價",
+  "@viewUserReviews": {
+    "description": "查看用戶評價描述"
+  },
+  "instantChat": "即時聊天",
+  "@instantChat": {
+    "description": "即時聊天功能標題"
+  },
+  "chatWithStaffRealtime": "與店員即時交流",
+  "@chatWithStaffRealtime": {
+    "description": "與店員即時交流描述"
+  },
+  "viewStaff": "查看店員",
+  "@viewStaff": {
+    "description": "查看店員功能標題"
+  },
+  "onlineStaffList": "在線店員列表",
+  "@onlineStaffList": {
+    "description": "在線店員列表描述"
+  },
+  "viewMenuDishes": "查看菜單",
+  "@viewMenuDishes": {
+    "description": "查看菜單功能標題"
+  },
+  "browseAllDishes": "瀏覽所有菜品",
+  "@browseAllDishes": {
+    "description": "瀏覽所有菜品描述"
+  },
+  "loadRestaurantFail": "取得餐廳失敗：{error}",
+  "@loadRestaurantFail": {
+    "description": "Hint when RestaurantService.list throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

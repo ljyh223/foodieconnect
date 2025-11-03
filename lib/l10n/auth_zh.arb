@@ -1,0 +1,104 @@
+{
+  "@@locale": "zh",
+  "@@context": "TableTalk 认证模块简体中文本地化",
+  "login": "登录",
+  "@login": {
+    "description": "登录按钮文本"
+  },
+  "register": "注册",
+  "@register": {
+    "description": "注册按钮文本"
+  },
+  "email": "邮箱地址",
+  "@email": {
+    "description": "邮箱输入框标签"
+  },
+  "password": "密码",
+  "@password": {
+    "description": "密码输入框标签"
+  },
+  "displayName": "显示名称",
+  "@displayName": {
+    "description": "显示名称输入框标签"
+  },
+  "phoneNumber": "手机号码",
+  "@phoneNumber": {
+    "description": "手机号码输入框标签"
+  },
+  "pleaseEnterEmail": "请输入邮箱地址",
+  "@pleaseEnterEmail": {
+    "description": "邮箱验证错误信息"
+  },
+  "pleaseEnterValidEmail": "请输入有效的邮箱地址",
+  "@pleaseEnterValidEmail": {
+    "description": "邮箱格式验证错误信息"
+  },
+  "pleaseEnterPassword": "请输入密码",
+  "@pleaseEnterPassword": {
+    "description": "密码验证错误信息"
+  },
+  "passwordMinLength": "密码至少需要6位字符",
+  "@passwordMinLength": {
+    "description": "密码长度验证错误信息"
+  },
+  "forgotPassword": "忘记密码？",
+  "@forgotPassword": {
+    "description": "忘记密码链接文本"
+  },
+  "noAccountYet": "还没有账号？",
+  "@noAccountYet": {
+    "description": "没有账号提示文本"
+  },
+  "registerNow": "立即注册",
+  "@registerNow": {
+    "description": "立即注册链接文本"
+  },
+  "alreadyHaveAccount": "已有账号？",
+  "@alreadyHaveAccount": {
+    "description": "已有账号提示文本"
+  },
+  "loginNow": "立即登录",
+  "@loginNow": {
+    "description": "立即登录链接文本"
+  },
+  "createAccount": "创建账号",
+  "@createAccount": {
+    "description": "创建账号标题"
+  },
+  "joinTableTalk": "加入TableTalk，发现更多美食",
+  "@joinTableTalk": {
+    "description": "注册页面副标题"
+  },
+  "loginFailed": "登录失败，请稍后重试",
+  "@loginFailed": {
+    "description": "登录失败提示"
+  },
+  "checkingLoginStatus": "正在检查登录状态...",
+  "@checkingLoginStatus": {
+    "description": "检查登录状态提示"
+  },
+  "authCheckFailed": "认证检查失败",
+  "@authCheckFailed": {
+    "description": "认证检查失败提示"
+  },
+  "authCheckTimeout": "认证检查超时",
+  "@authCheckTimeout": {
+    "description": "认证检查超时提示"
+  },
+  "invalidEmailOrPassword": "邮箱或密码错误",
+  "@invalidEmailOrPassword": {
+    "description": "Error message shown to user"
+  },
+  "registrationFailed": "注册失败",
+  "@registrationFailed": {
+    "description": "Prefix when registration throws"
+  },
+  "logoutFailed": "登出失败",
+  "@logoutFailed": {
+    "description": "Error message shown to user"
+  },
+  "restoreLoginFailed": "恢复登录状态失败",
+  "@restoreLoginFailed": {
+    "description": "Error message shown to user"
+  }
+}

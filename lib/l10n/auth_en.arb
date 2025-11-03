@@ -1,0 +1,104 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk authentication localization",
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "email": "Email Address",
+  "@email": {
+    "description": "Email input field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password input field label"
+  },
+  "displayName": "Display Name",
+  "@displayName": {
+    "description": "Display name input field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number input field label"
+  },
+  "pleaseEnterEmail": "Please enter email address",
+  "@pleaseEnterEmail": {
+    "description": "Email validation error message"
+  },
+  "pleaseEnterValidEmail": "Please enter a valid email address",
+  "@pleaseEnterValidEmail": {
+    "description": "Email format validation error message"
+  },
+  "pleaseEnterPassword": "Please enter password",
+  "@pleaseEnterPassword": {
+    "description": "Password validation error message"
+  },
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Password length validation error message"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "noAccountYet": "Don't have an account yet?",
+  "@noAccountYet": {
+    "description": "No account prompt text"
+  },
+  "registerNow": "Register Now",
+  "@registerNow": {
+    "description": "Register now link text"
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account prompt text"
+  },
+  "loginNow": "Login Now",
+  "@loginNow": {
+    "description": "Login now link text"
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Create account title"
+  },
+  "joinTableTalk": "Join TableTalk, discover more food",
+  "@joinTableTalk": {
+    "description": "Registration page subtitle"
+  },
+  "loginFailed": "Login failed, please try again later",
+  "@loginFailed": {
+    "description": "Login failed prompt"
+  },
+  "checkingLoginStatus": "Checking login status...",
+  "@checkingLoginStatus": {
+    "description": "Checking login status prompt"
+  },
+  "authCheckFailed": "Authentication check failed",
+  "@authCheckFailed": {
+    "description": "Authentication check failed prompt"
+  },
+  "authCheckTimeout": "Authentication check timeout",
+  "@authCheckTimeout": {
+    "description": "Authentication check timeout prompt"
+  },
+  "invalidEmailOrPassword": "Invalid email or password",
+  "@invalidEmailOrPassword": {
+    "description": "Error message shown to user"
+  },
+  "registrationFailed": "Registration failed",
+  "@registrationFailed": {
+    "description": "Prefix when registration throws"
+  },
+  "logoutFailed": "Logout failed",
+  "@logoutFailed": {
+    "description": "Error message shown to user"
+  },
+  "restoreLoginFailed": "Failed to restore login status",
+  "@restoreLoginFailed": {
+    "description": "Error message shown to user"
+  }
+}

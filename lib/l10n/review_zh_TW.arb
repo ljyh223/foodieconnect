@@ -1,0 +1,93 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk 評論模組繁體中文本地化",
+  "userComments": "用戶評論",
+  "@userComments": {
+    "description": "用戶評論標題"
+  },
+  "publishReview": "發布評價",
+  "@publishReview": {
+    "description": "發布評價按鈕"
+  },
+  "ratingScore": "評分",
+  "@ratingScore": {
+    "description": "評分標籤"
+  },
+  "reviewContent": "評價內容",
+  "@reviewContent": {
+    "description": "評價內容標籤"
+  },
+  "shareDiningExperience": "分享你的用餐體驗...",
+  "@shareDiningExperience": {
+    "description": "評價內容輸入框提示"
+  },
+  "addImages": "添加圖片",
+  "@addImages": {
+    "description": "添加圖片標題"
+  },
+  "takePhoto": "拍照",
+  "@takePhoto": {
+    "description": "拍照按鈕"
+  },
+  "selectFromGallery": "相冊",
+  "@selectFromGallery": {
+    "description": "相冊按鈕"
+  },
+  "selectFromAlbum": "從相冊選擇",
+  "@selectFromAlbum": {
+    "description": "從相冊選擇文本"
+  },
+  "addImage": "添加圖片",
+  "@addImage": {
+    "description": "添加圖片提示"
+  },
+  "publish": "發布",
+  "@publish": {
+    "description": "發布按鈕"
+  },
+  "pleaseEnterReviewContent": "請輸入評價內容",
+  "@pleaseEnterReviewContent": {
+    "description": "請輸入評價內容提示"
+  },
+  "reviewPublished": "評價已發布",
+  "@reviewPublished": {
+    "description": "評價已發布提示"
+  },
+  "publishFailed": "發布失敗",
+  "@publishFailed": {
+    "description": "發布失敗提示"
+  },
+  "takePhotoFailed": "拍照失敗",
+  "@takePhotoFailed": {
+    "description": "拍照失敗提示"
+  },
+  "selectImageFailed": "選擇圖片失敗",
+  "@selectImageFailed": {
+    "description": "選擇圖片失敗提示"
+  },
+  "noReviews": "暫無評價",
+  "@noReviews": {
+    "description": "無評價提示"
+  },
+  "userReviews": "用戶評價",
+  "@userReviews": {
+    "description": "用戶評價標題"
+  },
+  "reviewCount": "{count}條評價",
+  "@reviewCount": {
+    "description": "評價數量",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "loadReviewFail": "取得評論失敗：{error}",
+  "@loadReviewFail": {
+    "description": "Error hint when listByRestaurant throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "postReviewFail": "發布評論失敗：{error}",
+  "@postReviewFail": {
+    "description": "Error hint when postReview/postWithImages/postWithImageFiles throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

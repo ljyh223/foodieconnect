@@ -1,0 +1,56 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk settings localization",
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Select language title"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings title"
+  },
+  "languageSettings": "Language Settings",
+  "@languageSettings": {
+    "description": "Language settings title"
+  },
+  "currentLanguage": "Current Language",
+  "@currentLanguage": {
+    "description": "Current language label"
+  },
+  "accountSettings": "Account Settings",
+  "@accountSettings": {
+    "description": "Account settings title"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile"
+  },
+  "privacy": "Privacy Settings",
+  "@privacy": {
+    "description": "Privacy settings"
+  },
+  "notifications": "Notification Settings",
+  "@notifications": {
+    "description": "Notification settings"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Version"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout"
+  },
+  "sureLogout": "Are you sure you want to log out?",
+  "@sureLogout": {
+    "description": "Are you sure you want to log out prompt"
+  }
+}

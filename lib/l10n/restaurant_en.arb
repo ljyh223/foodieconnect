@@ -1,0 +1,123 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk restaurant details localization",
+  "noRestaurants": "No restaurant information available",
+  "@noRestaurants": {
+    "description": "No restaurant information prompt"
+  },
+  "basicInfo": "Basic Information",
+  "@basicInfo": {
+    "description": "Basic information title"
+  },
+  "address": "Address",
+  "@address": {
+    "description": "Address label"
+  },
+  "distanceFromYou": "{distance} from you",
+  "@distanceFromYou": {
+    "description": "Distance prompt",
+    "placeholders": {
+      "distance": { "type": "String" }
+    }
+  },
+  "businessHours": "Business Hours",
+  "@businessHours": {
+    "description": "Business hours label"
+  },
+  "phone": "Phone",
+  "@phone": {
+    "description": "Phone label"
+  },
+  "rating": "Rating",
+  "@rating": {
+    "description": "Rating label"
+  },
+  "totalReviews": "{count} reviews",
+  "@totalReviews": {
+    "description": "Review count prompt",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "restaurantImages": "Restaurant Images",
+  "@restaurantImages": {
+    "description": "Restaurant images title"
+  },
+  "averagePrice": "Average Price",
+  "@averagePrice": {
+    "description": "Average price title"
+  },
+  "recommendedDishes": "Recommended Dishes",
+  "@recommendedDishes": {
+    "description": "Recommended dishes title"
+  },
+  "menu": "Menu",
+  "@menu": {
+    "description": "Menu title"
+  },
+  "viewFullMenu": "View Full Menu",
+  "@viewFullMenu": {
+    "description": "View full menu text"
+  },
+  "viewMenu": "View Menu",
+  "@viewMenu": {
+    "description": "View menu button"
+  },
+  "menuFeatureInDevelopment": "Menu feature in development",
+  "@menuFeatureInDevelopment": {
+    "description": "Menu feature in development prompt"
+  },
+  "getMenuFailed": "Failed to get menu",
+  "@getMenuFailed": {
+    "description": "Failed to get menu prompt"
+  },
+  "getShopInfoFailed": "Failed to get shop information",
+  "@getShopInfoFailed": {
+    "description": "Failed to get shop information prompt"
+  },
+  "restaurantInfoInvalid": "Restaurant information is invalid",
+  "@restaurantInfoInvalid": {
+    "description": "Restaurant information invalid prompt"
+  },
+  "shopFeatures": "Shop Features",
+  "@shopFeatures": {
+    "description": "Shop features title"
+  },
+  "viewComments": "View Comments",
+  "@viewComments": {
+    "description": "View comments feature title"
+  },
+  "viewUserReviews": "View User Reviews",
+  "@viewUserReviews": {
+    "description": "View user reviews description"
+  },
+  "instantChat": "Instant Chat",
+  "@instantChat": {
+    "description": "Instant chat feature title"
+  },
+  "chatWithStaffRealtime": "Chat with staff in real-time",
+  "@chatWithStaffRealtime": {
+    "description": "Chat with staff in real-time description"
+  },
+  "viewStaff": "View Staff",
+  "@viewStaff": {
+    "description": "View staff feature title"
+  },
+  "onlineStaffList": "Online Staff List",
+  "@onlineStaffList": {
+    "description": "Online staff list description"
+  },
+  "viewMenuDishes": "View Menu",
+  "@viewMenuDishes": {
+    "description": "View menu feature title"
+  },
+  "browseAllDishes": "Browse all dishes",
+  "@browseAllDishes": {
+    "description": "Browse all dishes description"
+  },
+  "loadRestaurantFail": "Failed to load restaurants: {error}",
+  "@loadRestaurantFail": {
+    "description": "Hint when RestaurantService.list throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

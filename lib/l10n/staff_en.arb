@@ -1,0 +1,58 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk staff localization",
+  "staffReviews": "Staff Reviews",
+  "@staffReviews": {
+    "description": "Staff reviews title"
+  },
+  "noStaffInfo": "No staff information available",
+  "@noStaffInfo": {
+    "description": "No staff information prompt"
+  },
+  "viewAllStaff": "View All Staff",
+  "@viewAllStaff": {
+    "description": "View all staff button"
+  },
+  "experience": "Experience",
+  "@experience": {
+    "description": "Experience label"
+  },
+  "staffList": "Staff List",
+  "@staffList": {
+    "description": "Staff list title"
+  },
+  "getStaffListFailed": "Failed to get staff list",
+  "@getStaffListFailed": {
+    "description": "Failed to get staff list prompt"
+  },
+  "noStaff": "No staff information available",
+  "@noStaff": {
+    "description": "No staff information prompt"
+  },
+  "staffDetails": "Staff Details",
+  "@staffDetails": {
+    "description": "Staff details title"
+  },
+  "staffInfoNotExists": "Staff information does not exist",
+  "@staffInfoNotExists": {
+    "description": "Staff information does not exist prompt"
+  },
+  "getStaffDetailsFailed": "Failed to get staff details",
+  "@getStaffDetailsFailed": {
+    "description": "Failed to get staff details prompt"
+  },
+  "loadStaffReviewsFailed": "Failed to load staff reviews",
+  "@loadStaffReviewsFailed": {
+    "description": "Failed to load staff reviews prompt"
+  },
+  "loadStaffFail": "Failed to load staff list: {error}",
+  "@loadStaffFail": {
+    "description": "Error when listByRestaurant throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "loadStaffDetailFail": "Failed to load staff details: {error}",
+  "@loadStaffDetailFail": {
+    "description": "Error when getById throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

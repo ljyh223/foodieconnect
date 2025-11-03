@@ -1,0 +1,58 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk 店員模組繁體中文本地化",
+  "staffReviews": "店員評價",
+  "@staffReviews": {
+    "description": "店員評價標題"
+  },
+  "noStaffInfo": "暫無店員信息",
+  "@noStaffInfo": {
+    "description": "無店員信息提示"
+  },
+  "viewAllStaff": "查看所有店員",
+  "@viewAllStaff": {
+    "description": "查看所有店員按鈕"
+  },
+  "experience": "經驗",
+  "@experience": {
+    "description": "經驗標籤"
+  },
+  "staffList": "店員列表",
+  "@staffList": {
+    "description": "店員列表標題"
+  },
+  "getStaffListFailed": "獲取店員列表失敗",
+  "@getStaffListFailed": {
+    "description": "獲取店員列表失敗提示"
+  },
+  "noStaff": "暫無店員信息",
+  "@noStaff": {
+    "description": "無店員信息提示"
+  },
+  "staffDetails": "店員詳情",
+  "@staffDetails": {
+    "description": "店員詳情標題"
+  },
+  "staffInfoNotExists": "店員信息不存在",
+  "@staffInfoNotExists": {
+    "description": "店員信息不存在提示"
+  },
+  "getStaffDetailsFailed": "獲取店員詳情失敗",
+  "@getStaffDetailsFailed": {
+    "description": "獲取店員詳情失敗提示"
+  },
+  "loadStaffReviewsFailed": "載入店員評價失敗",
+  "@loadStaffReviewsFailed": {
+    "description": "載入店員評價失敗提示"
+  },
+  "loadStaffFail": "取得店員失敗：{error}",
+  "@loadStaffFail": {
+    "description": "Error when listByRestaurant throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "loadStaffDetailFail": "取得店員詳情失敗：{error}",
+  "@loadStaffDetailFail": {
+    "description": "Error when getById throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "@@locale": "zh",
+  "@@context": "TableTalk 店员模块简体中文本地化",
+  "staffReviews": "店员评价",
+  "@staffReviews": {
+    "description": "店员评价标题"
+  },
+  "noStaffInfo": "暂无店员信息",
+  "@noStaffInfo": {
+    "description": "无店员信息提示"
+  },
+  "viewAllStaff": "查看所有店员",
+  "@viewAllStaff": {
+    "description": "查看所有店员按钮"
+  },
+  "experience": "经验",
+  "@experience": {
+    "description": "经验标签"
+  },
+  "staffList": "店员列表",
+  "@staffList": {
+    "description": "店员列表标题"
+  },
+  "getStaffListFailed": "获取店员列表失败",
+  "@getStaffListFailed": {
+    "description": "获取店员列表失败提示"
+  },
+  "noStaff": "暂无店员信息",
+  "@noStaff": {
+    "description": "无店员信息提示"
+  },
+  "staffDetails": "店员详情",
+  "@staffDetails": {
+    "description": "店员详情标题"
+  },
+  "staffInfoNotExists": "店员信息不存在",
+  "@staffInfoNotExists": {
+    "description": "店员信息不存在提示"
+  },
+  "getStaffDetailsFailed": "获取店员详情失败",
+  "@getStaffDetailsFailed": {
+    "description": "获取店员详情失败提示"
+  },
+  "loadStaffReviewsFailed": "加载店员评价失败",
+  "@loadStaffReviewsFailed": {
+    "description": "加载店员评价失败提示"
+  },
+  "loadStaffFail": "获取店员失败：{error}",
+  "@loadStaffFail": {
+    "description": "Error when listByRestaurant throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "loadStaffDetailFail": "获取店员详情失败：{error}",
+  "@loadStaffDetailFail": {
+    "description": "Error when getById throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

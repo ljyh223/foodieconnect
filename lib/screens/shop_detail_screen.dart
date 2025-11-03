@@ -179,12 +179,12 @@ class ShopDetailScreen extends StatelessWidget {
                             ],
                           ),
                         const SizedBox(height: 12),
-                        _buildInfoRow(
-                          icon: Icons.location_on,
-                          label: LocalizationService.I.address,
-                          value: restaurant.address,
-                          subtitle: LocalizationService.I.distanceFromYou(restaurant.distance),
-                        ),
+                        // _buildInfoRow(
+                        //   icon: Icons.location_on,
+                        //   label: LocalizationService.I.address,
+                        //   value: restaurant.address,
+                        //   subtitle: LocalizationService.I.distanceFromYou(restaurant.distance),
+                        // ),
                         _buildInfoRow(
                           icon: Icons.schedule,
                           label: LocalizationService.I.businessHours,

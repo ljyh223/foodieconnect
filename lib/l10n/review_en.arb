@@ -1,0 +1,93 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk review and user comment localization",
+  "userComments": "User Comments",
+  "@userComments": {
+    "description": "User comments title"
+  },
+  "publishReview": "Publish Review",
+  "@publishReview": {
+    "description": "Publish review button"
+  },
+  "ratingScore": "Rating",
+  "@ratingScore": {
+    "description": "Rating label"
+  },
+  "reviewContent": "Review Content",
+  "@reviewContent": {
+    "description": "Review content label"
+  },
+  "shareDiningExperience": "Share your dining experience...",
+  "@shareDiningExperience": {
+    "description": "Review content input box prompt"
+  },
+  "addImages": "Add Images",
+  "@addImages": {
+    "description": "Add images title"
+  },
+  "takePhoto": "Take Photo",
+  "@takePhoto": {
+    "description": "Take photo button"
+  },
+  "selectFromGallery": "Gallery",
+  "@selectFromGallery": {
+    "description": "Gallery button"
+  },
+  "selectFromAlbum": "Select from Album",
+  "@selectFromAlbum": {
+    "description": "Select from album text"
+  },
+  "addImage": "Add Image",
+  "@addImage": {
+    "description": "Add image prompt"
+  },
+  "publish": "Publish",
+  "@publish": {
+    "description": "Publish button"
+  },
+  "pleaseEnterReviewContent": "Please enter review content",
+  "@pleaseEnterReviewContent": {
+    "description": "Please enter review content prompt"
+  },
+  "reviewPublished": "Review published",
+  "@reviewPublished": {
+    "description": "Review published prompt"
+  },
+  "publishFailed": "Publish failed",
+  "@publishFailed": {
+    "description": "Publish failed prompt"
+  },
+  "takePhotoFailed": "Failed to take photo",
+  "@takePhotoFailed": {
+    "description": "Failed to take photo prompt"
+  },
+  "selectImageFailed": "Failed to select image",
+  "@selectImageFailed": {
+    "description": "Failed to select image prompt"
+  },
+  "noReviews": "No reviews yet",
+  "@noReviews": {
+    "description": "No reviews prompt"
+  },
+  "userReviews": "User Reviews",
+  "@userReviews": {
+    "description": "User reviews title"
+  },
+  "reviewCount": "{count} reviews",
+  "@reviewCount": {
+    "description": "Review count",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "loadReviewFail": "Failed to load reviews: {error}",
+  "@loadReviewFail": {
+    "description": "Error hint when listByRestaurant throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "postReviewFail": "Failed to post review: {error}",
+  "@postReviewFail": {
+    "description": "Error hint when postReview/postWithImages/postWithImageFiles throws",
+    "placeholders": { "error": { "type": "String" } }
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "@@locale": "zh",
+  "@@context": "TableTalk 聊天功能简体中文本地化",
+  "chatRoom": "聊天室",
+  "@chatRoom": {
+    "description": "聊天室标题"
+  },
+  "chatWithStaff": "与店员实时沟通，了解更多详情",
+  "@chatWithStaff": {
+    "description": "聊天室描述"
+  },
+  "enterChatRoom": "进入聊天室",
+  "@enterChatRoom": {
+    "description": "进入聊天室按钮"
+  },
+  "restaurantChatVerification": "餐厅聊天验证",
+  "@restaurantChatVerification": {
+    "description": "餐厅聊天验证标题"
+  },
+  "enterRestaurantIdAndCode": "请输入餐厅ID和验证码以加入聊天室",
+  "@enterRestaurantIdAndCode": {
+    "description": "输入餐厅ID和验证码提示"
+  },
+  "verificationCode": "验证码",
+  "@verificationCode": {
+    "description": "验证码标签"
+  },
+  "pleaseEnterVerificationCode": "请填写验证码",
+  "@pleaseEnterVerificationCode": {
+    "description": "请填写验证码提示"
+  },
+  "verificationFailed": "验证失败，请检查餐厅ID和验证码",
+  "@verificationFailed": {
+    "description": "验证失败提示"
+  },
+  "verificationError": "验证失败：{error}",
+  "@verificationError": {
+    "description": "验证错误提示",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "verifyAndStartChat": "验证并开始聊天",
+  "@verifyAndStartChat": {
+    "description": "验证并开始聊天按钮"
+  },
+  "pleaseVerifyFirst": "请先通过验证界面加入聊天室",
+  "@pleaseVerifyFirst": {
+    "description": "请先验证提示"
+  },
+  "staffChatFeatureMoved": "店员聊天功能已迁移至餐厅聊天室",
+  "@staffChatFeatureMoved": {
+    "description": "店员聊天功能迁移提示"
+  },
+  "restaurantChatRoom": "餐厅聊天室",
+  "@restaurantChatRoom": {
+    "description": "餐厅聊天室名称"
+  },
+  "initializeChatRoomFailed": "初始化聊天室失败",
+  "@initializeChatRoomFailed": {
+    "description": "初始化聊天室失败提示"
+  },
+  "initializeChatRoomError": "初始化聊天室失败: {error}",
+  "@initializeChatRoomError": {
+    "description": "初始化聊天室错误提示",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "noAvailableChatRoom": "当前无可用聊天室",
+  "@noAvailableChatRoom": {
+    "description": "无可用聊天室提示"
+  },
+  "noMessagesStartChat": "暂无消息，开始聊天吧！",
+  "@noMessagesStartChat": {
+    "description": "无消息提示"
+  },
+  "websocketNotConnected": "WebSocket未连接",
+  "@websocketNotConnected": {
+    "description": "WebSocket未连接提示"
+  },
+  "connected": "已连接",
+  "@connected": {
+    "description": "已连接状态"
+  },
+  "disconnected": "未连接",
+  "@disconnected": {
+    "description": "未连接状态"
+  },
+  "enterMessage": "输入消息...",
+  "@enterMessage": {
+    "description": "输入消息提示"
+  },
+  "newMessages": "新消息",
+  "@newMessages": {
+    "description": "新消息提示"
+  },
+  "chat": "聊天",
+  "@chat": {
+    "description": "聊天标题"
+  },
+
+  "today": "今天",
+  "@today": {
+    "description": "Label for today in chat time separator"
+  },
+  "yesterday": "昨天",
+  "@yesterday": {
+    "description": "Label for yesterday in chat time separator"
+  },
+  "dateFormatThisYear": "{month}月{day}日",
+  "@dateFormatThisYear": {
+    "description": "Date format when message is from this year",
+    "placeholders": {
+      "month": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "dateFormatOtherYear": "{year}年{month}月{day}日",
+  "@dateFormatOtherYear": {
+    "description": "Date format when message is from another year",
+    "placeholders": {
+      "year": { "type": "int" },
+      "month": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "timeFormat": "{hour}:{minute}",
+  "@timeFormat": {
+    "description": "Time format used after today/yesterday labels",
+    "placeholders": {
+      "hour": { "type": "String" },
+      "minute": { "type": "String" }
+    }
+  },
+
+  "stompConnectionError": "STOMP连接错误：{error}",
+  "@stompConnectionError": {
+    "description": "Error hint when STOMP connection fails",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompConnectFail": "STOMP WebSocket连接失败：{error}",
+  "@stompConnectFail": {
+    "description": "Toast when initial connect throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "websocketTimeout": "WebSocket连接超时，请检查网络连接",
+  "@websocketTimeout": {
+    "description": "Hint when waiting for connection timeout"
+  },
+  "verifyFailNoRoomOrToken": "验证失败：未获取到聊天室ID或临时令牌",
+  "@verifyFailNoRoomOrToken": {
+    "description": "Hint when back-end does not return roomId/tempToken"
+  },
+  "verifyRoomFail": "验证聊天室失败：{error}",
+  "@verifyRoomFail": {
+    "description": "Toast when verifyChatRoom API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "joinRoomFail": "加入聊天室失败：{error}",
+  "@joinRoomFail": {
+    "description": "Toast when STOMP joinRoom throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "loadMessageFail": "获取消息失败：{error}",
+  "@loadMessageFail": {
+    "description": "Toast when fetchMessages API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "notConnectedCantSend": "STOMP WebSocket未连接，无法发送消息",
+  "@notConnectedCantSend": {
+    "description": "Toast when sendMessage but socket disconnected"
+  },
+  "sendMessageFail": "发送消息失败：{error}",
+  "@sendMessageFail": {
+    "description": "Toast when sendMessage API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "leaveRoomFail": "离开聊天室失败：{error}",
+  "@leaveRoomFail": {
+    "description": "Toast when leaveRoom API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "subscribeNotificationFail": "订阅通知失败：{error}",
+  "@subscribeNotificationFail": {
+    "description": "Toast when subscribeToNotifications throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompNotConnected": "未连接，请等待 WebSocket 完成连接",
+  "@stompNotConnected": {
+    "description": "Thrown when send/join is called before connected"
+  },
+  "stompConnectFailed": "WebSocket 连接失败：{error}",
+  "@stompConnectFailed": {
+    "description": "Connection exception text pushed to connectionStateController",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompConnected": "已连接",
+  "@stompConnected": {},
+  "stompDisconnected": "连接已断开",
+  "@stompDisconnected": {},
+  "msgParseFailed": "解析消息失败",
+  "@msgParseFailed": {},
+  "notificationParseFailed": "解析通知失败",
+  "@notificationParseFailed": {}
+}
