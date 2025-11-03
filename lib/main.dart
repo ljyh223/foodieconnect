@@ -15,12 +15,9 @@ import 'core/services/localization_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // 尝试从安全存储恢复 access token 并注入 ApiService
   final access = await TokenStorage.readAccessToken();
   if (access != null && access.isNotEmpty) {
     ApiService().setToken(access);
-    // 可选：在这里可以调用 AuthService.me() 来验证并预热用户数据
   }
 
   runApp(
@@ -112,7 +109,6 @@ class MyApp extends StatelessWidget {
             onGenerateRoute: AppRouter.generateRoute,
             debugShowCheckedModeBanner: false, // 隐藏调试横幅
             builder: (context, child) {
-              // 🔥 每次语言切换时会重新触发，自动更新LocalizationService
               LocalizationService.update(context);
               return child!;
             },
