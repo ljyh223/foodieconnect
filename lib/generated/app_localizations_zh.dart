@@ -391,6 +391,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get logout => '退出登录';
 
   @override
+  String get sureLogout => '确定要退出登录吗？';
+
+  @override
   String get today => '今天';
 
   @override
@@ -906,6 +909,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get logout => '登出';
+
+  @override
+  String get sureLogout => '確定要退出登錄嗎？';
 
   @override
   String get today => '今天';

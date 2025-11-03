@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../core/services/restaurant_service.dart';
 import '../data/models/restaurant_model.dart';
-import '../../generated/app_localizations.dart';
 
 class ShopFeaturesScreen extends StatefulWidget {
   final String? restaurantId;
@@ -84,7 +84,7 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).shopFeatures,
+        title: LocalizationService.I.shopFeatures,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -112,11 +112,11 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${AppLocalizations.of(context).loadingFailed}：$_error'),
+            Text('${LocalizationService.I.loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadRestaurant,
-              child: Text(AppLocalizations.of(context).retry),
+              child: Text(LocalizationService.I.retry),
             ),
           ],
         ),
@@ -135,11 +135,11 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${AppLocalizations.of(context).getShopInfoFailed}${snapshot.error}'),
+                Text('${LocalizationService.I.getShopInfoFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadRestaurant,
-                  child: Text(AppLocalizations.of(context).retry),
+                  child: Text(LocalizationService.I.retry),
                 ),
               ],
             ),
@@ -159,29 +159,29 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
               case 0:
                 return FeatureCard(
                   icon: Icons.star,
-                  title: AppLocalizations.of(context).viewComments,
-                  subtitle: AppLocalizations.of(context).viewUserReviews,
+                  title: LocalizationService.I.viewComments,
+                  subtitle: LocalizationService.I.viewUserReviews,
                   onTap: navigateToReviews,
                 );
               case 1:
                 return FeatureCard(
                   icon: Icons.chat,
-                  title: AppLocalizations.of(context).instantChat,
-                  subtitle: AppLocalizations.of(context).chatWithStaffRealtime,
+                  title: LocalizationService.I.instantChat,
+                  subtitle: LocalizationService.I.chatWithStaffRealtime,
                   onTap: navigateToChatVerify,
                 );
               case 2:
                 return FeatureCard(
                   icon: Icons.people,
-                  title: AppLocalizations.of(context).viewStaff,
-                  subtitle: AppLocalizations.of(context).onlineStaffList,
+                  title: LocalizationService.I.viewStaff,
+                  subtitle: LocalizationService.I.onlineStaffList,
                   onTap: navigateToStaff,
                 );
               case 3:
                 return FeatureCard(
                   icon: Icons.restaurant_menu,
-                  title: AppLocalizations.of(context).viewMenu,
-                  subtitle: AppLocalizations.of(context).browseAllDishes,
+                  title: LocalizationService.I.viewMenu,
+                  subtitle: LocalizationService.I.browseAllDishes,
                   onTap: navigateToMenu,
                 );
               default:

@@ -354,7 +354,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             }
                             
                             if (showTimeSeparator) {
-                              timeSeparatorText = ChatTimeFormatter.formatDateForSeparator(context, message.createdAt);
+                              timeSeparatorText = ChatTimeFormatter.formatDateForSeparator( message.createdAt);
                             }
                             
                             return ChatMessageWidget(

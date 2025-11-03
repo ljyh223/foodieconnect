@@ -395,6 +395,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logout => 'Logout';
 
   @override
+  String get sureLogout => 'Are you sure you want to log out?';
+
+  @override
   String get today => 'Today';
 
   @override

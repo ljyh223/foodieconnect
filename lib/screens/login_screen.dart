@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   // loading state is provided by AuthProvider
 
   @override
@@ -46,28 +47,28 @@ class _LoginScreenState extends State<LoginScreen> {
     if (auth.isAuthenticated) {
       _navigateToShops();
     } else {
-      final msg = auth.error ?? (LocalizationService.I.isInitialized ? LocalizationService.I.loginFailed : AppLocalizations.of(context).loginFailed);
+      final msg = auth.error ?? (LocalizationService.I.loginFailed);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.isInitialized ? LocalizationService.I.pleaseEnterEmail : AppLocalizations.of(context).pleaseEnterEmail;
+      return LocalizationService.I.pleaseEnterEmail;
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return LocalizationService.I.isInitialized ? LocalizationService.I.pleaseEnterValidEmail : AppLocalizations.of(context).pleaseEnterValidEmail;
+      return LocalizationService.I.pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.isInitialized ? LocalizationService.I.pleaseEnterPassword : AppLocalizations.of(context).pleaseEnterPassword;
+      return LocalizationService.I.pleaseEnterPassword;
     }
     if (value.length < 6) {
-      return LocalizationService.I.isInitialized ? LocalizationService.I.passwordMinLength : AppLocalizations.of(context).passwordMinLength;
+      return LocalizationService.I.passwordMinLength;
     }
     return null;
   }
@@ -110,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    LocalizationService.I.isInitialized ? LocalizationService.I.tableTalk : AppLocalizations.of(context).tableTalk,
+                    LocalizationService.I.tableTalk,
                     style: AppTextStyles.headlineMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -118,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    LocalizationService.I.isInitialized ? LocalizationService.I.discoverFoodShareExperience : AppLocalizations.of(context).discoverFoodShareExperience,
+                    LocalizationService.I.discoverFoodShareExperience,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -126,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               const SizedBox(height: 48),
-              
+
               // Login Form
               Container(
                 padding: const EdgeInsets.all(24),
@@ -135,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                    color: Colors.black.withAlpha(13),
+                      color: Colors.black.withAlpha(13),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -147,32 +148,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        LocalizationService.I.isInitialized ? LocalizationService.I.login : AppLocalizations.of(context).login,
+                        LocalizationService.I.login,
                         style: AppTextStyles.headlineSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 32),
-                      
+
                       TextFieldWidget(
                         controller: _emailController,
-                        label: LocalizationService.I.isInitialized ? LocalizationService.I.email : AppLocalizations.of(context).email,
+                        label: LocalizationService.I.email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: LocalizationService.I.isInitialized ? LocalizationService.I.password : AppLocalizations.of(context).password,
+                        label: LocalizationService.I.password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
                       ),
                       const SizedBox(height: 8),
-                      
+
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -183,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            LocalizationService.I.isInitialized ? LocalizationService.I.forgotPassword : AppLocalizations.of(context).forgotPassword,
+                            LocalizationService.I.forgotPassword,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                             ),
@@ -191,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
+
                       Consumer<AuthProvider>(
                         builder: (context, auth, _) {
                           return ElevatedButton(
@@ -211,11 +212,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.onPrimary),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.onPrimary,
+                                      ),
                                     ),
                                   )
                                 : Text(
-                                    LocalizationService.I.isInitialized ? LocalizationService.I.login : AppLocalizations.of(context).login,
+                                    LocalizationService.I.login,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -228,15 +231,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Register Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    LocalizationService.I.isInitialized ? LocalizationService.I.noAccountYet : AppLocalizations.of(context).noAccountYet,
+                    LocalizationService.I.noAccountYet,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -250,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      LocalizationService.I.isInitialized ? LocalizationService.I.registerNow : AppLocalizations.of(context).registerNow,
+                      LocalizationService.I.registerNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

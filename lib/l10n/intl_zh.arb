@@ -646,6 +646,10 @@
   "@logout": {
     "description": "退出登录"
   },
+  "sureLogout": "确定要退出登录吗？",
+  "@sureLogout": {
+    "description": "确定退出登录提示"
+  },
 
   "today": "今天",
   "@today": {"description": "Label for today in chat time separator"},
@@ -672,8 +676,12 @@
   "@timeFormat": {
     "description": "Time format used after today/yesterday labels",
     "placeholders": {
-      "hour": {"type": "String"},
-      "minute": {"type": "String"}
+      "hour": {
+        "type": "String"
+      },
+      "minute": {
+        "type": "String"
+      }
     }
   },
   "invalidEmailOrPassword": "邮箱或密码错误",

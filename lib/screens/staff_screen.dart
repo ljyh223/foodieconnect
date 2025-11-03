@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../data/models/staff_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../core/services/staff_service.dart';
 import '../core/services/api_service.dart';
-import '../../generated/app_localizations.dart';
 
 class StaffScreen extends StatefulWidget {
   final String? restaurantId;
@@ -64,7 +64,7 @@ class _StaffScreenState extends State<StaffScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).staffList,
+        title: LocalizationService.I.staffList,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -86,11 +86,11 @@ class _StaffScreenState extends State<StaffScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${AppLocalizations.of(context).loadingFailed}：$_error'),
+            Text('${LocalizationService.I.loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadStaff,
-              child: Text(AppLocalizations.of(context).retry),
+              child: Text(LocalizationService.I.retry),
             ),
           ],
         ),
@@ -109,11 +109,11 @@ class _StaffScreenState extends State<StaffScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${AppLocalizations.of(context).getStaffListFailed}${snapshot.error}'),
+                Text('${LocalizationService.I.getStaffListFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadStaff,
-                  child: Text(AppLocalizations.of(context).retry),
+                  child: Text(LocalizationService.I.retry),
                 ),
               ],
             ),
@@ -123,7 +123,7 @@ class _StaffScreenState extends State<StaffScreen> {
         final staffList = snapshot.data ?? [];
 
         if (staffList.isEmpty) {
-          return Center(child: Text(AppLocalizations.of(context).noStaff));
+          return Center(child: Text(LocalizationService.I.noStaff));
         }
 
         return ListView.builder(

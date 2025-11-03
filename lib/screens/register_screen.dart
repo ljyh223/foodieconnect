@@ -31,18 +31,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty)
+    if (value == null || value.isEmpty) {
       return LocalizationService.I.pleaseEnterEmail;
+    }
     // 修复：原来的正则在结尾处多了一个转义符号，导致校验异常
     final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(value))
+    if (!emailRegex.hasMatch(value)) {
       return LocalizationService.I.pleaseEnterValidEmail;
+    }
     return null;
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty)
+    if (value == null || value.isEmpty) {
       return LocalizationService.I.pleaseEnterPassword;
+    }
     if (value.length < 6) return LocalizationService.I.passwordMinLength;
     return null;
   }

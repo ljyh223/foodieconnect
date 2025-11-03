@@ -157,7 +157,7 @@ class SettingsScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(LocalizationService.I.logout),
-          content: const Text('确定要退出登录吗？'),
+          content: Text(LocalizationService.I.sureLogout),
           actions: [
             TextButton(
               onPressed: () {

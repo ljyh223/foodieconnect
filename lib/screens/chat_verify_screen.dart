@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/chat_provider.dart';
 import '../core/services/auth_service.dart';
-import '../../generated/app_localizations.dart';
 
 class ChatVerifyScreen extends StatefulWidget {
   final String? restaurantId;
@@ -40,7 +40,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     if ( _verificationController.text.isEmpty) {
       if (mounted) {
         setState(() {
-          _error = AppLocalizations.of(context).pleaseEnterVerificationCode;
+          _error = LocalizationService.I.pleaseEnterVerificationCode;
         });
       }
       return;
@@ -83,13 +83,13 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         );
       } else if (mounted) {
         setState(() {
-          _error = AppLocalizations.of(context).verificationFailed;
+          _error = LocalizationService.I.verificationFailed;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = '${AppLocalizations.of(context).verificationError}${e.toString()}';
+          _error = '${LocalizationService.I.verificationError}${e.toString()}';
         });
       }
     } finally {
@@ -106,7 +106,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).restaurantChatVerification,
+        title: LocalizationService.I.restaurantChatVerification,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -127,7 +127,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      AppLocalizations.of(context).enterRestaurantIdAndCode,
+                      LocalizationService.I.enterRestaurantIdAndCode,
                       style: AppTextStyles.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -135,7 +135,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     const SizedBox(height: 16),
                     TextFieldWidget(
                       controller: _verificationController,
-                      label: AppLocalizations.of(context).verificationCode,
+                      label: LocalizationService.I.verificationCode,
                       keyboardType: TextInputType.number,
                       maxLength: 6,
                       textAlign: TextAlign.center,
@@ -175,7 +175,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                               ),
                             )
                           : Text(
-                              AppLocalizations.of(context).verifyAndStartChat,
+                              LocalizationService.I.verifyAndStartChat,
                             ),
                     ),
                   ],

@@ -522,6 +522,11 @@
   "@logout": {
     "description": "Logout"
   },
+  "sureLogout": "Are you sure you want to log out?",
+  "@sureLogout": {
+    "description": "Are you sure you want to log out prompt"
+  },
+
   "today": "Today",
   "@today": {
     "description": "Label for today in chat time separator"
@@ -569,6 +574,7 @@
       }
     }
   },
+
   "invalidEmailOrPassword": "Invalid email or password",
   "@invalidEmailOrPassword": {
     "description": "Error message shown to user"

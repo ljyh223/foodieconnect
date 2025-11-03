@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabletalk/core/services/api_service.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../data/models/review_model.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/review_provider.dart';
-import '../../generated/app_localizations.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final String? restaurantId;
@@ -35,7 +35,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).userComments,
+        title: LocalizationService.I.userComments,
         showBackButton: true,
         actions: [
           IconButton(

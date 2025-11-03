@@ -843,6 +843,12 @@ abstract class AppLocalizations {
   /// **'Logout'**
   String get logout;
 
+  /// Are you sure you want to log out prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get sureLogout;
+
   /// Label for today in chat time separator
   ///
   /// In en, this message translates to:
