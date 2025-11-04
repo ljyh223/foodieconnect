@@ -60,7 +60,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
 
   void navigateToUserProfile() {
     // 导航到用户个人资料页面
-    Navigator.pushNamed(context, '/profile');
+    Navigator.pushNamed(context, '/user_profile');
   }
 
   @override

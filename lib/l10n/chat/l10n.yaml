@@ -1,0 +1,6 @@
+arb-dir: lib/chat/l10n
+template-arb-file: chat_en.arb
+output-localization-file: chat_localizations.dart
+output-class: ChatLocalizations
+output-dir: lib/chat/l10n/generated
+nullable-getter: false

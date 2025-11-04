@@ -192,4 +192,15 @@
   },
   "stompConnectFailed": "WebSocket connection failed: {error}",
   "@stompConnectFailed": {
-    "description":
+    "description": "Connection exception text pushed to connectionStateController",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompConnected": "Connected",
+  "@stompConnected": {},
+  "stompDisconnected": "Disconnected",
+  "@stompDisconnected": {},
+  "msgParseFailed": "Failed to parse message",
+  "@msgParseFailed": {},
+  "notificationParseFailed": "Failed to parse notification",
+  "@notificationParseFailed": {}
+}

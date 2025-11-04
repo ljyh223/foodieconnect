@@ -4,6 +4,7 @@ class User {
   final String? phone;
   final String? displayName;
   final String? avatarUrl; // 头像URL字段，与API保持一致
+  final String? bio; // 个人简介字段
   
   User({
     required this.id,
@@ -11,6 +12,7 @@ class User {
     this.phone,
     this.displayName,
     this.avatarUrl,
+    this.bio, // 添加bio参数
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class User {
       phone: json['phone'],
       displayName: json['displayName'],
       avatarUrl: json['avatarUrl'], // 直接使用API返回的avatarUrl字段
+      bio: json['bio'], // 添加bio字段解析
     );
   }
 
@@ -30,6 +33,7 @@ class User {
       'phone': phone,
       'displayName': displayName,
       'avatarUrl': avatarUrl,
+      'bio': bio, // 添加bio字段序列化
     };
   }
 
@@ -39,6 +43,7 @@ class User {
     String? phone,
     String? displayName,
     String? avatarUrl,
+    String? bio, // 添加bio参数
   }) {
     return User(
       id: id ?? this.id,
@@ -46,6 +51,7 @@ class User {
       phone: phone ?? this.phone,
       displayName: displayName ?? this.displayName,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      bio: bio ?? this.bio, // 添加bio字段复制
     );
   }
 }

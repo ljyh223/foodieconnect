@@ -13,6 +13,9 @@ import '../screens/register_screen.dart';
 import '../screens/restaurant_info_screen.dart';
 import '../screens/create_review_screen.dart';
 import '../screens/settings_screen.dart';
+import '../screens/user_profile_screen.dart';
+import '../screens/other_user_profile_screen.dart';
+import '../screens/following_list_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -76,6 +79,22 @@ class AppRouter {
         );
       case '/settings':
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
+      case '/user_profile':
+        return MaterialPageRoute(builder: (_) => const UserProfileScreen());
+      case '/other_user_profile':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => OtherUserProfileScreen(
+            userId: args?['userId'],
+          ),
+        );
+      case '/following_list':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => FollowingListScreen(
+            userId: args?['userId'],
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

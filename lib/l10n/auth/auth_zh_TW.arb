@@ -99,4 +99,6 @@
   },
   "restoreLoginFailed": "恢復登入狀態失敗",
   "@restoreLoginFailed": {
-    "description": "Error message shown to,
+    "description": "Error message shown to user"
+  }
+}
