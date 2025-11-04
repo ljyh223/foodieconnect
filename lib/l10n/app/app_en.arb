@@ -1,0 +1,156 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk application English localization - Global",
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "Application English name"
+  },
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "Application Chinese name"
+  },
+  "discoverFoodShareExperience": "Discover food, share experiences",
+  "@discoverFoodShareExperience": {
+    "description": "Application subtitle"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search box prompt text"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading prompt"
+  },
+  "loadingFailed": "Loading failed",
+  "@loadingFailed": {
+    "description": "Loading failed prompt"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "open": "Open",
+  "@open": {
+    "description": "Business status"
+  },
+  "closed": "Closed",
+  "@closed": {
+    "description": "Closed status"
+  },
+  "userProfile": "Profile",
+  "@userProfile": {
+    "description": "User profile title"
+  },
+  "otherUserProfile": "User Profile",
+  "@otherUserProfile": {
+    "description": "Other user profile title"
+  },
+  "followingList": "Following List",
+  "@followingList": {
+    "description": "Following list title"
+  },
+  "myFollowing": "My Following",
+  "@myFollowing": {
+    "description": "My following title"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "Connect button text"
+  },
+  "follow": "Follow",
+  "@follow": {
+    "description": "Follow button text"
+  },
+  "following": "Following",
+  "@following": {
+    "description": "Following status text"
+  },
+  "unfollow": "Unfollow",
+  "@unfollow": {
+    "description": "Unfollow button text"
+  },
+  "unfollowConfirm": "Are you sure you want to unfollow {username}?",
+  "@unfollowConfirm": {
+    "description": "Unfollow confirmation dialog"
+  },
+  "foodPreferences": "Food Preferences",
+  "@foodPreferences": {
+    "description": "Food preferences title"
+  },
+  "noFoodPreferences": "No food preferences",
+  "@noFoodPreferences": {
+    "description": "No food preferences message"
+  },
+  "personalBio": "Personal Bio",
+  "@personalBio": {
+    "description": "Personal bio title"
+  },
+  "noBio": "This person is lazy and left nothing...",
+  "@noBio": {
+    "description": "No bio message"
+  },
+  "recommendedRestaurants": "Recommended Restaurants",
+  "@recommendedRestaurants": {
+    "description": "Recommended restaurants title"
+  },
+  "noRecommendedRestaurants": "No recommended restaurants",
+  "@noRecommendedRestaurants": {
+    "description": "No recommended restaurants message"
+  },
+  "noFollowing": "No following",
+  "@noFollowing": {
+    "description": "No following message"
+  },
+  "discoverUsers": "Go discover interesting users",
+  "@discoverUsers": {
+    "description": "Discover users message"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "saveSuccess": "Saved successfully",
+  "@saveSuccess": {
+    "description": "Save success message"
+  },
+  "saveFailed": "Save failed",
+  "@saveFailed": {
+    "description": "Save failed message"
+  },
+  "followSuccess": "Followed successfully",
+  "@followSuccess": {
+    "description": "Follow success message"
+  },
+  "followFailed": "Follow failed",
+  "@followFailed": {
+    "description": "Follow failed message"
+  },
+  "unfollowSuccess": "Unfollowed",
+  "@unfollowSuccess": {
+    "description": "Unfollow success message"
+  },
+  "unfollowFailed": "Unfollow failed",
+  "@unfollowFailed": {
+    "description": "Unfollow failed message"
+  },
+  "userNotFound": "User not found",
+  "@userNotFound": {
+    "description": "User not found message"
+  },
+  "unknownUser": "Unknown User",
+  "@unknownUser": {
+    "description": "Unknown user text"
+  },
+  "introduceYourself": "Tell us about yourself...",
+  "@introduceYourself": {
+    "description": "Bio input placeholder"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk應用繁體中文本地化 - 全域",
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "應用標題"
+  },
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "應用英文名稱"
+  },
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "應用中文名稱"
+  },
+  "discoverFoodShareExperience": "發現美食，分享體驗",
+  "@discoverFoodShareExperience": {
+    "description": "應用副標題"
+  },
+  "search": "搜尋",
+  "@search": {
+    "description": "搜尋框提示文本"
+  },
+  "loading": "載入中...",
+  "@loading": {
+    "description": "載入中提示"
+  },
+  "loadingFailed": "載入失敗",
+  "@loadingFailed": {
+    "description": "載入失敗提示"
+  },
+  "retry": "重試",
+  "@retry": {
+    "description": "重試按鈕文本"
+  },
+  "open": "營業中",
+  "@open": {
+    "description": "營業狀態"
+  },
+  "closed": "已打烊",
+  "@closed": {
+    "description": "打烊狀態"
+  },
+  "userProfile": "個人資料",
+  "@userProfile": {
+    "description": "使用者個人資料標題"
+  },
+  "otherUserProfile": "使用者資料",
+  "@otherUserProfile": {
+    "description": "其他使用者個人資料標題"
+  },
+  "followingList": "追蹤列表",
+  "@followingList": {
+    "description": "追蹤列表標題"
+  },
+  "myFollowing": "我的追蹤",
+  "@myFollowing": {
+    "description": "我的追蹤標題"
+  },
+  "connect": "連接",
+  "@connect": {
+    "description": "連接按鈕文字"
+  },
+  "follow": "追蹤",
+  "@follow": {
+    "description": "追蹤按鈕文字"
+  },
+  "following": "已追蹤",
+  "@following": {
+    "description": "已追蹤狀態文字"
+  },
+  "unfollow": "取消追蹤",
+  "@unfollow": {
+    "description": "取消追蹤按鈕文字"
+  },
+  "unfollowConfirm": "確定要取消追蹤 {username} 嗎？",
+  "@unfollowConfirm": {
+    "description": "取消追蹤確認對話框"
+  },
+  "foodPreferences": "飲食偏好",
+  "@foodPreferences": {
+    "description": "飲食偏好標題"
+  },
+  "noFoodPreferences": "無飲食偏好",
+  "@noFoodPreferences": {
+    "description": "無飲食偏好訊息"
+  },
+  "personalBio": "個人簡介",
+  "@personalBio": {
+    "description": "個人簡介標題"
+  },
+  "noBio": "這個人太懶了，什麼都沒留下……",
+  "@noBio": {
+    "description": "無個人簡介訊息"
+  },
+  "recommendedRestaurants": "推薦餐廳",
+  "@recommendedRestaurants": {
+    "description": "推薦餐廳標題"
+  },
+  "noRecommendedRestaurants": "無推薦餐廳",
+  "@noRecommendedRestaurants": {
+    "description": "無推薦餐廳訊息"
+  },
+  "noFollowing": "尚未追蹤任何人",
+  "@noFollowing": {
+    "description": "無追蹤對象訊息"
+  },
+  "discoverUsers": "快去探索有趣的使用者吧！",
+  "@discoverUsers": {
+    "description": "探索使用者提示訊息"
+  },
+  "save": "儲存",
+  "@save": {
+    "description": "儲存按鈕文字"
+  },
+  "edit": "編輯",
+  "@edit": {
+    "description": "編輯按鈕文字"
+  },
+  "saveSuccess": "儲存成功",
+  "@saveSuccess": {
+    "description": "儲存成功訊息"
+  },
+  "saveFailed": "儲存失敗",
+  "@saveFailed": {
+    "description": "儲存失敗訊息"
+  },
+  "followSuccess": "追蹤成功",
+  "@followSuccess": {
+    "description": "追蹤成功訊息"
+  },
+  "followFailed": "追蹤失敗",
+  "@followFailed": {
+    "description": "追蹤失敗訊息"
+  },
+  "unfollowSuccess": "已取消追蹤",
+  "@unfollowSuccess": {
+    "description": "取消追蹤成功訊息"
+  },
+  "unfollowFailed": "取消追蹤失敗",
+  "@unfollowFailed": {
+    "description": "取消追蹤失敗訊息"
+  },
+  "userNotFound": "找不到該使用者",
+  "@userNotFound": {
+    "description": "使用者不存在訊息"
+  },
+  "unknownUser": "未知使用者",
+  "@unknownUser": {
+    "description": "未知使用者文字"
+  },
+  "introduceYourself": "告訴我們關於你自己的事……",
+  "@introduceYourself": {
+    "description": "個人簡介輸入框提示文字"
+  }
+}
