@@ -69,4 +69,7 @@ class ProfileLocalizationsEn extends ProfileLocalizations {
 
   @override
   String get recommendedRestaurants => 'Recommended Restaurants';
+
+  @override
+  String get updateFailed => 'update failed';
 }

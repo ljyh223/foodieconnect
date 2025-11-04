@@ -202,5 +202,9 @@
   "msgParseFailed": "解析消息失败",
   "@msgParseFailed": {},
   "notificationParseFailed": "解析通知失败",
-  "@notificationParseFailed": {}
+  "@notificationParseFailed": {},
+  "me":"我",
+  "@me": {
+     "description": "Label for current user"
+   }
 }

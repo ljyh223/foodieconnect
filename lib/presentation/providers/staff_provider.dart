@@ -20,7 +20,7 @@ class StaffProvider with ChangeNotifier {
 		try {
 			_staffs = await StaffService.listByRestaurant(restaurantId);
 		} catch (e) {
-			_error = LocalizationService.I.loadStaffFail(e.toString());
+			_error = LocalizationService.I.staff.loadStaffFail(e.toString());
 		} finally {
 			_setLoading(false);
 		}
@@ -32,7 +32,7 @@ class StaffProvider with ChangeNotifier {
 		try {
 			_selectedStaff = await StaffService.getById(id);
 		} catch (e) {
-			_error = LocalizationService.I.loadStaffDetailFail(e.toString());
+			_error = LocalizationService.I.staff.loadStaffDetailFail(e.toString());
 		} finally {
 			_setLoading(false);
 		}

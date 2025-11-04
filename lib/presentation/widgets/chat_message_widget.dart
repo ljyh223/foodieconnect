@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/app/app_localizations.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/services/api_service.dart';
 import '../../data/models/chat_message_model.dart';
@@ -36,7 +38,6 @@ class ChatMessageWidget extends StatelessWidget {
 
     return Column(
       children: [
-        // 时间分隔线
         if (showTimeSeparator && timeSeparatorText != null)
           Container(
             margin: const EdgeInsets.symmetric(vertical: 8),
@@ -64,84 +65,95 @@ class ChatMessageWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (!message.isSentByUser) ...[
-                // 显示发送者头像
-                Column(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryContainer,
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
-                        child: senderAvatar != null
-                            ? Image.network(
-                                ApiService.getFullImageUrl(senderAvatar),
-                                width: 36,
-                                height: 36,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: AppColors.primaryContainer,
-                                    child: Center(
-                                      child: Text(
-                                        senderName.isNotEmpty ? senderName.substring(0, 1).toUpperCase() : '?',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/other_user_profile',
+                      arguments: {'userId': message.senderId},
+                    );
+                                    },
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryContainer,
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: senderAvatar != null
+                              ? Image.network(
+                            ApiService.getFullImageUrl(senderAvatar),
+                            width: 36,
+                            height: 36,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: AppColors.primaryContainer,
+                                child: Center(
+                                  child: Text(
+                                    senderName.isNotEmpty
+                                        ? senderName.substring(0, 1).toUpperCase()
+                                        : '?',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
-                                  );
-                                },
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    color: AppColors.primaryContainer,
-                                    child: const Center(
-                                      child: SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Text(
-                                  senderName.isNotEmpty ? senderName.substring(0, 1).toUpperCase() : '?',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
                                   ),
                                 ),
+                              );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                color: AppColors.primaryContainer,
+                                child: const Center(
+                                  child: SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                              : Center(
+                            child: Text(
+                              senderName.isNotEmpty
+                                  ? senderName.substring(0, 1).toUpperCase()
+                                  : '?',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    // 昵称显示在头像下方
-                    SizedBox(
-                      width: 60,
-                      child: Text(
-                        senderName,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey,
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      SizedBox(
+                        width: 60,
+                        child: Text(
+                          senderName,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 8),
               ],
@@ -168,79 +180,82 @@ class ChatMessageWidget extends StatelessWidget {
               ),
               if (message.isSentByUser) ...[
                 const SizedBox(width: 8),
-                // 自己的头像（显示用户真实头像）
-                FutureBuilder<String?>(
-                  future: _getCurrentUserAvatar(),
-                  builder: (context, snapshot) {
-                    final userAvatar = snapshot.data;
-                    
-                    return Column(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(18),
-                            child: userAvatar != null && userAvatar.isNotEmpty
-                                ? Image.network(
-                                    ApiService.getFullImageUrl(userAvatar),
-                                    width: 36,
-                                    height: 36,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        color: AppColors.primary,
-                                        child: const Icon(
-                                          Icons.person,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      );
-                                    },
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Container(
-                                        color: AppColors.primary,
-                                        child: const Center(
-                                          child: SizedBox(
-                                            width: 16,
-                                            height: 16,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                : const Icon(
-                                    Icons.person,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        // 自己的昵称显示在头像下方
-                        SizedBox(
-                          width: 60,
-                          child: Text(
-                            '我',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    );
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/user_profile');
                   },
+                  child: FutureBuilder<String?>(
+                    future: _getCurrentUserAvatar(),
+                    builder: (context, snapshot) {
+                      final userAvatar = snapshot.data;
+
+                      return Column(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(18),
+                              child: userAvatar != null && userAvatar.isNotEmpty
+                                  ? Image.network(
+                                ApiService.getFullImageUrl(userAvatar),
+                                width: 36,
+                                height: 36,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: AppColors.primary,
+                                    child: const Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  );
+                                },
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(
+                                    color: AppColors.primary,
+                                    child: const Center(
+                                      child: SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                                  : const Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          SizedBox(
+                            width: 60,
+                            child: Text(
+                              LocalizationService.I.chat.me,
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ],
             ],

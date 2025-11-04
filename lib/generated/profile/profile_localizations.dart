@@ -221,6 +221,12 @@ abstract class ProfileLocalizations {
   /// In en, this message translates to:
   /// **'Recommended Restaurants'**
   String get recommendedRestaurants;
+
+  /// Error message shown to user
+  ///
+  /// In en, this message translates to:
+  /// **'update failed'**
+  String get updateFailed;
 }
 
 class _ProfileLocalizationsDelegate

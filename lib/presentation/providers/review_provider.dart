@@ -19,7 +19,7 @@ class ReviewProvider with ChangeNotifier {
     try {
       _reviews = await ReviewService.listByRestaurant(restaurantId);
     } catch (e) {
-      _error = LocalizationService.I.loadReviewFail(e.toString());
+      _error = LocalizationService.I.review.loadReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -32,7 +32,7 @@ class ReviewProvider with ChangeNotifier {
       final review = await ReviewService.post(restaurantId, rating, comment);
       _reviews.insert(0, review);
     } catch (e) {
-      _error = LocalizationService.I.postReviewFail(e.toString());
+      _error = LocalizationService.I.review.postReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -46,7 +46,7 @@ class ReviewProvider with ChangeNotifier {
       final review = await ReviewService.postWithImages(restaurantId, rating, comment, imageUrls);
       _reviews.insert(0, review);
     } catch (e) {
-      _error = LocalizationService.I.postReviewFail(e.toString());
+      _error = LocalizationService.I.review.postReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -60,7 +60,7 @@ class ReviewProvider with ChangeNotifier {
       final review = await ReviewService.postWithImageFiles(restaurantId, rating, comment, imageFiles);
       _reviews.insert(0, review);
     } catch (e) {
-      _error = LocalizationService.I.postReviewFail(e.toString());
+      _error = LocalizationService.I.review.postReviewFail(e.toString());
     } finally {
       _setLoading(false);
     }

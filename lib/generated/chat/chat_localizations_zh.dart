@@ -170,6 +170,9 @@ class ChatLocalizationsZh extends ChatLocalizations {
 
   @override
   String get notificationParseFailed => '解析通知失败';
+
+  @override
+  String get me => '我';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -338,4 +341,7 @@ class ChatLocalizationsZhTw extends ChatLocalizationsZh {
 
   @override
   String get notificationParseFailed => '解析通知失敗';
+
+  @override
+  String get me => '我';
 }

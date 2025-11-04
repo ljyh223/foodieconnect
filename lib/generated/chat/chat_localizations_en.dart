@@ -178,4 +178,7 @@ class ChatLocalizationsEn extends ChatLocalizations {
 
   @override
   String get notificationParseFailed => 'Failed to parse notification';
+
+  @override
+  String get me => 'Me';
 }

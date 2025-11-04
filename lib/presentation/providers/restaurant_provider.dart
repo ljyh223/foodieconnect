@@ -41,7 +41,7 @@ class RestaurantProvider with ChangeNotifier {
       }
     } catch (e) {
       // 回退到模拟数据，保持页面在无后端情况下可用
-      _error = LocalizationService.I.loadRestaurantFail(e.toString());
+      _error = LocalizationService.I.restaurant.loadRestaurantFail(e.toString());
     } finally {
       _setLoading(false);
     }

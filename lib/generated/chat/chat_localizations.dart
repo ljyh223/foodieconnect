@@ -368,6 +368,12 @@ abstract class ChatLocalizations {
   /// In en, this message translates to:
   /// **'Failed to parse notification'**
   String get notificationParseFailed;
+
+  /// Label for current user
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get me;
 }
 
 class _ChatLocalizationsDelegate

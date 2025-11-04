@@ -69,6 +69,9 @@ class ProfileLocalizationsZh extends ProfileLocalizations {
 
   @override
   String get recommendedRestaurants => '推荐餐厅';
+
+  @override
+  String get updateFailed => '更新失败';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -136,4 +139,7 @@ class ProfileLocalizationsZhTw extends ProfileLocalizationsZh {
 
   @override
   String get recommendedRestaurants => '推薦餐廳';
+
+  @override
+  String get updateFailed => '更新失敗';
 }

@@ -102,7 +102,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
               },
               icon: const Icon(Icons.settings, color: Colors.grey),
               iconSize: 20,
-              tooltip: LocalizationService.I.app.settings,
+              tooltip: LocalizationService.I.setting.settings,
             ),
           ),
           Padding(
@@ -135,7 +135,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
           if (restaurants.isEmpty) {
             return Center(
               child: Text(
-                LocalizationService.I.app.noRestaurants,
+                LocalizationService.I.restaurant.noRestaurants,
                 style: TextStyle(fontSize: 16, color: Colors.black54),
               ),
             );

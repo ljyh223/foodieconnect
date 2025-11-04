@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/auth_service.dart';
@@ -147,7 +148,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(ProfileLocalizations.of(context).saveSuccess),
+            content: Text(LocalizationService.I.profile.saveSuccess),
             backgroundColor: AppColors.primary,
           ),
         );
@@ -156,7 +157,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(ProfileLocalizations.of(context).saveFailed(e.toString())),
+            content: Text(LocalizationService.I.profile.saveFailed(e.toString())),
             backgroundColor: AppColors.error,
           ),
         );
@@ -178,7 +179,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: ProfileLocalizations.of(context).profileTitle,
+        title: LocalizationService.I.profile.profileTitle,
         showBackButton: true,
         actions: [
           if (!_isEditing)
@@ -189,7 +190,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           else
             TextButton(
               onPressed: _saveUserInfo,
-              child: Text(ProfileLocalizations.of(context).save),
+              child: Text(LocalizationService.I.profile.save),
             ),
         ],
       ),
@@ -212,7 +213,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              ProfileLocalizations.of(context).loadingFailed,
+              LocalizationService.I.profile.loadingFailed,
               style: AppTextStyles.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -225,7 +226,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadUserData,
-              child: Text(ProfileLocalizations.of(context).retry),
+              child: Text(LocalizationService.I.profile.retry),
             ),
           ],
         ),
@@ -235,7 +236,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (_user == null) {
       return Center(
         child: Text(
-          ProfileLocalizations.of(context).userNotFound,
+          LocalizationService.I.profile.userNotFound,
           style: AppTextStyles.titleMedium,
         ),
       );
@@ -289,7 +290,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           border: Border.all(color: AppColors.outline),
         ),
         child: Text(
-          ProfileLocalizations.of(context).noFoodPreferences,
+          LocalizationService.I.profile.noFoodPreferences,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -301,7 +302,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          ProfileLocalizations.of(context).foodPreferences,
+          LocalizationService.I.profile.foodPreferences,
           style: AppTextStyles.titleMedium,
         ),
         const SizedBox(height: 12),

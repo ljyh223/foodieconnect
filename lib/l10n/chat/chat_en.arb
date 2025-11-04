@@ -202,5 +202,9 @@
   "msgParseFailed": "Failed to parse message",
   "@msgParseFailed": {},
   "notificationParseFailed": "Failed to parse notification",
-  "@notificationParseFailed": {}
+  "@notificationParseFailed": {},
+  "me":"Me",
+  "@me": {
+    "description": "Label for current user"
+  }
 }

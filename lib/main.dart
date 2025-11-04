@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/generated/app/app_localizations.dart';
 import 'package:tabletalk/generated/auth/auth_localizations.dart';
 import 'package:tabletalk/generated/chat/chat_localizations.dart';
 import 'package:tabletalk/generated/profile/profile_localizations.dart';
@@ -17,7 +18,6 @@ import 'presentation/providers/staff_provider.dart';
 import 'presentation/providers/chat_provider.dart';
 import 'presentation/providers/language_provider.dart';
 import 'core/theme/app_theme.dart';
-import 'generated/app_localizations.dart';
 import 'core/services/localization_service.dart';
 
 void main() async {

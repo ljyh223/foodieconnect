@@ -39,7 +39,7 @@ class ChatProvider with ChangeNotifier {
       StompWebSocketService.connectionStateStream.listen((state) {
         _isConnected = state['connected'] ?? false;
         if (state['error'] != null) {
-          _error = LocalizationService.I.stompConnectionError(state['error']);
+          _error = LocalizationService.I.chat.stompConnectionError(state['error']);
         }
         notifyListeners();
       });
@@ -70,7 +70,7 @@ class ChatProvider with ChangeNotifier {
         debugPrint('收到通知: $notification');
       });
     } catch (e) {
-      _error = LocalizationService.I.stompConnectFail(e.toString());
+      _error = LocalizationService.I.chat.stompConnectFail(e.toString());
       notifyListeners();
     }
   }
@@ -113,7 +113,7 @@ class ChatProvider with ChangeNotifier {
         await _waitForConnection();
         
         if (!_isConnected) {
-          _error = LocalizationService.I.websocketTimeout;
+          _error = LocalizationService.I.chat.websocketTimeout;
           notifyListeners();
           return;
         }
@@ -126,12 +126,12 @@ class ChatProvider with ChangeNotifier {
         // 订阅聊天室消息以接收实时更新
         StompWebSocketService.subscribeToRoom(_currentRoomId!);
       } else {
-        _error = LocalizationService.I.verifyFailNoRoomOrToken;
+        _error = LocalizationService.I.chat.verifyFailNoRoomOrToken;
       }
       
       notifyListeners();
     } catch (e) {
-      _error = LocalizationService.I.verifyRoomFail(e.toString());
+      _error = LocalizationService.I.chat.verifyRoomFail(e.toString());
       debugPrint('验证聊天室失败: $e');
     } finally {
       _setLoading(false);
@@ -150,7 +150,7 @@ class ChatProvider with ChangeNotifier {
       StompWebSocketService.joinRoom(roomId);
       StompWebSocketService.subscribeToRoom(roomId);
     } catch (e) {
-      _error = LocalizationService.I.joinRoomFail(e.toString());
+      _error = LocalizationService.I.chat.joinRoomFail(e.toString());
       notifyListeners();
     }
   }
@@ -181,7 +181,7 @@ class ChatProvider with ChangeNotifier {
       debugPrint('成功加载 ${_messages.length} 条消息');
       notifyListeners();
     } catch (e) {
-      _error = LocalizationService.I.loadMessageFail(e.toString());
+      _error = LocalizationService.I.chat.loadMessageFail(e.toString());
       _messages = [];
       debugPrint('获取消息失败: $e');
     } finally {
@@ -192,7 +192,7 @@ class ChatProvider with ChangeNotifier {
   /// 发送聊天室消息（使用STOMP WebSocket）
   Future<void> sendMessage(String roomId, String content) async {
     if (!_isConnected) {
-      _error = LocalizationService.I.stompConnectionError("connect is null");
+      _error = LocalizationService.I.chat.stompConnectionError("connect is null");
       // _error = 'STOMP WebSocket未连接，无法发送消息';
       notifyListeners();
       return;
@@ -206,7 +206,7 @@ class ChatProvider with ChangeNotifier {
       StompWebSocketService.sendMessage(roomId, content);
       // 不需要手动添加消息，因为WebSocket会推送回来
     } catch (e) {
-      _error = LocalizationService.I.sendMessageFail(e.toString());
+      _error = LocalizationService.I.chat.sendMessageFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -226,7 +226,7 @@ class ChatProvider with ChangeNotifier {
       _messages.clear();
       notifyListeners();
     } catch (e) {
-      _error = LocalizationService.I.leaveRoomFail(e.toString());
+      _error = LocalizationService.I.chat.leaveRoomFail(e.toString());
     } finally {
       _setLoading(false);
     }
@@ -237,7 +237,7 @@ class ChatProvider with ChangeNotifier {
     try {
       StompWebSocketService.subscribeToNotifications(userId);
     } catch (e) {
-      _error = LocalizationService.I.subscribeNotificationFail(e.toString());
+      _error = LocalizationService.I.chat.subscribeNotificationFail(e.toString());
       notifyListeners();
     }
   }

@@ -55,7 +55,7 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       logger.log('登录失败：${e.toString()}');
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = LocalizationService.I.invalidEmailOrPassword;
+      _error = LocalizationService.I.auth.invalidEmailOrPassword;
     } finally {
       _setLoading(false);
     }
@@ -74,7 +74,7 @@ class AuthProvider with ChangeNotifier {
       _error = null;
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = '${LocalizationService.I.registrationFailed}：${e.toString()}';
+      _error = '${LocalizationService.I.auth.registrationFailed}：${e.toString()}';
     } finally {
       _setLoading(false);
     }
@@ -91,7 +91,7 @@ class AuthProvider with ChangeNotifier {
       _error = null;
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = LocalizationService.I.logoutFailed;
+      _error = LocalizationService.I.auth.logoutFailed;
     } finally {
       _setLoading(false);
     }
@@ -114,7 +114,7 @@ class AuthProvider with ChangeNotifier {
       // 不阻塞启动，仅记录错误
       logger.log('恢复登录状态失败：${e.toString()}');
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = '${LocalizationService.I.restoreLoginFailed}：${e.toString()}';
+      _error = '${LocalizationService.I.auth.restoreLoginFailed}：${e.toString()}';
     } finally {
       _setLoading(false);
     }
@@ -138,7 +138,7 @@ class AuthProvider with ChangeNotifier {
       }
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = LocalizationService.I.updateFailed;
+      _error = LocalizationService.I.profile.updateFailed;
     } finally {
       _setLoading(false);
     }

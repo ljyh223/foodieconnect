@@ -53,7 +53,7 @@ class ShopDetailScreen extends StatelessWidget {
 
         if (snapshot.hasError) {
           debugPrint('获取店铺信息失败：${snapshot.error}');
-          return Scaffold(body: Center(child: Text('${LocalizationService.I.app.getShopInfoFailed}${snapshot.error}')));
+          return Scaffold(body: Center(child: Text('${LocalizationService.I.restaurant.getShopInfoFailed}${snapshot.error}')));
         }
 
         final restaurant = snapshot.data!;
@@ -225,7 +225,7 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                LocalizationService.I.staff.dishReviews,
+                                LocalizationService.I.review.dishReviews,
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -380,7 +380,7 @@ class ShopDetailScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              LocalizationService.I.app.chatRoom,
+                              LocalizationService.I.chat.chatRoom,
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -391,7 +391,7 @@ class ShopDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          LocalizationService.I.app.chatWithStaff,
+                          LocalizationService.I.chat.chatWithStaff,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black87,
@@ -411,7 +411,7 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              LocalizationService.I.app.enterChatRoom,
+                              LocalizationService.I.chat.enterChatRoom,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -440,7 +440,7 @@ class ShopDetailScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              LocalizationService.I.app.staffReviews,
+                              LocalizationService.I.staff.staffReviews,
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -461,7 +461,7 @@ class ShopDetailScreen extends StatelessWidget {
                               return Column(
                                 children: [
                                   Text(
-                                    LocalizationService.I.app.noStaffInfo,
+                                    LocalizationService.I.staff.noStaffInfo,
                                     style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
@@ -481,7 +481,7 @@ class ShopDetailScreen extends StatelessWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        LocalizationService.I.app.viewAllStaff,
+                                        LocalizationService.I.staff.viewAllStaff,
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -597,7 +597,7 @@ class ShopDetailScreen extends StatelessWidget {
                                               if (staff.experience.isNotEmpty) ...[
                                                 const SizedBox(height: 2),
                                                 Text(
-                                                  '${LocalizationService.I.app.experience}：${staff.experience}',
+                                                  '${LocalizationService.I.staff.experience}：${staff.experience}',
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.grey[600],
@@ -628,7 +628,7 @@ class ShopDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: Text(
-                                      LocalizationService.I.app.viewAllStaff,
+                                      LocalizationService.I.staff.viewAllStaff,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,

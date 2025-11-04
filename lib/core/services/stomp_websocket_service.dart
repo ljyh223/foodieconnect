@@ -61,7 +61,7 @@ class StompWebSocketService {
 
       _connectionStateController.add({
         'connected': false,
-        'error': LocalizationService.I.stompConnectFailed(e.toString()),
+        'error': LocalizationService.I.chat.stompConnectFailed(e.toString()),
       });
       rethrow;
     }
@@ -72,7 +72,7 @@ class StompWebSocketService {
     debugPrint('STOMP WebSocket连接成功');
     _connectionStateController.add({
       'connected': true,
-      'message': LocalizationService.I.stompConnected,
+      'message': LocalizationService.I.chat.stompConnected,
     });
     
     // 如果已加入聊天室，重新订阅
@@ -91,7 +91,7 @@ class StompWebSocketService {
     debugPrint('STOMP WebSocket连接已断开');
     _connectionStateController.add({
       'connected': false,
-      'message': LocalizationService.I.stompDisconnected,
+      'message': LocalizationService.I.chat.stompDisconnected,
     });
   }
 
@@ -101,7 +101,7 @@ class StompWebSocketService {
     debugPrint('WebSocket错误: $error');
     _connectionStateController.add({
       'connected': false,
-      'error': LocalizationService.I.stompConnectFailed(error.toString()),
+      'error': LocalizationService.I.chat.stompConnectFailed(error.toString()),
     });
 
   }
@@ -136,7 +136,7 @@ class StompWebSocketService {
       debugPrint('发送消息到聊天室 $roomId: $content');
     } else {
       debugPrint('STOMP未连接，无法发送消息');
-      throw Exception(LocalizationService.I.stompNotConnected);
+      throw Exception(LocalizationService.I.chat.stompNotConnected);
     }
   }
 
@@ -157,7 +157,7 @@ class StompWebSocketService {
       debugPrint('加入聊天室: $roomId');
     } else {
       debugPrint('STOMP未连接，无法加入聊天室');
-      throw Exception(LocalizationService.I.stompNotConnected);
+      throw Exception(LocalizationService.I.chat.stompNotConnected);
     }
   }
 
@@ -256,7 +256,7 @@ class StompWebSocketService {
               debugPrint('解析个人通知失败: $e');
               _connectionStateController.add({
                 'connected': false,
-                'error': LocalizationService.I.msgParseFailed,
+                'error': LocalizationService.I.chat.msgParseFailed,
               });
             }
           }

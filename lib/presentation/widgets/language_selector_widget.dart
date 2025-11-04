@@ -12,7 +12,7 @@ class LanguageSelectorWidget extends StatelessWidget {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
         return PopupMenuButton<Locale>(
-          tooltip: LocalizationService.I.selectLanguage,
+          tooltip: LocalizationService.I.setting.selectLanguage,
           onSelected: (Locale locale) {
             languageProvider.changeLanguage(locale);
           },
@@ -173,7 +173,7 @@ class LanguageSelectorDialog extends StatelessWidget {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
         return AlertDialog(
-          title: Text(LocalizationService.I.selectLanguage),
+          title: Text(LocalizationService.I.setting.selectLanguage),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: LanguageProvider.supportedLocales.map((Locale locale) {
@@ -204,7 +204,7 @@ class LanguageSelectorDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(LocalizationService.I.close),
+              child: Text(LocalizationService.I.setting.close),
             ),
           ],
         );

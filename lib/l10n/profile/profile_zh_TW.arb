@@ -86,5 +86,9 @@
   "recommendedRestaurants": "推薦餐廳",
   "@recommendedRestaurants": {
     "description": "推薦餐廳標題"
-  }
+  },
+      "updateFailed":"更新失敗",
+      "@updateFailed": {
+        "description": "Prefix when update throws"
+      }
 }

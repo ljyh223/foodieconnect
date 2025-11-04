@@ -3,7 +3,7 @@ import '../../core/services/localization_service.dart';
 class ChatTimeFormatter {
   /// 格式化时间分隔线显示
   static String formatDateForSeparator(DateTime dateTime) {
-    final loc = LocalizationService.I;
+    final loc = LocalizationService.I.chat;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final messageDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
