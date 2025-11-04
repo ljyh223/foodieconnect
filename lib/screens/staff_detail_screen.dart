@@ -110,7 +110,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBarWidget(title: LocalizationService.I.staffDetails, showBackButton: true),
+      appBar: AppBarWidget(title: LocalizationService.I.staff.staffDetails, showBackButton: true),
       body: SafeArea(child: _buildContent()),
     );
   }
@@ -125,9 +125,9 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${LocalizationService.I.loadingFailed}：$_error'),
+            Text('${LocalizationService.I.app.loadingFailed}：$_error'),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: _loadStaff, child: Text(LocalizationService.I.retry)),
+            ElevatedButton(onPressed: _loadStaff, child: Text(LocalizationService.I.app.retry)),
           ],
         ),
       );
@@ -145,9 +145,9 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${LocalizationService.I.getStaffDetailsFailed}${snapshot.error}'),
+                Text('${LocalizationService.I.staff.getStaffDetailsFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
-                ElevatedButton(onPressed: _loadStaff, child: Text(LocalizationService.I.retry)),
+                ElevatedButton(onPressed: _loadStaff, child: Text(LocalizationService.I.app.retry)),
               ],
             ),
           );
@@ -155,7 +155,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
 
         final staff = snapshot.data;
         if (staff == null) {
-          return Center(child: Text(LocalizationService.I.staffInfoNotExists));
+          return Center(child: Text(LocalizationService.I.staff.staffInfoNotExists));
         }
 
         // 加载店员评价
@@ -251,7 +251,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${LocalizationService.I.rating} ${staff.rating}/5.0 · ${staff.experience}${LocalizationService.I.experience}',
+                      '${LocalizationService.I.restaurant.rating} ${staff.rating}/5.0 · ${staff.experience}${LocalizationService.I.staff.experience}',
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -267,14 +267,14 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                   Row(
                     children: [
                       Text(
-                        LocalizationService.I.userReviews,
+                        LocalizationService.I.review.userReviews,
                         style: AppTextStyles.titleMedium.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       const Spacer(),
                       Text(
-                        LocalizationService.I.reviewCount(_reviews.length),
+                        LocalizationService.I.review.reviewCount(_reviews.length),
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),

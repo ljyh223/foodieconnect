@@ -89,5 +89,9 @@
   "@postReviewFail": {
     "description": "Error hint when postReview/postWithImages/postWithImageFiles throws",
     "placeholders": { "error": { "type": "String" } }
-  }
+  },
+    "dishReviews": "Dish Reviews",
+    "@dishReviews": {
+      "description": "Dish reviews title"
+    }
 }

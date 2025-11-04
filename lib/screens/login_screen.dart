@@ -45,28 +45,28 @@ class _LoginScreenState extends State<LoginScreen> {
     if (auth.isAuthenticated) {
       _navigateToShops();
     } else {
-      final msg = auth.error ?? (LocalizationService.I.loginFailed);
+      final msg = auth.error ?? (LocalizationService.I.auth.loginFailed);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.pleaseEnterEmail;
+      return LocalizationService.I.auth.pleaseEnterEmail;
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return LocalizationService.I.pleaseEnterValidEmail;
+      return LocalizationService.I.auth.pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.pleaseEnterPassword;
+      return LocalizationService.I.auth.pleaseEnterPassword;
     }
     if (value.length < 6) {
-      return LocalizationService.I.passwordMinLength;
+      return LocalizationService.I.auth.passwordMinLength;
     }
     return null;
   }
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    LocalizationService.I.tableTalk,
+                    LocalizationService.I.app.tableTalk,
                     style: AppTextStyles.headlineMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    LocalizationService.I.discoverFoodShareExperience,
+                    LocalizationService.I.app.discoverFoodShareExperience,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        LocalizationService.I.login,
+                        LocalizationService.I.auth.login,
                         style: AppTextStyles.headlineSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       TextFieldWidget(
                         controller: _emailController,
-                        label: LocalizationService.I.email,
+                        label: LocalizationService.I.auth.email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: LocalizationService.I.password,
+                        label: LocalizationService.I.auth.password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            LocalizationService.I.forgotPassword,
+                            LocalizationService.I.auth.forgotPassword,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                             ),
@@ -216,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   )
                                 : Text(
-                                    LocalizationService.I.login,
+                                    LocalizationService.I.auth.login,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -237,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    LocalizationService.I.noAccountYet,
+                    LocalizationService.I.auth.noAccountYet,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -251,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      LocalizationService.I.registerNow,
+                      LocalizationService.I.auth.registerNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

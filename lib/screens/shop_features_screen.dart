@@ -84,7 +84,7 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.shopFeatures,
+        title: LocalizationService.I.restaurant.shopFeatures,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -112,11 +112,11 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${LocalizationService.I.loadingFailed}：$_error'),
+            Text('${LocalizationService.I.app.loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadRestaurant,
-              child: Text(LocalizationService.I.retry),
+              child: Text(LocalizationService.I.app.retry),
             ),
           ],
         ),
@@ -135,11 +135,11 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${LocalizationService.I.getShopInfoFailed}${snapshot.error}'),
+                Text('${LocalizationService.I.restaurant.getShopInfoFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadRestaurant,
-                  child: Text(LocalizationService.I.retry),
+                  child: Text(LocalizationService.I.app.retry),
                 ),
               ],
             ),
@@ -159,29 +159,29 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
               case 0:
                 return FeatureCard(
                   icon: Icons.star,
-                  title: LocalizationService.I.viewComments,
-                  subtitle: LocalizationService.I.viewUserReviews,
+                  title: LocalizationService.I.restaurant.viewComments,
+                  subtitle: LocalizationService.I.restaurant.viewUserReviews,
                   onTap: navigateToReviews,
                 );
               case 1:
                 return FeatureCard(
                   icon: Icons.chat,
-                  title: LocalizationService.I.instantChat,
-                  subtitle: LocalizationService.I.chatWithStaffRealtime,
+                  title: LocalizationService.I.restaurant.instantChat,
+                  subtitle: LocalizationService.I.restaurant.chatWithStaffRealtime,
                   onTap: navigateToChatVerify,
                 );
               case 2:
                 return FeatureCard(
                   icon: Icons.people,
-                  title: LocalizationService.I.viewStaff,
-                  subtitle: LocalizationService.I.onlineStaffList,
+                  title: LocalizationService.I.restaurant.viewStaff,
+                  subtitle: LocalizationService.I.restaurant.onlineStaffList,
                   onTap: navigateToStaff,
                 );
               case 3:
                 return FeatureCard(
                   icon: Icons.restaurant_menu,
-                  title: LocalizationService.I.viewMenu,
-                  subtitle: LocalizationService.I.browseAllDishes,
+                  title: LocalizationService.I.restaurant.viewMenu,
+                  subtitle: LocalizationService.I.restaurant.browseAllDishes,
                   onTap: navigateToMenu,
                 );
               default:

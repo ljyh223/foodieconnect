@@ -32,21 +32,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.pleaseEnterEmail;
+      return LocalizationService.I.auth.pleaseEnterEmail;
     }
     // 修复：原来的正则在结尾处多了一个转义符号，导致校验异常
     final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return LocalizationService.I.pleaseEnterValidEmail;
+      return LocalizationService.I.auth.pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.pleaseEnterPassword;
+      return LocalizationService.I.auth.pleaseEnterPassword;
     }
-    if (value.length < 6) return LocalizationService.I.passwordMinLength;
+    if (value.length < 6) return LocalizationService.I.auth.passwordMinLength;
     return null;
   }
 
@@ -108,14 +108,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    LocalizationService.I.createAccount,
+                    LocalizationService.I.auth.createAccount,
                     style: AppTextStyles.headlineSmall.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    LocalizationService.I.joinTableTalk,
+                    LocalizationService.I.auth.joinTableTalk,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -145,14 +145,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       TextFieldWidget(
                         controller: _displayNameController,
-                        label: LocalizationService.I.displayName,
+                        label: LocalizationService.I.auth.displayName,
                         prefixIcon: Icons.person_outline,
                       ),
                       const SizedBox(height: 16),
 
                       TextFieldWidget(
                         controller: _emailController,
-                        label: LocalizationService.I.email,
+                        label: LocalizationService.I.auth.email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -161,7 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       TextFieldWidget(
                         controller: _phoneController,
-                        label: LocalizationService.I.phoneNumber,
+                        label: LocalizationService.I.auth.phoneNumber,
                         keyboardType: TextInputType.phone,
                         prefixIcon: Icons.phone_outlined,
                       ),
@@ -169,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: LocalizationService.I.password,
+                        label: LocalizationService.I.auth.password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -201,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   )
                                 : Text(
-                                    LocalizationService.I.register,
+                                    LocalizationService.I.auth.register,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -222,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    LocalizationService.I.alreadyHaveAccount,
+                    LocalizationService.I.auth.alreadyHaveAccount,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -236,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      LocalizationService.I.loginNow,
+                      LocalizationService.I.auth.loginNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

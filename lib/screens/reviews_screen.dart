@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabletalk/core/services/api_service.dart';
+import 'package:tabletalk/core/services/auth_service.dart';
 import 'package:tabletalk/core/services/localization_service.dart';
 import '../data/models/review_model.dart';
 import '../core/constants/app_colors.dart';
@@ -23,9 +24,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final id = widget.restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String?;
+      final id =
+          widget.restaurantId ??
+          (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId']
+              as String?;
       if (id != null) {
-        Provider.of<ReviewProvider>(context, listen: false).fetchByRestaurant(id);
+        Provider.of<ReviewProvider>(
+          context,
+          listen: false,
+        ).fetchByRestaurant(id);
       }
     });
   }
@@ -35,7 +42,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.userComments,
+        title: LocalizationService.I.review.userComments,
         showBackButton: true,
         actions: [
           IconButton(
@@ -54,8 +61,12 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Consumer<ReviewProvider>(
             builder: (context, provider, _) {
-              if (provider.isLoading) return const Center(child: CircularProgressIndicator());
-              if (provider.error != null) return Center(child: Text(provider.error!));
+              if (provider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (provider.error != null) {
+                return Center(child: Text(provider.error!));
+              }
 
               final List<Review> reviews = provider.reviews;
 
@@ -72,27 +83,43 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Container(
-                                    width: 48,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryContainer,
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        review.userName.isNotEmpty ? review.userName[0] : '',
-                                        style: TextStyle(
-                                          color: AppColors.onPrimaryContainer,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
+                                  InkWell(
+                                    onTap: () => _handleAvatarTap(review.userId),
+                                    borderRadius: BorderRadius.circular(24),
+                                    // 保持圆形水波纹
+                                    child: CircleAvatar(
+                                      radius: 24,
+                                      backgroundImage:
+                                          review.userAvatar.isNotEmpty
+                                          ? NetworkImage(
+                                              ApiService.getFullImageUrl(
+                                                review.userAvatar,
+                                              ),
+                                            )
+                                          : null,
+                                      backgroundColor:
+                                          AppColors.primaryContainer,
+                                      child: review.userAvatar.isEmpty
+                                          ? Center(
+                                              child: Text(
+                                                review.userName.isNotEmpty
+                                                    ? review.userName[0]
+                                                    : '',
+                                                style: TextStyle(
+                                                  color: AppColors
+                                                      .onPrimaryContainer,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            )
+                                          : null,
                                     ),
                                   ),
                                   const SizedBox(width: 16),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         review.userName,
@@ -101,7 +128,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                       Row(
                                         children: [
                                           Text(
-                                            _buildRatingStars(review.rating.toDouble()),
+                                            _buildRatingStars(
+                                              review.rating.toDouble(),
+                                            ),
                                             style: TextStyle(
                                               color: AppColors.ratingStar,
                                               fontSize: 12,
@@ -109,10 +138,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
-                                            review.date.toIso8601String().split('T').first,
-                                            style: AppTextStyles.bodySmall.copyWith(
-                                              color: AppColors.onSurfaceVariant,
-                                            ),
+                                            review.date
+                                                .toIso8601String()
+                                                .split('T')
+                                                .first,
+                                            style: AppTextStyles.bodySmall
+                                                .copyWith(
+                                                  color: AppColors
+                                                      .onSurfaceVariant,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -159,11 +193,38 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return stars;
   }
 
+  /// 处理头像点击事件，根据用户类型跳转到相应的个人中心
+  Future<void> _handleAvatarTap(int userId) async {
+    try {
+      final currentUserId = await AuthService.getCurrentUserId();
+      
+      if (currentUserId != null && userId == currentUserId) {
+        // 跳转到自己的个人中心
+        Navigator.of(context).pushNamed('/user_profile');
+      } else {
+        // 跳转到他人的个人中心
+        Navigator.of(context).pushNamed(
+          '/other_user_profile',
+          arguments: {'userId': userId},
+        );
+      }
+    } catch (e) {
+      // 处理错误，显示一个提示
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('跳转失败: $e')),
+        );
+      }
+    }
+  }
+
   // 构建图片网格显示
   Widget _buildImageGrid(List<ReviewImage> images) {
     final int imageCount = images.length;
-    final List<String> imageUrls = images.map((image) => image.imageUrl).toList();
-    
+    final List<String> imageUrls = images
+        .map((image) => image.imageUrl)
+        .toList();
+
     if (imageCount == 1) {
       // 单张图片，显示较大尺寸
       return ClipRRect(
@@ -187,9 +248,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             return Container(
               height: 200,
               color: AppColors.surfaceVariant,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             );
           },
         ),
@@ -226,9 +285,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     width: 120,
                     height: 120,
                     color: AppColors.surfaceVariant,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   );
                 },
               ),
@@ -270,7 +327,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               ),
             );
           }
-          
+
           return GestureDetector(
             onTap: () {
               _showImageViewer(context, imageUrls, index);
@@ -292,9 +349,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   if (loadingProgress == null) return child;
                   return Container(
                     color: AppColors.surfaceVariant,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   );
                 },
               ),
@@ -306,13 +361,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   }
 
   // 显示图片查看器
-  void _showImageViewer(BuildContext context, List<String> images, int initialIndex) {
+  void _showImageViewer(
+    BuildContext context,
+    List<String> images,
+    int initialIndex,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => _ImageViewerScreen(
-          images: images,
-          initialIndex: initialIndex,
-        ),
+        builder: (context) =>
+            _ImageViewerScreen(images: images, initialIndex: initialIndex),
       ),
     );
   }
@@ -323,10 +380,7 @@ class _ImageViewerScreen extends StatefulWidget {
   final List<String> images;
   final int initialIndex;
 
-  const _ImageViewerScreen({
-    required this.images,
-    required this.initialIndex,
-  });
+  const _ImageViewerScreen({required this.images, required this.initialIndex});
 
   @override
   State<_ImageViewerScreen> createState() => _ImageViewerScreenState();

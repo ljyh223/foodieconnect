@@ -78,7 +78,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: LocalizationService.I.search,
+                hintText: LocalizationService.I.app.search,
                 hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 border: OutlineInputBorder(
@@ -102,7 +102,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
               },
               icon: const Icon(Icons.settings, color: Colors.grey),
               iconSize: 20,
-              tooltip: LocalizationService.I.settings,
+              tooltip: LocalizationService.I.app.settings,
             ),
           ),
           Padding(
@@ -135,7 +135,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
           if (restaurants.isEmpty) {
             return Center(
               child: Text(
-                LocalizationService.I.noRestaurants,
+                LocalizationService.I.app.noRestaurants,
                 style: TextStyle(fontSize: 16, color: Colors.black54),
               ),
             );
@@ -260,7 +260,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
-                                  restaurant.isOpen ? LocalizationService.I.open : LocalizationService.I.closed,
+                                  restaurant.isOpen ? LocalizationService.I.app.open : LocalizationService.I.app.closed,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: restaurant.isOpen ? Colors.green : Colors.grey,

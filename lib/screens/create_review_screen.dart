@@ -52,7 +52,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          LocalizationService.I.publishReview,
+          LocalizationService.I.review.publishReview,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -72,7 +72,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                     height: 16,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : Text(LocalizationService.I.publish),
+                : Text(LocalizationService.I.review.publish),
           ),
         ],
       ),
@@ -91,7 +91,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.ratingScore,
+                        LocalizationService.I.review.ratingScore,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -131,7 +131,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          LocalizationService.I.reviewContent,
+                          LocalizationService.I.review.reviewContent,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -145,7 +145,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
                             decoration: InputDecoration(
-                              hintText: LocalizationService.I.shareDiningExperience,
+                              hintText: LocalizationService.I.review.shareDiningExperience,
                               border: const OutlineInputBorder(),
                             ),
                           ),
@@ -166,7 +166,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.addImages,
+                        LocalizationService.I.review.addImages,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -185,7 +185,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                               child: OutlinedButton.icon(
                                 onPressed: _pickImageFromCamera,
                                 icon: const Icon(Icons.camera_alt),
-                                label: Text(LocalizationService.I.takePhoto),
+                                label: Text(LocalizationService.I.review.takePhoto),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -193,7 +193,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                               child: OutlinedButton.icon(
                                 onPressed: _pickImageFromGallery,
                                 icon: const Icon(Icons.photo_library),
-                                label: Text(LocalizationService.I.selectFromGallery),
+                                label: Text(LocalizationService.I.review.selectFromGallery),
                               ),
                             ),
                           ],
@@ -225,7 +225,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             children: [
               const Icon(Icons.add_photo_alternate, size: 32, color: Colors.grey),
               const SizedBox(height: 4),
-              Text(LocalizationService.I.addImage, style: const TextStyle(color: Colors.grey)),
+              Text(LocalizationService.I.review.addImage, style: const TextStyle(color: Colors.grey)),
             ],
           ),
         ),
@@ -311,7 +311,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: Text(LocalizationService.I.takePhoto),
+              title: Text(LocalizationService.I.review.takePhoto),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromCamera();
@@ -319,7 +319,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: Text(LocalizationService.I.selectFromAlbum),
+              title: Text(LocalizationService.I.review.selectFromAlbum),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromGallery();
@@ -354,7 +354,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (mounted) {
         debugPrint("拍照失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${LocalizationService.I.takePhotoFailed}${e.toString()}')),
+          SnackBar(content: Text('${LocalizationService.I.review.takePhotoFailed}${e.toString()}')),
         );
       }
     }
@@ -388,7 +388,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (mounted) {
         debugPrint("选择图片失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${LocalizationService.I.selectImageFailed}${e.toString()}')),
+          SnackBar(content: Text('${LocalizationService.I.review.selectImageFailed}${e.toString()}')),
         );
       }
     }
@@ -420,14 +420,14 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     
     if (restaurantId == null || restaurantId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(LocalizationService.I.restaurantInfoInvalid)),
+        SnackBar(content: Text(LocalizationService.I.restaurant.restaurantInfoInvalid)),
       );
       return;
     }
     
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(LocalizationService.I.pleaseEnterReviewContent)),
+        SnackBar(content: Text(LocalizationService.I.review.pleaseEnterReviewContent)),
       );
       return;
     }
@@ -441,13 +441,13 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(LocalizationService.I.reviewPublished)),
+        SnackBar(content: Text(LocalizationService.I.review.reviewPublished)),
       );
       Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${LocalizationService.I.publishFailed}${e.toString()}')),
+          SnackBar(content: Text('${LocalizationService.I.review.publishFailed}${e.toString()}')),
         );
       }
     } finally {

@@ -76,4 +76,7 @@ class ReviewLocalizationsEn extends ReviewLocalizations {
   String postReviewFail(String error) {
     return 'Failed to post review: $error';
   }
+
+  @override
+  String get dishReviews => 'Dish Reviews';
 }

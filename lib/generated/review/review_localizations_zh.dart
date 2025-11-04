@@ -76,6 +76,9 @@ class ReviewLocalizationsZh extends ReviewLocalizations {
   String postReviewFail(String error) {
     return '发布评论失败：$error';
   }
+
+  @override
+  String get dishReviews => '菜品评价';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -150,4 +153,7 @@ class ReviewLocalizationsZhTw extends ReviewLocalizationsZh {
   String postReviewFail(String error) {
     return '發布評論失敗：$error';
   }
+
+  @override
+  String get dishReviews => '菜肴點評';
 }

@@ -1,0 +1,90 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk應用繁體中文本地化 - 用戶個人中心",
+  "profileTitle": "個人主頁",
+  "@profileTitle": {
+    "description": "個人主頁標題"
+  },
+  "otherProfileTitle": "用戶主頁",
+  "@otherProfileTitle": {
+    "description": "其他用戶主頁標題"
+  },
+  "edit": "編輯",
+  "@edit": {
+    "description": "編輯按鈕文本"
+  },
+  "save": "保存",
+  "@save": {
+    "description": "保存按鈕文本"
+  },
+  "loading": "載入中...",
+  "@loading": {
+    "description": "載入中提示"
+  },
+  "loadingFailed": "載入失敗",
+  "@loadingFailed": {
+    "description": "載入失敗提示"
+  },
+  "retry": "重試",
+  "@retry": {
+    "description": "重試按鈕文本"
+  },
+  "userNotFound": "用戶不存在",
+  "@userNotFound": {
+    "description": "用戶不存在提示"
+  },
+  "unknownUser": "未知用戶",
+  "@unknownUser": {
+    "description": "未知用戶文本"
+  },
+  "foodPreferences": "喜好食物",
+  "@foodPreferences": {
+    "description": "喜好食物標題"
+  },
+  "noFoodPreferences": "暫無喜好食物資訊",
+  "@noFoodPreferences": {
+    "description": "無喜好食物資訊提示"
+  },
+  "personalBio": "個人簡介",
+  "@personalBio": {
+    "description": "個人簡介標題"
+  },
+  "introduceYourself": "介紹一下自己...",
+  "@introduceYourself": {
+    "description": "個人簡介輸入提示"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "連接按鈕文本"
+  },
+  "following": "已關注",
+  "@following": {
+    "description": "已關注狀態文本"
+  },
+  "saveSuccess": "保存成功",
+  "@saveSuccess": {
+    "description": "保存成功提示"
+  },
+  "saveFailed": "保存失敗: {error}",
+  "@saveFailed": {
+    "description": "保存失敗提示",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "錯誤資訊"
+      }
+    }
+  },
+  "followFailed": "關注失敗",
+  "@followFailed": {
+    "description": "關注失敗提示"
+  },
+  "unfollowFailed": "取消關注失敗",
+  "@unfollowFailed": {
+    "description": "取消關注失敗提示"
+  },
+  "recommendedRestaurants": "推薦餐廳",
+  "@recommendedRestaurants": {
+    "description": "推薦餐廳標題"
+  }
+}

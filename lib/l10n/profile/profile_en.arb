@@ -1,0 +1,90 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk application English localization - User Profile",
+  "profileTitle": "Profile",
+  "@profileTitle": {
+    "description": "Profile page title"
+  },
+  "otherProfileTitle": "User Profile",
+  "@otherProfileTitle": {
+    "description": "Other user profile page title"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading prompt"
+  },
+  "loadingFailed": "Loading failed",
+  "@loadingFailed": {
+    "description": "Loading failed prompt"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "userNotFound": "User not found",
+  "@userNotFound": {
+    "description": "User not found message"
+  },
+  "unknownUser": "Unknown User",
+  "@unknownUser": {
+    "description": "Unknown user text"
+  },
+  "foodPreferences": "Food Preferences",
+  "@foodPreferences": {
+    "description": "Food preferences title"
+  },
+  "noFoodPreferences": "No food preferences",
+  "@noFoodPreferences": {
+    "description": "No food preferences message"
+  },
+  "personalBio": "Personal Bio",
+  "@personalBio": {
+    "description": "Personal bio title"
+  },
+  "introduceYourself": "Tell us about yourself...",
+  "@introduceYourself": {
+    "description": "Bio input placeholder"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "Connect button text"
+  },
+  "following": "Following",
+  "@following": {
+    "description": "Following status text"
+  },
+  "saveSuccess": "Saved successfully",
+  "@saveSuccess": {
+    "description": "Save success message"
+  },
+  "saveFailed": "Save failed: {error}",
+  "@saveFailed": {
+    "description": "Save failed message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "Error message"
+      }
+    }
+  },
+  "followFailed": "Follow failed",
+  "@followFailed": {
+    "description": "Follow failed message"
+  },
+  "unfollowFailed": "Unfollow failed",
+  "@unfollowFailed": {
+    "description": "Unfollow failed message"
+  },
+  "recommendedRestaurants": "Recommended Restaurants",
+  "@recommendedRestaurants": {
+    "description": "Recommended restaurants title"
+  }
+}

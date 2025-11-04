@@ -5,24 +5,24 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'review_localizations_en.dart';
-import 'review_localizations_zh.dart';
+import 'profile_localizations_en.dart';
+import 'profile_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
-/// Callers can lookup localized strings with an instance of ReviewLocalizations
-/// returned by `ReviewLocalizations.of(context)`.
+/// Callers can lookup localized strings with an instance of ProfileLocalizations
+/// returned by `ProfileLocalizations.of(context)`.
 ///
-/// Applications need to include `ReviewLocalizations.delegate()` in their app's
+/// Applications need to include `ProfileLocalizations.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'review/review_localizations.dart';
+/// import 'profile/profile_localizations.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: ReviewLocalizations.localizationsDelegates,
-///   supportedLocales: ReviewLocalizations.supportedLocales,
+///   localizationsDelegates: ProfileLocalizations.localizationsDelegates,
+///   supportedLocales: ProfileLocalizations.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
@@ -59,20 +59,23 @@ import 'review_localizations_zh.dart';
 /// Select and expand the newly-created Localizations item then, for each
 /// locale your application supports, add a new item and select the locale
 /// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the ReviewLocalizations.supportedLocales
+/// be consistent with the languages listed in the ProfileLocalizations.supportedLocales
 /// property.
-abstract class ReviewLocalizations {
-  ReviewLocalizations(String locale)
+abstract class ProfileLocalizations {
+  ProfileLocalizations(String locale)
     : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static ReviewLocalizations? of(BuildContext context) {
-    return Localizations.of<ReviewLocalizations>(context, ReviewLocalizations);
+  static ProfileLocalizations? of(BuildContext context) {
+    return Localizations.of<ProfileLocalizations>(
+      context,
+      ProfileLocalizations,
+    );
   }
 
-  static const LocalizationsDelegate<ReviewLocalizations> delegate =
-      _ReviewLocalizationsDelegate();
+  static const LocalizationsDelegate<ProfileLocalizations> delegate =
+      _ProfileLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -99,147 +102,135 @@ abstract class ReviewLocalizations {
     Locale('zh', 'TW'),
   ];
 
-  /// User comments title
+  /// Profile page title
   ///
   /// In en, this message translates to:
-  /// **'User Comments'**
-  String get userComments;
+  /// **'Profile'**
+  String get profileTitle;
 
-  /// Publish review button
+  /// Other user profile page title
   ///
   /// In en, this message translates to:
-  /// **'Publish Review'**
-  String get publishReview;
+  /// **'User Profile'**
+  String get otherProfileTitle;
 
-  /// Rating label
+  /// Edit button text
   ///
   /// In en, this message translates to:
-  /// **'Rating'**
-  String get ratingScore;
+  /// **'Edit'**
+  String get edit;
 
-  /// Review content label
+  /// Save button text
   ///
   /// In en, this message translates to:
-  /// **'Review Content'**
-  String get reviewContent;
+  /// **'Save'**
+  String get save;
 
-  /// Review content input box prompt
+  /// Loading prompt
   ///
   /// In en, this message translates to:
-  /// **'Share your dining experience...'**
-  String get shareDiningExperience;
+  /// **'Loading...'**
+  String get loading;
 
-  /// Add images title
+  /// Loading failed prompt
   ///
   /// In en, this message translates to:
-  /// **'Add Images'**
-  String get addImages;
+  /// **'Loading failed'**
+  String get loadingFailed;
 
-  /// Take photo button
+  /// Retry button text
   ///
   /// In en, this message translates to:
-  /// **'Take Photo'**
-  String get takePhoto;
+  /// **'Retry'**
+  String get retry;
 
-  /// Gallery button
+  /// User not found message
   ///
   /// In en, this message translates to:
-  /// **'Gallery'**
-  String get selectFromGallery;
+  /// **'User not found'**
+  String get userNotFound;
 
-  /// Select from album text
+  /// Unknown user text
   ///
   /// In en, this message translates to:
-  /// **'Select from Album'**
-  String get selectFromAlbum;
+  /// **'Unknown User'**
+  String get unknownUser;
 
-  /// Add image prompt
+  /// Food preferences title
   ///
   /// In en, this message translates to:
-  /// **'Add Image'**
-  String get addImage;
+  /// **'Food Preferences'**
+  String get foodPreferences;
 
-  /// Publish button
+  /// No food preferences message
   ///
   /// In en, this message translates to:
-  /// **'Publish'**
-  String get publish;
+  /// **'No food preferences'**
+  String get noFoodPreferences;
 
-  /// Please enter review content prompt
+  /// Personal bio title
   ///
   /// In en, this message translates to:
-  /// **'Please enter review content'**
-  String get pleaseEnterReviewContent;
+  /// **'Personal Bio'**
+  String get personalBio;
 
-  /// Review published prompt
+  /// Bio input placeholder
   ///
   /// In en, this message translates to:
-  /// **'Review published'**
-  String get reviewPublished;
+  /// **'Tell us about yourself...'**
+  String get introduceYourself;
 
-  /// Publish failed prompt
+  /// Connect button text
   ///
   /// In en, this message translates to:
-  /// **'Publish failed'**
-  String get publishFailed;
+  /// **'Connect'**
+  String get connect;
 
-  /// Failed to take photo prompt
+  /// Following status text
   ///
   /// In en, this message translates to:
-  /// **'Failed to take photo'**
-  String get takePhotoFailed;
+  /// **'Following'**
+  String get following;
 
-  /// Failed to select image prompt
+  /// Save success message
   ///
   /// In en, this message translates to:
-  /// **'Failed to select image'**
-  String get selectImageFailed;
+  /// **'Saved successfully'**
+  String get saveSuccess;
 
-  /// No reviews prompt
+  /// Save failed message
   ///
   /// In en, this message translates to:
-  /// **'No reviews yet'**
-  String get noReviews;
+  /// **'Save failed: {error}'**
+  String saveFailed(String error);
 
-  /// User reviews title
+  /// Follow failed message
   ///
   /// In en, this message translates to:
-  /// **'User Reviews'**
-  String get userReviews;
+  /// **'Follow failed'**
+  String get followFailed;
 
-  /// Review count
+  /// Unfollow failed message
   ///
   /// In en, this message translates to:
-  /// **'{count} reviews'**
-  String reviewCount(int count);
+  /// **'Unfollow failed'**
+  String get unfollowFailed;
 
-  /// Error hint when listByRestaurant throws
+  /// Recommended restaurants title
   ///
   /// In en, this message translates to:
-  /// **'Failed to load reviews: {error}'**
-  String loadReviewFail(String error);
-
-  /// Error hint when postReview/postWithImages/postWithImageFiles throws
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to post review: {error}'**
-  String postReviewFail(String error);
-
-  /// Dish reviews title
-  ///
-  /// In en, this message translates to:
-  /// **'Dish Reviews'**
-  String get dishReviews;
+  /// **'Recommended Restaurants'**
+  String get recommendedRestaurants;
 }
 
-class _ReviewLocalizationsDelegate
-    extends LocalizationsDelegate<ReviewLocalizations> {
-  const _ReviewLocalizationsDelegate();
+class _ProfileLocalizationsDelegate
+    extends LocalizationsDelegate<ProfileLocalizations> {
+  const _ProfileLocalizationsDelegate();
 
   @override
-  Future<ReviewLocalizations> load(Locale locale) {
-    return SynchronousFuture<ReviewLocalizations>(
-      lookupReviewLocalizations(locale),
+  Future<ProfileLocalizations> load(Locale locale) {
+    return SynchronousFuture<ProfileLocalizations>(
+      lookupProfileLocalizations(locale),
     );
   }
 
@@ -248,17 +239,17 @@ class _ReviewLocalizationsDelegate
       <String>['en', 'zh'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_ReviewLocalizationsDelegate old) => false;
+  bool shouldReload(_ProfileLocalizationsDelegate old) => false;
 }
 
-ReviewLocalizations lookupReviewLocalizations(Locale locale) {
+ProfileLocalizations lookupProfileLocalizations(Locale locale) {
   // Lookup logic when language+country codes are specified.
   switch (locale.languageCode) {
     case 'zh':
       {
         switch (locale.countryCode) {
           case 'TW':
-            return ReviewLocalizationsZhTw();
+            return ProfileLocalizationsZhTw();
         }
         break;
       }
@@ -267,13 +258,13 @@ ReviewLocalizations lookupReviewLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':
-      return ReviewLocalizationsEn();
+      return ProfileLocalizationsEn();
     case 'zh':
-      return ReviewLocalizationsZh();
+      return ProfileLocalizationsZh();
   }
 
   throw FlutterError(
-    'ReviewLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'ProfileLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
     'that was used.',

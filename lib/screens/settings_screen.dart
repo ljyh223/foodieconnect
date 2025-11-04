@@ -12,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocalizationService.I.settings),
+        title: Text(LocalizationService.I.setting.settings),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,
@@ -23,13 +23,13 @@ class SettingsScreen extends StatelessWidget {
           // 语言设置部分
           _buildSection(
             context,
-            title: LocalizationService.I.languageSettings,
+            title: LocalizationService.I.setting.languageSettings,
             children: [
               Consumer<LanguageProvider>(
                 builder: (context, languageProvider, child) {
                   return ListTile(
                     leading: const Icon(Icons.language, color: Colors.blue),
-                    title: Text(LocalizationService.I.currentLanguage),
+                    title: Text(LocalizationService.I.setting.currentLanguage),
                     subtitle: Text(languageProvider.currentLanguageName),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
@@ -49,38 +49,38 @@ class SettingsScreen extends StatelessWidget {
           // 账户设置部分
           _buildSection(
             context,
-            title: LocalizationService.I.accountSettings,
+            title: LocalizationService.I.setting.accountSettings,
             children: [
               ListTile(
                 leading: const Icon(Icons.person, color: Colors.green),
-                title: Text(LocalizationService.I.profile),
+                title: Text(LocalizationService.I.setting.profile),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到个人资料页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocalizationService.I.profile)),
+                    SnackBar(content: Text(LocalizationService.I.setting.profile)),
                   );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.lock, color: Colors.orange),
-                title: Text(LocalizationService.I.privacy),
+                title: Text(LocalizationService.I.setting.privacy),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到隐私设置页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocalizationService.I.privacy)),
+                    SnackBar(content: Text(LocalizationService.I.setting.privacy)),
                   );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.notifications, color: Colors.purple),
-                title: Text(LocalizationService.I.notifications),
+                title: Text(LocalizationService.I.setting.notifications),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到通知设置页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocalizationService.I.notifications)),
+                    SnackBar(content: Text(LocalizationService.I.setting.notifications)),
                   );
                 },
               ),
@@ -90,11 +90,11 @@ class SettingsScreen extends StatelessWidget {
           // 关于部分
           _buildSection(
             context,
-            title: LocalizationService.I.about,
+            title: LocalizationService.I.setting.about,
             children: [
               ListTile(
                 leading: const Icon(Icons.info, color: Colors.grey),
-                title: Text(LocalizationService.I.version),
+                title: Text(LocalizationService.I.setting.version),
                 subtitle: const Text('1.0.0'),
               ),
             ],
@@ -116,7 +116,7 @@ class SettingsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(LocalizationService.I.logout),
+              child: Text(LocalizationService.I.setting.logout),
             ),
           ),
           const SizedBox(height: 20),
@@ -156,14 +156,14 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(LocalizationService.I.logout),
-          content: Text(LocalizationService.I.sureLogout),
+          title: Text(LocalizationService.I.setting.logout),
+          content: Text(LocalizationService.I.setting.sureLogout),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(LocalizationService.I.close),
+              child: Text(LocalizationService.I.setting.close),
             ),
             TextButton(
               onPressed: () {
@@ -173,7 +173,7 @@ class SettingsScreen extends StatelessWidget {
                 auth.logout();
                 Navigator.pushReplacementNamed(context, '/login');
               },
-              child: Text(LocalizationService.I.logout),
+              child: Text(LocalizationService.I.setting.logout),
             ),
           ],
         );
@@ -190,7 +190,7 @@ class LanguageSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocalizationService.I.languageSettings),
+        title: Text(LocalizationService.I.setting.languageSettings),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,

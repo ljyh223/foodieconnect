@@ -64,7 +64,7 @@ class _StaffScreenState extends State<StaffScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.staffList,
+        title: LocalizationService.I.staff.staffList,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -86,11 +86,11 @@ class _StaffScreenState extends State<StaffScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${LocalizationService.I.loadingFailed}：$_error'),
+            Text('${LocalizationService.I.app.loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadStaff,
-              child: Text(LocalizationService.I.retry),
+              child: Text(LocalizationService.I.app.retry),
             ),
           ],
         ),
@@ -109,11 +109,11 @@ class _StaffScreenState extends State<StaffScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${LocalizationService.I.getStaffListFailed}${snapshot.error}'),
+                Text('${LocalizationService.I.staff.getStaffListFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadStaff,
-                  child: Text(LocalizationService.I.retry),
+                  child: Text(LocalizationService.I.app.retry),
                 ),
               ],
             ),
@@ -123,7 +123,7 @@ class _StaffScreenState extends State<StaffScreen> {
         final staffList = snapshot.data ?? [];
 
         if (staffList.isEmpty) {
-          return Center(child: Text(LocalizationService.I.noStaff));
+          return Center(child: Text(LocalizationService.I.staff.noStaff));
         }
 
         return ListView.builder(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/generated/app_localizations.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
@@ -64,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context).pleaseVerifyFirst),
+              content: Text(LocalizationService.I.chat.pleaseVerifyFirst),
               duration: const Duration(seconds: 3),
             ),
           );
@@ -75,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // 店员聊天功能已移除，显示提示信息
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).staffChatFeatureMoved)),
+            SnackBar(content: Text(LocalizationService.I.chat.staffChatFeatureMoved)),
           );
         }
       }
@@ -140,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
       // 获取聊天室信息
       final roomInfo = await ChatService.getChatRoomInfo(roomId);
       final roomData = roomInfo['data'] ?? roomInfo;
-      _roomName = roomData['name'] ?? AppLocalizations.of(context).restaurantChatRoom;
+      _roomName = roomData['name'] ?? LocalizationService.I.chat.restaurantChatRoom;
       
       // 设置新消息回调
       provider.setNewMessageCallback(_handleNewMessages);
@@ -171,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
       debugPrint('初始化聊天室失败: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${AppLocalizations.of(context).initializeChatRoomError}$e')),
+          SnackBar(content: Text('${LocalizationService.I.chat.initializeChatRoomError}$e')),
         );
       }
     }
@@ -196,7 +196,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _messageController.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).noAvailableChatRoom)),
+          SnackBar(content: Text(LocalizationService.I.chat.noAvailableChatRoom)),
         );
       }
     }
@@ -251,7 +251,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: _roomName ?? AppLocalizations.of(context).chat,
+        title: _roomName ?? LocalizationService.I.chat.chat,
         showBackButton: true,
         actions: [
           Consumer<ChatProvider>(
@@ -269,7 +269,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      provider.isConnected ? AppLocalizations.of(context).connected : AppLocalizations.of(context).disconnected,
+                      provider.isConnected ? LocalizationService.I.chat.connected : LocalizationService.I.chat.disconnected,
                       style: AppTextStyles.bodySmall,
                     ),
                     const SizedBox(width: 16),
@@ -308,13 +308,13 @@ class _ChatScreenState extends State<ChatScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                AppLocalizations.of(context).noMessagesStartChat,
+                                LocalizationService.I.chat.noMessagesStartChat,
                                 style: const TextStyle(color: Colors.grey),
                               ),
                               const SizedBox(height: 8),
                               if (!provider.isConnected)
                                 Text(
-                                  AppLocalizations.of(context).websocketNotConnected,
+                                  LocalizationService.I.chat.websocketNotConnected,
                                   style: const TextStyle(color: Colors.red),
                                 ),
                             ],
@@ -386,7 +386,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: TextField(
                           controller: _messageController,
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context).enterMessage,
+                            hintText: LocalizationService.I.chat.enterMessage,
                             filled: true,
                             fillColor: AppColors.surface,
                             border: OutlineInputBorder(

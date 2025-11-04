@@ -19,7 +19,7 @@ class UserProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         // 头像
         Container(
@@ -48,36 +48,29 @@ class UserProfileHeader extends StatelessWidget {
                 : _buildDefaultAvatar(),
           ),
         ),
-        const SizedBox(height: 16),
-        
-        // 昵称（可编辑）
-        isEditing && displayNameController != null
-            ? TextField(
-                controller: displayNameController!,
-                style: AppTextStyles.headlineSmall.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                ),
-              )
-            : Text(
-                user.displayName ?? '未知用户',
-                style: AppTextStyles.headlineSmall.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+        const SizedBox(width: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              user.displayName ?? '未知用户',
+              style: AppTextStyles.headlineSmall.copyWith(
+                fontWeight: FontWeight.w600,
               ),
-        const SizedBox(height: 8),
-        
-        // 邮箱
-        Text(
-          user.email,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.onSurfaceVariant,
-          ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              user.email,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
         ),
+
+        
+
       ],
     );
   }

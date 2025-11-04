@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/core/services/localization_service.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/api_service.dart';
-import '../core/services/food_preference_service.dart';
+import '../core/services/user_service.dart';
 import '../core/services/follow_service.dart';
 import '../core/services/auth_service.dart';
 import '../data/models/user_model.dart';
-import '../data/models/food_preference_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 
 /// 其他用户个人主页界面
@@ -24,9 +24,7 @@ class OtherUserProfileScreen extends StatefulWidget {
 
 class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   User? _user;
-  List<FoodPreference> _foodPreferences = [];
   bool _isLoading = true;
-  bool _isFollowing = false;
   String? _error;
 
   @override
@@ -43,18 +41,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     });
 
     try {
-      // 获取当前用户ID
-      final currentUserId = await AuthService.getCurrentUserId();
-      if (currentUserId == null) {
-        throw Exception('未找到当前用户信息');
-      }
-
-      // 并行加载用户信息、喜好食物和关注状态
-      await Future.wait([
-        _loadUserInfo(),
-        _loadFoodPreferences(),
-        _checkFollowStatus(currentUserId),
-      ]);
+      // 加载用户信息，包含喜欢的食物和关注状态
+      await _loadUserInfo();
 
       setState(() {
         _isLoading = false;
@@ -69,59 +57,28 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
   /// 加载用户基本信息
   Future<User> _loadUserInfo() async {
-    // 这里应该调用获取用户信息的API
-    // 暂时使用模拟数据，实际应该调用类似这样的API：
-    // final response = await ApiService.get('/users/${widget.userId}');
-    // _user = User.fromJson(response['data']);
-    
-    // 模拟数据
-    _user = User(
-      id: widget.userId,
-      email: 'user$widget.userId@example.com',
-      displayName: '用户$widget.userId',
-      avatarUrl: null,
-      bio: '这是用户$widget.userId的个人简介',
-    );
-    
+    _user = await UserService.getUserInfo(widget.userId);
     return _user!;
-  }
-
-  /// 加载用户喜好食物
-  Future<void> _loadFoodPreferences() async {
-    try {
-      _foodPreferences = await FoodPreferenceService.getUserPreferences(widget.userId);
-    } catch (e) {
-      // 如果获取失败，使用空列表
-      _foodPreferences = [];
-    }
-  }
-
-  /// 检查关注状态
-  Future<void> _checkFollowStatus(int currentUserId) async {
-    try {
-      _isFollowing = await FollowService.isFollowing(
-        followerId: currentUserId,
-        followingId: widget.userId,
-      );
-    } catch (e) {
-      // 如果检查失败，默认为未关注
-      _isFollowing = false;
-    }
   }
 
   /// 关注/取消关注用户
   Future<void> _toggleFollow() async {
+    if (_user == null) return;
+    
     try {
       final currentUserId = await AuthService.getCurrentUserId();
       if (currentUserId == null) {
         throw Exception('未找到当前用户信息');
       }
 
+      // 更新本地状态
+      final newIsFollowing = !(_user!.isFollowing ?? false);
       setState(() {
-        _isFollowing = !_isFollowing;
+        _user = _user!.copyWith(isFollowing: newIsFollowing);
       });
 
-      if (_isFollowing) {
+      // 调用API
+      if (newIsFollowing) {
         await FollowService.followUser(
           followerId: currentUserId,
           followingId: widget.userId,
@@ -135,13 +92,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     } catch (e) {
       // 如果操作失败，恢复原状态
       setState(() {
-        _isFollowing = !_isFollowing;
+        _user = _user!.copyWith(isFollowing: _user!.isFollowing);
       });
       
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(_isFollowing ? '关注失败' : '取消关注失败'),
+            content: Text((_user!.isFollowing ?? false)
+                ? LocalizationService.I.profile.unfollowFailed
+                : LocalizationService.I.profile.followFailed),
             backgroundColor: AppColors.error,
           ),
         );
@@ -154,7 +113,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: '用户主页',
+        title: LocalizationService.I.profile.otherProfileTitle,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -176,7 +135,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '加载失败',
+              LocalizationService.I.profile.loadingFailed,
               style: AppTextStyles.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -189,7 +148,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadUserData,
-              child: const Text('重试'),
+              child: Text(LocalizationService.I.profile.retry),
             ),
           ],
         ),
@@ -199,7 +158,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     if (_user == null) {
       return Center(
         child: Text(
-          '用户不存在',
+          LocalizationService.I.profile.userNotFound,
           style: AppTextStyles.titleMedium,
         ),
       );
@@ -226,9 +185,10 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   }
 
   Widget _buildUserInfo() {
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // 头像
+        // 头像（左侧）
         Container(
           width: 100,
           height: 100,
@@ -244,34 +204,38 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             borderRadius: BorderRadius.circular(50),
             child: _user!.avatarUrl != null && _user!.avatarUrl!.isNotEmpty
                 ? Image.network(
-                    ApiService.getFullImageUrl(_user!.avatarUrl!),
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return _buildDefaultAvatar();
-                    },
-                  )
+              ApiService.getFullImageUrl(_user!.avatarUrl!),
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return _buildDefaultAvatar();
+              },
+            )
                 : _buildDefaultAvatar(),
           ),
         ),
-        const SizedBox(height: 16),
-        
-        // 昵称
-        Text(
-          _user!.displayName ?? '未知用户',
-          style: AppTextStyles.headlineSmall.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        
-        // 邮箱
-        Text(
-          _user!.email,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.onSurfaceVariant,
-          ),
+        const SizedBox(width: 16), // 水平间距
+
+        // 昵称和邮箱（右侧，垂直排列）
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // 左对齐
+          mainAxisAlignment: MainAxisAlignment.center, // 垂直居中对齐（与头像中部对齐）
+          children: [
+            Text(
+              _user!.displayName ?? LocalizationService.I.profile.unknownUser,
+              style: AppTextStyles.headlineSmall.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 4), // 减小昵称与邮箱间距更紧凑（可选）
+            Text(
+              _user!.email,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -292,7 +256,9 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   }
 
   Widget _buildFoodPreferences() {
-    if (_foodPreferences.isEmpty) {
+    final favoriteFoods = _user?.favoriteFoods ?? [];
+    
+    if (favoriteFoods.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -301,7 +267,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           border: Border.all(color: AppColors.outline),
         ),
         child: Text(
-          '暂无喜好食物信息',
+          LocalizationService.I.profile.noFoodPreferences,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -313,15 +279,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '喜好食物',
+          LocalizationService.I.profile.foodPreferences,
           style: AppTextStyles.titleMedium,
         ),
         const SizedBox(height: 12),
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: _foodPreferences.map((preference) {
-            return _buildFoodPreferenceTag(preference.foodName);
+          children: favoriteFoods.map((foodName) {
+            return _buildFoodPreferenceTag(foodName);
           }).toList(),
         ),
       ],
@@ -347,15 +313,17 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   }
 
   Widget _buildConnectButton() {
+    final isFollowing = _user?.isFollowing ?? false;
+    
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: _toggleFollow,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _isFollowing ? AppColors.surface : AppColors.primary,
-          foregroundColor: _isFollowing ? AppColors.primary : AppColors.onPrimary,
+          backgroundColor: isFollowing ? AppColors.surface : AppColors.primary,
+          foregroundColor: isFollowing ? AppColors.primary : AppColors.onPrimary,
           side: BorderSide(
-            color: _isFollowing ? AppColors.primary : Colors.transparent,
+            color: isFollowing ? AppColors.primary : Colors.transparent,
             width: 1,
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -364,9 +332,9 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           ),
         ),
         child: Text(
-          _isFollowing ? '已关注' : 'Connect',
+          isFollowing ? LocalizationService.I.profile.following : LocalizationService.I.profile.connect,
           style: AppTextStyles.button.copyWith(
-            color: _isFollowing ? AppColors.primary : AppColors.onPrimary,
+            color: isFollowing ? AppColors.primary : AppColors.onPrimary,
           ),
         ),
       ),

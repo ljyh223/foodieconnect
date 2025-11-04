@@ -91,20 +91,15 @@ class FollowService {
 
   /// 检查是否已关注某个用户
   static Future<bool> isFollowing({
-    required int followerId,
-    required int followingId,
+    required int userId
   }) async {
     try {
-      final response = await _apiService.get('/users/$followerId/follows/$followingId');
-      final data = response['data'];
-      
-      final isFollowing = data['isFollowing'] ?? false;
-      logger.log('检查关注状态: $followerId -> $followingId, 结果: $isFollowing');
+      final response = await _apiService.get('/api/follows/check/$userId');
+      final isFollowing = response['data'] ?? false;
       
       return isFollowing;
     } catch (e) {
       logger.log('检查关注状态失败: $e');
-      // 如果API调用失败，默认返回未关注
       return false;
     }
   }

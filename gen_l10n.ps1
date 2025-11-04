@@ -1,4 +1,4 @@
-$modules = @("app", "auth", "chat", "restaurant", "review", "setting", "staff")
+$modules = @("app", "auth", "chat", "restaurant", "review", "setting", "staff","profile")
 
 foreach ($m in $modules) {
   $arbPath = "lib/l10n/$m"

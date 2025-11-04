@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocalizationService.I.authCheckFailed),
+          content: Text(LocalizationService.I.auth.authCheckFailed),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final completer = Completer<void>();
       final timer = Timer(timeoutDuration, () {
         if (!completer.isCompleted) {
-          completer.completeError(TimeoutException(LocalizationService.I.authCheckTimeout));
+          completer.completeError(TimeoutException(LocalizationService.I.auth.authCheckTimeout));
         }
       });
       
@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             // 应用名称
             Text(
-              LocalizationService.I.tableTalk,
+              LocalizationService.I.app.tableTalk,
               style: AppTextStyles.headlineMedium.copyWith(
                 color: AppColors.onPrimary,
               ),
@@ -158,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 16),
             // 加载文本
             Text(
-              LocalizationService.I.checkingLoginStatus,
+              LocalizationService.I.auth.checkingLoginStatus,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onPrimary.withAlpha(204), // 80% opacity
               ),

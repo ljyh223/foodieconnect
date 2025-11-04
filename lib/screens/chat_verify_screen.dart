@@ -40,7 +40,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     if ( _verificationController.text.isEmpty) {
       if (mounted) {
         setState(() {
-          _error = LocalizationService.I.pleaseEnterVerificationCode;
+          _error = LocalizationService.I.chat.pleaseEnterVerificationCode;
         });
       }
       return;
@@ -83,13 +83,13 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         );
       } else if (mounted) {
         setState(() {
-          _error = LocalizationService.I.verificationFailed;
+          _error = LocalizationService.I.chat.verificationFailed;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = '${LocalizationService.I.verificationError}${e.toString()}';
+          _error = '${LocalizationService.I.chat.verificationError}${e.toString()}';
         });
       }
     } finally {
@@ -106,7 +106,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.restaurantChatVerification,
+        title: LocalizationService.I.chat.restaurantChatVerification,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -127,7 +127,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      LocalizationService.I.enterRestaurantIdAndCode,
+                      LocalizationService.I.chat.enterRestaurantIdAndCode,
                       style: AppTextStyles.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -135,7 +135,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     const SizedBox(height: 16),
                     TextFieldWidget(
                       controller: _verificationController,
-                      label: LocalizationService.I.verificationCode,
+                      label: LocalizationService.I.chat.verificationCode,
                       keyboardType: TextInputType.number,
                       maxLength: 6,
                       textAlign: TextAlign.center,
@@ -175,7 +175,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                               ),
                             )
                           : Text(
-                              LocalizationService.I.verifyAndStartChat,
+                              LocalizationService.I.chat.verifyAndStartChat,
                             ),
                     ),
                   ],

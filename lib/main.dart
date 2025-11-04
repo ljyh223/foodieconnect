@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabletalk/generated/auth/auth_localizations.dart';
 import 'package:tabletalk/generated/chat/chat_localizations.dart';
+import 'package:tabletalk/generated/profile/profile_localizations.dart';
 import 'package:tabletalk/generated/restaurant/restaurant_localizations.dart';
 import 'package:tabletalk/generated/review/review_localizations.dart';
 import 'package:tabletalk/generated/setting/setting_localizations.dart';
@@ -123,6 +124,7 @@ class MyApp extends StatelessWidget {
               ReviewLocalizations.delegate,
               SettingLocalizations.delegate,
               StaffLocalizations.delegate,
+              ProfileLocalizations.delegate
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             initialRoute: '/splash',
