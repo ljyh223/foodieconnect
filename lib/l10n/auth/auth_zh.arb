@@ -100,5 +100,13 @@
   "restoreLoginFailed": "恢复登录状态失败",
   "@restoreLoginFailed": {
     "description": "Error message shown to user"
+  },
+  "loginSuccessful": "登录成功",
+  "@loginSuccessful": {
+    "description": "登录成功提示"
+  },
+  "registrationSuccessful": "注册成功",
+  "@registrationSuccessful": {
+    "description": "注册成功提示"
   }
 }

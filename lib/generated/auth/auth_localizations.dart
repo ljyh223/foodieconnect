@@ -248,6 +248,18 @@ abstract class AuthLocalizations {
   /// In en, this message translates to:
   /// **'Failed to restore login status'**
   String get restoreLoginFailed;
+
+  /// Login success message
+  ///
+  /// In en, this message translates to:
+  /// **'Login successful'**
+  String get loginSuccessful;
+
+  /// Registration success message
+  ///
+  /// In en, this message translates to:
+  /// **'Registration successful'**
+  String get registrationSuccessful;
 }
 
 class _AuthLocalizationsDelegate

@@ -82,6 +82,12 @@ class AuthLocalizationsZh extends AuthLocalizations {
 
   @override
   String get restoreLoginFailed => '恢复登录状态失败';
+
+  @override
+  String get loginSuccessful => '登录成功';
+
+  @override
+  String get registrationSuccessful => '注册成功';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).

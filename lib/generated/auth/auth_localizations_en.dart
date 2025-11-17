@@ -82,4 +82,10 @@ class AuthLocalizationsEn extends AuthLocalizations {
 
   @override
   String get restoreLoginFailed => 'Failed to restore login status';
+
+  @override
+  String get loginSuccessful => 'Login successful';
+
+  @override
+  String get registrationSuccessful => 'Registration successful';
 }

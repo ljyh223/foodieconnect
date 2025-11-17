@@ -100,5 +100,13 @@
   "restoreLoginFailed": "Failed to restore login status",
   "@restoreLoginFailed": {
     "description": "Error message shown to user"
+  },
+  "loginSuccessful": "Login successful",
+  "@loginSuccessful": {
+    "description": "Login success message"
+  },
+  "registrationSuccessful": "Registration successful",
+  "@registrationSuccessful": {
+    "description": "Registration success message"
   }
 }
