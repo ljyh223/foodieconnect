@@ -118,6 +118,9 @@ class ChatProvider with ChangeNotifier {
           return;
         }
         
+        // 额外等待一段时间，确保连接完全建立
+        await Future.delayed(const Duration(milliseconds: 500));
+        
         // 获取历史消息
         await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
         

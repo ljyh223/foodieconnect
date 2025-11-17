@@ -43,10 +43,22 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (auth.isAuthenticated) {
+      // 显示登录成功提示
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(LocalizationService.I.auth.loginSuccessful),
+          backgroundColor: Colors.green,
+        ),
+      );
       _navigateToShops();
     } else {
       final msg = auth.error ?? (LocalizationService.I.auth.loginFailed);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(msg),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

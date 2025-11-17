@@ -32,7 +32,7 @@ class LanguageSelectorWidget extends StatelessWidget {
                     _buildLanguageIcon(locale),
                     const SizedBox(width: 12),
                     // 语言名称
-                    Expanded(
+                    Flexible(
                       child: Text(
                         LanguageProvider.languageNames[languageCode] ?? 'Unknown',
                         style: TextStyle(

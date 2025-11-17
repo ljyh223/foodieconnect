@@ -19,14 +19,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _displayNameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _displayNameController.dispose();
-    _phoneController.dispose();
     super.dispose();
   }
 
@@ -57,8 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await auth.register(
       _emailController.text.trim(),
       _passwordController.text,
-      _displayNameController.text.trim(),
-      _phoneController.text.trim(),
+      _displayNameController.text.trim()
     );
 
     if (!mounted) return;
@@ -66,8 +63,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (auth.error != null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(auth.error!)));
+      ).showSnackBar(
+        SnackBar(
+          content: Text(auth.error!),
+          backgroundColor: Colors.red,
+        ),
+      );
     } else {
+      // 显示注册成功提示
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(LocalizationService.I.auth.registrationSuccessful),
+          backgroundColor: Colors.green,
+        ),
+      );
       // 注册成功，直接回到登录页或跳转到商店页
       Navigator.pop(context);
     }
@@ -159,13 +168,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      TextFieldWidget(
-                        controller: _phoneController,
-                        label: LocalizationService.I.auth.phoneNumber,
-                        keyboardType: TextInputType.phone,
-                        prefixIcon: Icons.phone_outlined,
-                      ),
-                      const SizedBox(height: 16),
 
                       TextFieldWidget(
                         controller: _passwordController,

@@ -65,6 +65,9 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         // 注意：现在initialize方法需要tempToken参数，这里先传空字符串
         // 实际使用时需要从认证服务获取token
         await chatProvider.initialize('', userId: userIdStr);
+        
+        // 等待WebSocket连接完全建立
+        await _waitForWebSocketConnection(chatProvider);
       }
       
       await chatProvider.verifyAndJoinChatRoom(
@@ -98,6 +101,20 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  // 等待WebSocket连接完全建立
+  Future<void> _waitForWebSocketConnection(ChatProvider chatProvider) async {
+    int retryCount = 0;
+    while (!chatProvider.isConnected && retryCount < 30) { // 增加等待时间到6秒
+      await Future.delayed(const Duration(milliseconds: 200));
+      retryCount++;
+      debugPrint('等待WebSocket连接... ($retryCount/30)');
+    }
+    
+    if (!chatProvider.isConnected) {
+      throw Exception('WebSocket连接超时，请检查网络连接');
     }
   }
 

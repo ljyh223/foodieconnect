@@ -11,8 +11,12 @@ class AuthProvider with ChangeNotifier {
   User? _user;
   bool _isLoading = false;
   String? _error;
+  bool _loginSuccess = false;
+  bool _registrationSuccess = false;
 
   User? get user => _user;
+  bool get loginSuccess => _loginSuccess;
+  bool get registrationSuccess => _registrationSuccess;
 
   late BuildContext context;
 
@@ -47,34 +51,40 @@ class AuthProvider with ChangeNotifier {
   Future<void> login(String email, String password) async {
     _setLoading(true);
     _error = null;
+    _loginSuccess = false;
 
     try {
       final user = await AuthService.login(email, password);
       _user = user;
       _error = null;
+      _loginSuccess = true;
     } catch (e) {
       logger.log('登录失败：${e.toString()}');
       // 直接使用LocalizationService，无需检查初始化状态
       _error = LocalizationService.I.auth.invalidEmailOrPassword;
+      _loginSuccess = false;
     } finally {
       _setLoading(false);
     }
   }
 
   // 使用真实 API 注册，失败时返回错误信息
-  Future<void> register(String email, String password, String displayName, String phone) async {
+  Future<void> register(String email, String password, String displayName) async {
     _setLoading(true);
     _error = null;
+    _registrationSuccess = false;
 
     try {
-      final user = await AuthService.register(email, password, displayName, phone);
+      final user = await AuthService.register(email, password, displayName);
       _user = user;
       // 注册成功后保存用户ID到本地存储
       await TokenStorage.saveUserId(user.id);
       _error = null;
+      _registrationSuccess = true;
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
       _error = '${LocalizationService.I.auth.registrationFailed}：${e.toString()}';
+      _registrationSuccess = false;
     } finally {
       _setLoading(false);
     }
@@ -146,6 +156,12 @@ class AuthProvider with ChangeNotifier {
 
   void clearError() {
     _error = null;
+    notifyListeners();
+  }
+
+  void clearSuccessStates() {
+    _loginSuccess = false;
+    _registrationSuccess = false;
     notifyListeners();
   }
 

@@ -48,13 +48,11 @@ class AuthService {
     String email,
     String password,
     String displayName,
-    String phone,
   ) async {
     final payload = {
       'email': email,
       'password': password,
       'displayName': displayName,
-      'phone': phone,
     };
     final res = await _apiService.post(
       AppConstants.registerEndpoint,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tabletalk/generated/app/app_localizations.dart';
 import 'package:tabletalk/generated/auth/auth_localizations.dart';
 import 'package:tabletalk/generated/chat/chat_localizations.dart';
@@ -124,7 +126,10 @@ class MyApp extends StatelessWidget {
               ReviewLocalizations.delegate,
               SettingLocalizations.delegate,
               StaffLocalizations.delegate,
-              ProfileLocalizations.delegate
+              ProfileLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             initialRoute: '/splash',
