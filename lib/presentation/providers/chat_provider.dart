@@ -119,7 +119,14 @@ class ChatProvider with ChangeNotifier {
         }
         
         // 额外等待一段时间，确保连接完全建立
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 300));
+        
+        // 再次检查连接状态
+        if (!_isConnected) {
+          _error = LocalizationService.I.chat.stompNotConnected;
+          notifyListeners();
+          return;
+        }
         
         // 获取历史消息
         await fetchMessages(_currentRoomId!, currentUserId: userIdStr);

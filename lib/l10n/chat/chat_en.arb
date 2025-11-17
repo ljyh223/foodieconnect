@@ -190,6 +190,10 @@
   "@stompNotConnected": {
     "description": "Thrown when send/join is called before connected"
   },
+  "websocketConnecting": "Connecting to WebSocket...",
+  "@websocketConnecting": {
+    "description": "WebSocket connection status"
+  },
   "stompConnectFailed": "WebSocket connection failed: {error}",
   "@stompConnectFailed": {
     "description": "Connection exception text pushed to connectionStateController",

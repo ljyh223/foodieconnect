@@ -66,9 +66,27 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         // 实际使用时需要从认证服务获取token
         await chatProvider.initialize('', userId: userIdStr);
         
+        // 显示连接中状态，等待WebSocket连接完全建立
+        if (mounted) {
+          setState(() {
+            _isLoading = true;
+            _error = LocalizationService.I.chat.websocketConnecting;
+          });
+        }
+        
         // 等待WebSocket连接完全建立
         await _waitForWebSocketConnection(chatProvider);
+        
+        // 连接成功后清除错误状态
+        if (mounted && chatProvider.isConnected) {
+          setState(() {
+            _error = null;
+          });
+        }
       }
+      
+      // 额外延迟一小段时间，确保UI状态完全更新
+      await Future.delayed(const Duration(milliseconds: 100));
       
       await chatProvider.verifyAndJoinChatRoom(
         _restaurantId!, // 使用从路由参数获取的餐厅ID
@@ -93,6 +111,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
       if (mounted) {
         setState(() {
           _error = '${LocalizationService.I.chat.verificationError}${e.toString()}';
+          _isLoading = false;
         });
       }
     } finally {
@@ -107,14 +126,14 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
   // 等待WebSocket连接完全建立
   Future<void> _waitForWebSocketConnection(ChatProvider chatProvider) async {
     int retryCount = 0;
-    while (!chatProvider.isConnected && retryCount < 30) { // 增加等待时间到6秒
+    while (!chatProvider.isConnected && retryCount < 50) { // 增加等待时间到10秒
       await Future.delayed(const Duration(milliseconds: 200));
       retryCount++;
-      debugPrint('等待WebSocket连接... ($retryCount/30)');
+      debugPrint('等待WebSocket连接... ($retryCount/50)');
     }
     
     if (!chatProvider.isConnected) {
-      throw Exception('WebSocket连接超时，请检查网络连接');
+      throw Exception(LocalizationService.I.chat.websocketTimeout);
     }
   }
 

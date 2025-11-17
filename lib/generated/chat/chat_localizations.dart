@@ -339,6 +339,12 @@ abstract class ChatLocalizations {
   /// **'Not connected, please wait for WebSocket to complete'**
   String get stompNotConnected;
 
+  /// WebSocket connection status
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to WebSocket...'**
+  String get websocketConnecting;
+
   /// Connection exception text pushed to connectionStateController
   ///
   /// In en, this message translates to:

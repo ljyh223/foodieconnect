@@ -155,6 +155,9 @@ class ChatLocalizationsZh extends ChatLocalizations {
   String get stompNotConnected => '未连接，请等待 WebSocket 完成连接';
 
   @override
+  String get websocketConnecting => '正在连接WebSocket...';
+
+  @override
   String stompConnectFailed(String error) {
     return 'WebSocket 连接失败：$error';
   }

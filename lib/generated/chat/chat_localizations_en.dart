@@ -163,6 +163,9 @@ class ChatLocalizationsEn extends ChatLocalizations {
       'Not connected, please wait for WebSocket to complete';
 
   @override
+  String get websocketConnecting => 'Connecting to WebSocket...';
+
+  @override
   String stompConnectFailed(String error) {
     return 'WebSocket connection failed: $error';
   }
