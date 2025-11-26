@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/services/api_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../../data/models/user_model.dart';
 
 /// 用户个人主页头部组件
@@ -54,7 +55,7 @@ class UserProfileHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              user.displayName ?? '未知用户',
+              user.displayName ?? t.profile.unknownUser,
               style: AppTextStyles.headlineSmall.copyWith(
                 fontWeight: FontWeight.w600,
               ),

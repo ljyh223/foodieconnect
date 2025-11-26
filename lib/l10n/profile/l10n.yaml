@@ -1,6 +1,0 @@
-arb-dir: lib/l10n/profile
-template-arb-file: profile_en.arb
-output-localization-file: profile_localizations.dart
-output-class: ProfileLocalizations
-output-dir: lib/generated/profile
-nullable-getter: false

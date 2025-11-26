@@ -14,8 +14,12 @@ import '../screens/restaurant_info_screen.dart';
 import '../screens/create_review_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/user_profile_screen.dart';
+import '../screens/profile_view_screen.dart';
+import '../screens/edit_profile_screen.dart';
 import '../screens/other_user_profile_screen.dart';
 import '../screens/following_list_screen.dart';
+import '../screens/recommendations_screen.dart';
+import '../screens/main_tab_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -81,6 +85,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SettingsScreen());
       case '/user_profile':
         return MaterialPageRoute(builder: (_) => const UserProfileScreen());
+      case '/profile_view':
+        return MaterialPageRoute(builder: (_) => const ProfileViewScreen());
+      case '/edit_profile':
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen());
       case '/other_user_profile':
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
@@ -95,6 +103,10 @@ class AppRouter {
             userId: args?['userId'],
           ),
         );
+      case '/recommendations':
+        return MaterialPageRoute(builder: (_) => const RecommendationsScreen());
+      case '/main':
+        return MaterialPageRoute(builder: (_) => const MainTabScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

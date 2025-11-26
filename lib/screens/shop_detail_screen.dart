@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../data/models/restaurant_model.dart';
 import '../data/models/review_model.dart';
 import '../data/models/staff_model.dart';
@@ -53,7 +53,7 @@ class ShopDetailScreen extends StatelessWidget {
 
         if (snapshot.hasError) {
           debugPrint('获取店铺信息失败：${snapshot.error}');
-          return Scaffold(body: Center(child: Text('${LocalizationService.I.restaurant.getShopInfoFailed}${snapshot.error}')));
+          return Scaffold(body: Center(child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}')));
         }
 
         final restaurant = snapshot.data!;
@@ -163,7 +163,7 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                LocalizationService.I.restaurant.basicInfo,
+                                t.restaurant.basicInfo,
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -181,25 +181,25 @@ class ShopDetailScreen extends StatelessWidget {
                         const SizedBox(height: 12),
                         // _buildInfoRow(
                         //   icon: Icons.location_on,
-                        //   label: LocalizationService.I.app.address,
+                        //   label: t.app.address,
                         //   value: restaurant.address,
-                        //   subtitle: LocalizationService.I.app.distanceFromYou(restaurant.distance),
+                        //   subtitle: t.app.distanceFromYou(restaurant.distance),
                         // ),
                         _buildInfoRow(
                           icon: Icons.schedule,
-                          label: LocalizationService.I.restaurant.businessHours,
+                          label: t.restaurant.businessHours,
                           value: restaurant.hours,
                         ),
                         _buildInfoRow(
                           icon: Icons.phone,
-                          label: LocalizationService.I.restaurant.phone,
+                          label: t.restaurant.phone,
                           value: restaurant.phone,
                         ),
                         _buildInfoRow(
                           icon: Icons.star,
-                          label: LocalizationService.I.restaurant.rating,
+                          label: t.restaurant.rating,
                           value: '${restaurant.rating}/5.0',
-                          subtitle: LocalizationService.I.restaurant.totalReviews(restaurant.reviewCount),
+                          subtitle: t.restaurant.totalReviews(count: restaurant.reviewCount),
                         ),
                         ],
                       ),
@@ -225,7 +225,7 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                LocalizationService.I.review.dishReviews,
+                                t.review.dishReviews,
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -250,7 +250,7 @@ class ShopDetailScreen extends StatelessWidget {
                             
                             if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
                               return Text(
-                                LocalizationService.I.review.noReviews,
+                                t.review.noReviews,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
@@ -380,7 +380,7 @@ class ShopDetailScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              LocalizationService.I.chat.chatRoom,
+                              t.chat.chatRoom,
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -391,7 +391,7 @@ class ShopDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          LocalizationService.I.chat.chatWithStaff,
+                          t.chat.chatWithStaff,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black87,
@@ -411,7 +411,7 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              LocalizationService.I.chat.enterChatRoom,
+                              t.chat.enterChatRoom,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -440,7 +440,7 @@ class ShopDetailScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              LocalizationService.I.staff.staffReviews,
+                              t.staff.staffReviews,
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -461,7 +461,7 @@ class ShopDetailScreen extends StatelessWidget {
                               return Column(
                                 children: [
                                   Text(
-                                    LocalizationService.I.staff.noStaffInfo,
+                                    t.staff.noStaffInfo,
                                     style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
@@ -481,7 +481,7 @@ class ShopDetailScreen extends StatelessWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        LocalizationService.I.staff.viewAllStaff,
+                                        t.staff.viewAllStaff,
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -597,7 +597,7 @@ class ShopDetailScreen extends StatelessWidget {
                                               if (staff.experience.isNotEmpty) ...[
                                                 const SizedBox(height: 2),
                                                 Text(
-                                                  '${LocalizationService.I.staff.experience}：${staff.experience}',
+                                                  '${t.staff.experience}：${staff.experience}',
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.grey[600],
@@ -628,7 +628,7 @@ class ShopDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: Text(
-                                      LocalizationService.I.staff.viewAllStaff,
+                                      t.staff.viewAllStaff,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,

@@ -5,7 +5,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
-import '../core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -30,21 +30,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.auth.pleaseEnterEmail;
+      return t.auth.pleaseEnterEmail;
     }
     // 修复：原来的正则在结尾处多了一个转义符号，导致校验异常
     final emailRegex = RegExp(r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return LocalizationService.I.auth.pleaseEnterValidEmail;
+      return t.auth.pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.auth.pleaseEnterPassword;
+      return t.auth.pleaseEnterPassword;
     }
-    if (value.length < 6) return LocalizationService.I.auth.passwordMinLength;
+    if (value.length < 6) return t.auth.passwordMinLength;
     return null;
   }
 
@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // 显示注册成功提示
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocalizationService.I.auth.registrationSuccessful),
+          content: Text(t.auth.registrationSuccessful),
           backgroundColor: Colors.green,
         ),
       );
@@ -117,14 +117,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    LocalizationService.I.auth.createAccount,
+                    t.auth.createAccount,
                     style: AppTextStyles.headlineSmall.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    LocalizationService.I.auth.joinTableTalk,
+                    t.auth.joinTableTalk,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -154,14 +154,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       TextFieldWidget(
                         controller: _displayNameController,
-                        label: LocalizationService.I.auth.displayName,
+                        label: t.auth.displayName,
                         prefixIcon: Icons.person_outline,
                       ),
                       const SizedBox(height: 16),
 
                       TextFieldWidget(
                         controller: _emailController,
-                        label: LocalizationService.I.auth.email,
+                        label: t.auth.email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -171,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: LocalizationService.I.auth.password,
+                        label: t.auth.password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -203,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   )
                                 : Text(
-                                    LocalizationService.I.auth.register,
+                                    t.auth.register,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -224,7 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    LocalizationService.I.auth.alreadyHaveAccount,
+                    t.auth.alreadyHaveAccount,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -238,7 +238,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      LocalizationService.I.auth.loginNow,
+                      t.auth.loginNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
@@ -40,7 +40,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     if ( _verificationController.text.isEmpty) {
       if (mounted) {
         setState(() {
-          _error = LocalizationService.I.chat.pleaseEnterVerificationCode;
+          _error = t.chat.pleaseEnterVerificationCode;
         });
       }
       return;
@@ -70,7 +70,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         if (mounted) {
           setState(() {
             _isLoading = true;
-            _error = LocalizationService.I.chat.websocketConnecting;
+            _error = t.chat.websocketConnecting;
           });
         }
         
@@ -104,13 +104,13 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
         );
       } else if (mounted) {
         setState(() {
-          _error = LocalizationService.I.chat.verificationFailed;
+          _error = t.chat.verificationFailed;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = '${LocalizationService.I.chat.verificationError}${e.toString()}';
+          _error = '${t.chat.verificationError}${e.toString()}';
           _isLoading = false;
         });
       }
@@ -133,7 +133,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     }
     
     if (!chatProvider.isConnected) {
-      throw Exception(LocalizationService.I.chat.websocketTimeout);
+      throw Exception(t.chat.websocketTimeout);
     }
   }
 
@@ -142,7 +142,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.chat.restaurantChatVerification,
+        title: t.chat.restaurantChatVerification,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -163,7 +163,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      LocalizationService.I.chat.enterRestaurantIdAndCode,
+                      t.chat.enterRestaurantIdAndCode,
                       style: AppTextStyles.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -171,7 +171,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                     const SizedBox(height: 16),
                     TextFieldWidget(
                       controller: _verificationController,
-                      label: LocalizationService.I.chat.verificationCode,
+                      label: t.chat.verificationCode,
                       keyboardType: TextInputType.number,
                       maxLength: 6,
                       textAlign: TextAlign.center,
@@ -211,7 +211,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                               ),
                             )
                           : Text(
-                              LocalizationService.I.chat.verifyAndStartChat,
+                              t.chat.verifyAndStartChat,
                             ),
                     ),
                   ],

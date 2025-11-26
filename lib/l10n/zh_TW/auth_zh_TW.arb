@@ -1,0 +1,112 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk 認證模組繁體中文本地化",
+  "login": "登入",
+  "@login": {
+    "description": "登入按鈕文本"
+  },
+  "register": "註冊",
+  "@register": {
+    "description": "註冊按鈕文本"
+  },
+  "email": "郵箱地址",
+  "@email": {
+    "description": "郵箱輸入框標籤"
+  },
+  "password": "密碼",
+  "@password": {
+    "description": "密碼輸入框標籤"
+  },
+  "displayName": "顯示名稱",
+  "@displayName": {
+    "description": "顯示名稱輸入框標籤"
+  },
+  "phoneNumber": "手機號碼",
+  "@phoneNumber": {
+    "description": "手機號碼輸入框標籤"
+  },
+  "pleaseEnterEmail": "請輸入郵箱地址",
+  "@pleaseEnterEmail": {
+    "description": "郵箱驗證錯誤信息"
+  },
+  "pleaseEnterValidEmail": "請輸入有效的郵箱地址",
+  "@pleaseEnterValidEmail": {
+    "description": "郵箱格式驗證錯誤信息"
+  },
+  "pleaseEnterPassword": "請輸入密碼",
+  "@pleaseEnterPassword": {
+    "description": "密碼驗證錯誤信息"
+  },
+  "passwordMinLength": "密碼至少需要6位字符",
+  "@passwordMinLength": {
+    "description": "密碼長度驗證錯誤信息"
+  },
+  "forgotPassword": "忘記密碼？",
+  "@forgotPassword": {
+    "description": "忘記密碼鏈接文本"
+  },
+  "noAccountYet": "還沒有帳號？",
+  "@noAccountYet": {
+    "description": "沒有帳號提示文本"
+  },
+  "registerNow": "立即註冊",
+  "@registerNow": {
+    "description": "立即註冊鏈接文本"
+  },
+  "alreadyHaveAccount": "已有帳號？",
+  "@alreadyHaveAccount": {
+    "description": "已有帳號提示文本"
+  },
+  "loginNow": "立即登入",
+  "@loginNow": {
+    "description": "立即登入鏈接文本"
+  },
+  "createAccount": "創建帳號",
+  "@createAccount": {
+    "description": "創建帳號標題"
+  },
+  "joinTableTalk": "加入TableTalk，發現更多美食",
+  "@joinTableTalk": {
+    "description": "註冊頁面副標題"
+  },
+  "loginFailed": "登入失敗，請稍後重試",
+  "@loginFailed": {
+    "description": "登入失敗提示"
+  },
+  "checkingLoginStatus": "正在檢查登入狀態...",
+  "@checkingLoginStatus": {
+    "description": "檢查登入狀態提示"
+  },
+  "authCheckFailed": "認證檢查失敗",
+  "@authCheckFailed": {
+    "description": "認證檢查失敗提示"
+  },
+  "authCheckTimeout": "認證檢查超時",
+  "@authCheckTimeout": {
+    "description": "認證檢查超時提示"
+  },
+  "invalidEmailOrPassword": "信箱或密碼錯誤",
+  "@invalidEmailOrPassword": {
+    "description": "Error message shown to user"
+  },
+  "registrationFailed": "註冊失敗",
+  "@registrationFailed": {
+    "description": "Prefix when registration throws"
+  },
+  "logoutFailed": "登出失敗",
+  "@logoutFailed": {
+    "description": "Error message shown to user"
+  },
+  "restoreLoginFailed": "恢復登入狀態失敗",
+  "@restoreLoginFailed": {
+    "description": "Error message shown to user"
+  },
+  "loginSuccessful": "登入成功",
+  "@loginSuccessful": {
+    "description": "Login success message"
+  },
+  "registrationSuccessful": "註冊成功",
+  "@registrationSuccessful": {
+    "description": "Registration success message"
+  }
+}

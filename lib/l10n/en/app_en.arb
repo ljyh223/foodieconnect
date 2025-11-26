@@ -1,0 +1,356 @@
+{
+  "@@locale": "en",
+  "@@context": "TableTalk application English localization - Global",
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "Application English name"
+  },
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "Application Chinese name"
+  },
+  "discoverFoodShareExperience": "Discover food, share experiences",
+  "@discoverFoodShareExperience": {
+    "description": "Application subtitle"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search box prompt text"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home tab text"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading prompt"
+  },
+  "loadingFailed": "Loading failed",
+  "@loadingFailed": {
+    "description": "Loading failed prompt"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "open": "Open",
+  "@open": {
+    "description": "Business status"
+  },
+  "closed": "Closed",
+  "@closed": {
+    "description": "Closed status"
+  },
+  "userProfile": "Profile",
+  "@userProfile": {
+    "description": "User profile title"
+  },
+  "otherUserProfile": "User Profile",
+  "@otherUserProfile": {
+    "description": "Other user profile title"
+  },
+  "followingList": "Following List",
+  "@followingList": {
+    "description": "Following list title"
+  },
+  "myFollowing": "My Following",
+  "@myFollowing": {
+    "description": "My following title"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "Connect button text"
+  },
+  "follow": "Follow",
+  "@follow": {
+    "description": "Follow button text"
+  },
+  "following": "Following",
+  "@following": {
+    "description": "Following status text"
+  },
+  "unfollow": "Unfollow",
+  "@unfollow": {
+    "description": "Unfollow button text"
+  },
+  "unfollowConfirm": "Are you sure you want to unfollow {username}?",
+  "@unfollowConfirm": {
+    "description": "Unfollow confirmation dialog"
+  },
+  "foodPreferences": "Food Preferences",
+  "@foodPreferences": {
+    "description": "Food preferences title"
+  },
+  "noFoodPreferences": "No food preferences",
+  "@noFoodPreferences": {
+    "description": "No food preferences message"
+  },
+  "personalBio": "Personal Bio",
+  "@personalBio": {
+    "description": "Personal bio title"
+  },
+  "noBio": "This person is lazy and left nothing...",
+  "@noBio": {
+    "description": "No bio message"
+  },
+  "recommendedRestaurants": "Recommended Restaurants",
+  "@recommendedRestaurants": {
+    "description": "Recommended restaurants title"
+  },
+  "noRecommendedRestaurants": "No recommended restaurants",
+  "@noRecommendedRestaurants": {
+    "description": "No recommended restaurants message"
+  },
+  "noFollowing": "No following",
+  "@noFollowing": {
+    "description": "No following message"
+  },
+  "discoverUsers": "Go discover interesting users",
+  "@discoverUsers": {
+    "description": "Discover users message"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "saveSuccess": "Saved successfully",
+  "@saveSuccess": {
+    "description": "Save success message"
+  },
+  "saveFailed": "Save failed",
+  "@saveFailed": {
+    "description": "Save failed message"
+  },
+  "followSuccess": "Followed successfully",
+  "@followSuccess": {
+    "description": "Follow success message"
+  },
+  "followFailed": "Follow failed",
+  "@followFailed": {
+    "description": "Follow failed message"
+  },
+  "unfollowSuccess": "Unfollowed",
+  "@unfollowSuccess": {
+    "description": "Unfollow success message"
+  },
+  "unfollowFailed": "Unfollow failed",
+  "@unfollowFailed": {
+    "description": "Unfollow failed message"
+  },
+  "userNotFound": "User not found",
+  "@userNotFound": {
+    "description": "User not found message"
+  },
+  "unknownUser": "Unknown User",
+  "@unknownUser": {
+    "description": "Unknown user text"
+  },
+  "introduceYourself": "Tell us about yourself...",
+  "@introduceYourself": {
+    "description": "Bio input placeholder"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "recommendations": "Recommendations",
+  "@recommendations": {
+    "description": "Recommendations feature title"
+  },
+  "recommendedUsers": "Recommended Users",
+  "@recommendedUsers": {
+    "description": "Recommended users title"
+  },
+  "viewMore": "View More",
+  "@viewMore": {
+    "description": "View more button"
+  },
+  "noRecommendations": "No recommended users",
+  "@noRecommendations": {
+    "description": "No recommended users message"
+  },
+  "searchingRecommendations": "The system is finding users you might be interested in",
+  "@searchingRecommendations": {
+    "description": "Searching recommendations message"
+  },
+  "interested": "Interested",
+  "@interested": {
+    "description": "Interested status"
+  },
+  "notInterested": "Not Interested",
+  "@notInterested": {
+    "description": "Not interested status"
+  },
+  "markAsInterested": "Marked as interested",
+  "@markAsInterested": {
+    "description": "Mark interested success message"
+  },
+  "markAsNotInterested": "Marked as not interested",
+  "@markAsNotInterested": {
+    "description": "Mark not interested success message"
+  },
+  "recommendationScore": "Recommendation Score",
+  "@recommendationScore": {
+    "description": "Recommendation score label"
+  },
+  "recommendationReason": "Recommendation Reason",
+  "@recommendationReason": {
+    "description": "Recommendation reason label"
+  },
+  "collaborativeRecommendation": "Recommended based on common preferences",
+  "@collaborativeRecommendation": {
+    "description": "Collaborative filtering recommendation reason"
+  },
+  "socialRecommendation": "People you follow also follow them",
+  "@socialRecommendation": {
+    "description": "Social recommendation reason"
+  },
+  "hybridRecommendation": "Comprehensive recommendation",
+  "@hybridRecommendation": {
+    "description": "Hybrid recommendation reason"
+  },
+  "commonInterests": "Common interests: {interests}",
+  "@commonInterests": {
+    "description": "Common interests description",
+    "placeholders": {
+      "interests": {
+        "type": "String",
+        "example": "Sichuan cuisine, Cantonese cuisine"
+      }
+    }
+  },
+  "commonVisits": "Visited {count} restaurants together",
+  "@commonVisits": {
+    "description": "Common restaurant visits description",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "filter": "Filter",
+  "@filter": {
+    "description": "Filter button"
+  },
+  "sort": "Sort",
+  "@sort": {
+    "description": "Sort button"
+  },
+  "filterByStatus": "Filter Recommendations",
+  "@filterByStatus": {
+    "description": "Filter dialog title"
+  },
+  "sortBy": "Sort By",
+  "@sortBy": {
+    "description": "Sort dialog title"
+  },
+  "all": "All",
+  "@all": {
+    "description": "All option"
+  },
+  "unviewed": "Unviewed",
+  "@unviewed": {
+    "description": "Unviewed status"
+  },
+  "viewed": "Viewed",
+  "@viewed": {
+    "description": "Viewed status"
+  },
+  "sortByScore": "Recommendation Score",
+  "@sortByScore": {
+    "description": "Sort by score"
+  },
+  "sortByTime": "Creation Time",
+  "@sortByTime": {
+    "description": "Sort by time"
+  },
+  "sortByViewTime": "View Time",
+  "@sortByViewTime": {
+    "description": "Sort by view time"
+  },
+  "clearAllRecommendations": "Clear All Recommendations",
+  "@clearAllRecommendations": {
+    "description": "Clear recommendations button"
+  },
+  "clearAllConfirm": "Are you sure you want to clear all recommendations? This action cannot be undone.",
+  "@clearAllConfirm": {
+    "description": "Clear recommendations confirmation dialog"
+  },
+  "totalRecommendations": "{count} recommendations total",
+  "@totalRecommendations": {
+    "description": "Total recommendations count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "noMoreRecommendations": "No more recommendations",
+  "@noMoreRecommendations": {
+    "description": "No more recommendations message"
+  },
+  "recommendationDetail": "View recommendation details",
+  "@recommendationDetail": {
+    "description": "View recommendation details message"
+  },
+  "operationFailed": "Operation failed: {error}",
+  "@operationFailed": {
+    "description": "Operation failed message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "discover": "Discover",
+  "@discover": {
+    "description": "Discover page title"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button text"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings button text"
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Edit profile button text"
+  },
+  "clearAll": "Clear All Recommendations",
+  "@clearAll": {
+    "description": "Clear all recommendations button text"
+  },
+  "clearAllConfirm": "Are you sure you want to clear all recommendations? This action cannot be undone.",
+  "@clearAllConfirm": {
+    "description": "Clear recommendations confirmation dialog content"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+  "commonRestaurants": "Common Restaurants",
+  "@commonRestaurants": {
+    "description": "Common restaurants label"
+  },
+  "similarity": "Similarity",
+  "@similarity": {
+    "description": "Similarity label"
+  },
+  "follow": "Follow",
+  "@follow": {
+    "description": "Follow button text"
+  }
+}

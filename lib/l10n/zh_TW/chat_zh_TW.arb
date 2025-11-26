@@ -1,0 +1,214 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk 聊天功能繁體中文本地化",
+  "chatRoom": "聊天室",
+  "@chatRoom": {
+    "description": "聊天室標題"
+  },
+  "chatWithStaff": "與店員即時溝通，了解更多詳情",
+  "@chatWithStaff": {
+    "description": "聊天室描述"
+  },
+  "enterChatRoom": "進入聊天室",
+  "@enterChatRoom": {
+    "description": "進入聊天室按鈕"
+  },
+  "restaurantChatVerification": "餐廳聊天驗證",
+  "@restaurantChatVerification": {
+    "description": "餐廳聊天驗證標題"
+  },
+  "enterRestaurantIdAndCode": "請輸入餐廳ID和驗證碼以加入聊天室",
+  "@enterRestaurantIdAndCode": {
+    "description": "輸入餐廳ID和驗證碼提示"
+  },
+  "verificationCode": "驗證碼",
+  "@verificationCode": {
+    "description": "驗證碼標籤"
+  },
+  "pleaseEnterVerificationCode": "請填寫驗證碼",
+  "@pleaseEnterVerificationCode": {
+    "description": "請填寫驗證碼提示"
+  },
+  "verificationFailed": "驗證失敗，請檢查餐廳ID和驗證碼",
+  "@verificationFailed": {
+    "description": "驗證失敗提示"
+  },
+  "verificationError": "驗證失敗：{error}",
+  "@verificationError": {
+    "description": "驗證錯誤提示",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "verifyAndStartChat": "驗證並開始聊天",
+  "@verifyAndStartChat": {
+    "description": "驗證並開始聊天按鈕"
+  },
+  "pleaseVerifyFirst": "請先通過驗證界面加入聊天室",
+  "@pleaseVerifyFirst": {
+    "description": "請先驗證提示"
+  },
+  "staffChatFeatureMoved": "店員聊天功能已遷移至餐廳聊天室",
+  "@staffChatFeatureMoved": {
+    "description": "店員聊天功能遷移提示"
+  },
+  "restaurantChatRoom": "餐廳聊天室",
+  "@restaurantChatRoom": {
+    "description": "餐廳聊天室名稱"
+  },
+  "initializeChatRoomFailed": "初始化聊天室失敗",
+  "@initializeChatRoomFailed": {
+    "description": "初始化聊天室失敗提示"
+  },
+  "initializeChatRoomError": "初始化聊天室失敗: {error}",
+  "@initializeChatRoomError": {
+    "description": "初始化聊天室錯誤提示",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "noAvailableChatRoom": "當前無可用聊天室",
+  "@noAvailableChatRoom": {
+    "description": "無可用聊天室提示"
+  },
+  "noMessagesStartChat": "暫無消息，開始聊天吧！",
+  "@noMessagesStartChat": {
+    "description": "無消息提示"
+  },
+  "websocketNotConnected": "WebSocket未連接",
+  "@websocketNotConnected": {
+    "description": "WebSocket未連接提示"
+  },
+  "connected": "已連接",
+  "@connected": {
+    "description": "已連接狀態"
+  },
+  "disconnected": "未連接",
+  "@disconnected": {
+    "description": "未連接狀態"
+  },
+  "enterMessage": "輸入消息...",
+  "@enterMessage": {
+    "description": "輸入消息提示"
+  },
+  "newMessages": "新消息",
+  "@newMessages": {
+    "description": "新消息提示"
+  },
+  "chat": "聊天",
+  "@chat": {
+    "description": "聊天標題"
+  },
+
+  "today": "今天",
+  "@today": {
+    "description": "Label for today in chat time separator"
+  },
+  "yesterday": "昨天",
+  "@yesterday": {
+    "description": "Label for yesterday in chat time separator"
+  },
+  "dateFormatThisYear": "{month}月{day}日",
+  "@dateFormatThisYear": {
+    "description": "Date format when message is from this year",
+    "placeholders": {
+      "month": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "dateFormatOtherYear": "{year}年{month}月{day}日",
+  "@dateFormatOtherYear": {
+    "description": "Date format when message is from another year",
+    "placeholders": {
+      "year": { "type": "int" },
+      "month": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "timeFormat": "{hour}:{minute}",
+  "@timeFormat": {
+    "description": "Time format used after today/yesterday labels",
+    "placeholders": {
+      "hour": { "type": "String" },
+      "minute": { "type": "String" }
+    }
+  },
+
+  "stompConnectionError": "STOMP連線錯誤：{error}",
+  "@stompConnectionError": {
+    "description": "Error hint when STOMP connection fails",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompConnectFail": "STOMP WebSocket連線失敗：{error}",
+  "@stompConnectFail": {
+    "description": "Toast when initial connect throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "websocketTimeout": "WebSocket連線逾時，請檢查網路連線",
+  "@websocketTimeout": {
+    "description": "Hint when waiting for connection timeout"
+  },
+  "verifyFailNoRoomOrToken": "驗證失敗：未取得聊天室ID或臨時令牌",
+  "@verifyFailNoRoomOrToken": {
+    "description": "Hint when back-end does not return roomId/tempToken"
+  },
+  "verifyRoomFail": "驗證聊天室失敗：{error}",
+  "@verifyRoomFail": {
+    "description": "Toast when verifyChatRoom API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "joinRoomFail": "加入聊天室失敗：{error}",
+  "@joinRoomFail": {
+    "description": "Toast when STOMP joinRoom throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "loadMessageFail": "取得訊息失敗：{error}",
+  "@loadMessageFail": {
+    "description": "Toast when fetchMessages API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "notConnectedCantSend": "STOMP WebSocket未連線，無法發送訊息",
+  "@notConnectedCantSend": {
+    "description": "Toast when sendMessage but socket disconnected"
+  },
+  "sendMessageFail": "發送訊息失敗：{error}",
+  "@sendMessageFail": {
+    "description": "Toast when sendMessage API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "leaveRoomFail": "離開聊天室失敗：{error}",
+  "@leaveRoomFail": {
+    "description": "Toast when leaveRoom API throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "subscribeNotificationFail": "訂閱通知失敗：{error}",
+  "@subscribeNotificationFail": {
+    "description": "Toast when subscribeToNotifications throws",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompNotConnected": "未連線，請等待 WebSocket 完成連線",
+  "@stompNotConnected": {
+    "description": "Thrown when send/join is called before connected"
+  },
+  "websocketConnecting": "正在連接 WebSocket...",
+  "@websocketConnecting": {
+    "description": "WebSocket connection status"
+  },
+  "stompConnectFailed": "WebSocket 連線失敗：{error}",
+  "@stompConnectFailed": {
+    "description": "Connection exception text pushed to connectionStateController",
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "stompConnected": "已連線",
+  "@stompConnected": {},
+  "stompDisconnected": "連線已斷開",
+  "@stompDisconnected": {},
+  "msgParseFailed": "解析訊息失敗",
+  "@msgParseFailed": {},
+  "notificationParseFailed": "解析通知失敗",
+  "@notificationParseFailed": {},
+  "me":"我",
+  "@me": {
+    "description": "Label for current user"
+   }
+}

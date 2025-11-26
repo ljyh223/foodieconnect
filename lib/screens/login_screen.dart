@@ -4,7 +4,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
-import '../core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,13 +46,13 @@ class _LoginScreenState extends State<LoginScreen> {
       // 显示登录成功提示
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocalizationService.I.auth.loginSuccessful),
+          content: Text(t.auth.loginSuccessful),
           backgroundColor: Colors.green,
         ),
       );
       _navigateToShops();
     } else {
-      final msg = auth.error ?? (LocalizationService.I.auth.loginFailed);
+      final msg = auth.error ?? (t.auth.loginFailed);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(msg),
@@ -64,21 +64,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.auth.pleaseEnterEmail;
+      return t.auth.pleaseEnterEmail;
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return LocalizationService.I.auth.pleaseEnterValidEmail;
+      return t.auth.pleaseEnterValidEmail;
     }
     return null;
   }
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return LocalizationService.I.auth.pleaseEnterPassword;
+      return t.auth.pleaseEnterPassword;
     }
     if (value.length < 6) {
-      return LocalizationService.I.auth.passwordMinLength;
+      return t.auth.passwordMinLength;
     }
     return null;
   }
@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    LocalizationService.I.app.tableTalk,
+                    t.app.tableTalk,
                     style: AppTextStyles.headlineMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,
@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    LocalizationService.I.app.discoverFoodShareExperience,
+                    t.app.discoverFoodShareExperience,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        LocalizationService.I.auth.login,
+                        t.auth.login,
                         style: AppTextStyles.headlineSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       TextFieldWidget(
                         controller: _emailController,
-                        label: LocalizationService.I.auth.email,
+                        label: t.auth.email,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
                         prefixIcon: Icons.email_outlined,
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       TextFieldWidget(
                         controller: _passwordController,
-                        label: LocalizationService.I.auth.password,
+                        label: t.auth.password,
                         obscureText: true,
                         validator: _validatePassword,
                         prefixIcon: Icons.lock_outline,
@@ -194,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           child: Text(
-                            LocalizationService.I.auth.forgotPassword,
+                            t.auth.forgotPassword,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                             ),
@@ -228,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   )
                                 : Text(
-                                    LocalizationService.I.auth.login,
+                                    t.auth.login,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -249,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    LocalizationService.I.auth.noAccountYet,
+                    t.auth.noAccountYet,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -263,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(
-                      LocalizationService.I.auth.registerNow,
+                      t.auth.registerNow,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

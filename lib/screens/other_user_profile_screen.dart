@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/api_service.dart';
@@ -99,8 +99,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text((_user!.isFollowing ?? false)
-                ? LocalizationService.I.profile.unfollowFailed
-                : LocalizationService.I.profile.followFailed),
+                ? t.profile.unfollowFailed
+                : t.profile.followFailed),
             backgroundColor: AppColors.error,
           ),
         );
@@ -113,7 +113,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.profile.otherProfileTitle,
+        title: t.profile.otherProfileTitle,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -135,7 +135,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              LocalizationService.I.profile.loadingFailed,
+              t.profile.loadingFailed,
               style: AppTextStyles.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -148,7 +148,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadUserData,
-              child: Text(LocalizationService.I.profile.retry),
+              child: Text(t.profile.retry),
             ),
           ],
         ),
@@ -158,7 +158,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     if (_user == null) {
       return Center(
         child: Text(
-          LocalizationService.I.profile.userNotFound,
+          t.profile.userNotFound,
           style: AppTextStyles.titleMedium,
         ),
       );
@@ -223,7 +223,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center, // 垂直居中对齐（与头像中部对齐）
           children: [
             Text(
-              _user!.displayName ?? LocalizationService.I.profile.unknownUser,
+              _user!.displayName ?? t.profile.unknownUser,
               style: AppTextStyles.headlineSmall.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -267,7 +267,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           border: Border.all(color: AppColors.outline),
         ),
         child: Text(
-          LocalizationService.I.profile.noFoodPreferences,
+          t.profile.noFoodPreferences,
           style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.onSurfaceVariant,
           ),
@@ -279,7 +279,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          LocalizationService.I.profile.foodPreferences,
+          t.profile.foodPreferences,
           style: AppTextStyles.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -332,7 +332,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           ),
         ),
         child: Text(
-          isFollowing ? LocalizationService.I.profile.following : LocalizationService.I.profile.connect,
+          isFollowing ? t.profile.following : t.profile.connect,
           style: AppTextStyles.button.copyWith(
             color: isFollowing ? AppColors.primary : AppColors.onPrimary,
           ),

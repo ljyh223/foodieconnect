@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-import '../core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(LocalizationService.I.auth.authCheckFailed),
+          content: Text(t.auth.authCheckFailed),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final completer = Completer<void>();
       final timer = Timer(timeoutDuration, () {
         if (!completer.isCompleted) {
-          completer.completeError(TimeoutException(LocalizationService.I.auth.authCheckTimeout));
+          completer.completeError(TimeoutException(t.auth.authCheckTimeout));
         }
       });
       
@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             // 应用名称
             Text(
-              LocalizationService.I.app.tableTalk,
+              t.app.tableTalk,
               style: AppTextStyles.headlineMedium.copyWith(
                 color: AppColors.onPrimary,
               ),
@@ -158,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 16),
             // 加载文本
             Text(
-              LocalizationService.I.auth.checkingLoginStatus,
+              t.auth.checkingLoginStatus,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onPrimary.withAlpha(204), // 80% opacity
               ),

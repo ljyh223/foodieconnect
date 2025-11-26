@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../data/models/staff_model.dart';
@@ -110,7 +110,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBarWidget(title: LocalizationService.I.staff.staffDetails, showBackButton: true),
+      appBar: AppBarWidget(title: t.staff.staffDetails, showBackButton: true),
       body: SafeArea(child: _buildContent()),
     );
   }
@@ -125,9 +125,9 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${LocalizationService.I.app.loadingFailed}：$_error'),
+            Text('${t.app.loadingFailed}：$_error'),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: _loadStaff, child: Text(LocalizationService.I.app.retry)),
+            ElevatedButton(onPressed: _loadStaff, child: Text(t.app.retry)),
           ],
         ),
       );
@@ -145,9 +145,9 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${LocalizationService.I.staff.getStaffDetailsFailed}${snapshot.error}'),
+                Text('${t.staff.getStaffDetailsFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
-                ElevatedButton(onPressed: _loadStaff, child: Text(LocalizationService.I.app.retry)),
+                ElevatedButton(onPressed: _loadStaff, child: Text(t.app.retry)),
               ],
             ),
           );
@@ -155,7 +155,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
 
         final staff = snapshot.data;
         if (staff == null) {
-          return Center(child: Text(LocalizationService.I.staff.staffInfoNotExists));
+          return Center(child: Text(t.staff.staffInfoNotExists));
         }
 
         // 加载店员评价
@@ -251,7 +251,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${LocalizationService.I.restaurant.rating} ${staff.rating}/5.0 · ${staff.experience}${LocalizationService.I.staff.experience}',
+                      '${t.restaurant.rating} ${staff.rating}/5.0 · ${staff.experience}${t.staff.experience}',
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.onSurfaceVariant,
                       ),
@@ -267,14 +267,14 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                   Row(
                     children: [
                       Text(
-                        LocalizationService.I.review.userReviews,
+                        t.review.userReviews,
                         style: AppTextStyles.titleMedium.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       const Spacer(),
                       Text(
-                        LocalizationService.I.review.reviewCount(_reviews.length),
+                        t.review.reviewCount(count: _reviews.length),
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.onSurfaceVariant,
                         ),

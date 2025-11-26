@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 
 /// 用户个人简介组件
 class UserBioSection extends StatelessWidget {
@@ -21,7 +22,7 @@ class UserBioSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '个人简介',
+          t.profile.personalBio,
           style: AppTextStyles.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -44,7 +45,7 @@ class UserBioSection extends StatelessWidget {
                     borderSide: BorderSide(color: AppColors.primary, width: 2),
                   ),
                   contentPadding: const EdgeInsets.all(16),
-                  hintText: '介绍一下自己...',
+                  hintText: t.profile.introduceYourself,
                 ),
               )
             : Container(
@@ -56,7 +57,7 @@ class UserBioSection extends StatelessWidget {
                   border: Border.all(color: AppColors.outline),
                 ),
                 child: Text(
-                  bio ?? '这个人很懒，什么都没有留下...',
+                  bio ?? 'This person is lazy and left nothing...',
                   style: AppTextStyles.bodyMedium,
                 ),
               ),

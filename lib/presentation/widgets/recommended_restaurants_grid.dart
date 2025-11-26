@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../data/models/restaurant_model.dart';
@@ -22,7 +23,7 @@ class RecommendedRestaurantsGrid extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '推荐餐厅',
+            t.profile.recommendedRestaurants,
             style: AppTextStyles.titleMedium,
           ),
           const SizedBox(height: 12),
@@ -35,7 +36,7 @@ class RecommendedRestaurantsGrid extends StatelessWidget {
               border: Border.all(color: AppColors.outline),
             ),
             child: Text(
-              '暂无推荐餐厅',
+              t.profile.noFoodPreferences,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
@@ -52,14 +53,14 @@ class RecommendedRestaurantsGrid extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '推荐餐厅',
+              t.profile.recommendedRestaurants,
               style: AppTextStyles.titleMedium,
             ),
             if (onFollowingTap != null)
               TextButton(
                 onPressed: onFollowingTap,
                 child: Text(
-                  '我的关注',
+                  t.profile.following,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.primary,
                   ),

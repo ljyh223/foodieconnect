@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../constants/app_constants.dart';
 import '../../data/models/chat_message_model.dart';
 
@@ -61,7 +61,7 @@ class StompWebSocketService {
 
       _connectionStateController.add({
         'connected': false,
-        'error': LocalizationService.I.chat.stompConnectFailed(e.toString()),
+        'error': t.chat.stompConnectFailed( error: ''),
       });
       rethrow;
     }
@@ -72,7 +72,7 @@ class StompWebSocketService {
     debugPrint('STOMP WebSocket连接成功');
     _connectionStateController.add({
       'connected': true,
-      'message': LocalizationService.I.chat.stompConnected,
+      'message': t.chat.stompConnected,
     });
     
     // 如果已加入聊天室，重新订阅
@@ -82,7 +82,12 @@ class StompWebSocketService {
     
     // 订阅个人通知
     if (_currentUserId != null) {
-      subscribeToNotifications(_currentUserId!);
+      // 延迟订阅，确保连接完全建立
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (_stompClient?.connected == true) {
+          subscribeToNotifications(_currentUserId!);
+        }
+      });
     }
   }
 
@@ -91,7 +96,7 @@ class StompWebSocketService {
     debugPrint('STOMP WebSocket连接已断开');
     _connectionStateController.add({
       'connected': false,
-      'message': LocalizationService.I.chat.stompDisconnected,
+      'message': t.chat.stompDisconnected,
     });
   }
 
@@ -101,7 +106,7 @@ class StompWebSocketService {
     debugPrint('WebSocket错误: $error');
     _connectionStateController.add({
       'connected': false,
-      'error': LocalizationService.I.chat.stompConnectFailed(error.toString()),
+      'error': t.chat.stompConnectFailed(error: error.toString()),
     });
 
   }
@@ -136,7 +141,7 @@ class StompWebSocketService {
       debugPrint('发送消息到聊天室 $roomId: $content');
     } else {
       debugPrint('STOMP未连接，无法发送消息');
-      throw Exception(LocalizationService.I.chat.stompNotConnected);
+      throw Exception(t.chat.stompNotConnected);
     }
   }
 
@@ -157,7 +162,7 @@ class StompWebSocketService {
       debugPrint('加入聊天室: $roomId');
     } else {
       debugPrint('STOMP未连接，无法加入聊天室');
-      throw Exception(LocalizationService.I.chat.stompNotConnected);
+      throw Exception(t.chat.stompNotConnected);
     }
   }
 
@@ -256,7 +261,7 @@ class StompWebSocketService {
               debugPrint('解析个人通知失败: $e');
               _connectionStateController.add({
                 'connected': false,
-                'error': LocalizationService.I.chat.msgParseFailed,
+                'error': t.chat.msgParseFailed,
               });
             }
           }
@@ -266,7 +271,32 @@ class StompWebSocketService {
       debugPrint('已订阅个人通知');
     } else {
       debugPrint('STOMP未连接，无法订阅个人通知');
+      // 尝试重新连接并订阅
+      debugPrint('尝试重新连接并订阅个人通知');
+      _retrySubscribeToNotifications(userId);
     }
+  }
+  
+  /// 重试订阅个人通知
+  static void _retrySubscribeToNotifications(String userId) {
+    int retryCount = 0;
+    const maxRetries = 3;
+    
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (retryCount >= maxRetries || _stompClient?.connected == true) {
+        timer.cancel();
+        
+        if (_stompClient?.connected == true) {
+          subscribeToNotifications(userId);
+        } else {
+          debugPrint('重试订阅个人通知失败，已达到最大重试次数');
+        }
+        return;
+      }
+      
+      retryCount++;
+      debugPrint('重试订阅个人通知 ($retryCount/$maxRetries)');
+    });
   }
 
   /// 取消订阅个人通知

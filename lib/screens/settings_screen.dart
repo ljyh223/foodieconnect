@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/language_provider.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../presentation/widgets/language_selector_widget.dart';
-import '../core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocalizationService.I.setting.settings),
+        title: Text(t.setting.settings),
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.onSurface,
         elevation: 0,
@@ -24,13 +24,13 @@ class SettingsScreen extends StatelessWidget {
           // 语言设置部分
           _buildSection(
             context,
-            title: LocalizationService.I.setting.languageSettings,
+            title: t.setting.languageSettings,
             children: [
               Consumer<LanguageProvider>(
                 builder: (context, languageProvider, child) {
                   return ListTile(
                     leading: Icon(Icons.language, color: AppColors.onSurface),
-                    title: Text(LocalizationService.I.setting.currentLanguage),
+                    title: Text(t.setting.currentLanguage),
                     subtitle: Text(languageProvider.currentLanguageName),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
@@ -45,38 +45,38 @@ class SettingsScreen extends StatelessWidget {
           // 账户设置部分
           _buildSection(
             context,
-            title: LocalizationService.I.setting.accountSettings,
+            title: t.setting.accountSettings,
             children: [
               ListTile(
                 leading: Icon(Icons.person, color: AppColors.onSurface),
-                title: Text(LocalizationService.I.setting.profile),
+                title: Text(t.setting.profile),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到个人资料页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocalizationService.I.setting.profile)),
+                    SnackBar(content: Text(t.setting.profile)),
                   );
                 },
               ),
               ListTile(
                 leading: Icon(Icons.lock, color: AppColors.onSurface),
-                title: Text(LocalizationService.I.setting.privacy),
+                title: Text(t.setting.privacy),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到隐私设置页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocalizationService.I.setting.privacy)),
+                    SnackBar(content: Text(t.setting.privacy)),
                   );
                 },
               ),
               ListTile(
                 leading: Icon(Icons.notifications, color: AppColors.onSurface),
-                title: Text(LocalizationService.I.setting.notifications),
+                title: Text(t.setting.notifications),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到通知设置页面
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocalizationService.I.setting.notifications)),
+                    SnackBar(content: Text(t.setting.notifications)),
                   );
                 },
               ),
@@ -86,11 +86,11 @@ class SettingsScreen extends StatelessWidget {
           // 关于部分
           _buildSection(
             context,
-            title: LocalizationService.I.setting.about,
+            title: t.setting.about,
             children: [
               ListTile(
                 leading: Icon(Icons.info, color: AppColors.onSurface),
-                title: Text(LocalizationService.I.setting.version),
+                title: Text(t.setting.version),
                 subtitle: const Text('1.0.0'),
               ),
             ],
@@ -112,7 +112,7 @@ class SettingsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(LocalizationService.I.setting.logout),
+              child: Text(t.setting.logout),
             ),
           ),
           const SizedBox(height: 20),
@@ -152,14 +152,14 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(LocalizationService.I.setting.logout),
-          content: Text(LocalizationService.I.setting.sureLogout),
+          title: Text(t.setting.logout),
+          content: Text(t.setting.sureLogout),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(LocalizationService.I.setting.close),
+              child: Text(t.setting.close),
             ),
             TextButton(
               onPressed: () {
@@ -169,7 +169,7 @@ class SettingsScreen extends StatelessWidget {
                 auth.logout();
                 Navigator.pushReplacementNamed(context, '/login');
               },
-              child: Text(LocalizationService.I.setting.logout),
+              child: Text(t.setting.logout),
             ),
           ],
         );

@@ -1,6 +1,0 @@
-arb-dir: lib/restaurant/l10n
-template-arb-file: restaurant_en.arb
-output-localization-file: restaurant_localizations.dart
-output-class: RestaurantLocalizations
-output-dir: lib/restaurant/l10n/generated
-nullable-getter: false

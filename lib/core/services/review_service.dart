@@ -77,7 +77,7 @@ class ReviewService {
     
     // 如果有图片，先上传图片
     if (imageFiles.isNotEmpty) {
-      imageUrls = await _api.uploadImages(imageFiles);
+      imageUrls = await _api.uploadImagesAndGetUrls(imageFiles);
     }
     
     // 发布带图片URL的评论

@@ -1,0 +1,356 @@
+{
+  "@@locale": "zh",
+  "@@context": "TableTalk应用简体中文本地化 - 全局",
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "应用标题"
+  },
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "应用英文名称"
+  },
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "应用中文名称"
+  },
+  "discoverFoodShareExperience": "发现美食，分享体验",
+  "@discoverFoodShareExperience": {
+    "description": "应用副标题"
+  },
+  "search": "搜索",
+  "@search": {
+    "description": "搜索框提示文本"
+  },
+  "home": "首页",
+  "@home": {
+    "description": "首页标签文本"
+  },
+  "loading": "加载中...",
+  "@loading": {
+    "description": "加载中提示"
+  },
+  "loadingFailed": "加载失败",
+  "@loadingFailed": {
+    "description": "加载失败提示"
+  },
+  "retry": "重试",
+  "@retry": {
+    "description": "重试按钮文本"
+  },
+  "open": "营业中",
+  "@open": {
+    "description": "营业状态"
+  },
+  "closed": "已打烊",
+  "@closed": {
+    "description": "打烊状态"
+  },
+  "userProfile": "个人主页",
+  "@userProfile": {
+    "description": "个人主页标题"
+  },
+  "otherUserProfile": "用户主页",
+  "@otherUserProfile": {
+    "description": "其他用户主页标题"
+  },
+  "followingList": "关注列表",
+  "@followingList": {
+    "description": "关注列表标题"
+  },
+  "myFollowing": "我的关注",
+  "@myFollowing": {
+    "description": "我的关注标题"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "连接按钮文本"
+  },
+  "follow": "关注",
+  "@follow": {
+    "description": "关注按钮文本"
+  },
+  "following": "已关注",
+  "@following": {
+    "description": "已关注状态文本"
+  },
+  "unfollow": "取消关注",
+  "@unfollow": {
+    "description": "取消关注按钮文本"
+  },
+  "unfollowConfirm": "确定要取消关注 {username} 吗？",
+  "@unfollowConfirm": {
+    "description": "取消关注确认对话框"
+  },
+  "foodPreferences": "喜好食物",
+  "@foodPreferences": {
+    "description": "喜好食物标题"
+  },
+  "noFoodPreferences": "暂无喜好食物信息",
+  "@noFoodPreferences": {
+    "description": "无喜好食物信息提示"
+  },
+  "personalBio": "个人简介",
+  "@personalBio": {
+    "description": "个人简介标题"
+  },
+  "noBio": "这个人很懒，什么都没有留下...",
+  "@noBio": {
+    "description": "无个人简介提示"
+  },
+  "recommendedRestaurants": "推荐餐厅",
+  "@recommendedRestaurants": {
+    "description": "推荐餐厅标题"
+  },
+  "noRecommendedRestaurants": "暂无推荐餐厅",
+  "@noRecommendedRestaurants": {
+    "description": "无推荐餐厅提示"
+  },
+  "noFollowing": "暂无关注",
+  "@noFollowing": {
+    "description": "无关注提示"
+  },
+  "discoverUsers": "去发现感兴趣的用户吧",
+  "@discoverUsers": {
+    "description": "发现用户提示"
+  },
+  "save": "保存",
+  "@save": {
+    "description": "保存按钮文本"
+  },
+  "edit": "编辑",
+  "@edit": {
+    "description": "编辑按钮文本"
+  },
+  "saveSuccess": "保存成功",
+  "@saveSuccess": {
+    "description": "保存成功提示"
+  },
+  "saveFailed": "保存失败",
+  "@saveFailed": {
+    "description": "保存失败提示"
+  },
+  "followSuccess": "关注成功",
+  "@followSuccess": {
+    "description": "关注成功提示"
+  },
+  "followFailed": "关注失败",
+  "@followFailed": {
+    "description": "关注失败提示"
+  },
+  "unfollowSuccess": "已取消关注",
+  "@unfollowSuccess": {
+    "description": "取消关注成功提示"
+  },
+  "unfollowFailed": "取消关注失败",
+  "@unfollowFailed": {
+    "description": "取消关注失败提示"
+  },
+  "userNotFound": "用户不存在",
+  "@userNotFound": {
+    "description": "用户不存在提示"
+  },
+  "unknownUser": "未知用户",
+  "@unknownUser": {
+    "description": "未知用户文本"
+  },
+  "introduceYourself": "介绍一下自己...",
+  "@introduceYourself": {
+    "description": "个人简介输入提示"
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "description": "取消按钮文本"
+  },
+  "recommendations": "推荐",
+  "@recommendations": {
+    "description": "推荐功能标题"
+  },
+  "recommendedUsers": "推荐关注",
+  "@recommendedUsers": {
+    "description": "推荐用户标题"
+  },
+  "viewMore": "查看更多",
+  "@viewMore": {
+    "description": "查看更多按钮"
+  },
+  "noRecommendations": "暂无推荐用户",
+  "@noRecommendations": {
+    "description": "无推荐用户提示"
+  },
+  "searchingRecommendations": "系统正在为您寻找可能感兴趣的用户",
+  "@searchingRecommendations": {
+    "description": "搜索推荐用户提示"
+  },
+  "interested": "感兴趣",
+  "@interested": {
+    "description": "感兴趣状态"
+  },
+  "notInterested": "不感兴趣",
+  "@notInterested": {
+    "description": "不感兴趣状态"
+  },
+  "markAsInterested": "已标记为感兴趣",
+  "@markAsInterested": {
+    "description": "标记感兴趣成功提示"
+  },
+  "markAsNotInterested": "已标记为不感兴趣",
+  "@markAsNotInterested": {
+    "description": "标记不感兴趣成功提示"
+  },
+  "recommendationScore": "推荐分数",
+  "@recommendationScore": {
+    "description": "推荐分数标签"
+  },
+  "recommendationReason": "推荐理由",
+  "@recommendationReason": {
+    "description": "推荐理由标签"
+  },
+  "collaborativeRecommendation": "基于共同喜好推荐",
+  "@collaborativeRecommendation": {
+    "description": "协同过滤推荐理由"
+  },
+  "socialRecommendation": "您关注的人也关注了TA",
+  "@socialRecommendation": {
+    "description": "社交推荐理由"
+  },
+  "hybridRecommendation": "综合推荐",
+  "@hybridRecommendation": {
+    "description": "混合推荐理由"
+  },
+  "commonInterests": "共同喜欢{interests}",
+  "@commonInterests": {
+    "description": "共同兴趣描述",
+    "placeholders": {
+      "interests": {
+        "type": "String",
+        "example": "川菜、粤菜"
+      }
+    }
+  },
+  "commonVisits": "共同访问过{count}家餐厅",
+  "@commonVisits": {
+    "description": "共同访问餐厅描述",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "filter": "筛选",
+  "@filter": {
+    "description": "筛选按钮"
+  },
+  "sort": "排序",
+  "@sort": {
+    "description": "排序按钮"
+  },
+  "filterByStatus": "筛选推荐",
+  "@filterByStatus": {
+    "description": "筛选对话框标题"
+  },
+  "sortBy": "排序方式",
+  "@sortBy": {
+    "description": "排序对话框标题"
+  },
+  "all": "全部",
+  "@all": {
+    "description": "全部选项"
+  },
+  "unviewed": "未查看",
+  "@unviewed": {
+    "description": "未查看状态"
+  },
+  "viewed": "已查看",
+  "@viewed": {
+    "description": "已查看状态"
+  },
+  "sortByScore": "推荐分数",
+  "@sortByScore": {
+    "description": "按分数排序"
+  },
+  "sortByTime": "创建时间",
+  "@sortByTime": {
+    "description": "按时间排序"
+  },
+  "sortByViewTime": "查看时间",
+  "@sortByViewTime": {
+    "description": "按查看时间排序"
+  },
+  "clearAllRecommendations": "清除所有推荐",
+  "@clearAllRecommendations": {
+    "description": "清除推荐按钮"
+  },
+  "clearAllConfirm": "确定要清除所有推荐吗？此操作不可撤销。",
+  "@clearAllConfirm": {
+    "description": "清除推荐确认对话框"
+  },
+  "totalRecommendations": "共 {count} 个推荐",
+  "@totalRecommendations": {
+    "description": "推荐总数统计",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "noMoreRecommendations": "没有更多推荐了",
+  "@noMoreRecommendations": {
+    "description": "无更多推荐提示"
+  },
+  "recommendationDetail": "查看推荐详情",
+  "@recommendationDetail": {
+    "description": "查看推荐详情提示"
+  },
+  "operationFailed": "操作失败: {error}",
+  "@operationFailed": {
+    "description": "操作失败提示",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "网络错误"
+      }
+    }
+  },
+  "discover": "发现",
+  "@discover": {
+    "description": "发现页面标题"
+  },
+  "back": "返回",
+  "@back": {
+    "description": "返回按钮文本"
+  },
+  "settings": "设置",
+  "@settings": {
+    "description": "设置按钮文本"
+  },
+  "editProfile": "编辑资料",
+  "@editProfile": {
+    "description": "编辑资料按钮文本"
+  },
+  "clearAll": "清除所有推荐",
+  "@clearAll": {
+    "description": "清除所有推荐按钮文本"
+  },
+  "clearAllConfirm": "确定要清除所有推荐吗？此操作不可撤销。",
+  "@clearAllConfirm": {
+    "description": "清除推荐确认对话框内容"
+  },
+  "confirm": "确定",
+  "@confirm": {
+    "description": "确定按钮文本"
+  },
+  "commonRestaurants": "共同餐厅",
+  "@commonRestaurants": {
+    "description": "共同餐厅标签"
+  },
+  "similarity": "相似度",
+  "@similarity": {
+    "description": "相似度标签"
+  },
+  "follow": "关注",
+  "@follow": {
+    "description": "关注按钮文本"
+  }
+}

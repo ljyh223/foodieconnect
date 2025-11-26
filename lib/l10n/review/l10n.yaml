@@ -1,6 +1,0 @@
-arb-dir: lib/review/l10n
-template-arb-file: review_en.arb
-output-localization-file: review_localizations.dart
-output-class: ReviewLocalizations
-output-dir: lib/review/l10n/generated
-nullable-getter: false

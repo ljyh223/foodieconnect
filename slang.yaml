@@ -1,0 +1,5 @@
+namespaces: true
+input_directory: lib/l10n
+input_file_pattern: .arb
+output_directory: lib/generated
+output_file_name: translations.g.dart

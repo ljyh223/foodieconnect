@@ -1,0 +1,170 @@
+{
+  "@@locale": "zh",
+  "@@context": "TableTalk应用简体中文本地化 - 用户个人中心",
+  "profileTitle": "个人主页",
+  "@profileTitle": {
+    "description": "个人主页标题"
+  },
+  "otherProfileTitle": "用户主页",
+  "@otherProfileTitle": {
+    "description": "其他用户主页标题"
+  },
+  "edit": "编辑",
+  "@edit": {
+    "description": "编辑按钮文本"
+  },
+  "save": "保存",
+  "@save": {
+    "description": "保存按钮文本"
+  },
+  "loading": "加载中...",
+  "@loading": {
+    "description": "加载中提示"
+  },
+  "loadingFailed": "加载失败",
+  "@loadingFailed": {
+    "description": "加载失败提示"
+  },
+  "retry": "重试",
+  "@retry": {
+    "description": "重试按钮文本"
+  },
+  "userNotFound": "用户不存在",
+  "@userNotFound": {
+    "description": "用户不存在提示"
+  },
+  "unknownUser": "未知用户",
+  "@unknownUser": {
+    "description": "未知用户文本"
+  },
+  "foodPreferences": "喜好食物",
+  "@foodPreferences": {
+    "description": "喜好食物标题"
+  },
+  "noFoodPreferences": "暂无喜好食物信息",
+  "@noFoodPreferences": {
+    "description": "无喜好食物信息提示"
+  },
+  "personalBio": "个人简介",
+  "@personalBio": {
+    "description": "个人简介标题"
+  },
+  "introduceYourself": "介绍一下自己...",
+  "@introduceYourself": {
+    "description": "个人简介输入提示"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "连接按钮文本"
+  },
+  "following": "已关注",
+  "@following": {
+    "description": "已关注状态文本"
+  },
+  "saveSuccess": "保存成功",
+  "@saveSuccess": {
+    "description": "保存成功提示"
+  },
+  "saveFailed": "保存失败: {error}",
+  "@saveFailed": {
+    "description": "保存失败提示",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "错误信息"
+      }
+    }
+  },
+  "followFailed": "关注失败",
+  "@followFailed": {
+    "description": "关注失败提示"
+  },
+  "unfollowFailed": "取消关注失败",
+  "@unfollowFailed": {
+    "description": "取消关注失败提示"
+  },
+  "recommendedRestaurants": "推荐餐厅",
+  "@recommendedRestaurants": {
+    "description": "推荐餐厅标题"
+  },
+    "updateFailed":"更新失败",
+    "@updateFailed": {
+      "description": "Prefix when update throws"
+    },
+    "editProfile": "编辑个人资料",
+    "@editProfile": {
+      "description": "编辑个人资料页面标题"
+    },
+    "email": "邮箱",
+    "@email": {
+      "description": "邮箱字段标签"
+    },
+    "username": "用户名",
+    "@username": {
+      "description": "用户名字段标签"
+    },
+    "phone": "手机号",
+    "@phone": {
+      "description": "手机号字段标签"
+    },
+    "changeAvatar": "更改头像",
+    "@changeAvatar": {
+      "description": "更改头像选项标题"
+    },
+    "takePhoto": "拍照",
+    "@takePhoto": {
+      "description": "拍照选项"
+    },
+    "selectFromGallery": "从相册选择",
+    "@selectFromGallery": {
+      "description": "从相册选择选项"
+    },
+    "avatarUpdateSuccess": "头像更新成功",
+    "@avatarUpdateSuccess": {
+      "description": "头像更新成功提示"
+    },
+    "avatarUploadFailed": "头像上传失败: {error}",
+    "@avatarUploadFailed": {
+      "description": "头像上传失败提示",
+      "placeholders": {
+        "error": {
+          "type": "String",
+          "description": "错误信息"
+        }
+      }
+    },
+    "avatarUpdateFailed": "头像更新失败: {error}",
+    "@avatarUpdateFailed": {
+      "description": "头像更新失败提示",
+      "placeholders": {
+        "error": {
+          "type": "String",
+          "description": "错误信息"
+        }
+      }
+    },
+    "unknownUser": "未知用户",
+    "@unknownUser": {
+      "description": "未知用户文本"
+    },
+    "personalBio": "个人简介",
+    "@personalBio": {
+      "description": "个人简介标题"
+    },
+    "emailCannotBeChanged": "邮箱地址不可修改",
+    "@emailCannotBeChanged": {
+      "description": "邮箱不可修改提示"
+    },
+    "usernameHint": "请输入用户名",
+    "@usernameHint": {
+      "description": "用户名输入提示"
+    },
+    "phoneHint": "请输入手机号码（可选）",
+    "@phoneHint": {
+      "description": "手机号输入提示"
+    },
+    "saving": "保存中...",
+    "@saving": {
+      "description": "保存中提示"
+    }
+}

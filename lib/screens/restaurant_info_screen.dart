@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../data/models/restaurant_model.dart';
 import '../core/services/restaurant_service.dart';
 import '../core/services/api_service.dart';
@@ -75,14 +75,14 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       // TODO: 实现菜单显示界面
       // 这里可以导航到一个新的菜单页面或显示底部弹窗
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(LocalizationService.I.restaurant.menuFeatureInDevelopment)),
+        SnackBar(content: Text(t.restaurant.menuFeatureInDevelopment)),
       );
     } catch (e) {
       // 关闭加载指示器（如果还在显示）
       Navigator.of(context).pop();
       
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${LocalizationService.I.restaurant.getMenuFailed}$e')),
+        SnackBar(content: Text('${t.restaurant.getMenuFailed}$e')),
       );
     }
   }
@@ -99,7 +99,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         }
 
         if (snapshot.hasError) {
-          return Scaffold(body: Center(child: Text('${LocalizationService.I.restaurant.getShopInfoFailed}${snapshot.error}')));
+          return Scaffold(body: Center(child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}')));
         }
 
         final restaurant = snapshot.data!;
@@ -137,7 +137,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Text(
-                          LocalizationService.I.restaurant.restaurantImages,
+                          t.restaurant.restaurantImages,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -187,7 +187,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.restaurant.businessHours,
+                        t.restaurant.businessHours,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -226,7 +226,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.restaurant.address,
+                        t.restaurant.address,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -255,7 +255,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  LocalizationService.I.restaurant.distanceFromYou(restaurant.distance),
+                                  t.restaurant.distanceFromYou( distance: restaurant.distance),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey[600],
@@ -278,7 +278,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.restaurant.averagePrice,
+                        t.restaurant.averagePrice,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -318,7 +318,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.restaurant.recommendedDishes,
+                        t.restaurant.recommendedDishes,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -341,7 +341,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 List<String> dishes = [];
                                 
                                 if (dishesSnapshot.connectionState == ConnectionState.waiting) {
-                                  dishes = [LocalizationService.I.app.loading];
+                                  dishes = [t.app.loading];
                                 } else if (dishesSnapshot.hasError || dishesSnapshot.data == null || dishesSnapshot.data!.isEmpty) {
                                   // 如果API调用失败或没有数据，使用餐厅模型中的推荐菜品或默认菜品
                                   dishes = restaurant.recommendedDishes.isNotEmpty
@@ -379,7 +379,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocalizationService.I.restaurant.menu,
+                        t.restaurant.menu,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -400,7 +400,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  LocalizationService.I.restaurant.viewFullMenu,
+                                  t.restaurant.viewFullMenu,
                                   style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.black87,
@@ -423,7 +423,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                       ),
                                     ),
                                     child: Text(
-                                      LocalizationService.I.restaurant.viewMenu,
+                                      t.restaurant.viewMenu,
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,

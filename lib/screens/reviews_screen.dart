@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabletalk/core/services/api_service.dart';
 import 'package:tabletalk/core/services/auth_service.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../data/models/review_model.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
@@ -42,7 +42,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.review.userComments,
+        title: t.review.userComments,
         showBackButton: true,
         actions: [
           IconButton(

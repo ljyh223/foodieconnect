@@ -1,11 +1,11 @@
 import 'dart:developer' as logger;
 
 import 'package:flutter/material.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../../data/models/user_model.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/api_service.dart';
 import '../../core/utils/token_storage.dart';
-import '../../core/services/localization_service.dart';
 
 class AuthProvider with ChangeNotifier {
   User? _user;
@@ -61,7 +61,7 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       logger.log('登录失败：${e.toString()}');
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = LocalizationService.I.auth.invalidEmailOrPassword;
+      _error = t.auth.invalidEmailOrPassword;
       _loginSuccess = false;
     } finally {
       _setLoading(false);
@@ -83,7 +83,7 @@ class AuthProvider with ChangeNotifier {
       _registrationSuccess = true;
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = '${LocalizationService.I.auth.registrationFailed}：${e.toString()}';
+      _error = '${t.auth.registrationFailed}：${e.toString()}';
       _registrationSuccess = false;
     } finally {
       _setLoading(false);
@@ -101,7 +101,7 @@ class AuthProvider with ChangeNotifier {
       _error = null;
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = LocalizationService.I.auth.logoutFailed;
+      _error = t.auth.logoutFailed;
     } finally {
       _setLoading(false);
     }
@@ -124,7 +124,7 @@ class AuthProvider with ChangeNotifier {
       // 不阻塞启动，仅记录错误
       logger.log('恢复登录状态失败：${e.toString()}');
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = '${LocalizationService.I.auth.restoreLoginFailed}：${e.toString()}';
+      _error = '${t.auth.restoreLoginFailed}：${e.toString()}';
     } finally {
       _setLoading(false);
     }
@@ -148,7 +148,7 @@ class AuthProvider with ChangeNotifier {
       }
     } catch (e) {
       // 直接使用LocalizationService，无需检查初始化状态
-      _error = LocalizationService.I.profile.updateFailed;
+      _error = t.profile.updateFailed;
     } finally {
       _setLoading(false);
     }

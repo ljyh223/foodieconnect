@@ -1,6 +1,0 @@
-arb-dir: lib/staff/l10n
-template-arb-file: staff_en.arb
-output-localization-file: staff_localizations.dart
-output-class: StaffLocalizations
-output-dir: lib/staff/l10n/generated
-nullable-getter: false

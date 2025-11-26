@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tabletalk/generated/app/app_localizations.dart';
-import 'package:tabletalk/generated/auth/auth_localizations.dart';
-import 'package:tabletalk/generated/chat/chat_localizations.dart';
-import 'package:tabletalk/generated/profile/profile_localizations.dart';
-import 'package:tabletalk/generated/restaurant/restaurant_localizations.dart';
-import 'package:tabletalk/generated/review/review_localizations.dart';
-import 'package:tabletalk/generated/setting/setting_localizations.dart';
-import 'package:tabletalk/generated/staff/staff_localizations.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import 'routes/app_router.dart';
 import 'core/utils/token_storage.dart';
 import 'core/services/api_service.dart';
@@ -19,8 +11,8 @@ import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/staff_provider.dart';
 import 'presentation/providers/chat_provider.dart';
 import 'presentation/providers/language_provider.dart';
+import 'presentation/providers/recommendation_provider.dart';
 import 'core/theme/app_theme.dart';
-import 'core/services/localization_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +20,9 @@ void main() async {
   if (access != null && access.isNotEmpty) {
     ApiService().setToken(access);
   }
+
+  LocaleSettings.useDeviceLocale();
+
 
   runApp(
     MultiProvider(
@@ -40,6 +35,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => StaffProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()..init()),
+        ChangeNotifierProvider(create: (_) => RecommendationProvider()),
       ],
       child: const MyApp(),
     ),
@@ -81,10 +77,12 @@ class _AppInitializerState extends State<AppInitializer> {
       await chatProvider.initialize('');
 
       // 获取当前用户ID并订阅通知
+      if (!mounted) return;
+      
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       authProvider.setContext(context);
       final userId = await authProvider.getCurrentUserId();
-      if (userId != null) {
+      if (userId != null && mounted) {
         await chatProvider.subscribeToNotifications(userId.toString());
       }
 
@@ -119,25 +117,15 @@ class MyApp extends StatelessWidget {
             // 跟随系统主题设置
             locale: languageProvider.locale,
             localizationsDelegates: const [
-              AppLocalizations.delegate,
-              AuthLocalizations.delegate,
-              ChatLocalizations.delegate,
-              RestaurantLocalizations.delegate,
-              ReviewLocalizations.delegate,
-              SettingLocalizations.delegate,
-              StaffLocalizations.delegate,
-              ProfileLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            initialRoute: '/splash',
+            initialRoute: '/main',
             onGenerateRoute: AppRouter.generateRoute,
             debugShowCheckedModeBanner: false,
             // 隐藏调试横幅
             builder: (context, child) {
-              LocalizationService.update(context);
               return child!;
             },
           ),

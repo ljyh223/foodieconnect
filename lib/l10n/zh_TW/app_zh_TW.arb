@@ -1,0 +1,356 @@
+{
+  "@@locale": "zh_TW",
+  "@@context": "TableTalk應用繁體中文本地化 - 全域",
+  "appTitle": "TableTalk",
+  "@appTitle": {
+    "description": "應用標題"
+  },
+  "foodieConnect": "Foodie Connect",
+  "@foodieConnect": {
+    "description": "應用英文名稱"
+  },
+  "tableTalk": "TableTalk",
+  "@tableTalk": {
+    "description": "應用中文名稱"
+  },
+  "discoverFoodShareExperience": "發現美食，分享體驗",
+  "@discoverFoodShareExperience": {
+    "description": "應用副標題"
+  },
+  "search": "搜尋",
+  "@search": {
+    "description": "搜尋框提示文本"
+  },
+  "home": "首頁",
+  "@home": {
+    "description": "首頁標籤文字"
+  },
+  "loading": "載入中...",
+  "@loading": {
+    "description": "載入中提示"
+  },
+  "loadingFailed": "載入失敗",
+  "@loadingFailed": {
+    "description": "載入失敗提示"
+  },
+  "retry": "重試",
+  "@retry": {
+    "description": "重試按鈕文本"
+  },
+  "open": "營業中",
+  "@open": {
+    "description": "營業狀態"
+  },
+  "closed": "已打烊",
+  "@closed": {
+    "description": "打烊狀態"
+  },
+  "userProfile": "個人資料",
+  "@userProfile": {
+    "description": "使用者個人資料標題"
+  },
+  "otherUserProfile": "使用者資料",
+  "@otherUserProfile": {
+    "description": "其他使用者個人資料標題"
+  },
+  "followingList": "追蹤列表",
+  "@followingList": {
+    "description": "追蹤列表標題"
+  },
+  "myFollowing": "我的追蹤",
+  "@myFollowing": {
+    "description": "我的追蹤標題"
+  },
+  "connect": "連接",
+  "@connect": {
+    "description": "連接按鈕文字"
+  },
+  "follow": "追蹤",
+  "@follow": {
+    "description": "追蹤按鈕文字"
+  },
+  "following": "已追蹤",
+  "@following": {
+    "description": "已追蹤狀態文字"
+  },
+  "unfollow": "取消追蹤",
+  "@unfollow": {
+    "description": "取消追蹤按鈕文字"
+  },
+  "unfollowConfirm": "確定要取消追蹤 {username} 嗎？",
+  "@unfollowConfirm": {
+    "description": "取消追蹤確認對話框"
+  },
+  "foodPreferences": "飲食偏好",
+  "@foodPreferences": {
+    "description": "飲食偏好標題"
+  },
+  "noFoodPreferences": "無飲食偏好",
+  "@noFoodPreferences": {
+    "description": "無飲食偏好訊息"
+  },
+  "personalBio": "個人簡介",
+  "@personalBio": {
+    "description": "個人簡介標題"
+  },
+  "noBio": "這個人太懶了，什麼都沒留下……",
+  "@noBio": {
+    "description": "無個人簡介訊息"
+  },
+  "recommendedRestaurants": "推薦餐廳",
+  "@recommendedRestaurants": {
+    "description": "推薦餐廳標題"
+  },
+  "noRecommendedRestaurants": "無推薦餐廳",
+  "@noRecommendedRestaurants": {
+    "description": "無推薦餐廳訊息"
+  },
+  "noFollowing": "尚未追蹤任何人",
+  "@noFollowing": {
+    "description": "無追蹤對象訊息"
+  },
+  "discoverUsers": "快去探索有趣的使用者吧！",
+  "@discoverUsers": {
+    "description": "探索使用者提示訊息"
+  },
+  "save": "儲存",
+  "@save": {
+    "description": "儲存按鈕文字"
+  },
+  "edit": "編輯",
+  "@edit": {
+    "description": "編輯按鈕文字"
+  },
+  "saveSuccess": "儲存成功",
+  "@saveSuccess": {
+    "description": "儲存成功訊息"
+  },
+  "saveFailed": "儲存失敗",
+  "@saveFailed": {
+    "description": "儲存失敗訊息"
+  },
+  "followSuccess": "追蹤成功",
+  "@followSuccess": {
+    "description": "追蹤成功訊息"
+  },
+  "followFailed": "追蹤失敗",
+  "@followFailed": {
+    "description": "追蹤失敗訊息"
+  },
+  "unfollowSuccess": "已取消追蹤",
+  "@unfollowSuccess": {
+    "description": "取消追蹤成功訊息"
+  },
+  "unfollowFailed": "取消追蹤失敗",
+  "@unfollowFailed": {
+    "description": "取消追蹤失敗訊息"
+  },
+  "userNotFound": "找不到該使用者",
+  "@userNotFound": {
+    "description": "使用者不存在訊息"
+  },
+  "unknownUser": "未知使用者",
+  "@unknownUser": {
+    "description": "未知使用者文字"
+  },
+  "introduceYourself": "告訴我們關於你自己的事……",
+  "@introduceYourself": {
+    "description": "個人簡介輸入框提示文字"
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "description": "取消按鈕文字"
+  },
+  "discover": "發現",
+  "@discover": {
+    "description": "發現頁面標題"
+  },
+  "back": "返回",
+  "@back": {
+    "description": "返回按鈕文字"
+  },
+  "settings": "設定",
+  "@settings": {
+    "description": "設定按鈕文字"
+  },
+  "editProfile": "編輯資料",
+  "@editProfile": {
+    "description": "編輯資料按鈕文字"
+  },
+  "clearAll": "清除所有推薦",
+  "@clearAll": {
+    "description": "清除所有推薦按鈕文字"
+  },
+  "clearAllConfirm": "確定要清除所有推薦嗎？此操作無法復原。",
+  "@clearAllConfirm": {
+    "description": "清除推薦確認對話框內容"
+  },
+  "confirm": "確定",
+  "@confirm": {
+    "description": "確定按鈕文字"
+  },
+  "recommendations": "推薦",
+  "@recommendations": {
+    "description": "推薦功能標題"
+  },
+  "recommendedUsers": "推薦關注",
+  "@recommendedUsers": {
+    "description": "推薦用戶標題"
+  },
+  "viewMore": "查看更多",
+  "@viewMore": {
+    "description": "查看更多按鈕"
+  },
+  "noRecommendations": "暫無推薦用戶",
+  "@noRecommendations": {
+    "description": "無推薦用戶訊息"
+  },
+  "searchingRecommendations": "系統正在為您尋找可能感興趣的用戶",
+  "@searchingRecommendations": {
+    "description": "搜尋推薦用戶訊息"
+  },
+  "interested": "感興趣",
+  "@interested": {
+    "description": "感興趣狀態"
+  },
+  "notInterested": "不感興趣",
+  "@notInterested": {
+    "description": "不感興趣狀態"
+  },
+  "markAsInterested": "已標記為感興趣",
+  "@markAsInterested": {
+    "description": "標記感興趣成功訊息"
+  },
+  "markAsNotInterested": "已標記為不感興趣",
+  "@markAsNotInterested": {
+    "description": "標記不感興趣成功訊息"
+  },
+  "recommendationScore": "推薦分數",
+  "@recommendationScore": {
+    "description": "推薦分數標籤"
+  },
+  "recommendationReason": "推薦理由",
+  "@recommendationReason": {
+    "description": "推薦理由標籤"
+  },
+  "collaborativeRecommendation": "基於共同喜好推薦",
+  "@collaborativeRecommendation": {
+    "description": "協同過濾推薦理由"
+  },
+  "socialRecommendation": "您關注的人也關注了TA",
+  "@socialRecommendation": {
+    "description": "社交推薦理由"
+  },
+  "hybridRecommendation": "綜合推薦",
+  "@hybridRecommendation": {
+    "description": "混合推薦理由"
+  },
+  "commonInterests": "共同喜歡{interests}",
+  "@commonInterests": {
+    "description": "共同興趣描述",
+    "placeholders": {
+      "interests": {
+        "type": "String",
+        "example": "川菜、粤菜"
+      }
+    }
+  },
+  "commonVisits": "共同訪問過{count}家餐廳",
+  "@commonVisits": {
+    "description": "共同訪問餐廳描述",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "filter": "篩選",
+  "@filter": {
+    "description": "篩選按鈕"
+  },
+  "sort": "排序",
+  "@sort": {
+    "description": "排序按鈕"
+  },
+  "filterByStatus": "篩選推薦",
+  "@filterByStatus": {
+    "description": "篩選對話框標題"
+  },
+  "sortBy": "排序方式",
+  "@sortBy": {
+    "description": "排序對話框標題"
+  },
+  "all": "全部",
+  "@all": {
+    "description": "全部選項"
+  },
+  "unviewed": "未查看",
+  "@unviewed": {
+    "description": "未查看狀態"
+  },
+  "viewed": "已查看",
+  "@viewed": {
+    "description": "已查看狀態"
+  },
+  "sortByScore": "推薦分數",
+  "@sortByScore": {
+    "description": "按分數排序"
+  },
+  "sortByTime": "創建時間",
+  "@sortByTime": {
+    "description": "按時間排序"
+  },
+  "sortByViewTime": "查看時間",
+  "@sortByViewTime": {
+    "description": "按查看時間排序"
+  },
+  "clearAllRecommendations": "清除所有推薦",
+  "@clearAllRecommendations": {
+    "description": "清除所有推薦按鈕"
+  },
+  "clearAllConfirm": "確定要清除所有推薦嗎？此操作無法復原。",
+  "@clearAllConfirm": {
+    "description": "清除推薦確認對話框內容"
+  },
+  "totalRecommendations": "共 {count} 個推薦",
+  "@totalRecommendations": {
+    "description": "推薦總數統計",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  "noMoreRecommendations": "沒有更多推薦了",
+  "@noMoreRecommendations": {
+    "description": "無更多推薦訊息"
+  },
+  "recommendationDetail": "查看推薦詳情",
+  "@recommendationDetail": {
+    "description": "查看推薦詳情訊息"
+  },
+  "operationFailed": "操作失敗: {error}",
+  "@operationFailed": {
+    "description": "操作失敗提示",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "網路錯誤"
+      }
+    }
+  },
+    "commonRestaurants": "共同餐廳",
+    "@commonRestaurants": {
+      "description": "共同餐廳標籤"
+    },
+    "similarity": "相似度",
+    "@similarity": {
+      "description": "相似度標籤"
+    },
+    "follow": "關注",
+    "@follow": {
+      "description": "關注按鈕文字"
+    }
+}

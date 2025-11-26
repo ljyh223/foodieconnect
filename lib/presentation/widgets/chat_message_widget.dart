@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
-import 'package:tabletalk/generated/app/app_localizations.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/services/api_service.dart';
 import '../../data/models/chat_message_model.dart';
@@ -244,7 +243,7 @@ class ChatMessageWidget extends StatelessWidget {
                           SizedBox(
                             width: 60,
                             child: Text(
-                              LocalizationService.I.chat.me,
+                              t.chat.me,
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: Colors.grey,

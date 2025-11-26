@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/core/services/localization_service.dart';
+import 'package:tabletalk/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../data/models/staff_model.dart';
@@ -64,7 +64,7 @@ class _StaffScreenState extends State<StaffScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: LocalizationService.I.staff.staffList,
+        title: t.staff.staffList,
         showBackButton: true,
       ),
       body: SafeArea(
@@ -86,11 +86,11 @@ class _StaffScreenState extends State<StaffScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${LocalizationService.I.app.loadingFailed}：$_error'),
+            Text('${t.app.loadingFailed}：$_error'),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadStaff,
-              child: Text(LocalizationService.I.app.retry),
+              child: Text(t.app.retry),
             ),
           ],
         ),
@@ -109,11 +109,11 @@ class _StaffScreenState extends State<StaffScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${LocalizationService.I.staff.getStaffListFailed}${snapshot.error}'),
+                Text('${t.staff.getStaffListFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _loadStaff,
-                  child: Text(LocalizationService.I.app.retry),
+                  child: Text(t.app.retry),
                 ),
               ],
             ),
@@ -123,7 +123,7 @@ class _StaffScreenState extends State<StaffScreen> {
         final staffList = snapshot.data ?? [];
 
         if (staffList.isEmpty) {
-          return Center(child: Text(LocalizationService.I.staff.noStaff));
+          return Center(child: Text(t.staff.noStaff));
         }
 
         return ListView.builder(
