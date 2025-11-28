@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      protobuf:
+        generate_for:
+          - lib/protos/*.proto
+        options:
+          protobuf:
+            generate_well_known_types: true

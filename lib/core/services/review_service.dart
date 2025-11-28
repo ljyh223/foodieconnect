@@ -12,7 +12,11 @@ class ReviewService {
   /// 获取餐厅评论列表
   static Future<List<Review>> listByRestaurant(String restaurantId, {int page = 0, int size = 20}) async {
     final endpoint = AppConstants.restaurantsReviewsEndpoint.replaceFirst('{restaurantId}', restaurantId);
-    final res = await _api.get(endpoint, queryParams: {'page': page.toString(), 'size': size.toString()});
+    final res = await _api.get(
+      endpoint,
+      queryParams: {'page': page.toString(), 'size': size.toString()},
+      requireAuth: false, // 获取评论列表不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     
     // 调试输出，帮助分析数据结构
@@ -51,7 +55,11 @@ class ReviewService {
   static Future<Review> post(String restaurantId, int rating, String comment) async {
     final endpoint = AppConstants.restaurantsReviewsEndpoint.replaceFirst('{restaurantId}', restaurantId);
     final body = {'rating': rating, 'comment': comment};
-    final res = await _api.post(endpoint, body: body);
+    final res = await _api.post(
+      endpoint,
+      body: body,
+      requireAuth: true, // 发布评论需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) return Review.fromJson(payload);
     throw Exception('Comment failed to post');
@@ -65,7 +73,11 @@ class ReviewService {
       'comment': comment,
       'imageUrls': imageUrls, // 图片URL列表，多个URL用逗号分隔
     };
-    final res = await _api.post(endpoint, body: body);
+    final res = await _api.post(
+      endpoint,
+      body: body,
+      requireAuth: true, // 发布带图片评论需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) return Review.fromJson(payload);
     throw Exception('Comment failed to post');
@@ -87,10 +99,14 @@ class ReviewService {
   /// 获取用户的评价列表
   static Future<List<Review>> getUserReviews(int userId, {int page = 0, int size = 20}) async {
     try {
-      final res = await _api.get('/users/$userId/reviews', queryParams: {
-        'page': page.toString(),
-        'size': size.toString(),
-      });
+      final res = await _api.get(
+        '/users/$userId/reviews',
+        queryParams: {
+          'page': page.toString(),
+          'size': size.toString(),
+        },
+        requireAuth: true, // 获取用户评价需要认证
+      );
       
       final dynamic payload = res['data'] ?? res;
       List<Review> reviews = [];
@@ -150,7 +166,10 @@ class ReviewService {
       final List<Restaurant> recommendedRestaurants = [];
       for (final review in sortedReviews.take(10)) { // 最多推荐10个餐厅
         try {
-          final restaurantRes = await _api.get('/restaurants/${review.restaurantId}');
+          final restaurantRes = await _api.get(
+            '/restaurants/${review.restaurantId}',
+            requireAuth: false, // 获取餐厅详情不需要认证
+          );
           final restaurantData = restaurantRes['data'];
           if (restaurantData != null) {
             final restaurant = Restaurant.fromJson(restaurantData);
@@ -172,7 +191,10 @@ class ReviewService {
   /// 获取用户对特定餐厅的评价
   static Future<Review?> getUserReviewForRestaurant(int userId, int restaurantId) async {
     try {
-      final res = await _api.get('/restaurants/$restaurantId/reviews/user/$userId');
+      final res = await _api.get(
+        '/restaurants/$restaurantId/reviews/user/$userId',
+        requireAuth: true, // 获取用户对特定餐厅的评价需要认证
+      );
       final data = res['data'];
       
       if (data != null) {
@@ -190,7 +212,10 @@ class ReviewService {
   /// 获取用户的评价统计信息
   static Future<Map<String, dynamic>> getUserReviewStats(int userId) async {
     try {
-      final res = await _api.get('/users/$userId/reviews/stats');
+      final res = await _api.get(
+        '/users/$userId/reviews/stats',
+        requireAuth: true, // 获取评价统计需要认证
+      );
       final data = res['data'] ?? {};
       
       final stats = {

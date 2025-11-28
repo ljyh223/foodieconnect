@@ -7,10 +7,14 @@ class ChatService {
   /// 验证聊天室验证码并获取临时令牌
   /// 返回包含聊天室信息和临时token的数据
   static Future<Map<String, dynamic>> verifyChatRoom(String restaurantId, String verificationCode) async {
-    final res = await _api.get('/chat-rooms/verify', queryParams: {
-      'restaurantId': restaurantId,
-      'verificationCode': verificationCode,
-    });
+    final res = await _api.get(
+      '/chat-rooms/verify',
+      queryParams: {
+        'restaurantId': restaurantId,
+        'verificationCode': verificationCode,
+      },
+      requireAuth: false, // 验证聊天室不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) {
       return payload;
@@ -21,7 +25,10 @@ class ChatService {
 
   /// 获取餐厅聊天室信息
   static Future<Map<String, dynamic>> getRestaurantChatRoom(String restaurantId) async {
-    final res = await _api.get('/chat-rooms/restaurant/$restaurantId');
+    final res = await _api.get(
+      '/chat-rooms/restaurant/$restaurantId',
+      requireAuth: false, // 获取聊天室信息不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) {
       return payload;
@@ -31,10 +38,14 @@ class ChatService {
 
   /// 获取聊天室消息列表
   static Future<List<ChatMessage>> getRoomMessages(String roomId, {int page = 0, int size = 50, String? currentUserId}) async {
-    final res = await _api.get('/chat-rooms/$roomId/messages', queryParams: {
-      'page': page.toString(),
-      'size': size.toString(),
-    });
+    final res = await _api.get(
+      '/chat-rooms/$roomId/messages',
+      queryParams: {
+        'page': page.toString(),
+        'size': size.toString(),
+      },
+      requireAuth: true, // 获取消息需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     
     if (payload is Map<String, dynamic>) {
@@ -47,9 +58,13 @@ class ChatService {
 
   /// 发送聊天室消息（HTTP方式，主要用于备份或WebSocket不可用时）
   static Future<ChatMessage> sendRoomMessage(String roomId, String content) async {
-    final res = await _api.post('/chat-rooms/$roomId/messages', body: {
-      'content': content,
-    });
+    final res = await _api.post(
+      '/chat-rooms/$roomId/messages',
+      body: {
+        'content': content,
+      },
+      requireAuth: true, // 发送消息需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) return ChatMessage.fromJson(payload);
     throw Exception('Message sending failed');
@@ -57,12 +72,18 @@ class ChatService {
 
   /// 离开聊天室
   static Future<void> leaveRoom(String roomId) async {
-    await _api.post('/chat-rooms/$roomId/leave');
+    await _api.post(
+      '/chat-rooms/$roomId/leave',
+      requireAuth: true, // 离开聊天室需要认证
+    );
   }
 
   /// 获取聊天室信息
   static Future<Map<String, dynamic>> getChatRoomInfo(String roomId) async {
-    final res = await _api.get('/chat-rooms/$roomId');
+    final res = await _api.get(
+      '/chat-rooms/$roomId',
+      requireAuth: true, // 获取聊天室详情需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) {
       return payload;
@@ -72,7 +93,10 @@ class ChatService {
 
   /// 获取聊天室成员列表
   static Future<List<Map<String, dynamic>>> getChatRoomMembers(String roomId) async {
-    final res = await _api.get('/chat-rooms/$roomId/members');
+    final res = await _api.get(
+      '/chat-rooms/$roomId/members',
+      requireAuth: true, // 获取成员列表需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     
     if (payload is List) {

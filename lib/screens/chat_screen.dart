@@ -84,6 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
+    // 在dispose中不能访问Provider，使用didChangeDependencies保存引用
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -157,12 +158,17 @@ class _ChatScreenState extends State<ChatScreen> {
       // 获取历史消息
       await provider.fetchMessages(roomId, currentUserId: userIdStr);
       
-      // 初始化STOMP WebSocket连接
+      // 初始化WebSocket连接
       // 注意：这里需要临时token，通常在验证聊天室后获取
       // 如果已经通过验证界面连接，WebSocket应该已经连接
-      // 如果没有连接，尝试使用空token初始化（这可能会失败，但不会影响已连接的情况）
+      // 如果没有连接，显示错误提示
       if (!provider.isConnected) {
-        await provider.initialize('', userId: userIdStr);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(t.chat.websocketNotConnected)),
+          );
+        }
+        return;
       }
       
       // 加入聊天室
@@ -246,9 +252,21 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  /// 处理返回按钮
+  Future<bool> _onWillPop() async {
+    final provider = Provider.of<ChatProvider>(context, listen: false);
+    if (provider.currentRoomId != null) {
+      provider.leaveRoom(provider.currentRoomId!);
+    }
+    provider.disconnect();
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
         title: _roomName ?? t.chat.chat,
@@ -423,6 +441,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 onTap: _scrollToBottomAndClearIndicator,
               ),
           ],
+        ),
         ),
       ),
     );

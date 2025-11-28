@@ -11,7 +11,11 @@ class AuthService {
   /// 登录，成功时会将 access token 注入到 ApiService 并返回 User
   static Future<User> login(String email, String password) async {
     final body = {'email': email, 'password': password};
-    final res = await _apiService.post(AppConstants.loginEndpoint, body: body);
+    final res = await _apiService.post(
+      AppConstants.loginEndpoint,
+      body: body,
+      requireAuth: false, // 登录不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     final token =
         (payload['token'] as String?) ?? (payload['accessToken'] as String?);
@@ -57,6 +61,7 @@ class AuthService {
     final res = await _apiService.post(
       AppConstants.registerEndpoint,
       body: payload,
+      requireAuth: false, // 注册不需要认证
     );
     final dynamic regPayload = res['data'] ?? res;
     return User.fromJson(regPayload);
@@ -66,7 +71,10 @@ class AuthService {
   static Future<void> refresh(String refreshToken) async {
     // 将 refresh token 临时放入 ApiService 的 Authorization（按后端约定）
     _apiService.setToken(refreshToken);
-    final res = await _apiService.post(AppConstants.refreshEndpoint);
+    final res = await _apiService.post(
+      AppConstants.refreshEndpoint,
+      requireAuth: false, // 刷新token不需要认证
+    );
     final dynamic refPayload = res['data'] ?? res;
     final token =
         (refPayload['token'] as String?) ??

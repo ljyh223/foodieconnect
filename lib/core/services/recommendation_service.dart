@@ -23,6 +23,7 @@ class RecommendationService {
       final response = await _apiService.get(
         '/api/user-recommendations',
         queryParams: queryParams,
+        requireAuth: true, // 获取用户推荐需要认证
       );
       
       final List<dynamic> data = response['data'] ?? [];
@@ -70,6 +71,7 @@ class RecommendationService {
       final response = await _apiService.get(
         '/api/user-recommendations/paginated',
         queryParams: queryParams,
+        requireAuth: true, // 分页获取推荐需要认证
       );
       
       final List<dynamic> data = response['data'] ?? [];
@@ -105,7 +107,10 @@ class RecommendationService {
   /// [recommendationId] 推荐ID
   static Future<UserRecommendation> getRecommendationDetail(int recommendationId) async {
     try {
-      final response = await _apiService.get('/api/user-recommendations/$recommendationId');
+      final response = await _apiService.get(
+        '/api/user-recommendations/$recommendationId',
+        requireAuth: true, // 获取推荐详情需要认证
+      );
       final data = response['data'];
       
       logger.log('获取推荐详情成功: $recommendationId');
@@ -148,6 +153,7 @@ class RecommendationService {
       await _apiService.put(
         '/api/user-recommendations/$recommendationId/status',
         body: request.toJson(),
+        requireAuth: true, // 标记推荐状态需要认证
       );
       
       logger.log('标记推荐状态成功: $recommendationId -> ${status.name}');
@@ -186,6 +192,7 @@ class RecommendationService {
       await _apiService.put(
         '/api/user-recommendations/batch-viewed',
         body: request.toJson(),
+        requireAuth: true, // 批量标记需要认证
       );
       
       logger.log('批量标记已查看成功，数量: ${recommendationIds.length}');
@@ -215,7 +222,10 @@ class RecommendationService {
   /// 获取未查看的推荐
   static Future<List<UserRecommendation>> getUnviewedRecommendations() async {
     try {
-      final response = await _apiService.get('/api/user-recommendations/unviewed');
+      final response = await _apiService.get(
+        '/api/user-recommendations/unviewed',
+        requireAuth: true, // 获取未查看推荐需要认证
+      );
       final List<dynamic> data = response['data'] ?? [];
       
       logger.log('获取未查看推荐成功，数量: ${data.length}');
@@ -230,7 +240,10 @@ class RecommendationService {
   /// 获取推荐统计信息
   static Future<RecommendationStats> getRecommendationStats() async {
     try {
-      final response = await _apiService.get('/api/user-recommendations/stats');
+      final response = await _apiService.get(
+        '/api/user-recommendations/stats',
+        requireAuth: true, // 获取推荐统计需要认证
+      );
       final data = response['data'];
       
       logger.log('获取推荐统计成功');
@@ -245,7 +258,10 @@ class RecommendationService {
   /// 获取算法统计信息
   static Future<Map<String, dynamic>> getAlgorithmStats() async {
     try {
-      final response = await _apiService.get('/api/user-recommendations/algorithm-stats');
+      final response = await _apiService.get(
+        '/api/user-recommendations/algorithm-stats',
+        requireAuth: true, // 获取算法统计需要认证
+      );
       final data = response['data'] ?? {};
       
       logger.log('获取算法统计成功');
@@ -260,7 +276,10 @@ class RecommendationService {
   /// 获取全局算法统计信息
   static Future<Map<String, dynamic>> getGlobalAlgorithmStats() async {
     try {
-      final response = await _apiService.get('/api/user-recommendations/global-algorithm-stats');
+      final response = await _apiService.get(
+        '/api/user-recommendations/global-algorithm-stats',
+        requireAuth: true, // 获取全局算法统计需要认证
+      );
       final data = response['data'] ?? {};
       
       logger.log('获取全局算法统计成功');
@@ -277,7 +296,10 @@ class RecommendationService {
   /// [recommendationId] 推荐ID
   static Future<bool> deleteRecommendation(int recommendationId) async {
     try {
-      await _apiService.delete('/api/user-recommendations/$recommendationId');
+      await _apiService.delete(
+        '/api/user-recommendations/$recommendationId',
+        requireAuth: true, // 删除推荐需要认证
+      );
       
       logger.log('删除推荐成功: $recommendationId');
       
@@ -291,7 +313,10 @@ class RecommendationService {
   /// 清除所有推荐
   static Future<bool> clearAllRecommendations() async {
     try {
-      await _apiService.delete('/api/user-recommendations/clear');
+      await _apiService.delete(
+        '/api/user-recommendations/clear',
+        requireAuth: true, // 清除所有推荐需要认证
+      );
       
       logger.log('清除所有推荐成功');
       
@@ -305,7 +330,10 @@ class RecommendationService {
   /// 清除过期推荐
   static Future<bool> clearExpiredRecommendations() async {
     try {
-      await _apiService.delete('/api/user-recommendations/cleanup-expired');
+      await _apiService.delete(
+        '/api/user-recommendations/cleanup-expired',
+        requireAuth: true, // 清除过期推荐需要认证
+      );
       
       logger.log('清除过期推荐成功');
       
@@ -319,7 +347,10 @@ class RecommendationService {
   /// 预热推荐缓存
   static Future<bool> warmupRecommendationCache() async {
     try {
-      await _apiService.post('/api/user-recommendations/warmup-cache');
+      await _apiService.post(
+        '/api/user-recommendations/warmup-cache',
+        requireAuth: true, // 预热缓存需要认证
+      );
       
       logger.log('预热推荐缓存成功');
       

@@ -6,7 +6,6 @@ import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/chat_provider.dart';
-import '../core/services/auth_service.dart';
 
 class ChatVerifyScreen extends StatefulWidget {
   final String? restaurantId;
@@ -56,35 +55,6 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     try {
       final chatProvider = Provider.of<ChatProvider>(context, listen: false);
       
-      // 确保WebSocket已连接
-      if (!chatProvider.isConnected) {
-        // 获取用户ID
-        final userId = await AuthService.getCurrentUserId();
-        final userIdStr = userId?.toString();
-        
-        // 注意：现在initialize方法需要tempToken参数，这里先传空字符串
-        // 实际使用时需要从认证服务获取token
-        await chatProvider.initialize('', userId: userIdStr);
-        
-        // 显示连接中状态，等待WebSocket连接完全建立
-        if (mounted) {
-          setState(() {
-            _isLoading = true;
-            _error = t.chat.websocketConnecting;
-          });
-        }
-        
-        // 等待WebSocket连接完全建立
-        await _waitForWebSocketConnection(chatProvider);
-        
-        // 连接成功后清除错误状态
-        if (mounted && chatProvider.isConnected) {
-          setState(() {
-            _error = null;
-          });
-        }
-      }
-      
       // 额外延迟一小段时间，确保UI状态完全更新
       await Future.delayed(const Duration(milliseconds: 100));
       
@@ -123,19 +93,6 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     }
   }
 
-  // 等待WebSocket连接完全建立
-  Future<void> _waitForWebSocketConnection(ChatProvider chatProvider) async {
-    int retryCount = 0;
-    while (!chatProvider.isConnected && retryCount < 50) { // 增加等待时间到10秒
-      await Future.delayed(const Duration(milliseconds: 200));
-      retryCount++;
-      debugPrint('等待WebSocket连接... ($retryCount/50)');
-    }
-    
-    if (!chatProvider.isConnected) {
-      throw Exception(t.chat.websocketTimeout);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

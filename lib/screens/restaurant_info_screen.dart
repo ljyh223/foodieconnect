@@ -68,12 +68,8 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       
       // 调用API获取菜单
       final menuData = await RestaurantService.getMenu(restaurantId);
-      
-      // 关闭加载指示器
+
       Navigator.of(context).pop();
-      
-      // TODO: 实现菜单显示界面
-      // 这里可以导航到一个新的菜单页面或显示底部弹窗
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t.restaurant.menuFeatureInDevelopment)),
       );

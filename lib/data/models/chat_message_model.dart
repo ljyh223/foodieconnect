@@ -1,3 +1,6 @@
+import 'package:fixnum/fixnum.dart';
+import '../../protos/chat_proto.dart';
+
 class ChatMessage {
   final String id;
   final String roomId;
@@ -39,6 +42,66 @@ class ChatMessage {
       updatedAt: DateTime.parse(json['updatedAt'] ?? DateTime.now().toIso8601String()),
       isSentByUser: json['senderId']?.toString() == userId,
     );
+  }
+
+  /// 从protobuf消息创建
+  factory ChatMessage.fromProto(ChatMessageProto proto, {String? currentUserId}) {
+    final userId = currentUserId ?? '';
+    
+    return ChatMessage(
+      id: proto.id.toString(),
+      roomId: proto.roomId.toString(),
+      senderId: proto.senderId.toString(),
+      content: proto.content,
+      messageType: _messageTypeToString(proto.messageType),
+      senderName: proto.senderName,
+      senderAvatar: proto.senderAvatar,
+      createdAt: DateTime.parse(proto.timestamp),
+      updatedAt: DateTime.parse(proto.timestamp),
+      isSentByUser: proto.senderId.toString() == userId,
+    );
+  }
+
+  /// 转换为protobuf消息
+  ChatMessageProto toProto() {
+    return ChatMessageProto(
+      id: Int64.parseInt(id),
+      roomId: Int64.parseInt(roomId),
+      senderId: Int64.parseInt(senderId),
+      content: content,
+      messageType: _stringToMessageType(messageType),
+      senderName: senderName,
+      senderAvatar: senderAvatar ?? '',
+      timestamp: createdAt.toIso8601String(),
+    );
+  }
+
+  /// 将字符串转换为MessageType枚举
+  static MessageType _stringToMessageType(String type) {
+    switch (type.toUpperCase()) {
+      case 'TEXT':
+        return MessageType.TEXT;
+      case 'IMAGE':
+        return MessageType.IMAGE;
+      case 'SYSTEM':
+        return MessageType.SYSTEM;
+      default:
+        return MessageType.TEXT;
+    }
+  }
+
+  /// 将MessageType枚举转换为字符串
+  static String _messageTypeToString(MessageType type) {
+    switch (type) {
+      case MessageType.TEXT:
+        return 'TEXT';
+      case MessageType.IMAGE:
+        return 'IMAGE';
+      case MessageType.SYSTEM:
+        return 'SYSTEM';
+      default:
+        return 'TEXT';
+    }
   }
 
   Map<String, dynamic> toJson() {

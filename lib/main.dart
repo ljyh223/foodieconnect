@@ -121,7 +121,7 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            initialRoute: '/main',
+            initialRoute: '/splash',
             onGenerateRoute: AppRouter.generateRoute,
             debugShowCheckedModeBanner: false,
             // 隐藏调试横幅

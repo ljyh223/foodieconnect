@@ -103,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToHome() {
-    Navigator.pushReplacementNamed(context, '/shops');
+    Navigator.pushReplacementNamed(context, '/main');
   }
 
   void _navigateToLogin() {

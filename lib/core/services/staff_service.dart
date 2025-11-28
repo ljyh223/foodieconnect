@@ -7,14 +7,20 @@ class StaffService {
   static final ApiService _api = ApiService();
 
   static Future<Staff> getById(String id) async {
-  final res = await _api.get('${AppConstants.staffEndpoint}/$id');
+  final res = await _api.get(
+    '${AppConstants.staffEndpoint}/$id',
+    requireAuth: false, // 获取员工详情不需要认证
+  );
   final dynamic payload = res['data'] ?? res;
     if (payload is! Map<String, dynamic> || payload.isEmpty) throw Exception('Failed to retrieve employee details');
     return Staff.fromJson(payload);
   }
 
   static Future<List<Staff>> listByRestaurant(String restaurantId) async {
-  final res = await _api.get('${AppConstants.staffEndpoint}/restaurant/$restaurantId');
+  final res = await _api.get(
+    '${AppConstants.staffEndpoint}/restaurant/$restaurantId',
+    requireAuth: false, // 获取餐厅员工列表不需要认证
+  );
   final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) {
       final list = payload['content'] as List<dynamic>? ?? [];
@@ -25,7 +31,10 @@ class StaffService {
   }
 
   static Future<List<Staff>> listByStatus(String status) async {
-  final res = await _api.get('${AppConstants.staffEndpoint}/status/$status');
+  final res = await _api.get(
+    '${AppConstants.staffEndpoint}/status/$status',
+    requireAuth: false, // 按状态获取员工列表不需要认证
+  );
   final dynamic payload = res['data'] ?? res;
     if (payload is Map<String, dynamic>) {
       final list = payload['content'] as List<dynamic>? ?? [];
@@ -38,10 +47,14 @@ class StaffService {
   /// 获取店员评价列表
   static Future<List<StaffReview>> getStaffReviews(String staffId, {int page = 0, int size = 10}) async {
     final endpoint = '${AppConstants.staffEndpoint}/$staffId/reviews';
-    final res = await _api.get(endpoint, queryParams: {
-      'page': page.toString(),
-      'size': size.toString(),
-    });
+    final res = await _api.get(
+      endpoint,
+      queryParams: {
+        'page': page.toString(),
+        'size': size.toString(),
+      },
+      requireAuth: false, // 获取员工评价不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     
     debugPrint('StaffService.getStaffReviews API Response: $payload');

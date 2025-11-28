@@ -10,7 +10,10 @@ class UserService {
   /// 获取用户信息
   static Future<User> getUserInfo(int userId) async {
     try {
-      final response = await _apiService.get('/api/users/$userId');
+      final response = await _apiService.get(
+        '/api/users/$userId',
+        requireAuth: true, // 获取用户信息需要认证
+      );
       final data = response['data'];
       
       return User.fromJson(data);
@@ -36,7 +39,11 @@ class UserService {
       logger.log('头像上传成功，URL: $avatarUrl');
 
       // 更新用户头像URL
-      final updateResponse = await _apiService.put('/api/users/profile', body: {'avatarUrl': avatarUrl});
+      final updateResponse = await _apiService.put(
+        '/api/users/profile',
+        body: {'avatarUrl': avatarUrl},
+        requireAuth: true, // 更新用户头像需要认证
+      );
       final data = updateResponse['data'];
       
       return User.fromJson(data);
@@ -58,7 +65,11 @@ class UserService {
       if (bio != null) body['bio'] = bio;
       if (avatarUrl != null) body['avatarUrl'] = avatarUrl;
 
-      final response = await _apiService.put('/api/users/profile', body: body);
+      final response = await _apiService.put(
+        '/api/users/profile',
+        body: body,
+        requireAuth: true, // 更新用户信息需要认证
+      );
       final data = response['data'];
       
       return User.fromJson(data);

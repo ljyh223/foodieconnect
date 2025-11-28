@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as logger;
@@ -6,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as path;
 import '../constants/app_constants.dart';
+import 'auth_service.dart';
+import '../utils/token_storage.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -14,6 +17,8 @@ class ApiService {
 
   String? _token;
   final String _baseUrl = AppConstants.baseUrl;
+  bool _isRefreshing = false;
+  final List<Completer<void>> _refreshCompleters = [];
 
   void setToken(String token) {
     // Normalize: if token includes a "Bearer " prefix, remove it to avoid double-prefixing
@@ -32,24 +37,75 @@ class ApiService {
     } catch (_) {}
   }
 
-  Map<String, String> _getHeaders() {
+  Map<String, String> _getHeaders({bool requireAuth = false}) {
     final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
 
     try {
-      logger.log('ApiService._getHeaders: hasToken=${_token != null}');
+      logger.log('ApiService._getHeaders: hasToken=${_token != null}, requireAuth=$requireAuth');
     } catch (_) {}
 
     if (_token != null) {
       headers['Authorization'] = 'Bearer $_token';
+    } else if (requireAuth) {
+      // 如果需要认证但没有token，抛出异常
+      throw ApiException('NO_TOKEN', '用户未登录，请先登录', 401);
     }
 
     return headers;
   }
 
-  Future<Map<String, dynamic>> _handleResponse(http.Response response) async {
+  /// 处理token刷新
+  Future<void> _refreshToken() async {
+    if (_isRefreshing) {
+      // 如果已经在刷新，等待刷新完成
+      final completer = Completer<void>();
+      _refreshCompleters.add(completer);
+      return completer.future;
+    }
+
+    _isRefreshing = true;
+    try {
+      logger.log('开始刷新token...');
+      
+      // 从存储中获取refresh token
+      final refreshToken = await TokenStorage.readRefreshToken();
+      
+      if (refreshToken == null || refreshToken.isEmpty) {
+        throw ApiException('TOKEN_EXPIRED', '刷新令牌不存在，请重新登录', 401);
+      }
+      
+      // 调用AuthService刷新token
+      await AuthService.refresh(refreshToken);
+      
+      logger.log('token刷新成功');
+      
+      // 通知所有等待的请求
+      for (final completer in _refreshCompleters) {
+        completer.complete();
+      }
+    } catch (e) {
+      logger.log('token刷新失败: $e');
+      
+      // 刷新失败，清除所有token
+      await TokenStorage.deleteAll();
+      clearToken();
+      
+      // 通知所有等待的请求刷新失败
+      for (final completer in _refreshCompleters) {
+        completer.completeError(e);
+      }
+      rethrow;
+    } finally {
+      _isRefreshing = false;
+      _refreshCompleters.clear();
+    }
+  }
+
+  /// 处理HTTP响应，包含token过期自动刷新
+  Future<Map<String, dynamic>> _handleResponse(http.Response response, {bool isRetry = false}) async {
     try {
       // 使用UTF-8编码解码响应体，解决中文字符乱码问题
       final decoded = json.decode(utf8.decode(response.bodyBytes));
@@ -78,6 +134,17 @@ class ApiService {
         // 否则直接返回解析后的顶层对象（方便兼容不包含 success 的接口）
         return parsed;
       } else {
+        // 处理token过期 (401)
+        if (response.statusCode == 401 && !isRetry) {
+          final errorCode = parsed['error']?['code'] ?? 'TOKEN_EXPIRED';
+          if (errorCode == 'TOKEN_EXPIRED' || errorCode == 'INVALID_TOKEN') {
+            logger.log('检测到token过期，尝试刷新...');
+            await _refreshToken();
+            // 刷新成功后重试请求
+            throw RetryRequestException();
+          }
+        }
+
         final errorMessage =
             parsed['error']?['message'] ??
             parsed['error']?['details'] ??
@@ -106,14 +173,30 @@ class ApiService {
     }
   }
 
+  /// 发送HTTP请求，支持token过期自动重试
+  Future<Map<String, dynamic>> _sendRequest(
+    Future<http.Response> Function() requestFn,
+  ) async {
+    try {
+      final response = await requestFn();
+      return await _handleResponse(response);
+    } on RetryRequestException {
+      // 重试请求（token已刷新）
+      logger.log('重试请求...');
+      final response = await requestFn();
+      return await _handleResponse(response, isRetry: true);
+    }
+  }
+
   Future<Map<String, dynamic>> get(
     String endpoint, {
     Map<String, dynamic>? queryParams,
+    bool requireAuth = true, // 默认需要认证
   }) async {
     final uri = Uri.parse(
       '$_baseUrl$endpoint',
     ).replace(queryParameters: queryParams);
-    final headers = _getHeaders();
+    final headers = _getHeaders(requireAuth: requireAuth);
     try {
       final authHeader = headers['Authorization'];
       if (authHeader != null) {
@@ -124,8 +207,8 @@ class ApiService {
       }
     } catch (_) {}
 
-    try {
-      final response = await http
+    return _sendRequest(() async {
+      return await http
           .get(uri, headers: headers)
           .timeout(
             const Duration(seconds: 30),
@@ -133,28 +216,16 @@ class ApiService {
               throw TimeoutException('请求超时', const Duration(seconds: 30));
             },
           );
-
-      try {
-        logger.log(
-          'ApiService.GET <- ${response.statusCode} ${response.body.length} bytes',
-        );
-      } catch (_) {}
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      throw ApiException('TIMEOUT_ERROR', '请求超时: ${e.message}', 408);
-    } on SocketException catch (e) {
-      throw ApiException('NETWORK_ERROR', '网络连接失败: ${e.message}', 0);
-    } on HttpException catch (e) {
-      throw ApiException('HTTP_ERROR', 'HTTP错误: ${e.message}', 0);
-    }
+    });
   }
 
   Future<Map<String, dynamic>> post(
     String endpoint, {
     Map<String, dynamic>? body,
+    bool requireAuth = true, // 默认需要认证
   }) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final headers = _getHeaders();
+    final headers = _getHeaders(requireAuth: requireAuth);
     try {
       final masked = headers['Authorization'] != null
           ? 'Bearer ${headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}'
@@ -168,8 +239,8 @@ class ApiService {
       );
     } catch (_) {}
 
-    try {
-      final response = await http
+    return _sendRequest(() async {
+      return await http
           .post(
             uri,
             headers: headers,
@@ -181,28 +252,16 @@ class ApiService {
               throw TimeoutException('请求超时', const Duration(seconds: 30));
             },
           );
-
-      try {
-        logger.log(
-          'ApiService.POST <- ${response.statusCode} ${response.body.length} bytes',
-        );
-      } catch (_) {}
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      throw ApiException('TIMEOUT_ERROR', '请求超时: ${e.message}', 408);
-    } on SocketException catch (e) {
-      throw ApiException('NETWORK_ERROR', '网络连接失败: ${e.message}', 0);
-    } on HttpException catch (e) {
-      throw ApiException('HTTP_ERROR', 'HTTP错误: ${e.message}', 0);
-    }
+    });
   }
 
   Future<Map<String, dynamic>> put(
     String endpoint, {
     Map<String, dynamic>? body,
+    bool requireAuth = true, // 默认需要认证
   }) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final headers = _getHeaders();
+    final headers = _getHeaders(requireAuth: requireAuth);
     try {
       final masked = headers['Authorization'] != null
           ? 'Bearer ${headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}'
@@ -210,8 +269,8 @@ class ApiService {
       logger.log('ApiService.PUT -> $uri | Authorization=$masked');
     } catch (_) {}
 
-    try {
-      final response = await http
+    return _sendRequest(() async {
+      return await http
           .put(
             uri,
             headers: headers,
@@ -223,25 +282,15 @@ class ApiService {
               throw TimeoutException('请求超时', const Duration(seconds: 30));
             },
           );
-
-      try {
-        logger.log(
-          'ApiService.PUT <- ${response.statusCode} ${response.body.length} bytes',
-        );
-      } catch (_) {}
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      throw ApiException('TIMEOUT_ERROR', '请求超时: ${e.message}', 408);
-    } on SocketException catch (e) {
-      throw ApiException('NETWORK_ERROR', '网络连接失败: ${e.message}', 0);
-    } on HttpException catch (e) {
-      throw ApiException('HTTP_ERROR', 'HTTP错误: ${e.message}', 0);
-    }
+    });
   }
 
-  Future<Map<String, dynamic>> delete(String endpoint) async {
+  Future<Map<String, dynamic>> delete(
+    String endpoint, {
+    bool requireAuth = true, // 默认需要认证
+  }) async {
     final uri = Uri.parse('$_baseUrl$endpoint');
-    final headers = _getHeaders();
+    final headers = _getHeaders(requireAuth: requireAuth);
     try {
       final masked = headers['Authorization'] != null
           ? 'Bearer ${headers['Authorization']!.split(' ').last.replaceAll(RegExp('.(?=.{4})'), '*')}'
@@ -249,8 +298,8 @@ class ApiService {
       logger.log('ApiService.DELETE -> $uri | Authorization=$masked');
     } catch (_) {}
 
-    try {
-      final response = await http
+    return _sendRequest(() async {
+      return await http
           .delete(uri, headers: headers)
           .timeout(
             const Duration(seconds: 30),
@@ -258,20 +307,7 @@ class ApiService {
               throw TimeoutException('请求超时', const Duration(seconds: 30));
             },
           );
-
-      try {
-        logger.log(
-          'ApiService.DELETE <- ${response.statusCode} ${response.body.length} bytes',
-        );
-      } catch (_) {}
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      throw ApiException('TIMEOUT_ERROR', '请求超时: ${e.message}', 408);
-    } on SocketException catch (e) {
-      throw ApiException('NETWORK_ERROR', '网络连接失败: ${e.message}', 0);
-    } on HttpException catch (e) {
-      throw ApiException('HTTP_ERROR', 'HTTP错误: ${e.message}', 0);
-    }
+    });
   }
 
   /// 将相对路径图片URL转换为完整URL
@@ -299,7 +335,7 @@ class ApiService {
   /// 返回包含url、filename、size的Map
   Future<Map<String, String>> uploadImage(File imageFile) async {
     final uri = Uri.parse('$_baseUrl/upload/image');
-    final headers = _getHeaders();
+    final headers = _getHeaders(requireAuth: true);
 
     // 移除Content-Type，让http包自动设置multipart/form-data边界
     final uploadHeaders = Map<String, String>.from(headers);
@@ -418,7 +454,7 @@ class ApiService {
     }
 
     final uri = Uri.parse('$_baseUrl/upload/images');
-    final headers = _getHeaders();
+    final headers = _getHeaders(requireAuth: true);
 
     // 移除Content-Type，让http包自动设置multipart/form-data边界
     final uploadHeaders = Map<String, String>.from(headers);
@@ -532,4 +568,9 @@ class ApiException implements Exception {
   String toString() {
     return 'ApiException{code: $code, message: $message, statusCode: $statusCode}';
   }
+}
+
+/// 重试请求异常（用于token刷新后重试）
+class RetryRequestException implements Exception {
+  const RetryRequestException();
 }

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:tabletalk/generated/translations.g.dart';
 import '../../data/models/chat_message_model.dart';
 import '../../core/services/chat_service.dart';
-import '../../core/services/stomp_websocket_service.dart';
+import '../../core/services/websocket_service.dart';
 import '../../core/services/auth_service.dart';
 
 class ChatProvider with ChangeNotifier {
@@ -12,7 +12,6 @@ class ChatProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   String? _currentRoomId; // 当前聊天室ID
-  bool _isConnected = false;
   StreamSubscription<ChatMessage>? _messageSubscription;
   StreamSubscription<Map<String, dynamic>>? _notificationSubscription;
   
@@ -24,64 +23,87 @@ class ChatProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   String? get currentRoomId => _currentRoomId;
-  bool get isConnected => _isConnected;
+  bool get isConnected => WebSocketService.isConnected;
 
-  /// 初始化STOMP WebSocket连接
+  /// 初始化WebSocket连接
   Future<void> initialize(String tempToken, {String? userId}) async {
     try {
       // 保存当前用户ID
       _currentUserId = userId;
       
-      // 连接STOMP WebSocket
-      StompWebSocketService.connect(tempToken, userId: userId);
+      // 使用原生WebSocket二进制端点，并传递用户ID
+      final connected = await WebSocketService.connect(tempToken: tempToken, userId: userId);
       
-      // 监听连接状态
-      StompWebSocketService.connectionStateStream.listen((state) {
-        _isConnected = state['connected'] ?? false;
-        if (state['error'] != null) {
-          _error = t.chat.stompConnectionError(error: state['error']);
-        }
+      if (connected) {
+        // 监听消息流
+        _messageSubscription = WebSocketService.messageStream.listen((message) {
+          _handleIncomingMessage(message);
+        });
+
+        // 监听通知流
+        _notificationSubscription = WebSocketService.notificationStream.listen((notification) {
+          // 处理通知，可以在这里添加通知处理逻辑
+          debugPrint('收到通知: $notification');
+        });
+
         notifyListeners();
-      });
-      
-      // 监听消息流
-      _messageSubscription = StompWebSocketService.messageStream.listen((message) {
-        // 只添加当前聊天室的消息，且避免重复添加
-        if (message.roomId == _currentRoomId &&
-            !_messages.any((existing) => existing.id == message.id)) {
-          _messages.add(message);
-          
-          // 检查是否为新消息（不是自己发送的消息）
-          final isNotOwnMessage = message.senderId != _currentUserId;
-          
-          notifyListeners();
-          
-          // 如果不是自己发送的消息，触发新消息提示
-          if (isNotOwnMessage) {
-            // 调用新消息回调函数
-            _newMessageCallback?.call();
-          }
-        }
-      });
-      
-      // 监听通知流
-      _notificationSubscription = StompWebSocketService.notificationStream.listen((notification) {
-        // 处理通知，可以在这里添加通知处理逻辑
-        debugPrint('收到通知: $notification');
-      });
+      } else {
+        _error = t.chat.stompConnectFail(error: '连接失败，请检查网络或重新验证');
+        notifyListeners();
+      }
     } catch (e) {
       _error = t.chat.stompConnectFail(error: e.toString());
       notifyListeners();
     }
   }
 
-  /// 断开STOMP WebSocket连接
+  /// 处理接收到的消息
+  void _handleIncomingMessage(ChatMessage message) {
+    // 只添加当前聊天室的消息，且避免重复添加
+    if (message.roomId == _currentRoomId &&
+        !_messages.any((existing) => existing.id == message.id)) {
+      _messages.add(message);
+      
+      // 检查是否为新消息（不是自己发送的消息）
+      final isNotOwnMessage = message.senderId != _currentUserId;
+      
+      notifyListeners();
+      
+      // 如果不是自己发送的消息，触发新消息提示
+      if (isNotOwnMessage) {
+        // 调用新消息回调函数
+        _newMessageCallback?.call();
+      }
+    }
+  }
+
+  /// 断开WebSocket连接
   Future<void> disconnect() async {
+    debugPrint('ChatProvider: 断开WebSocket连接');
+    
+    // 先离开当前聊天室
+    if (_currentRoomId != null) {
+      try {
+        WebSocketService.leaveRoom(_currentRoomId!);
+      } catch (e) {
+        debugPrint('离开聊天室失败: $e');
+      }
+    }
+    
+    // 取消订阅
     await _messageSubscription?.cancel();
     await _notificationSubscription?.cancel();
-    StompWebSocketService.disconnect();
-    _isConnected = false;
+    
+    // 断开WebSocket连接
+    WebSocketService.disconnect();
+    
+    // 清理所有状态
     _currentUserId = null;
+    _currentRoomId = null;
+    _messages.clear();
+    _error = null;
+    
+    debugPrint('ChatProvider: WebSocket连接已断开，状态已清理');
     notifyListeners();
   }
 
@@ -112,7 +134,7 @@ class ChatProvider with ChangeNotifier {
         // 等待WebSocket连接完成
         await _waitForConnection();
         
-        if (!_isConnected) {
+        if (!isConnected) {
           _error = t.chat.websocketTimeout;
           notifyListeners();
           return;
@@ -122,7 +144,7 @@ class ChatProvider with ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 300));
         
         // 再次检查连接状态
-        if (!_isConnected) {
+        if (!isConnected) {
           _error = t.chat.stompNotConnected;
           notifyListeners();
           return;
@@ -131,10 +153,8 @@ class ChatProvider with ChangeNotifier {
         // 获取历史消息
         await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
         
-        // 然后通过STOMP WebSocket加入聊天室
-        StompWebSocketService.joinRoom(_currentRoomId!);
-        // 订阅聊天室消息以接收实时更新
-        StompWebSocketService.subscribeToRoom(_currentRoomId!);
+        // 然后通过WebSocket加入聊天室
+        await joinRoom(_currentRoomId!);
       } else {
         _error = t.chat.verifyFailNoRoomOrToken;
       }
@@ -148,17 +168,10 @@ class ChatProvider with ChangeNotifier {
     }
   }
 
-  /// 加入餐厅聊天室（已弃用，使用verifyAndJoinChatRoom代替）
-  @Deprecated('使用verifyAndJoinChatRoom代替')
-  Future<void> joinRestaurantChat(String restaurantId, String verificationCode) async {
-    await verifyAndJoinChatRoom(restaurantId, verificationCode);
-  }
-
   /// 加入聊天室（仅WebSocket操作）
   Future<void> joinRoom(String roomId) async {
     try {
-      StompWebSocketService.joinRoom(roomId);
-      StompWebSocketService.subscribeToRoom(roomId);
+      WebSocketService.joinRoom(roomId);
     } catch (e) {
       _error = t.chat.joinRoomFail(error: e.toString());
       notifyListeners();
@@ -199,11 +212,10 @@ class ChatProvider with ChangeNotifier {
     }
   }
 
-  /// 发送聊天室消息（使用STOMP WebSocket）
+  /// 发送聊天室消息（使用WebSocket）
   Future<void> sendMessage(String roomId, String content) async {
-    if (!_isConnected) {
+    if (!isConnected) {
       _error = t.chat.stompConnectionError(error: "connect is null");
-      // _error = 'STOMP WebSocket未连接，无法发送消息';
       notifyListeners();
       return;
     }
@@ -212,8 +224,8 @@ class ChatProvider with ChangeNotifier {
     _error = null;
     
     try {
-      // 使用STOMP WebSocket发送消息
-      StompWebSocketService.sendMessage(roomId, content);
+      // 使用原生WebSocket发送消息
+      WebSocketService.sendMessage(roomId, content);
       // 不需要手动添加消息，因为WebSocket会推送回来
     } catch (e) {
       _error = t.chat.sendMessageFail(error: e.toString());
@@ -228,10 +240,8 @@ class ChatProvider with ChangeNotifier {
     _error = null;
     
     try {
-      // 取消订阅聊天室消息
-      StompWebSocketService.unsubscribeFromRoom(roomId);
-      // 使用STOMP WebSocket离开聊天室
-      StompWebSocketService.leaveRoom(roomId);
+      // 使用原生WebSocket离开聊天室
+      WebSocketService.leaveRoom(roomId);
       _currentRoomId = null;
       _messages.clear();
       notifyListeners();
@@ -245,7 +255,7 @@ class ChatProvider with ChangeNotifier {
   /// 订阅用户通知
   Future<void> subscribeToNotifications(String userId) async {
     try {
-      StompWebSocketService.subscribeToNotifications(userId);
+      WebSocketService.subscribeToNotifications(userId);
     } catch (e) {
       _error = t.chat.subscribeNotificationFail(error: e.toString());
       notifyListeners();
@@ -265,7 +275,7 @@ class ChatProvider with ChangeNotifier {
   /// 等待WebSocket连接完成
   Future<void> _waitForConnection() async {
     int retryCount = 0;
-    while (!_isConnected && retryCount < 20) {
+    while (!isConnected && retryCount < 20) {
       await Future.delayed(const Duration(milliseconds: 200));
       retryCount++;
       debugPrint('等待WebSocket连接... ($retryCount/20)');
@@ -276,7 +286,7 @@ class ChatProvider with ChangeNotifier {
   void dispose() {
     _messageSubscription?.cancel();
     _notificationSubscription?.cancel();
-    StompWebSocketService.disconnect();
+    WebSocketService.disconnect();
     _newMessageCallback = null;
     _currentUserId = null;
     super.dispose();

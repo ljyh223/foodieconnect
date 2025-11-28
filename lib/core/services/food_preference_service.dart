@@ -9,7 +9,10 @@ class FoodPreferenceService {
   /// 获取用户喜好食物列表
   static Future<List<FoodPreference>> getUserPreferences(int userId) async {
     try {
-      final response = await _apiService.get('/users/$userId/food-preferences');
+      final response = await _apiService.get(
+        '/users/$userId/food-preferences',
+        requireAuth: true, // 获取用户喜好需要认证
+      );
       final List<dynamic> data = response['data'] ?? [];
       
       logger.log('获取用户喜好食物成功，数量: ${data.length}');
@@ -36,7 +39,11 @@ class FoodPreferenceService {
         if (description != null) 'description': description,
       };
 
-      final response = await _apiService.post('/users/$userId/food-preferences', body: body);
+      final response = await _apiService.post(
+        '/users/$userId/food-preferences',
+        body: body,
+        requireAuth: true, // 添加喜好需要认证
+      );
       final data = response['data'];
       
       logger.log('添加用户喜好食物成功: $foodName');
@@ -63,7 +70,11 @@ class FoodPreferenceService {
         if (description != null) 'description': description,
       };
 
-      final response = await _apiService.put('/users/$userId/food-preferences/$preferenceId', body: body);
+      final response = await _apiService.put(
+        '/users/$userId/food-preferences/$preferenceId',
+        body: body,
+        requireAuth: true, // 更新喜好需要认证
+      );
       final data = response['data'];
       
       logger.log('更新用户喜好食物成功，ID: $preferenceId');
@@ -81,7 +92,10 @@ class FoodPreferenceService {
     required int userId,
   }) async {
     try {
-      await _apiService.delete('/users/$userId/food-preferences/$preferenceId');
+      await _apiService.delete(
+        '/users/$userId/food-preferences/$preferenceId',
+        requireAuth: true, // 删除喜好需要认证
+      );
       
       logger.log('删除用户喜好食物成功，ID: $preferenceId');
       
@@ -122,7 +136,10 @@ class FoodPreferenceService {
   /// 获取所有食物分类
   static Future<List<String>> getFoodCategories() async {
     try {
-      final response = await _apiService.get('/food-categories');
+      final response = await _apiService.get(
+        '/food-categories',
+        requireAuth: false, // 获取食物分类不需要认证
+      );
       final List<dynamic> data = response['data'] ?? [];
       
       logger.log('获取食物分类成功，数量: ${data.length}');

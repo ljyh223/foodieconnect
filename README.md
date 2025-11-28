@@ -13,3 +13,10 @@
 ``` bash
 pwsh gen_l10n.ps1
 ```
+
+
+### flutter 技术要点
+
+websocket stomp
+
+protobuf 通信

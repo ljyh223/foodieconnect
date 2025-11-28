@@ -49,6 +49,8 @@ dependencies:
   slang: ^4.11.0
   slang_flutter: ^4.11.0
   shared_preferences: ^2.5.3
+  protobuf: ^6.0.0
+  fixnum: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +63,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   slang_build_runner: ^4.11.0
+  build_runner: ^2.10.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

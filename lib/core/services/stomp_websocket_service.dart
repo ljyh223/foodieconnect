@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 import 'package:tabletalk/generated/translations.g.dart';
+import 'package:fixnum/fixnum.dart';
 import '../constants/app_constants.dart';
 import '../../data/models/chat_message_model.dart';
+import '../../protos/chat_proto.dart';
 
 /// STOMP WebSocket服务类，处理实时聊天功能
 class StompWebSocketService {
@@ -34,11 +35,12 @@ class StompWebSocketService {
     try {
       _currentUserId = userId;
       
-      debugPrint('尝试连接STOMP WebSocket: ${AppConstants.wsBaseUrl}/api/v1/ws/chat');
+      final wsUrl = '${AppConstants.wsBaseUrl}/api/v1/ws/chat';
+      debugPrint('尝试连接STOMP WebSocket: $wsUrl');
       
       _stompClient = StompClient(
         config: StompConfig(
-          url: '${AppConstants.wsBaseUrl}/api/v1/ws/chat',
+          url: wsUrl,
           onConnect: _onConnect,
           onDisconnect: _onDisconnect,
           onWebSocketError: _onWebSocketError,
@@ -128,17 +130,30 @@ class StompWebSocketService {
   /// 发送消息到聊天室
   static void sendMessage(String roomId, String content) {
     if (_stompClient?.connected == true) {
-      final message = {
-        'roomId': int.tryParse(roomId) ?? 0,
-        'content': content,
-      };
+      // 使用protobuf格式
+      final sendMessageRequest = SendMessageRequestProto(
+        roomId: Int64.parseInt(roomId),
+        content: content,
+      );
+      
+      final webSocketMessage = WebSocketMessageProto(
+        type: 'SEND_MESSAGE',
+        payload: sendMessageRequest.toBuffer(),
+      );
+      
+      // 将protobuf二进制数据转换为字符串发送
+      final binaryData = webSocketMessage.toBuffer();
+      final base64Data = String.fromCharCodes(binaryData);
       
       _stompClient!.send(
         destination: '/app/chat-room.sendMessage',
-        body: json.encode(message),
+        body: base64Data,
+        headers: {
+          'content-type': 'application/x-protobuf',
+        },
       );
       
-      debugPrint('发送消息到聊天室 $roomId: $content');
+      debugPrint('发送protobuf消息到聊天室 $roomId: $content');
     } else {
       debugPrint('STOMP未连接，无法发送消息');
       throw Exception(t.chat.stompNotConnected);
@@ -150,16 +165,29 @@ class StompWebSocketService {
     if (_stompClient?.connected == true) {
       _currentRoomId = roomId;
       
-      final message = {
-        'roomId': int.tryParse(roomId) ?? 0,
-      };
+      // 使用protobuf格式
+      final joinRoomRequest = JoinRoomRequestProto(
+        roomId: Int64.parseInt(roomId),
+      );
+      
+      final webSocketMessage = WebSocketMessageProto(
+        type: 'JOIN_ROOM',
+        payload: joinRoomRequest.toBuffer(),
+      );
+      
+      // 将protobuf二进制数据转换为字符串发送
+      final binaryData = webSocketMessage.toBuffer();
+      final base64Data = String.fromCharCodes(binaryData);
       
       _stompClient!.send(
         destination: '/app/chat-room.join',
-        body: json.encode(message),
+        body: base64Data,
+        headers: {
+          'content-type': 'application/x-protobuf',
+        },
       );
       
-      debugPrint('加入聊天室: $roomId');
+      debugPrint('加入聊天室: $roomId (使用protobuf)');
     } else {
       debugPrint('STOMP未连接，无法加入聊天室');
       throw Exception(t.chat.stompNotConnected);
@@ -169,16 +197,29 @@ class StompWebSocketService {
   /// 离开聊天室
   static void leaveRoom(String roomId) {
     if (_stompClient?.connected == true) {
-      final message = {
-        'roomId': int.tryParse(roomId) ?? 0,
-      };
+      // 使用protobuf格式
+      final leaveRoomRequest = LeaveRoomRequestProto(
+        roomId: Int64.parseInt(roomId),
+      );
+      
+      final webSocketMessage = WebSocketMessageProto(
+        type: 'LEAVE_ROOM',
+        payload: leaveRoomRequest.toBuffer(),
+      );
+      
+      // 将protobuf二进制数据转换为字符串发送
+      final binaryData = webSocketMessage.toBuffer();
+      final base64Data = String.fromCharCodes(binaryData);
       
       _stompClient!.send(
         destination: '/app/chat-room.leave',
-        body: json.encode(message),
+        body: base64Data,
+        headers: {
+          'content-type': 'application/x-protobuf',
+        },
       );
       
-      debugPrint('离开聊天室: $roomId');
+      debugPrint('离开聊天室: $roomId (使用protobuf)');
     }
     
     if (_currentRoomId == roomId) {
@@ -194,29 +235,38 @@ class StompWebSocketService {
       _stompClient!.subscribe(
         destination: '/topic/chat-room/$roomId',
         callback: (StompFrame frame) {
-          if (frame.body != null) {
+          if (frame.binaryBody != null) {
             try {
-              final data = json.decode(frame.body!);
-              debugPrint('收到聊天室消息: $data');
+              // 解析protobuf二进制数据
+              final chatResponse = ChatResponseProto.fromBuffer(frame.binaryBody!);
+              debugPrint('收到protobuf聊天室消息: success=${chatResponse.success}');
               
-              // 根据API文档，消息可能包装在data字段中
-              Map<String, dynamic> messageData;
-              if (data is Map<String, dynamic> && data.containsKey('data')) {
-                messageData = data['data'];
+              if (chatResponse.success) {
+                if (chatResponse.payload is ChatMessageProto) {
+                  final messageProto = chatResponse.payload as ChatMessageProto;
+                  final chatMessage = messageProto.toModel(currentUserId: _currentUserId);
+                  _messageStreamController.add(chatMessage);
+                  debugPrint('处理聊天消息: ${chatMessage.content}');
+                } else if (chatResponse.payload is JoinRoomResponseProto) {
+                  final joinResponse = chatResponse.payload as JoinRoomResponseProto;
+                  debugPrint('加入房间响应: ${joinResponse.message}');
+                } else if (chatResponse.payload is LeaveRoomResponseProto) {
+                  final leaveResponse = chatResponse.payload as LeaveRoomResponseProto;
+                  debugPrint('离开房间响应: ${leaveResponse.message}');
+                }
               } else {
-                messageData = data;
+                debugPrint('protobuf操作失败: ${chatResponse.errorMessage}');
               }
-              
-              final chatMessage = ChatMessage.fromJson(messageData, currentUserId: _currentUserId);
-              _messageStreamController.add(chatMessage);
             } catch (e) {
-              debugPrint('解析聊天室消息失败: $e');
+              debugPrint('解析protobuf聊天室消息失败: $e');
             }
+          } else if (frame.body != null) {
+            debugPrint('收到文本格式消息，但服务器应该只发送protobuf: ${frame.body}');
           }
         },
       );
       
-      debugPrint('已订阅聊天室 $roomId 的消息');
+      debugPrint('已订阅聊天室 $roomId 的消息 (使用protobuf)');
     } else {
       debugPrint('STOMP未连接，无法订阅聊天室消息');
     }
@@ -243,32 +293,48 @@ class StompWebSocketService {
       _stompClient!.subscribe(
         destination: '/user/queue/notifications',
         callback: (StompFrame frame) {
-          if (frame.body != null) {
+          if (frame.binaryBody != null) {
             try {
-              final data = json.decode(frame.body!);
-              debugPrint('收到个人通知: $data');
+              // 解析protobuf二进制数据
+              final chatResponse = ChatResponseProto.fromBuffer(frame.binaryBody!);
+              debugPrint('收到protobuf个人通知: success=${chatResponse.success}');
               
-              // 根据API文档，通知可能包装在data字段中
-              Map<String, dynamic> notificationData;
-              if (data is Map<String, dynamic> && data.containsKey('data')) {
-                notificationData = data['data'];
+              if (chatResponse.success) {
+                if (chatResponse.payload is ChatMessageProto) {
+                  final messageProto = chatResponse.payload as ChatMessageProto;
+                  final chatMessage = messageProto.toModel(currentUserId: _currentUserId);
+                  _messageStreamController.add(chatMessage);
+                  debugPrint('处理通知消息: ${chatMessage.content}');
+                } else {
+                  // 其他类型的通知
+                  final notificationData = {
+                    'type': 'protobuf_notification',
+                    'success': chatResponse.success,
+                    'payload': chatResponse.payload?.runtimeType.toString(),
+                  };
+                  _notificationStreamController.add(notificationData);
+                }
               } else {
-                notificationData = data;
+                debugPrint('protobuf通知操作失败: ${chatResponse.errorMessage}');
+                _notificationStreamController.add({
+                  'type': 'error',
+                  'message': chatResponse.errorMessage,
+                });
               }
-              
-              _notificationStreamController.add(notificationData);
             } catch (e) {
-              debugPrint('解析个人通知失败: $e');
+              debugPrint('解析protobuf个人通知失败: $e');
               _connectionStateController.add({
                 'connected': false,
                 'error': t.chat.msgParseFailed,
               });
             }
+          } else if (frame.body != null) {
+            debugPrint('收到文本格式通知，但服务器应该只发送protobuf: ${frame.body}');
           }
         },
       );
       
-      debugPrint('已订阅个人通知');
+      debugPrint('已订阅个人通知 (使用protobuf)');
     } else {
       debugPrint('STOMP未连接，无法订阅个人通知');
       // 尝试重新连接并订阅

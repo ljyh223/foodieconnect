@@ -15,7 +15,11 @@ class RestaurantService {
     if (keyword != null) query['keyword'] = keyword;
     if (sort != null) query['sort'] = sort;
 
-  final res = await _api.get(AppConstants.restaurantsEndpoint, queryParams: query);
+  final res = await _api.get(
+    AppConstants.restaurantsEndpoint,
+    queryParams: query,
+    requireAuth: false, // 餐厅列表不需要认证
+  );
 
   // 统一 payload：优先使用 res['data']，否则使用 res
   final dynamic payload = res['data'] ?? res;
@@ -31,7 +35,10 @@ class RestaurantService {
 
   /// 获取餐厅详情
   static Future<Restaurant> get(String id) async {
-    final res = await _api.get('${AppConstants.restaurantsEndpoint}/$id');
+    final res = await _api.get(
+      '${AppConstants.restaurantsEndpoint}/$id',
+      requireAuth: false, // 餐厅详情不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     if (payload is! Map<String, dynamic>) throw Exception('Failed to retrieve restaurant details');
     
@@ -64,7 +71,10 @@ class RestaurantService {
 
   /// 获取热门餐厅
   static Future<List<Restaurant>> popular() async {
-    final res = await _api.get('${AppConstants.restaurantsEndpoint}/popular');
+    final res = await _api.get(
+      '${AppConstants.restaurantsEndpoint}/popular',
+      requireAuth: false, // 热门餐厅不需要认证
+    );
     final dynamic payload = res['data'] ?? res;
     final List<dynamic> list = payload is List ? payload : (payload is Map<String, dynamic> ? (payload['content'] as List<dynamic>? ?? []) : []);
     return list.map((e) => Restaurant.fromJson(e as Map<String, dynamic>)).toList();
@@ -73,7 +83,10 @@ class RestaurantService {
   /// 获取餐厅菜单
   static Future<Map<String, dynamic>> getMenu(String restaurantId) async {
     try {
-      final res = await _api.get('${AppConstants.restaurantsEndpoint}/$restaurantId/menu');
+      final res = await _api.get(
+        '${AppConstants.restaurantsEndpoint}/$restaurantId/menu',
+        requireAuth: false, // 菜单不需要认证
+      );
       final dynamic payload = res['data'] ?? res;
       if (payload is! Map<String, dynamic>) throw Exception('Failed to retrieve restaurant menu');
       return payload;
@@ -86,7 +99,10 @@ class RestaurantService {
   /// 获取餐厅推荐菜品
   static Future<List<String>> getRecommendedDishes(String restaurantId) async {
     try {
-      final res = await _api.get('${AppConstants.restaurantsEndpoint}/$restaurantId/recommended-dishes');
+      final res = await _api.get(
+        '${AppConstants.restaurantsEndpoint}/$restaurantId/recommended-dishes',
+        requireAuth: false, // 推荐菜品不需要认证
+      );
       final dynamic payload = res['data'] ?? res;
       
       if (payload is List) {

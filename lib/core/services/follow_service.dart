@@ -18,7 +18,11 @@ class FollowService {
         'followingId': followingId,
       };
 
-      final response = await _apiService.post('/users/follow', body: body);
+      final response = await _apiService.post(
+        '/users/follow',
+        body: body,
+        requireAuth: true, // 关注用户需要认证
+      );
       final data = response['data'];
       
       logger.log('关注用户成功: $followerId -> $followingId');
@@ -36,7 +40,10 @@ class FollowService {
     required int followingId,
   }) async {
     try {
-      await _apiService.delete('/users/$followerId/follow/$followingId');
+      await _apiService.delete(
+        '/users/$followerId/follow/$followingId',
+        requireAuth: true, // 取消关注需要认证
+      );
       
       logger.log('取消关注用户成功: $followerId -> $followingId');
       
@@ -50,7 +57,10 @@ class FollowService {
   /// 获取用户的关注列表
   static Future<List<User>> getFollowingList(int userId) async {
     try {
-      final response = await _apiService.get('/users/$userId/following');
+      final response = await _apiService.get(
+        '/users/$userId/following',
+        requireAuth: true, // 获取关注列表需要认证
+      );
       final List<dynamic> data = response['data'] ?? [];
       
       logger.log('获取用户关注列表成功，数量: ${data.length}');
@@ -71,7 +81,10 @@ class FollowService {
   /// 获取用户的粉丝列表
   static Future<List<User>> getFollowersList(int userId) async {
     try {
-      final response = await _apiService.get('/users/$userId/followers');
+      final response = await _apiService.get(
+        '/users/$userId/followers',
+        requireAuth: true, // 获取粉丝列表需要认证
+      );
       final List<dynamic> data = response['data'] ?? [];
       
       logger.log('获取用户粉丝列表成功，数量: ${data.length}');
@@ -94,7 +107,10 @@ class FollowService {
     required int userId
   }) async {
     try {
-      final response = await _apiService.get('/api/follows/check/$userId');
+      final response = await _apiService.get(
+        '/api/follows/check/$userId',
+        requireAuth: true, // 检查关注状态需要认证
+      );
       final isFollowing = response['data'] ?? false;
       
       return isFollowing;
@@ -110,7 +126,10 @@ class FollowService {
     required int followingId,
   }) async {
     try {
-      final response = await _apiService.get('/users/$followerId/follow-relation/$followingId');
+      final response = await _apiService.get(
+        '/users/$followerId/follow-relation/$followingId',
+        requireAuth: true, // 获取关注关系需要认证
+      );
       final data = response['data'];
       
       if (data != null) {
@@ -128,7 +147,10 @@ class FollowService {
   /// 获取用户的关注统计信息
   static Future<Map<String, int>> getFollowStats(int userId) async {
     try {
-      final response = await _apiService.get('/users/$userId/follow-stats');
+      final response = await _apiService.get(
+        '/users/$userId/follow-stats',
+        requireAuth: true, // 获取关注统计需要认证
+      );
       final data = response['data'] ?? {};
       
       final stats = <String, int>{
