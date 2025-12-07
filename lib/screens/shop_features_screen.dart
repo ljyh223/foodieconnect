@@ -34,7 +34,10 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
     });
 
     try {
-      final restaurantId = widget.restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String?;
+      final restaurantId =
+          widget.restaurantId ??
+          (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId']
+              as String?;
       if (restaurantId != null) {
         _restaurantFuture = RestaurantService.get(restaurantId);
       } else {
@@ -62,10 +65,7 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
     }
 
     void navigateToChatVerify() {
-      Navigator.pushNamed(
-        context,
-        '/chat_verify',
-      );
+      Navigator.pushNamed(context, '/chat_verify');
     }
 
     void navigateToStaff() {
@@ -80,7 +80,6 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
       // 菜单功能尚未实现
     }
 
-
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
@@ -90,12 +89,16 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: _buildContent(navigateToReviews, navigateToChatVerify, navigateToStaff, navigateToMenu),
+          child: _buildContent(
+            navigateToReviews,
+            navigateToChatVerify,
+            navigateToStaff,
+            navigateToMenu,
+          ),
         ),
       ),
     );
   }
-
 
   Widget _buildContent(
     VoidCallback navigateToReviews,
@@ -192,7 +195,7 @@ class _ShopFeaturesScreenState extends State<ShopFeaturesScreen> {
       },
     );
   }
-  }
+}
 
 class FeatureCard extends StatelessWidget {
   final IconData icon;
@@ -215,25 +218,15 @@ class FeatureCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
-        children:
-        [
+        children: [
           Row(
-            children:
-            [
-              Icon(
-                icon,
-                size: 32,
-                color: AppColors.primary,
-              ),
+            children: [
+              Icon(icon, size: 32, color: AppColors.primary),
               const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-                  Text(
-                    title,
-                    style: AppTextStyles.titleMedium,
-                  ),
+                children: [
+                  Text(title, style: AppTextStyles.titleMedium),
                   Text(
                     subtitle,
                     style: AppTextStyles.bodySmall.copyWith(

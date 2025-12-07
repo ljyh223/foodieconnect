@@ -53,12 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
       _navigateToShops();
     } else {
       final msg = auth.error ?? (t.auth.loginFailed);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.red));
     }
   }
 

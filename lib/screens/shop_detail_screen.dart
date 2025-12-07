@@ -12,7 +12,7 @@ import 'dart:math';
 class ShopDetailScreen extends StatelessWidget {
   final String? restaurantId;
   final Random _random = Random();
-  
+
   // 随机在线图片列表
   final List<String> _randomImages = [
     'https://picsum.photos/seed/restaurant1/400/300.jpg',
@@ -42,18 +42,28 @@ class ShopDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final restaurantId = this.restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String? ?? '1';
+    final restaurantId =
+        this.restaurantId ??
+        (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId']
+            as String? ??
+        '1';
 
     return FutureBuilder<Restaurant>(
       future: RestaurantService.get(restaurantId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
 
         if (snapshot.hasError) {
           debugPrint('获取店铺信息失败：${snapshot.error}');
-          return Scaffold(body: Center(child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}')));
+          return Scaffold(
+            body: Center(
+              child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}'),
+            ),
+          );
         }
 
         final restaurant = snapshot.data!;
@@ -123,14 +133,16 @@ class ShopDetailScreen extends StatelessWidget {
                         bottomRight: Radius.circular(16),
                       ),
                       child: Image.network(
-                        _getRestaurantImageUrl(restaurant.avatar),
+                        _getRestaurantImageUrl(restaurant.imageUrl),
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             color: Colors.grey[200],
                             child: Center(
                               child: Text(
-                                restaurant.name.isNotEmpty ? restaurant.name.substring(0, 1) : '',
+                                restaurant.name.isNotEmpty
+                                    ? restaurant.name.substring(0, 1)
+                                    : '',
                                 style: const TextStyle(
                                   fontSize: 48,
                                   fontWeight: FontWeight.bold,
@@ -143,9 +155,9 @@ class ShopDetailScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // 基础信息模块 - 无边框
                   GestureDetector(
                     onTap: navigateToRestaurantInfo,
@@ -178,36 +190,38 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                        const SizedBox(height: 12),
-                        // _buildInfoRow(
-                        //   icon: Icons.location_on,
-                        //   label: t.app.address,
-                        //   value: restaurant.address,
-                        //   subtitle: t.app.distanceFromYou(restaurant.distance),
-                        // ),
-                        _buildInfoRow(
-                          icon: Icons.schedule,
-                          label: t.restaurant.businessHours,
-                          value: restaurant.hours,
-                        ),
-                        _buildInfoRow(
-                          icon: Icons.phone,
-                          label: t.restaurant.phone,
-                          value: restaurant.phone,
-                        ),
-                        _buildInfoRow(
-                          icon: Icons.star,
-                          label: t.restaurant.rating,
-                          value: '${restaurant.rating}/5.0',
-                          subtitle: t.restaurant.totalReviews(count: restaurant.reviewCount),
-                        ),
+                          const SizedBox(height: 12),
+                          // _buildInfoRow(
+                          //   icon: Icons.location_on,
+                          //   label: t.app.address,
+                          //   value: restaurant.address,
+                          //   subtitle: t.app.distanceFromYou(restaurant.distance),
+                          // ),
+                          _buildInfoRow(
+                            icon: Icons.schedule,
+                            label: t.restaurant.businessHours,
+                            value: restaurant.hours,
+                          ),
+                          _buildInfoRow(
+                            icon: Icons.phone,
+                            label: t.restaurant.phone,
+                            value: restaurant.phone,
+                          ),
+                          _buildInfoRow(
+                            icon: Icons.star,
+                            label: t.restaurant.rating,
+                            value: '${restaurant.rating}/5.0',
+                            subtitle: t.restaurant.totalReviews(
+                              count: restaurant.reviewCount,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // 菜肴点评模块 - 从接口获取
                   GestureDetector(
                     onTap: navigateToReviews,
@@ -240,131 +254,174 @@ class ShopDetailScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                        const SizedBox(height: 12),
-                        FutureBuilder<List<Review>>(
-                          future: ReviewService.listByRestaurant(restaurant.id.toString()),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(child: CircularProgressIndicator());
-                            }
-                            
-                            if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Text(
-                                t.review.noReviews,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            }
-                            
-                            final reviews = snapshot.data!.take(3).toList(); // 只显示前3条
-                            
-                            return Column(
-                              children: reviews.map((review) {
-                                return Container(
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      // 用户头像
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(20),
-                                          child: review.userAvatar.isNotEmpty
-                                              ? Image.network(
-                                                  ApiService.getFullImageUrl(review.userAvatar),
-                                                  width: 40,
-                                                  height: 40,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (context, error, stackTrace) {
-                                                    return Center(
-                                                      child: Text(
-                                                        review.userName.isNotEmpty ? review.userName.substring(0, 1) : '',
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                )
-                                              : Center(
-                                                  child: Text(
-                                                    review.userName.isNotEmpty ? review.userName.substring(0, 1) : '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      
-                                      // 评价内容
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  review.userName,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Row(
-                                                  children: List.generate(5, (index) {
-                                                    return Icon(
-                                                      index < review.rating ? Icons.star : Icons.star_border,
-                                                      color: Colors.orange,
-                                                      size: 14,
-                                                    );
-                                                  }),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              review.comment,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black87,
-                                                height: 1.4,
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                          const SizedBox(height: 12),
+                          FutureBuilder<List<Review>>(
+                            future: ReviewService.listByRestaurant(
+                              restaurant.id.toString(),
+                            ),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+
+                              if (snapshot.hasError ||
+                                  !snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Text(
+                                  t.review.noReviews,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
                                   ),
                                 );
-                              }).toList(),
-                            );
-                          },
-                        ),
+                              }
+
+                              final reviews = snapshot.data!
+                                  .take(3)
+                                  .toList(); // 只显示前3条
+
+                              return Column(
+                                children: reviews.map((review) {
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // 用户头像
+                                        Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                            child: review.userAvatar.isNotEmpty
+                                                ? Image.network(
+                                                    ApiService.getFullImageUrl(
+                                                      review.userAvatar,
+                                                    ),
+                                                    width: 40,
+                                                    height: 40,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) {
+                                                          return Center(
+                                                            child: Text(
+                                                              review
+                                                                      .userName
+                                                                      .isNotEmpty
+                                                                  ? review
+                                                                        .userName
+                                                                        .substring(
+                                                                          0,
+                                                                          1,
+                                                                        )
+                                                                  : '',
+                                                              style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                      review.userName.isNotEmpty
+                                                          ? review.userName
+                                                                .substring(0, 1)
+                                                          : '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+
+                                        // 评价内容
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    review.userName,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Row(
+                                                    children: List.generate(5, (
+                                                      index,
+                                                    ) {
+                                                      return Icon(
+                                                        index < review.rating
+                                                            ? Icons.star
+                                                            : Icons.star_border,
+                                                        color: Colors.orange,
+                                                        size: 14,
+                                                      );
+                                                    }),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                review.comment,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black87,
+                                                  height: 1.4,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // 聊天室模块 - 无边框
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -422,9 +479,9 @@ class ShopDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // 店员评价模块 - 无边框
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -451,13 +508,20 @@ class ShopDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         FutureBuilder<List<Staff>>(
-                          future: StaffService.listByRestaurant(restaurant.id.toString()),
+                          future: StaffService.listByRestaurant(
+                            restaurant.id.toString(),
+                          ),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(child: CircularProgressIndicator());
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
                             }
-                            
-                            if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+
+                            if (snapshot.hasError ||
+                                !snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
                               return Column(
                                 children: [
                                   Text(
@@ -475,9 +539,13 @@ class ShopDetailScreen extends StatelessWidget {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.black,
                                         foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                         ),
                                       ),
                                       child: Text(
@@ -492,9 +560,11 @@ class ShopDetailScreen extends StatelessWidget {
                                 ],
                               );
                             }
-                            
-                            final staffList = snapshot.data!.take(3).toList(); // 只显示前3个店员
-                            
+
+                            final staffList = snapshot.data!
+                                .take(3)
+                                .toList(); // 只显示前3个店员
+
                             return Column(
                               children: [
                                 // 显示前3个店员
@@ -502,7 +572,8 @@ class ShopDetailScreen extends StatelessWidget {
                                   return Container(
                                     margin: const EdgeInsets.only(bottom: 12),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         // 店员头像
                                         Container(
@@ -510,35 +581,63 @@ class ShopDetailScreen extends StatelessWidget {
                                           height: 40,
                                           decoration: BoxDecoration(
                                             color: Colors.grey[200],
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
                                           ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(20),
-                                            child: staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                            child:
+                                                staff.avatarUrl != null &&
+                                                    staff.avatarUrl!.isNotEmpty
                                                 ? Image.network(
-                                                    ApiService.getFullImageUrl(staff.avatarUrl!),
+                                                    ApiService.getFullImageUrl(
+                                                      staff.avatarUrl!,
+                                                    ),
                                                     width: 40,
                                                     height: 40,
                                                     fit: BoxFit.cover,
-                                                    errorBuilder: (context, error, stackTrace) {
-                                                      return Center(
-                                                        child: Text(
-                                                          staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
-                                                          style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight: FontWeight.bold,
-                                                            color: Colors.grey,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
+                                                    errorBuilder:
+                                                        (
+                                                          context,
+                                                          error,
+                                                          stackTrace,
+                                                        ) {
+                                                          return Center(
+                                                            child: Text(
+                                                              staff
+                                                                      .name
+                                                                      .isNotEmpty
+                                                                  ? staff.name
+                                                                        .substring(
+                                                                          0,
+                                                                          1,
+                                                                        )
+                                                                  : '',
+                                                              style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
                                                   )
                                                 : Center(
                                                     child: Text(
-                                                      staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                                      staff.name.isNotEmpty
+                                                          ? staff.name
+                                                                .substring(0, 1)
+                                                          : '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
-                                                        fontWeight: FontWeight.bold,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                         color: Colors.grey,
                                                       ),
                                                     ),
@@ -546,11 +645,12 @@ class ShopDetailScreen extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(width: 12),
-                                        
+
                                         // 店员信息
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Row(
                                                 children: [
@@ -558,7 +658,8 @@ class ShopDetailScreen extends StatelessWidget {
                                                     staff.name,
                                                     style: const TextStyle(
                                                       fontSize: 14,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -576,9 +677,13 @@ class ShopDetailScreen extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   Row(
-                                                    children: List.generate(5, (index) {
+                                                    children: List.generate(5, (
+                                                      index,
+                                                    ) {
                                                       return Icon(
-                                                        index < staff.rating ? Icons.star : Icons.star_border,
+                                                        index < staff.rating
+                                                            ? Icons.star
+                                                            : Icons.star_border,
                                                         color: Colors.orange,
                                                         size: 14,
                                                       );
@@ -586,7 +691,8 @@ class ShopDetailScreen extends StatelessWidget {
                                                   ),
                                                   const SizedBox(width: 8),
                                                   Text(
-                                                    staff.rating.toStringAsFixed(1),
+                                                    staff.rating
+                                                        .toStringAsFixed(1),
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       color: Colors.grey,
@@ -594,7 +700,9 @@ class ShopDetailScreen extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-                                              if (staff.experience.isNotEmpty) ...[
+                                              if (staff
+                                                  .experience
+                                                  .isNotEmpty) ...[
                                                 const SizedBox(height: 2),
                                                 Text(
                                                   '${t.staff.experience}：${staff.experience}',
@@ -611,9 +719,9 @@ class ShopDetailScreen extends StatelessWidget {
                                     ),
                                   );
                                 }).toList(),
-                                
+
                                 const SizedBox(height: 12),
-                                
+
                                 // 查看所有店员按钮
                                 SizedBox(
                                   width: double.infinity,
@@ -622,7 +730,9 @@ class ShopDetailScreen extends StatelessWidget {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -643,7 +753,7 @@ class ShopDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 20),
                 ],
               ),
@@ -666,11 +776,7 @@ class ShopDetailScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: 20,
-            color: Colors.grey[600],
-          ),
+          Icon(icon, size: 20, color: Colors.grey[600]),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -678,19 +784,13 @@ class ShopDetailScreen extends StatelessWidget {
               children: [
                 Text(
                   '$label：$value',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
                 ),
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ],
@@ -700,5 +800,4 @@ class ShopDetailScreen extends StatelessWidget {
       ),
     );
   }
-
 }

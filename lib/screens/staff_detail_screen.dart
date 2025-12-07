@@ -300,17 +300,26 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: ClipOval(
-                                  child: review.userAvatar != null && review.userAvatar!.isNotEmpty
+                                  child:
+                                      review.userAvatar != null &&
+                                          review.userAvatar!.isNotEmpty
                                       ? Image.network(
-                                          ApiService.getFullImageUrl(review.userAvatar!),
+                                          ApiService.getFullImageUrl(
+                                            review.userAvatar!,
+                                          ),
                                           width: 40,
                                           height: 40,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return _buildUserAvatarPlaceholder(review.userName);
-                                          },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                                return _buildUserAvatarPlaceholder(
+                                                  review.userName,
+                                                );
+                                              },
                                         )
-                                      : _buildUserAvatarPlaceholder(review.userName),
+                                      : _buildUserAvatarPlaceholder(
+                                          review.userName,
+                                        ),
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -320,13 +329,15 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           review.userName,
-                                          style: AppTextStyles.bodyMedium.copyWith(
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                          style: AppTextStyles.bodyMedium
+                                              .copyWith(
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                         ),
                                         Text(
                                           _buildRatingStars(review.rating),

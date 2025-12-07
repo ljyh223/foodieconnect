@@ -9,7 +9,7 @@ import '../presentation/providers/chat_provider.dart';
 
 class ChatVerifyScreen extends StatefulWidget {
   final String? restaurantId;
-  
+
   const ChatVerifyScreen({super.key, this.restaurantId});
 
   @override
@@ -26,7 +26,9 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
   void initState() {
     super.initState();
     // 优先使用构造函数参数，如果没有则从路由参数获取
-    _restaurantId = widget.restaurantId ?? ModalRoute.of(context)?.settings.arguments as String?;
+    _restaurantId =
+        widget.restaurantId ??
+        ModalRoute.of(context)?.settings.arguments as String?;
   }
 
   @override
@@ -36,7 +38,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
   }
 
   Future<void> handleVerification(BuildContext context) async {
-    if ( _verificationController.text.isEmpty) {
+    if (_verificationController.text.isEmpty) {
       if (mounted) {
         setState(() {
           _error = t.chat.pleaseEnterVerificationCode;
@@ -54,10 +56,10 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
 
     try {
       final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-      
+
       // 额外延迟一小段时间，确保UI状态完全更新
       await Future.delayed(const Duration(milliseconds: 100));
-      
+
       await chatProvider.verifyAndJoinChatRoom(
         _restaurantId!, // 使用从路由参数获取的餐厅ID
         _verificationController.text.trim(),
@@ -92,7 +94,6 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,22 +135,21 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 20, letterSpacing: 4),
                     ),
-                    
+
                     if (_error != null) ...[
                       const SizedBox(height: 16),
                       Text(
                         _error!,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 14,
-                        ),
+                        style: const TextStyle(color: Colors.red, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ],
-                    
+
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: _isLoading ? null : () => handleVerification(context),
+                      onPressed: _isLoading
+                          ? null
+                          : () => handleVerification(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.onPrimary,
@@ -164,12 +164,12 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                               height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
                               ),
                             )
-                          : Text(
-                              t.chat.verifyAndStartChat,
-                            ),
+                          : Text(t.chat.verifyAndStartChat),
                     ),
                   ],
                 ),
@@ -181,7 +181,6 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
     );
   }
 }
-
 
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;

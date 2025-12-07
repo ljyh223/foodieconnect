@@ -84,7 +84,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                               Row(
                                 children: [
                                   InkWell(
-                                    onTap: () => _handleAvatarTap(review.userId),
+                                    onTap: () =>
+                                        _handleAvatarTap(review.userId),
                                     borderRadius: BorderRadius.circular(24),
                                     // 保持圆形水波纹
                                     child: CircleAvatar(
@@ -197,23 +198,22 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   Future<void> _handleAvatarTap(int userId) async {
     try {
       final currentUserId = await AuthService.getCurrentUserId();
-      
+
       if (currentUserId != null && userId == currentUserId) {
         // 跳转到自己的个人中心
         Navigator.of(context).pushNamed('/user_profile');
       } else {
         // 跳转到他人的个人中心
-        Navigator.of(context).pushNamed(
-          '/other_user_profile',
-          arguments: {'userId': userId},
-        );
+        Navigator.of(
+          context,
+        ).pushNamed('/other_user_profile', arguments: {'userId': userId});
       }
     } catch (e) {
       // 处理错误，显示一个提示
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('跳转失败: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('跳转失败: $e')));
       }
     }
   }

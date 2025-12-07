@@ -10,7 +10,7 @@ class Staff {
   final List<String> skills;
   final List<String> languages;
   final List<StaffReview> reviews;
-  
+
   Staff({
     required this.id,
     required this.name,
@@ -37,9 +37,11 @@ class Staff {
       avatarUrl: json['avatarUrl'], // 直接使用API返回的avatarUrl字段
       skills: List<String>.from(json['skills'] ?? []),
       languages: List<String>.from(json['languages'] ?? []),
-      reviews: (json['reviews'] as List<dynamic>?)
-          ?.map((review) => StaffReview.fromJson(review))
-          .toList() ?? [],
+      reviews:
+          (json['reviews'] as List<dynamic>?)
+              ?.map((review) => StaffReview.fromJson(review))
+              .toList() ??
+          [],
     );
   }
 
@@ -98,7 +100,7 @@ class StaffReview {
   final String staffId;
   final String userId;
   final String? userAvatar;
-  
+
   StaffReview({
     required this.id,
     required this.userName,
@@ -117,8 +119,12 @@ class StaffReview {
       userName: json['userName'] ?? '',
       content: json['content'] ?? '',
       rating: (json['rating'] ?? 0.0).toDouble(),
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
-      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
+      createdAt: DateTime.parse(
+        json['createdAt'] ?? DateTime.now().toIso8601String(),
+      ),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'])
+          : null,
       staffId: json['staffId']?.toString() ?? '',
       userId: json['userId']?.toString() ?? '',
       userAvatar: json['userAvatar'],

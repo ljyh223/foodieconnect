@@ -37,11 +37,11 @@ class RecommendedRestaurantCard extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   color: AppColors.primaryContainer,
                 ),
-                child: restaurant.avatar != null && restaurant.avatar!.isNotEmpty
+                child: restaurant.imageUrl != null && restaurant.imageUrl!.isNotEmpty
                     ? ClipRRect(
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                         child: Image.network(
-                          ApiService.getFullImageUrl(restaurant.avatar!),
+                          ApiService.getFullImageUrl(restaurant.imageUrl!),
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return _buildDefaultRestaurantImage();

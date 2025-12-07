@@ -10,7 +10,7 @@ class Restaurant {
   final double rating;
   final int reviewCount;
   final bool isOpen;
-  final String? avatar; // 改为可空类型，与API保持一致
+  final String? imageUrl; // 改为可空类型，与API保持一致
   final List<String> recommendedDishes;
   final double? averagePrice;
   final String? createdAt;
@@ -28,7 +28,7 @@ class Restaurant {
     required this.rating,
     required this.reviewCount,
     required this.isOpen,
-    this.avatar, // 改为可选参数
+    this.imageUrl, // 改为可选参数
     required this.recommendedDishes,
     this.averagePrice, // 人均消费价格，可选参数
     this.createdAt,
@@ -65,7 +65,7 @@ class Restaurant {
       rating: (json['rating'] ?? 0.0).toDouble(),
       reviewCount: json['reviewCount'] ?? 0,
       isOpen: json['isOpen'] ?? false,
-      avatar: json['avatar'], // 直接使用，允许为null
+      imageUrl: json['imageUrl'], // 直接使用，允许为null
       recommendedDishes: recommendedDishes,
       averagePrice: json['averagePrice']?.toDouble(), // 从API获取人均消费价格
       createdAt: json['createdAt'],
@@ -86,7 +86,7 @@ class Restaurant {
       'rating': rating,
       'reviewCount': reviewCount,
       'isOpen': isOpen,
-      'avatar': avatar,
+      'imageUrl': imageUrl,
       'recommendedDishes': recommendedDishes,
       'averagePrice': averagePrice,
       'createdAt': createdAt,
@@ -106,7 +106,7 @@ class Restaurant {
     double? rating,
     int? reviewCount,
     bool? isOpen,
-    String? avatar,
+    String? imageUrl,
     List<String>? recommendedDishes,
     double? averagePrice,
     String? createdAt,
@@ -124,7 +124,7 @@ class Restaurant {
       rating: rating ?? this.rating,
       reviewCount: reviewCount ?? this.reviewCount,
       isOpen: isOpen ?? this.isOpen,
-      avatar: avatar ?? this.avatar,
+      imageUrl: imageUrl ?? this.imageUrl,
       recommendedDishes: recommendedDishes ?? this.recommendedDishes,
       averagePrice: averagePrice ?? this.averagePrice,
       createdAt: createdAt ?? this.createdAt,

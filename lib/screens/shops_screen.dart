@@ -23,7 +23,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
     'https://wp.upx8.com/api.php',
     'https://wp.upx8.com/api.php',
     'https://wp.upx8.com/api.php',
-    'https://wp.upx8.com/api.php'
+    'https://wp.upx8.com/api.php',
   ];
 
   @override
@@ -31,8 +31,14 @@ class _ShopsScreenState extends State<ShopsScreen> {
     super.initState();
     // Trigger fetch
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<RestaurantProvider>(context, listen: false).fetchRestaurants();
-      Provider.of<RecommendationProvider>(context, listen: false).getHomeRecommendations();
+      Provider.of<RestaurantProvider>(
+        context,
+        listen: false,
+      ).fetchRestaurants();
+      Provider.of<RecommendationProvider>(
+        context,
+        listen: false,
+      ).getHomeRecommendations();
     });
   }
 
@@ -85,7 +91,10 @@ class _ShopsScreenState extends State<ShopsScreen> {
               ),
               filled: true,
               fillColor: Colors.grey[100],
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
               isDense: true, // 减少垂直空间
             ),
           ),
@@ -120,7 +129,8 @@ class _ShopsScreenState extends State<ShopsScreen> {
           // 创建一个ListView，将推荐用户组件和餐厅列表合并
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            itemCount: restaurants.length + 1, // +1 for the recommendation section
+            itemCount:
+                restaurants.length + 1, // +1 for the recommendation section
             itemBuilder: (context, index) {
               // 第一个item是推荐用户组件
               if (index == 0) {
@@ -133,7 +143,9 @@ class _ShopsScreenState extends State<ShopsScreen> {
               }
 
               // 其他item是餐厅
-              final restaurant = restaurants[index - 1]; // -1 because first item is recommendation section
+              final restaurant =
+                  restaurants[index -
+                      1]; // -1 because first item is recommendation section
               return GestureDetector(
                 onTap: () => navigateToShopDetail(restaurant.id.toString()),
                 child: Container(
@@ -145,8 +157,10 @@ class _ShopsScreenState extends State<ShopsScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Image.network(
-                          _getRestaurantImageUrl(restaurant.avatar),
-                          width: MediaQuery.of(context).size.width * 0.67, // 占宽度2/3
+                          _getRestaurantImageUrl(restaurant.imageUrl),
+                          width:
+                              MediaQuery.of(context).size.width *
+                              0.67, // 占宽度2/3
                           height: 200,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
@@ -156,7 +170,9 @@ class _ShopsScreenState extends State<ShopsScreen> {
                               color: Colors.grey[200],
                               child: Center(
                                 child: Text(
-                                  restaurant.name.isNotEmpty ? restaurant.name.substring(0, 1) : '',
+                                  restaurant.name.isNotEmpty
+                                      ? restaurant.name.substring(0, 1)
+                                      : '',
                                   style: const TextStyle(
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
@@ -251,7 +267,9 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                   restaurant.isOpen ? t.app.open : t.app.closed,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: restaurant.isOpen ? Colors.green : Colors.grey,
+                                    color: restaurant.isOpen
+                                        ? Colors.green
+                                        : Colors.grey,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -278,25 +296,28 @@ class _ShopsScreenState extends State<ShopsScreen> {
                             Wrap(
                               spacing: 6,
                               runSpacing: 4,
-                              children: restaurant.recommendedDishes.take(3).map((dish) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[100],
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    dish,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[700],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
+                              children: restaurant.recommendedDishes
+                                  .take(3)
+                                  .map((dish) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[100],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        dish,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[700],
+                                        ),
+                                      ),
+                                    );
+                                  })
+                                  .toList(),
                             ),
                           ],
                         ],

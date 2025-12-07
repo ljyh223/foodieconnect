@@ -23,7 +23,6 @@ void main() async {
 
   LocaleSettings.useDeviceLocale();
 
-
   runApp(
     MultiProvider(
       providers: [
@@ -78,7 +77,7 @@ class _AppInitializerState extends State<AppInitializer> {
 
       // 获取当前用户ID并订阅通知
       if (!mounted) return;
-      
+
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       authProvider.setContext(context);
       final userId = await authProvider.getCurrentUserId();
@@ -105,29 +104,33 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
+
         return AppInitializer(
-          child: MaterialApp(
-            title: 'Foodie Connect',
-            // 更新应用名称为 Foodie Connect
-            theme: AppTheme.lightTheme,
-            // 使用新的简约黑白主题
-            darkTheme: AppTheme.darkTheme,
-            // 可选的暗色主题
-            themeMode: ThemeMode.system,
-            // 跟随系统主题设置
-            locale: languageProvider.locale,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            initialRoute: '/splash',
-            onGenerateRoute: AppRouter.generateRoute,
-            debugShowCheckedModeBanner: false,
-            // 隐藏调试横幅
-            builder: (context, child) {
-              return child!;
-            },
+          child: TranslationProvider(
+            child: MaterialApp(
+              title: 'Foodie Connect',
+              // 更新应用名称为 Foodie Connect
+              theme: AppTheme.lightTheme,
+              // 使用新的简约黑白主题
+              darkTheme: AppTheme.darkTheme,
+              // 可选的暗色主题
+              themeMode: ThemeMode.system,
+              // 跟随系统主题设置
+              locale: languageProvider.locale,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: LanguageProvider.supportedLocales,
+              initialRoute: '/splash',
+              onGenerateRoute: AppRouter.generateRoute,
+              debugShowCheckedModeBanner: false,
+              // 隐藏调试横幅
+              builder: (context, child) {
+                return child!;
+              },
+            ),
           ),
         );
       },

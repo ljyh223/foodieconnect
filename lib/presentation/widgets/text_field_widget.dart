@@ -66,7 +66,9 @@ class TextFieldWidgetState extends State<TextFieldWidget> {
         decoration: InputDecoration(
           labelText: widget.label,
           labelStyle: AppTextStyles.inputLabel.copyWith(
-            color: _focusNode.hasFocus ? AppColors.primary : AppColors.onSurfaceVariant,
+            color: _focusNode.hasFocus
+                ? AppColors.primary
+                : AppColors.onSurfaceVariant,
           ),
           floatingLabelStyle: AppTextStyles.inputLabel.copyWith(
             color: AppColors.primary,
@@ -74,14 +76,22 @@ class TextFieldWidgetState extends State<TextFieldWidget> {
           prefixIcon: widget.prefixIcon != null
               ? Icon(
                   widget.prefixIcon,
-                  color: _focusNode.hasFocus ? AppColors.primary : AppColors.onSurfaceVariant,
+                  color: _focusNode.hasFocus
+                      ? AppColors.primary
+                      : AppColors.onSurfaceVariant,
                   size: 20,
                 )
               : null,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.outlineVariant, width: 1),
+            borderSide: const BorderSide(
+              color: AppColors.outlineVariant,
+              width: 1,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -89,7 +99,10 @@ class TextFieldWidgetState extends State<TextFieldWidget> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.outlineVariant, width: 1),
+            borderSide: const BorderSide(
+              color: AppColors.outlineVariant,
+              width: 1,
+            ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),

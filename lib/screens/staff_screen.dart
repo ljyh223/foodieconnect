@@ -34,7 +34,10 @@ class _StaffScreenState extends State<StaffScreen> {
     });
 
     try {
-      final restaurantId = widget.restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String?;
+      final restaurantId =
+          widget.restaurantId ??
+          (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId']
+              as String?;
       if (restaurantId != null) {
         _staffFuture = StaffService.listByRestaurant(restaurantId);
       } else {
@@ -63,10 +66,7 @@ class _StaffScreenState extends State<StaffScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.surface,
-      appBar: AppBarWidget(
-        title: t.staff.staffList,
-        showBackButton: true,
-      ),
+      appBar: AppBarWidget(title: t.staff.staffList, showBackButton: true),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -88,10 +88,7 @@ class _StaffScreenState extends State<StaffScreen> {
           children: [
             Text('${t.app.loadingFailed}：$_error'),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadStaff,
-              child: Text(t.app.retry),
-            ),
+            ElevatedButton(onPressed: _loadStaff, child: Text(t.app.retry)),
           ],
         ),
       );
@@ -111,10 +108,7 @@ class _StaffScreenState extends State<StaffScreen> {
               children: [
                 Text('${t.staff.getStaffListFailed}${snapshot.error}'),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _loadStaff,
-                  child: Text(t.app.retry),
-                ),
+                ElevatedButton(onPressed: _loadStaff, child: Text(t.app.retry)),
               ],
             ),
           );
@@ -145,7 +139,8 @@ class _StaffScreenState extends State<StaffScreen> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
-                      child: staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
+                      child:
+                          staff.avatarUrl != null && staff.avatarUrl!.isNotEmpty
                           ? Image.network(
                               ApiService.getFullImageUrl(staff.avatarUrl),
                               width: 60,
@@ -154,7 +149,9 @@ class _StaffScreenState extends State<StaffScreen> {
                               errorBuilder: (context, error, stackTrace) {
                                 return Center(
                                   child: Text(
-                                    staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                    staff.name.isNotEmpty
+                                        ? staff.name.substring(0, 1)
+                                        : '',
                                     style: TextStyle(
                                       color: AppColors.onPrimaryContainer,
                                       fontSize: 24,
@@ -166,7 +163,9 @@ class _StaffScreenState extends State<StaffScreen> {
                             )
                           : Center(
                               child: Text(
-                                staff.name.isNotEmpty ? staff.name.substring(0, 1) : '',
+                                staff.name.isNotEmpty
+                                    ? staff.name.substring(0, 1)
+                                    : '',
                                 style: TextStyle(
                                   color: AppColors.onPrimaryContainer,
                                   fontSize: 24,
@@ -205,7 +204,10 @@ class _StaffScreenState extends State<StaffScreen> {
                       backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.onPrimary,
                       elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -226,5 +228,4 @@ class _StaffScreenState extends State<StaffScreen> {
       },
     );
   }
-
 }

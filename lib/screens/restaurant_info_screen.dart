@@ -151,7 +151,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                             bottomRight: Radius.circular(12),
                           ),
                           child: Image.network(
-                            _getRestaurantImageUrl(restaurant.avatar),
+                            _getRestaurantImageUrl(restaurant.imageUrl),
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
