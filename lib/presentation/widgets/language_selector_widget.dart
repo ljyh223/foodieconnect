@@ -11,21 +11,21 @@ class LanguageSelectorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
-        return PopupMenuButton<Locale>(
+        return PopupMenuButton<AppLocale>(
           tooltip: t.setting.selectLanguage,
-          onSelected: (Locale locale) {
-            languageProvider.changeLanguage(locale);
+          onSelected: (AppLocale appLocale) {
+            languageProvider.changeLanguage(appLocale);
           },
           itemBuilder: (BuildContext context) {
-            return LanguageProvider.supportedLocales.map((Locale locale) {
-              final String languageCode = locale.countryCode != null
-                  ? '${locale.languageCode}_${locale.countryCode}'
-                  : locale.languageCode;
-              
-              final isSelected = languageProvider.locale == locale;
-              
-              return PopupMenuItem<Locale>(
-                value: locale,
+            return LanguageProvider.supportedLanguageOptions.map((option) {
+              final AppLocale appLocale = option.key;
+              final Locale locale = appLocale.flutterLocale;
+              final String languageName = option.value;
+
+              final isSelected = languageProvider.currentLocale == appLocale;
+
+              return PopupMenuItem<AppLocale>(
+                value: appLocale,
                 child: Row(
                   children: [
                     // 语言图标
@@ -34,10 +34,14 @@ class LanguageSelectorWidget extends StatelessWidget {
                     // 语言名称
                     Flexible(
                       child: Text(
-                        LanguageProvider.languageNames[languageCode] ?? 'Unknown',
+                        languageName,
                         style: TextStyle(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          color: isSelected ? Theme.of(context).primaryColor : null,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: isSelected
+                              ? Theme.of(context).primaryColor
+                              : null,
                         ),
                       ),
                     ),
@@ -58,24 +62,13 @@ class LanguageSelectorWidget extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.language,
-                  color: Colors.grey[600],
-                  size: 20,
-                ),
+                Icon(Icons.language, color: Colors.grey[600], size: 20),
                 const SizedBox(width: 4),
                 Text(
                   languageProvider.currentLanguageName,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.grey[600],
-                  size: 20,
-                ),
+                Icon(Icons.arrow_drop_down, color: Colors.grey[600], size: 20),
               ],
             ),
           ),
@@ -154,11 +147,7 @@ class LanguageSelectorWidget extends StatelessWidget {
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            Icons.language,
-            size: 16,
-            color: Colors.grey[600],
-          ),
+          child: Icon(Icons.language, size: 16, color: Colors.grey[600]),
         );
     }
   }
@@ -176,26 +165,21 @@ class LanguageSelectorDialog extends StatelessWidget {
           title: Text(t.setting.selectLanguage),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: LanguageProvider.supportedLocales.map((Locale locale) {
-              final String languageCode = locale.countryCode != null 
-                  ? '${locale.languageCode}_${locale.countryCode}'
-                  : locale.languageCode;
-              
-              final isSelected = languageProvider.locale == locale;
-              
+            children: LanguageProvider.supportedLanguageOptions.map((option) {
+              final AppLocale appLocale = option.key;
+              final Locale locale = appLocale.flutterLocale;
+              final String languageName = option.value;
+
+              final isSelected = languageProvider.currentLocale == appLocale;
+
               return ListTile(
                 leading: _buildLanguageIcon(locale),
-                title: Text(
-                  LanguageProvider.languageNames[languageCode] ?? 'Unknown',
-                ),
+                title: Text(languageName),
                 trailing: isSelected
-                    ? Icon(
-                        Icons.check,
-                        color: Theme.of(context).primaryColor,
-                      )
+                    ? Icon(Icons.check, color: Theme.of(context).primaryColor)
                     : null,
                 onTap: () {
-                  languageProvider.changeLanguage(locale);
+                  languageProvider.changeLanguage(appLocale);
                   Navigator.of(context).pop();
                 },
               );
@@ -282,11 +266,7 @@ class LanguageSelectorDialog extends StatelessWidget {
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Icon(
-            Icons.language,
-            size: 20,
-            color: Colors.grey[600],
-          ),
+          child: Icon(Icons.language, size: 20, color: Colors.grey[600]),
         );
     }
   }

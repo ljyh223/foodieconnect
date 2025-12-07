@@ -104,7 +104,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<LanguageProvider>(
       builder: (context, languageProvider, child) {
-
         return AppInitializer(
           child: TranslationProvider(
             child: MaterialApp(
