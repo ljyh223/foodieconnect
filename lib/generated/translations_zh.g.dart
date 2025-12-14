@@ -109,6 +109,15 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 已关注状态文本
 	@override String get following => '已关注';
 
+	/// 以只读模式进入聊天室按钮文本
+	@override String get enterReadOnlyMode => '以只读模式进入';
+
+	/// 只读模式提示信息
+	@override String get readOnlyModeNotice => '您当前处于只读模式，只能查看消息，无法发送消息';
+
+	/// 只读模式底部提示
+	@override String get readOnlyModeTip => '只读模式：您可以查看消息，但无法发送';
+
 	/// 取消关注按钮文本
 	@override String get unfollow => '取消关注';
 
@@ -421,6 +430,12 @@ class _TranslationsChatZh implements TranslationsChatEn {
 	/// 验证错误提示
 	@override String verificationError({required String error}) => '验证失败：${error}';
 
+	/// 获取聊天室信息失败提示
+	@override String get failedToGetChatRoomInfo => '获取聊天室信息失败';
+
+	/// 进入只读模式失败提示
+	@override String get enterReadOnlyModeError => '进入只读模式失败：';
+
 	/// 验证并开始聊天按钮
 	@override String get verifyAndStartChat => '验证并开始聊天';
 
@@ -527,6 +542,15 @@ class _TranslationsChatZh implements TranslationsChatEn {
 
 	/// Label for current user
 	@override String get me => '我';
+
+	/// 以只读模式进入聊天室按钮文本
+	@override String get enterReadOnlyMode => '以只读模式进入';
+
+	/// 只读模式提示信息
+	@override String get readOnlyModeNotice => '您当前处于只读模式，只能查看消息，无法发送消息';
+
+	/// 只读模式底部提示
+	@override String get readOnlyModeTip => '只读模式：您可以查看消息，但无法发送';
 }
 
 // Path: profile
@@ -933,6 +957,9 @@ extension on TranslationsZh {
 			'app.connect' => 'Connect',
 			'app.follow' => '关注',
 			'app.following' => '已关注',
+			'app.enterReadOnlyMode' => '以只读模式进入',
+			'app.readOnlyModeNotice' => '您当前处于只读模式，只能查看消息，无法发送消息',
+			'app.readOnlyModeTip' => '只读模式：您可以查看消息，但无法发送',
 			'app.unfollow' => '取消关注',
 			'app.unfollowConfirm' => ({required Object username}) => '确定要取消关注 ${username} 吗？',
 			'app.foodPreferences' => '喜好食物',
@@ -1031,6 +1058,8 @@ extension on TranslationsZh {
 			'chat.pleaseEnterVerificationCode' => '请填写验证码',
 			'chat.verificationFailed' => '验证失败，请检查餐厅ID和验证码',
 			'chat.verificationError' => ({required String error}) => '验证失败：${error}',
+			'chat.failedToGetChatRoomInfo' => '获取聊天室信息失败',
+			'chat.enterReadOnlyModeError' => '进入只读模式失败：',
 			'chat.verifyAndStartChat' => '验证并开始聊天',
 			'chat.pleaseVerifyFirst' => '请先通过验证界面加入聊天室',
 			'chat.staffChatFeatureMoved' => '店员聊天功能已迁移至餐厅聊天室',
@@ -1069,6 +1098,9 @@ extension on TranslationsZh {
 			'chat.msgParseFailed' => '解析消息失败',
 			'chat.notificationParseFailed' => '解析通知失败',
 			'chat.me' => '我',
+			'chat.enterReadOnlyMode' => '以只读模式进入',
+			'chat.readOnlyModeNotice' => '您当前处于只读模式，只能查看消息，无法发送消息',
+			'chat.readOnlyModeTip' => '只读模式：您可以查看消息，但无法发送',
 			'profile.profileTitle' => '个人主页',
 			'profile.otherProfileTitle' => '用户主页',
 			'profile.edit' => '编辑',

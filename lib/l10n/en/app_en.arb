@@ -73,6 +73,18 @@
   "@following": {
     "description": "Following status text"
   },
+  "enterReadOnlyMode": "Enter Read-only Mode",
+  "@enterReadOnlyMode": {
+    "description": "Button text to enter chat room in read-only mode"
+  },
+  "readOnlyModeNotice": "You are currently in read-only mode, you can only view messages, not send them",
+  "@readOnlyModeNotice": {
+    "description": "Read-only mode notification"
+  },
+  "readOnlyModeTip": "Read-only mode: You can view messages, but cannot send",
+  "@readOnlyModeTip": {
+    "description": "Read-only mode bottom tip"
+  },
   "unfollow": "Unfollow",
   "@unfollow": {
     "description": "Unfollow button text"

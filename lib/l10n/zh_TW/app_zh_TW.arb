@@ -73,6 +73,18 @@
   "@following": {
     "description": "已追蹤狀態文字"
   },
+  "enterReadOnlyMode": "以唯讀模式進入",
+  "@enterReadOnlyMode": {
+    "description": "以唯讀模式進入聊天室按鈕文字"
+  },
+  "readOnlyModeNotice": "您目前處於唯讀模式，只能查看訊息，無法發送訊息",
+  "@readOnlyModeNotice": {
+    "description": "唯讀模式提示訊息"
+  },
+  "readOnlyModeTip": "唯讀模式：您可以查看訊息，但無法發送",
+  "@readOnlyModeTip": {
+    "description": "唯讀模式底部提示"
+  },
   "unfollow": "取消追蹤",
   "@unfollow": {
     "description": "取消追蹤按鈕文字"

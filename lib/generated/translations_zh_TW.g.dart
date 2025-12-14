@@ -109,6 +109,15 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	/// 已追蹤狀態文字
 	@override String get following => '已追蹤';
 
+	/// 以唯讀模式進入聊天室按鈕文字
+	@override String get enterReadOnlyMode => '以唯讀模式進入';
+
+	/// 唯讀模式提示訊息
+	@override String get readOnlyModeNotice => '您目前處於唯讀模式，只能查看訊息，無法發送訊息';
+
+	/// 唯讀模式底部提示
+	@override String get readOnlyModeTip => '唯讀模式：您可以查看訊息，但無法發送';
+
 	/// 取消追蹤按鈕文字
 	@override String get unfollow => '取消追蹤';
 
@@ -421,6 +430,12 @@ class _TranslationsChatZhTw implements TranslationsChatEn {
 	/// 驗證錯誤提示
 	@override String verificationError({required String error}) => '驗證失敗：${error}';
 
+	/// 獲取聊天室資訊失敗提示
+	@override String get failedToGetChatRoomInfo => '獲取聊天室資訊失敗';
+
+	/// 進入唯讀模式失敗提示
+	@override String get enterReadOnlyModeError => '進入唯讀模式失敗：';
+
 	/// 驗證並開始聊天按鈕
 	@override String get verifyAndStartChat => '驗證並開始聊天';
 
@@ -527,6 +542,15 @@ class _TranslationsChatZhTw implements TranslationsChatEn {
 
 	/// Label for current user
 	@override String get me => '我';
+
+	/// 以唯讀模式進入聊天室按鈕文字
+	@override String get enterReadOnlyMode => '以唯讀模式進入';
+
+	/// 唯讀模式提示訊息
+	@override String get readOnlyModeNotice => '您目前處於唯讀模式，只能查看訊息，無法發送訊息';
+
+	/// 唯讀模式底部提示
+	@override String get readOnlyModeTip => '唯讀模式：您可以查看訊息，但無法發送';
 }
 
 // Path: profile
@@ -933,6 +957,9 @@ extension on TranslationsZhTw {
 			'app.connect' => '連接',
 			'app.follow' => '關注',
 			'app.following' => '已追蹤',
+			'app.enterReadOnlyMode' => '以唯讀模式進入',
+			'app.readOnlyModeNotice' => '您目前處於唯讀模式，只能查看訊息，無法發送訊息',
+			'app.readOnlyModeTip' => '唯讀模式：您可以查看訊息，但無法發送',
 			'app.unfollow' => '取消追蹤',
 			'app.unfollowConfirm' => ({required Object username}) => '確定要取消追蹤 ${username} 嗎？',
 			'app.foodPreferences' => '飲食偏好',
@@ -1031,6 +1058,8 @@ extension on TranslationsZhTw {
 			'chat.pleaseEnterVerificationCode' => '請填寫驗證碼',
 			'chat.verificationFailed' => '驗證失敗，請檢查餐廳ID和驗證碼',
 			'chat.verificationError' => ({required String error}) => '驗證失敗：${error}',
+			'chat.failedToGetChatRoomInfo' => '獲取聊天室資訊失敗',
+			'chat.enterReadOnlyModeError' => '進入唯讀模式失敗：',
 			'chat.verifyAndStartChat' => '驗證並開始聊天',
 			'chat.pleaseVerifyFirst' => '請先通過驗證界面加入聊天室',
 			'chat.staffChatFeatureMoved' => '店員聊天功能已遷移至餐廳聊天室',
@@ -1069,6 +1098,9 @@ extension on TranslationsZhTw {
 			'chat.msgParseFailed' => '解析訊息失敗',
 			'chat.notificationParseFailed' => '解析通知失敗',
 			'chat.me' => '我',
+			'chat.enterReadOnlyMode' => '以唯讀模式進入',
+			'chat.readOnlyModeNotice' => '您目前處於唯讀模式，只能查看訊息，無法發送訊息',
+			'chat.readOnlyModeTip' => '唯讀模式：您可以查看訊息，但無法發送',
 			'profile.profileTitle' => '個人主頁',
 			'profile.otherProfileTitle' => '用戶主頁',
 			'profile.edit' => '編輯',

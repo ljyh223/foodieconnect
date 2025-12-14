@@ -40,6 +40,17 @@
       "error": { "type": "String" }
     }
   },
+  "failedToGetChatRoomInfo": "获取聊天室信息失败",
+  "@failedToGetChatRoomInfo": {
+    "description": "获取聊天室信息失败提示"
+  },
+  "enterReadOnlyModeError": "进入只读模式失败：",
+  "@enterReadOnlyModeError": {
+    "description": "进入只读模式失败提示",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
   "verifyAndStartChat": "验证并开始聊天",
   "@verifyAndStartChat": {
     "description": "验证并开始聊天按钮"
@@ -210,5 +221,17 @@
   "me":"我",
   "@me": {
      "description": "Label for current user"
-   }
+   },
+  "enterReadOnlyMode": "以只读模式进入",
+  "@enterReadOnlyMode": {
+    "description": "以只读模式进入聊天室按钮文本"
+  },
+  "readOnlyModeNotice": "您当前处于只读模式，只能查看消息，无法发送消息",
+  "@readOnlyModeNotice": {
+    "description": "只读模式提示信息"
+  },
+  "readOnlyModeTip": "只读模式：您可以查看消息，但无法发送",
+  "@readOnlyModeTip": {
+    "description": "只读模式底部提示"
+  }
 }

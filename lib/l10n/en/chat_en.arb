@@ -40,6 +40,17 @@
       "error": { "type": "String" }
     }
   },
+  "failedToGetChatRoomInfo": "Failed to get chat room information",
+  "@failedToGetChatRoomInfo": {
+    "description": "Failed to get chat room information prompt"
+  },
+  "enterReadOnlyModeError": "Failed to enter read-only mode: ",
+  "@enterReadOnlyModeError": {
+    "description": "Failed to enter read-only mode prompt",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
   "verifyAndStartChat": "Verify and Start Chat",
   "@verifyAndStartChat": {
     "description": "Verify and start chat button"
@@ -210,5 +221,17 @@
   "me":"Me",
   "@me": {
     "description": "Label for current user"
+  },
+  "enterReadOnlyMode": "Enter Read-only Mode",
+  "@enterReadOnlyMode": {
+    "description": "Button text to enter chat room in read-only mode"
+  },
+  "readOnlyModeNotice": "You are currently in read-only mode, you can only view messages, not send them",
+  "@readOnlyModeNotice": {
+    "description": "Read-only mode notification"
+  },
+  "readOnlyModeTip": "Read-only mode: You can view messages, but cannot send",
+  "@readOnlyModeTip": {
+    "description": "Read-only mode bottom tip"
   }
 }

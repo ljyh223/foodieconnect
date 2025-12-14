@@ -148,6 +148,21 @@ class TranslationsAppEn {
 	/// en: 'Following'
 	String get following => 'Following';
 
+	/// Button text to enter chat room in read-only mode
+	///
+	/// en: 'Enter Read-only Mode'
+	String get enterReadOnlyMode => 'Enter Read-only Mode';
+
+	/// Read-only mode notification
+	///
+	/// en: 'You are currently in read-only mode, you can only view messages, not send them'
+	String get readOnlyModeNotice => 'You are currently in read-only mode, you can only view messages, not send them';
+
+	/// Read-only mode bottom tip
+	///
+	/// en: 'Read-only mode: You can view messages, but cannot send'
+	String get readOnlyModeTip => 'Read-only mode: You can view messages, but cannot send';
+
 	/// Unfollow button text
 	///
 	/// en: 'Unfollow'
@@ -656,6 +671,16 @@ class TranslationsChatEn {
 	/// en: 'Verification failed: {error: String}'
 	String verificationError({required String error}) => 'Verification failed: ${error}';
 
+	/// Failed to get chat room information prompt
+	///
+	/// en: 'Failed to get chat room information'
+	String get failedToGetChatRoomInfo => 'Failed to get chat room information';
+
+	/// Failed to enter read-only mode prompt
+	///
+	/// en: 'Failed to enter read-only mode: '
+	String get enterReadOnlyModeError => 'Failed to enter read-only mode: ';
+
 	/// Verify and start chat button
 	///
 	/// en: 'Verify and Start Chat'
@@ -837,6 +862,21 @@ class TranslationsChatEn {
 	///
 	/// en: 'Me'
 	String get me => 'Me';
+
+	/// Button text to enter chat room in read-only mode
+	///
+	/// en: 'Enter Read-only Mode'
+	String get enterReadOnlyMode => 'Enter Read-only Mode';
+
+	/// Read-only mode notification
+	///
+	/// en: 'You are currently in read-only mode, you can only view messages, not send them'
+	String get readOnlyModeNotice => 'You are currently in read-only mode, you can only view messages, not send them';
+
+	/// Read-only mode bottom tip
+	///
+	/// en: 'Read-only mode: You can view messages, but cannot send'
+	String get readOnlyModeTip => 'Read-only mode: You can view messages, but cannot send';
 }
 
 // Path: profile
@@ -1465,6 +1505,9 @@ extension on Translations {
 			'app.connect' => 'Connect',
 			'app.follow' => 'Follow',
 			'app.following' => 'Following',
+			'app.enterReadOnlyMode' => 'Enter Read-only Mode',
+			'app.readOnlyModeNotice' => 'You are currently in read-only mode, you can only view messages, not send them',
+			'app.readOnlyModeTip' => 'Read-only mode: You can view messages, but cannot send',
 			'app.unfollow' => 'Unfollow',
 			'app.unfollowConfirm' => ({required Object username}) => 'Are you sure you want to unfollow ${username}?',
 			'app.foodPreferences' => 'Food Preferences',
@@ -1563,6 +1606,8 @@ extension on Translations {
 			'chat.pleaseEnterVerificationCode' => 'Please enter verification code',
 			'chat.verificationFailed' => 'Verification failed, please check restaurant ID and verification code',
 			'chat.verificationError' => ({required String error}) => 'Verification failed: ${error}',
+			'chat.failedToGetChatRoomInfo' => 'Failed to get chat room information',
+			'chat.enterReadOnlyModeError' => 'Failed to enter read-only mode: ',
 			'chat.verifyAndStartChat' => 'Verify and Start Chat',
 			'chat.pleaseVerifyFirst' => 'Please join the chat room through the verification interface first',
 			'chat.staffChatFeatureMoved' => 'Staff chat feature has been moved to restaurant chat room',
@@ -1601,6 +1646,9 @@ extension on Translations {
 			'chat.msgParseFailed' => 'Failed to parse message',
 			'chat.notificationParseFailed' => 'Failed to parse notification',
 			'chat.me' => 'Me',
+			'chat.enterReadOnlyMode' => 'Enter Read-only Mode',
+			'chat.readOnlyModeNotice' => 'You are currently in read-only mode, you can only view messages, not send them',
+			'chat.readOnlyModeTip' => 'Read-only mode: You can view messages, but cannot send',
 			'profile.profileTitle' => 'Profile',
 			'profile.otherProfileTitle' => 'User Profile',
 			'profile.edit' => 'Edit',
