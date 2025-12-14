@@ -22,6 +22,23 @@ class ChatService {
     throw Exception('Chat room verification failed');
   }
 
+  /// 以观察者模式加入聊天室（只读模式）
+  /// 返回包含聊天室信息和临时token的数据
+  static Future<Map<String, dynamic>> joinAsObserver(String restaurantId) async {
+    final res = await _api.get(
+      '/chat-rooms/join-as-observer',
+      queryParams: {
+        'restaurantId': restaurantId,
+      },
+      requireAuth: false, // 以观察者模式加入不需要认证
+    );
+    final dynamic payload = res['data'] ?? res;
+    if (payload is Map<String, dynamic>) {
+      return payload;
+    }
+    throw Exception('Failed to join chat room as observer');
+  }
+
 
   /// 获取餐厅聊天室信息
   static Future<Map<String, dynamic>> getRestaurantChatRoom(String restaurantId) async {

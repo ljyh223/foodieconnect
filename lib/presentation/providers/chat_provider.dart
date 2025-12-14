@@ -168,6 +168,67 @@ class ChatProvider with ChangeNotifier {
     }
   }
 
+  /// 以观察者模式加入餐厅聊天室（只读模式）
+  Future<void> joinAsObserver(String restaurantId) async {
+    _setLoading(true);
+    _error = null;
+    
+    try {
+      // 通过HTTP API以观察者模式加入聊天室并获取临时token
+      final result = await ChatService.joinAsObserver(restaurantId);
+      
+      // 从响应中获取聊天室信息和临时token
+      final chatRoomData = result['chatRoom'] as Map<String, dynamic>?;
+      if (chatRoomData != null) {
+        _currentRoomId = chatRoomData['id']?.toString();
+      }
+      
+      final tempToken = result['tempToken']?.toString() ?? '';
+      if (tempToken.isNotEmpty && _currentRoomId != null) {
+        // 获取用户ID
+        final userId = await AuthService.getCurrentUserId();
+        final userIdStr = userId?.toString();
+        
+        // 使用临时token初始化WebSocket连接
+        await initialize(tempToken, userId: userIdStr);
+        
+        // 等待WebSocket连接完成
+        await _waitForConnection();
+        
+        if (!isConnected) {
+          _error = t.chat.websocketTimeout;
+          notifyListeners();
+          return;
+        }
+        
+        // 额外等待一段时间，确保连接完全建立
+        await Future.delayed(const Duration(milliseconds: 300));
+        
+        // 再次检查连接状态
+        if (!isConnected) {
+          _error = t.chat.stompNotConnected;
+          notifyListeners();
+          return;
+        }
+        
+        // 获取历史消息
+        await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
+        
+        // 然后通过WebSocket加入聊天室
+        await joinRoom(_currentRoomId!);
+      } else {
+        _error = t.chat.verifyFailNoRoomOrToken;
+      }
+      
+      notifyListeners();
+    } catch (e) {
+      _error = t.chat.verifyRoomFail(error: e.toString());
+      debugPrint('以观察者模式加入聊天室失败: $e');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   /// 加入聊天室（仅WebSocket操作）
   Future<void> joinRoom(String roomId) async {
     try {

@@ -72,6 +72,7 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
           arguments: {
             'restaurantId': _restaurantId!,
             'roomId': chatProvider.currentRoomId!,
+            'isReadOnly': false,
           },
         );
       } else if (mounted) {
@@ -83,6 +84,53 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
       if (mounted) {
         setState(() {
           _error = '${t.chat.verificationError}${e.toString()}';
+          _isLoading = false;
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  /// 以只读模式进入聊天室
+  Future<void> _enterReadOnlyMode(BuildContext context) async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+        _error = null;
+      });
+    }
+
+    try {
+      final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+
+      // 以观察者模式加入聊天室，获取临时token
+      await chatProvider.joinAsObserver(_restaurantId!);
+
+      if (chatProvider.currentRoomId != null && mounted) {
+        // 跳转到聊天室，标记为只读模式
+        Navigator.pushNamed(
+          context,
+          '/chat',
+          arguments: {
+            'restaurantId': _restaurantId!,
+            'roomId': chatProvider.currentRoomId!,
+            'isReadOnly': true,
+          },
+        );
+      } else if (mounted) {
+        setState(() {
+          _error = t.chat.failedToGetChatRoomInfo;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = '${t.chat.enterReadOnlyModeError}${e.toString()}';
           _isLoading = false;
         });
       }
@@ -170,6 +218,25 @@ class _ChatVerifyScreenState extends State<ChatVerifyScreen> {
                               ),
                             )
                           : Text(t.chat.verifyAndStartChat),
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () => _enterReadOnlyMode(context),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        t.chat.enterReadOnlyMode,
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ],
                 ),

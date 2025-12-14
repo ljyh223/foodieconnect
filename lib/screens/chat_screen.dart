@@ -16,8 +16,15 @@ class ChatScreen extends StatefulWidget {
   final String? staffId;
   final String? restaurantId;
   final String? roomId;
+  final bool? isReadOnly;
 
-  const ChatScreen({super.key, this.staffId, this.restaurantId, this.roomId});
+  const ChatScreen({
+    super.key,
+    this.staffId,
+    this.restaurantId,
+    this.roomId,
+    this.isReadOnly = false,
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -28,6 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   String? _restaurantId;
   String? _roomName;
+  bool _isReadOnly = false;
 
   // 新消息提示相关状态
   bool _showNewMessageIndicator = false;
@@ -38,8 +46,9 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
 
-    // 设置餐厅ID
+    // 设置餐厅ID和只读模式
     _restaurantId = widget.restaurantId;
+    _isReadOnly = widget.isReadOnly ?? false;
 
     // 监听滚动位置变化
     _scrollController.addListener(_scrollListener);
@@ -78,6 +87,16 @@ class _ChatScreenState extends State<ChatScreen> {
             context,
           ).showSnackBar(SnackBar(content: Text(t.chat.staffChatFeatureMoved)));
         }
+      }
+
+      // 如果是只读模式，显示提示信息
+      if (_isReadOnly && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(t.chat.readOnlyModeNotice),
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     });
   }
@@ -151,33 +170,31 @@ class _ChatScreenState extends State<ChatScreen> {
       // 设置新消息回调
       provider.setNewMessageCallback(_handleNewMessages);
 
-      // 如果WebSocket已经连接且消息已加载，不需要重复获取
-      if (provider.isConnected && provider.messages.isNotEmpty) {
+      // 获取历史消息
+      await provider.fetchMessages(roomId, currentUserId: userIdStr);
+
+      // 无论是只读模式还是普通模式，都需要初始化WebSocket连接以接收实时消息
+      if (!provider.isConnected) {
+        // 只读模式下，我们需要一个特殊的方式初始化WebSocket
+        // 这里使用空的临时token，让WebSocket连接能够建立
+        await provider.initialize('');
+      }
+
+      // 等待WebSocket连接完成
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // 加入聊天室，无论是只读还是普通模式都需要加入才能接收消息
+      if (provider.isConnected) {
         // 只需要加入聊天室（如果还没有加入）
         if (provider.currentRoomId != roomId) {
           provider.joinRoom(roomId);
         }
-        return;
+      } else if (mounted) {
+        // 如果WebSocket连接失败，显示错误提示
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(t.chat.websocketNotConnected)));
       }
-
-      // 获取历史消息
-      await provider.fetchMessages(roomId, currentUserId: userIdStr);
-
-      // 初始化WebSocket连接
-      // 注意：这里需要临时token，通常在验证聊天室后获取
-      // 如果已经通过验证界面连接，WebSocket应该已经连接
-      // 如果没有连接，显示错误提示
-      if (!provider.isConnected) {
-        if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(t.chat.websocketNotConnected)));
-        }
-        return;
-      }
-
-      // 加入聊天室
-      provider.joinRoom(roomId);
     } catch (e) {
       debugPrint('初始化聊天室失败: $e');
       if (mounted) {
@@ -410,58 +427,84 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceVariant,
-                      border: Border(top: BorderSide(color: AppColors.outline)),
+                  // 只在非只读模式下显示消息输入区域
+                  if (!_isReadOnly)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceVariant,
+                        border: Border(
+                          top: BorderSide(color: AppColors.outline),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.image_outlined,
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                            onPressed: () {
+                              // 选择图片的逻辑
+                            },
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: _messageController,
+                              decoration: InputDecoration(
+                                hintText: t.chat.enterMessage,
+                                filled: true,
+                                fillColor: AppColors.surface,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                              ),
+                              onSubmitted: (_) => _sendMessage(),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.send,
+                                color: AppColors.onPrimary,
+                              ),
+                              onPressed: () => _sendMessage(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.image_outlined,
+                  // 只读模式提示
+                  if (_isReadOnly)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceVariant,
+                        border: Border(
+                          top: BorderSide(color: AppColors.outline),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          t.chat.readOnlyModeTip,
+                          style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.onSurfaceVariant,
                           ),
-                          onPressed: () {
-                            // 选择图片的逻辑
-                          },
                         ),
-                        Expanded(
-                          child: TextField(
-                            controller: _messageController,
-                            decoration: InputDecoration(
-                              hintText: t.chat.enterMessage,
-                              filled: true,
-                              fillColor: AppColors.surface,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(24),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                            ),
-                            onSubmitted: (_) => _sendMessage(),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.send, color: AppColors.onPrimary),
-                            onPressed: () => _sendMessage(),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
                 ],
               ),
               // 新消息提示浮动按钮
