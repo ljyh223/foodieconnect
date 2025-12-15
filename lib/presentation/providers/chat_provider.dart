@@ -14,7 +14,7 @@ class ChatProvider with ChangeNotifier {
   String? _currentRoomId; // 当前聊天室ID
   StreamSubscription<ChatMessage>? _messageSubscription;
   StreamSubscription<Map<String, dynamic>>? _notificationSubscription;
-  
+
   // 新消息回调函数
   Function()? _newMessageCallback;
   String? _currentUserId; // 当前用户ID
@@ -30,10 +30,13 @@ class ChatProvider with ChangeNotifier {
     try {
       // 保存当前用户ID
       _currentUserId = userId;
-      
+
       // 使用原生WebSocket二进制端点，并传递用户ID
-      final connected = await WebSocketService.connect(tempToken: tempToken, userId: userId);
-      
+      final connected = await WebSocketService.connect(
+        tempToken: tempToken,
+        userId: userId,
+      );
+
       if (connected) {
         // 监听消息流
         _messageSubscription = WebSocketService.messageStream.listen((message) {
@@ -41,7 +44,9 @@ class ChatProvider with ChangeNotifier {
         });
 
         // 监听通知流
-        _notificationSubscription = WebSocketService.notificationStream.listen((notification) {
+        _notificationSubscription = WebSocketService.notificationStream.listen((
+          notification,
+        ) {
           // 处理通知，可以在这里添加通知处理逻辑
           debugPrint('收到通知: $notification');
         });
@@ -63,12 +68,12 @@ class ChatProvider with ChangeNotifier {
     if (message.roomId == _currentRoomId &&
         !_messages.any((existing) => existing.id == message.id)) {
       _messages.add(message);
-      
+
       // 检查是否为新消息（不是自己发送的消息）
       final isNotOwnMessage = message.senderId != _currentUserId;
-      
+
       notifyListeners();
-      
+
       // 如果不是自己发送的消息，触发新消息提示
       if (isNotOwnMessage) {
         // 调用新消息回调函数
@@ -80,7 +85,7 @@ class ChatProvider with ChangeNotifier {
   /// 断开WebSocket连接
   Future<void> disconnect() async {
     debugPrint('ChatProvider: 断开WebSocket连接');
-    
+
     // 先离开当前聊天室
     if (_currentRoomId != null) {
       try {
@@ -89,76 +94,82 @@ class ChatProvider with ChangeNotifier {
         debugPrint('离开聊天室失败: $e');
       }
     }
-    
+
     // 取消订阅
     await _messageSubscription?.cancel();
     await _notificationSubscription?.cancel();
-    
+
     // 断开WebSocket连接
     WebSocketService.disconnect();
-    
+
     // 清理所有状态
     _currentUserId = null;
     _currentRoomId = null;
     _messages.clear();
     _error = null;
-    
+
     debugPrint('ChatProvider: WebSocket连接已断开，状态已清理');
     notifyListeners();
   }
 
   /// 验证并加入餐厅聊天室
-  Future<void> verifyAndJoinChatRoom(String restaurantId, String verificationCode) async {
+  Future<void> verifyAndJoinChatRoom(
+    String restaurantId,
+    String verificationCode,
+  ) async {
     _setLoading(true);
     _error = null;
-    
+
     try {
       // 首先通过HTTP API验证聊天室并获取临时token
-      final result = await ChatService.verifyChatRoom(restaurantId, verificationCode);
-      
+      final result = await ChatService.verifyChatRoom(
+        restaurantId,
+        verificationCode,
+      );
+
       // 从响应中获取聊天室信息和临时token
       final chatRoomData = result['chatRoom'] as Map<String, dynamic>?;
       if (chatRoomData != null) {
         _currentRoomId = chatRoomData['id']?.toString();
       }
-      
+
       final tempToken = result['tempToken']?.toString() ?? '';
       if (tempToken.isNotEmpty && _currentRoomId != null) {
         // 获取用户ID
         final userId = await AuthService.getCurrentUserId();
         final userIdStr = userId?.toString();
-        
+
         // 使用临时token初始化WebSocket连接
         await initialize(tempToken, userId: userIdStr);
-        
+
         // 等待WebSocket连接完成
         await _waitForConnection();
-        
+
         if (!isConnected) {
           _error = t.chat.websocketTimeout;
           notifyListeners();
           return;
         }
-        
+
         // 额外等待一段时间，确保连接完全建立
         await Future.delayed(const Duration(milliseconds: 300));
-        
+
         // 再次检查连接状态
         if (!isConnected) {
           _error = t.chat.stompNotConnected;
           notifyListeners();
           return;
         }
-        
+
         // 获取历史消息
         await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
-        
+
         // 然后通过WebSocket加入聊天室
         await joinRoom(_currentRoomId!);
       } else {
         _error = t.chat.verifyFailNoRoomOrToken;
       }
-      
+
       notifyListeners();
     } catch (e) {
       _error = t.chat.verifyRoomFail(error: e.toString());
@@ -172,54 +183,54 @@ class ChatProvider with ChangeNotifier {
   Future<void> joinAsObserver(String restaurantId) async {
     _setLoading(true);
     _error = null;
-    
+
     try {
       // 通过HTTP API以观察者模式加入聊天室并获取临时token
       final result = await ChatService.joinAsObserver(restaurantId);
-      
+
       // 从响应中获取聊天室信息和临时token
       final chatRoomData = result['chatRoom'] as Map<String, dynamic>?;
       if (chatRoomData != null) {
         _currentRoomId = chatRoomData['id']?.toString();
       }
-      
+
       final tempToken = result['tempToken']?.toString() ?? '';
       if (tempToken.isNotEmpty && _currentRoomId != null) {
         // 获取用户ID
         final userId = await AuthService.getCurrentUserId();
         final userIdStr = userId?.toString();
-        
+
         // 使用临时token初始化WebSocket连接
         await initialize(tempToken, userId: userIdStr);
-        
+
         // 等待WebSocket连接完成
         await _waitForConnection();
-        
+
         if (!isConnected) {
           _error = t.chat.websocketTimeout;
           notifyListeners();
           return;
         }
-        
+
         // 额外等待一段时间，确保连接完全建立
         await Future.delayed(const Duration(milliseconds: 300));
-        
+
         // 再次检查连接状态
         if (!isConnected) {
           _error = t.chat.stompNotConnected;
           notifyListeners();
           return;
         }
-        
+
         // 获取历史消息
         await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
-        
+
         // 然后通过WebSocket加入聊天室
         await joinRoom(_currentRoomId!);
       } else {
         _error = t.chat.verifyFailNoRoomOrToken;
       }
-      
+
       notifyListeners();
     } catch (e) {
       _error = t.chat.verifyRoomFail(error: e.toString());
@@ -254,13 +265,17 @@ class ChatProvider with ChangeNotifier {
           debugPrint('获取用户信息失败: $e');
         }
       }
-      
+
       // 获取消息列表并解析
-      final messagesData = await ChatService.getRoomMessages(roomId, currentUserId: currentUserId);
-      
+      final messagesData = await ChatService.getRoomMessages(
+        roomId,
+        currentUserId: currentUserId,
+      );
+
       // 确保消息按时间排序（最新的在最后）
-      _messages = messagesData..sort((a, b) => a.createdAt.compareTo(b.createdAt));
-      
+      _messages = messagesData
+        ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
       _currentRoomId = roomId;
       debugPrint('成功加载 ${_messages.length} 条消息');
       notifyListeners();
@@ -280,10 +295,10 @@ class ChatProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-    
+
     _setLoading(true);
     _error = null;
-    
+
     try {
       // 使用原生WebSocket发送消息
       WebSocketService.sendMessage(roomId, content);
@@ -299,7 +314,7 @@ class ChatProvider with ChangeNotifier {
   Future<void> leaveRoom(String roomId) async {
     _setLoading(true);
     _error = null;
-    
+
     try {
       // 使用原生WebSocket离开聊天室
       WebSocketService.leaveRoom(roomId);
@@ -332,7 +347,7 @@ class ChatProvider with ChangeNotifier {
   void setNewMessageCallback(Function() callback) {
     _newMessageCallback = callback;
   }
-  
+
   /// 等待WebSocket连接完成
   Future<void> _waitForConnection() async {
     int retryCount = 0;
