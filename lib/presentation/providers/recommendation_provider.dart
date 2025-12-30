@@ -350,7 +350,11 @@ class RecommendationProvider with ChangeNotifier {
         filteredRecommendations.sort((a, b) => b.score.compareTo(a.score));
         break;
       case 'createdAt':
-        filteredRecommendations.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        filteredRecommendations.sort((a, b) {
+          final aTime = a.createdAt ?? DateTime.now();
+          final bTime = b.createdAt ?? DateTime.now();
+          return bTime.compareTo(aTime);
+        });
         break;
       case 'viewedAt':
         filteredRecommendations.sort((a, b) {

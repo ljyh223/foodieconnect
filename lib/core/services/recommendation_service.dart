@@ -1,10 +1,10 @@
 import 'dart:developer' as logger;
-import 'api_service.dart';
 import '../../data/models/user_recommendation_model.dart';
+import '../../features/recommendation/recommendation_repository.dart';
 
 /// 推荐服务类
 class RecommendationService {
-  static final ApiService _apiService = ApiService();
+  static final RecommendationRepository _repository = RecommendationRepository();
 
   /// 获取用户推荐列表
   ///
@@ -15,30 +15,22 @@ class RecommendationService {
     int limit = 10,
   }) async {
     try {
-      final queryParams = {
-        'algorithm': algorithm.name.toUpperCase(),
-        'limit': limit.toString(),
-      };
-
-      final response = await _apiService.get(
-        '/api/user-recommendations',
-        queryParams: queryParams,
-        requireAuth: true, // 获取用户推荐需要认证
+      final result = await _repository.fetchUserRecommendations(
+        algorithm: algorithm,
+        limit: limit,
       );
       
-      final List<dynamic> data = response['data'] ?? [];
+      logger.log('获取用户推荐成功，数量: ${result.length}');
       
-      logger.log('获取用户推荐成功，数量: ${data.length}');
-      
-      return data.map((json) => UserRecommendation.fromJson(json)).toList();
+      return result;
     } catch (e) {
       logger.log('获取用户推荐失败: $e');
       String errorMessage = '获取用户推荐失败';
       
       // 根据错误类型提供更具体的错误信息
-      if (e.toString().contains('SocketException')) {
+      if (e.toString().contains('网络')) {
         errorMessage = '网络连接失败，请检查网络设置';
-      } else if (e.toString().contains('TimeoutException')) {
+      } else if (e.toString().contains('timeout')) {
         errorMessage = '请求超时，请稍后重试';
       } else if (e.toString().contains('401')) {
         errorMessage = '身份验证失败，请重新登录';
@@ -63,30 +55,22 @@ class RecommendationService {
     int size = 10,
   }) async {
     try {
-      final queryParams = {
-        'page': page.toString(),
-        'size': size.toString(),
-      };
-
-      final response = await _apiService.get(
-        '/api/user-recommendations/paginated',
-        queryParams: queryParams,
-        requireAuth: true, // 分页获取推荐需要认证
+      final result = await _repository.fetchUserRecommendationsPaginated(
+        page: page,
+        size: size,
       );
       
-      final List<dynamic> data = response['data'] ?? [];
+      logger.log('分页获取用户推荐成功，页码: $page, 数量: ${result.length}');
       
-      logger.log('分页获取用户推荐成功，页码: $page, 数量: ${data.length}');
-      
-      return data.map((json) => UserRecommendation.fromJson(json)).toList();
+      return result;
     } catch (e) {
       logger.log('分页获取用户推荐失败: $e');
       String errorMessage = '分页获取用户推荐失败';
       
       // 根据错误类型提供更具体的错误信息
-      if (e.toString().contains('SocketException')) {
+      if (e.toString().contains('网络')) {
         errorMessage = '网络连接失败，请检查网络设置';
-      } else if (e.toString().contains('TimeoutException')) {
+      } else if (e.toString().contains('timeout')) {
         errorMessage = '请求超时，请稍后重试';
       } else if (e.toString().contains('401')) {
         errorMessage = '身份验证失败，请重新登录';
@@ -107,23 +91,19 @@ class RecommendationService {
   /// [recommendationId] 推荐ID
   static Future<UserRecommendation> getRecommendationDetail(int recommendationId) async {
     try {
-      final response = await _apiService.get(
-        '/api/user-recommendations/$recommendationId',
-        requireAuth: true, // 获取推荐详情需要认证
-      );
-      final data = response['data'];
+      final result = await _repository.fetchRecommendationDetail(recommendationId);
       
       logger.log('获取推荐详情成功: $recommendationId');
       
-      return UserRecommendation.fromJson(data);
+      return result;
     } catch (e) {
       logger.log('获取推荐详情失败: $e');
       String errorMessage = '获取推荐详情失败';
       
       // 根据错误类型提供更具体的错误信息
-      if (e.toString().contains('SocketException')) {
+      if (e.toString().contains('网络')) {
         errorMessage = '网络连接失败，请检查网络设置';
-      } else if (e.toString().contains('TimeoutException')) {
+      } else if (e.toString().contains('timeout')) {
         errorMessage = '请求超时，请稍后重试';
       } else if (e.toString().contains('401')) {
         errorMessage = '身份验证失败，请重新登录';
@@ -148,25 +128,22 @@ class RecommendationService {
     required RecommendationStatus status,
   }) async {
     try {
-      final request = RecommendationStatusRequest(status: status);
-      
-      await _apiService.put(
-        '/api/user-recommendations/$recommendationId/status',
-        body: request.toJson(),
-        requireAuth: true, // 标记推荐状态需要认证
+      final result = await _repository.updateRecommendationStatus(
+        recommendationId: recommendationId,
+        status: status,
       );
       
       logger.log('标记推荐状态成功: $recommendationId -> ${status.name}');
       
-      return true;
+      return result;
     } catch (e) {
       logger.log('标记推荐状态失败: $e');
       String errorMessage = '标记推荐状态失败';
       
       // 根据错误类型提供更具体的错误信息
-      if (e.toString().contains('SocketException')) {
+      if (e.toString().contains('网络')) {
         errorMessage = '网络连接失败，请检查网络设置';
-      } else if (e.toString().contains('TimeoutException')) {
+      } else if (e.toString().contains('timeout')) {
         errorMessage = '请求超时，请稍后重试';
       } else if (e.toString().contains('401')) {
         errorMessage = '身份验证失败，请重新登录';
@@ -187,25 +164,19 @@ class RecommendationService {
   /// [recommendationIds] 推荐ID列表
   static Future<bool> batchMarkAsViewed(List<int> recommendationIds) async {
     try {
-      final request = BatchViewedRequest(recommendationIds: recommendationIds);
-      
-      await _apiService.put(
-        '/api/user-recommendations/batch-viewed',
-        body: request.toJson(),
-        requireAuth: true, // 批量标记需要认证
-      );
+      final result = await _repository.batchMarkRecommendationsAsViewed(recommendationIds);
       
       logger.log('批量标记已查看成功，数量: ${recommendationIds.length}');
       
-      return true;
+      return result;
     } catch (e) {
       logger.log('批量标记已查看失败: $e');
       String errorMessage = '批量标记已查看失败';
       
       // 根据错误类型提供更具体的错误信息
-      if (e.toString().contains('SocketException')) {
+      if (e.toString().contains('网络')) {
         errorMessage = '网络连接失败，请检查网络设置';
-      } else if (e.toString().contains('TimeoutException')) {
+      } else if (e.toString().contains('timeout')) {
         errorMessage = '请求超时，请稍后重试';
       } else if (e.toString().contains('401')) {
         errorMessage = '身份验证失败，请重新登录';
@@ -222,15 +193,11 @@ class RecommendationService {
   /// 获取未查看的推荐
   static Future<List<UserRecommendation>> getUnviewedRecommendations() async {
     try {
-      final response = await _apiService.get(
-        '/api/user-recommendations/unviewed',
-        requireAuth: true, // 获取未查看推荐需要认证
-      );
-      final List<dynamic> data = response['data'] ?? [];
+      final result = await _repository.fetchUnviewedRecommendations();
       
-      logger.log('获取未查看推荐成功，数量: ${data.length}');
+      logger.log('获取未查看推荐成功，数量: ${result.length}');
       
-      return data.map((json) => UserRecommendation.fromJson(json)).toList();
+      return result;
     } catch (e) {
       logger.log('获取未查看推荐失败: $e');
       throw Exception('获取未查看推荐失败: $e');
@@ -240,15 +207,11 @@ class RecommendationService {
   /// 获取推荐统计信息
   static Future<RecommendationStats> getRecommendationStats() async {
     try {
-      final response = await _apiService.get(
-        '/api/user-recommendations/stats',
-        requireAuth: true, // 获取推荐统计需要认证
-      );
-      final data = response['data'];
+      final result = await _repository.fetchRecommendationStats();
       
       logger.log('获取推荐统计成功');
       
-      return RecommendationStats.fromJson(data);
+      return result;
     } catch (e) {
       logger.log('获取推荐统计失败: $e');
       throw Exception('获取推荐统计失败: $e');
@@ -258,15 +221,11 @@ class RecommendationService {
   /// 获取算法统计信息
   static Future<Map<String, dynamic>> getAlgorithmStats() async {
     try {
-      final response = await _apiService.get(
-        '/api/user-recommendations/algorithm-stats',
-        requireAuth: true, // 获取算法统计需要认证
-      );
-      final data = response['data'] ?? {};
+      final result = await _repository.fetchAlgorithmStats();
       
       logger.log('获取算法统计成功');
       
-      return data;
+      return result;
     } catch (e) {
       logger.log('获取算法统计失败: $e');
       throw Exception('获取算法统计失败: $e');
@@ -276,15 +235,11 @@ class RecommendationService {
   /// 获取全局算法统计信息
   static Future<Map<String, dynamic>> getGlobalAlgorithmStats() async {
     try {
-      final response = await _apiService.get(
-        '/api/user-recommendations/global-algorithm-stats',
-        requireAuth: true, // 获取全局算法统计需要认证
-      );
-      final data = response['data'] ?? {};
+      final result = await _repository.fetchGlobalAlgorithmStats();
       
       logger.log('获取全局算法统计成功');
       
-      return data;
+      return result;
     } catch (e) {
       logger.log('获取全局算法统计失败: $e');
       throw Exception('获取全局算法统计失败: $e');
@@ -296,14 +251,11 @@ class RecommendationService {
   /// [recommendationId] 推荐ID
   static Future<bool> deleteRecommendation(int recommendationId) async {
     try {
-      await _apiService.delete(
-        '/api/user-recommendations/$recommendationId',
-        requireAuth: true, // 删除推荐需要认证
-      );
+      final result = await _repository.deleteRecommendation(recommendationId);
       
       logger.log('删除推荐成功: $recommendationId');
       
-      return true;
+      return result;
     } catch (e) {
       logger.log('删除推荐失败: $e');
       throw Exception('删除推荐失败: $e');
@@ -313,14 +265,11 @@ class RecommendationService {
   /// 清除所有推荐
   static Future<bool> clearAllRecommendations() async {
     try {
-      await _apiService.delete(
-        '/api/user-recommendations/clear',
-        requireAuth: true, // 清除所有推荐需要认证
-      );
+      final result = await _repository.clearAllRecommendations();
       
       logger.log('清除所有推荐成功');
       
-      return true;
+      return result;
     } catch (e) {
       logger.log('清除所有推荐失败: $e');
       throw Exception('清除所有推荐失败: $e');
@@ -330,14 +279,11 @@ class RecommendationService {
   /// 清除过期推荐
   static Future<bool> clearExpiredRecommendations() async {
     try {
-      await _apiService.delete(
-        '/api/user-recommendations/cleanup-expired',
-        requireAuth: true, // 清除过期推荐需要认证
-      );
+      final result = await _repository.clearExpiredRecommendations();
       
       logger.log('清除过期推荐成功');
       
-      return true;
+      return result;
     } catch (e) {
       logger.log('清除过期推荐失败: $e');
       throw Exception('清除过期推荐失败: $e');
@@ -347,14 +293,11 @@ class RecommendationService {
   /// 预热推荐缓存
   static Future<bool> warmupRecommendationCache() async {
     try {
-      await _apiService.post(
-        '/api/user-recommendations/warmup-cache',
-        requireAuth: true, // 预热缓存需要认证
-      );
+      final result = await _repository.warmupRecommendationCache();
       
       logger.log('预热推荐缓存成功');
       
-      return true;
+      return result;
     } catch (e) {
       logger.log('预热推荐缓存失败: $e');
       throw Exception('预热推荐缓存失败: $e');
