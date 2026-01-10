@@ -9,8 +9,8 @@
   "@foodieConnect": {
     "description": "应用英文名称"
   },
-  "tableTalk": "FoodieConnect",
-  "@tableTalk": {
+  "foodieConnect": "FoodieConnect",
+  "@foodieConnect": {
     "description": "应用中文名称"
   },
   "discoverFoodShareExperience": "发现美食，分享体验",

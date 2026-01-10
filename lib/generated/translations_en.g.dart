@@ -71,7 +71,7 @@ class TranslationsAppEn {
 	/// Application Chinese name
 	///
 	/// en: 'FoodieConnect'
-	String get tableTalk => 'FoodieConnect';
+	String get foodieConnect => 'FoodieConnect';
 
 	/// Application subtitle
 	///
@@ -1489,7 +1489,7 @@ extension on Translations {
 		return switch (path) {
 			'app.appTitle' => 'FoodieConnect',
 			'app.foodieConnect' => 'Foodie Connect',
-			'app.tableTalk' => 'FoodieConnect',
+			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => 'Discover food, share experiences',
 			'app.search' => 'Search',
 			'app.home' => 'Home',

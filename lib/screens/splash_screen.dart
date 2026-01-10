@@ -140,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             // 应用名称
             Text(
-              t.app.tableTalk,
+              t.app.foodieConnect,
               style: AppTextStyles.headlineMedium.copyWith(
                 color: AppColors.onPrimary,
               ),

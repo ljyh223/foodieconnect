@@ -9,8 +9,8 @@
   "@foodieConnect": {
     "description": "Application English name"
   },
-  "tableTalk": "FoodieConnect",
-  "@tableTalk": {
+  "foodieConnect": "FoodieConnect",
+  "@foodieConnect": {
     "description": "Application Chinese name"
   },
   "discoverFoodShareExperience": "Discover food, share experiences",

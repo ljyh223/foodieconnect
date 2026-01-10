@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    t.app.tableTalk,
+                    t.app.foodieConnect,
                     style: AppTextStyles.headlineMedium.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w600,

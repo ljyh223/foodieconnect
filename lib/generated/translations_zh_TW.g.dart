@@ -62,7 +62,7 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	@override String get foodieConnect => 'Foodie Connect';
 
 	/// 應用中文名稱
-	@override String get tableTalk => 'FoodieConnect';
+	@override String get foodieConnect => 'FoodieConnect';
 
 	/// 應用副標題
 	@override String get discoverFoodShareExperience => '發現美食，分享體驗';
@@ -941,7 +941,7 @@ extension on TranslationsZhTw {
 		return switch (path) {
 			'app.appTitle' => 'FoodieConnect',
 			'app.foodieConnect' => 'Foodie Connect',
-			'app.tableTalk' => 'FoodieConnect',
+			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => '發現美食，分享體驗',
 			'app.search' => '搜尋',
 			'app.home' => '首頁',
