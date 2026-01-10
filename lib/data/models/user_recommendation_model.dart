@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'restaurant_model.dart';
 
 part 'user_recommendation_model.freezed.dart';
-part 'user_recommendation_model.g.dart';
 
 /// 推荐状态枚举
 enum RecommendationStatus {
@@ -30,7 +29,6 @@ class RecommendationAlgorithmType {
 
 /// 用户推荐模型 - 根据API返回数据结构更新
 @freezed
-@JsonSerializable()
 class UserRecommendation with _$UserRecommendation {
   const factory UserRecommendation({
     required int userId, // 用户ID
@@ -53,10 +51,61 @@ class UserRecommendation with _$UserRecommendation {
   }) = _UserRecommendation;
 
   factory UserRecommendation.fromJson(Map<String, dynamic> json) {
-    // 手动处理默认值
-    final parsedJson = Map<String, dynamic>.from(json);
-    parsedJson['status'] ??= RecommendationStatus.unviewed.name;
-    return _$UserRecommendationFromJson(parsedJson);
+    // 手动处理嵌套的Restaurant对象列表
+    List<Restaurant>? commonRestaurantsList;
+    if (json['commonRestaurants'] != null &&
+        json['commonRestaurants'] is List) {
+      commonRestaurantsList = (json['commonRestaurants'] as List)
+          .map(
+            (restaurantJson) =>
+                Restaurant.fromJson(restaurantJson as Map<String, dynamic>),
+          )
+          .toList();
+    }
+
+    // 处理RecommendationStatus枚举
+    RecommendationStatus? status;
+    if (json['status'] != null) {
+      try {
+        status = RecommendationStatus.values.byName(json['status'] as String);
+      } catch (e) {
+        status = RecommendationStatus.unviewed;
+      }
+    } else {
+      status = RecommendationStatus.unviewed;
+    }
+
+    // 处理DateTime字段
+    DateTime? createdAt;
+    if (json['createdAt'] != null) {
+      createdAt = DateTime.parse(json['createdAt'] as String);
+    } else {
+      createdAt = DateTime.now();
+    }
+
+    DateTime? viewedAt;
+    if (json['viewedAt'] != null) {
+      viewedAt = DateTime.parse(json['viewedAt'] as String);
+    }
+
+    return UserRecommendation(
+      userId: json['userId'] as int,
+      userName: json['userName'] as String,
+      userAvatar: json['userAvatar'] as String?,
+      score: json['score'] as double,
+      algorithmType: json['algorithmType'] as String,
+      similarity: json['similarity'] as double?,
+      socialDistance: json['socialDistance'] as double?,
+      mutualFollowsCount: json['mutualFollowsCount'] as int?,
+      recommendationReason: json['recommendationReason'] as String,
+      commonRestaurants: commonRestaurantsList,
+      commonRestaurantTypes: json['commonRestaurantTypes'] as List<String>?,
+      activityScore: json['activityScore'] as double?,
+      influenceScore: json['influenceScore'] as double?,
+      status: status,
+      createdAt: createdAt,
+      viewedAt: viewedAt,
+    );
   }
 
   // 添加私有构造函数以支持在getter中访问属性
@@ -132,8 +181,11 @@ class RecommendationStatusRequest with _$RecommendationStatusRequest {
     required RecommendationStatus status,
   }) = _RecommendationStatusRequest;
 
-  factory RecommendationStatusRequest.fromJson(Map<String, dynamic> json) =>
-      _$RecommendationStatusRequestFromJson(json);
+  factory RecommendationStatusRequest.fromJson(Map<String, dynamic> json) {
+    return RecommendationStatusRequest(
+      status: RecommendationStatus.values.byName(json['status'] as String),
+    );
+  }
 }
 
 /// 批量查看请求模型
@@ -142,8 +194,13 @@ class BatchViewedRequest with _$BatchViewedRequest {
   const factory BatchViewedRequest({required List<int> recommendationIds}) =
       _BatchViewedRequest;
 
-  factory BatchViewedRequest.fromJson(Map<String, dynamic> json) =>
-      _$BatchViewedRequestFromJson(json);
+  factory BatchViewedRequest.fromJson(Map<String, dynamic> json) {
+    return BatchViewedRequest(
+      recommendationIds: List<int>.from(
+        json['recommendationIds'] as List<dynamic>,
+      ),
+    );
+  }
 }
 
 /// 推荐统计信息模型
@@ -157,8 +214,15 @@ class RecommendationStats with _$RecommendationStats {
     required double averageScore, // 平均推荐分数
   }) = _RecommendationStats;
 
-  factory RecommendationStats.fromJson(Map<String, dynamic> json) =>
-      _$RecommendationStatsFromJson(json);
+  factory RecommendationStats.fromJson(Map<String, dynamic> json) {
+    return RecommendationStats(
+      totalRecommendations: json['totalRecommendations'] as int,
+      viewedCount: json['viewedCount'] as int,
+      interestedCount: json['interestedCount'] as int,
+      notInterestedCount: json['notInterestedCount'] as int,
+      averageScore: (json['averageScore'] as num).toDouble(),
+    );
+  }
 }
 
 // 用户模型已在文件开头导入，无需重复导入

@@ -1,11 +1,11 @@
 import 'dart:developer' as logger;
-import 'api_service.dart';
 import '../../data/models/follow_model.dart';
 import '../../data/models/user_model.dart';
+import '../../features/follow/follow_repository.dart';
 
 /// 用户关注服务类
 class FollowService {
-  static final ApiService _apiService = ApiService();
+  static final FollowRepository _followRepository = FollowRepository();
 
   /// 关注用户
   static Future<Follow> followUser({
@@ -13,24 +13,17 @@ class FollowService {
     required int followingId,
   }) async {
     try {
-      final body = {
-        'followerId': followerId,
-        'followingId': followingId,
-      };
-
-      final response = await _apiService.post(
-        '/users/follow',
-        body: body,
-        requireAuth: true, // 关注用户需要认证
+      final result = await _followRepository.followUser(
+        followerId: followerId,
+        followingId: followingId,
       );
-      final data = response['data'];
       
       logger.log('关注用户成功: $followerId -> $followingId');
       
-      return Follow.fromJson(data);
+      return result;
     } catch (e) {
       logger.log('关注用户失败: $e');
-      throw Exception('关注用户失败: $e');
+      rethrow;
     }
   }
 
@@ -40,9 +33,9 @@ class FollowService {
     required int followingId,
   }) async {
     try {
-      await _apiService.delete(
-        '/users/$followerId/follow/$followingId',
-        requireAuth: true, // 取消关注需要认证
+      await _followRepository.unfollowUser(
+        followerId: followerId,
+        followingId: followingId,
       );
       
       logger.log('取消关注用户成功: $followerId -> $followingId');
@@ -50,55 +43,35 @@ class FollowService {
       return true;
     } catch (e) {
       logger.log('取消关注用户失败: $e');
-      throw Exception('取消关注用户失败: $e');
+      rethrow;
     }
   }
 
   /// 获取用户的关注列表
   static Future<List<User>> getFollowingList(int userId) async {
     try {
-      final response = await _apiService.get(
-        '/users/$userId/following',
-        requireAuth: true, // 获取关注列表需要认证
-      );
-      final List<dynamic> data = response['data'] ?? [];
+      final result = await _followRepository.getFollowingList(userId);
       
-      logger.log('获取用户关注列表成功，数量: ${data.length}');
+      logger.log('获取用户关注列表成功，数量: ${result.length}');
       
-      return data.map((json) {
-        // 从follow关系中提取用户信息
-        if (json['following'] != null) {
-          return User.fromJson(json['following']);
-        }
-        return User.fromJson(json);
-      }).toList();
+      return result;
     } catch (e) {
       logger.log('获取用户关注列表失败: $e');
-      throw Exception('获取用户关注列表失败: $e');
+      rethrow;
     }
   }
 
   /// 获取用户的粉丝列表
   static Future<List<User>> getFollowersList(int userId) async {
     try {
-      final response = await _apiService.get(
-        '/users/$userId/followers',
-        requireAuth: true, // 获取粉丝列表需要认证
-      );
-      final List<dynamic> data = response['data'] ?? [];
+      final result = await _followRepository.getFollowersList(userId);
       
-      logger.log('获取用户粉丝列表成功，数量: ${data.length}');
+      logger.log('获取用户粉丝列表成功，数量: ${result.length}');
       
-      return data.map((json) {
-        // 从follow关系中提取用户信息
-        if (json['follower'] != null) {
-          return User.fromJson(json['follower']);
-        }
-        return User.fromJson(json);
-      }).toList();
+      return result;
     } catch (e) {
       logger.log('获取用户粉丝列表失败: $e');
-      throw Exception('获取用户粉丝列表失败: $e');
+      rethrow;
     }
   }
 
@@ -107,13 +80,7 @@ class FollowService {
     required int userId
   }) async {
     try {
-      final response = await _apiService.get(
-        '/api/follows/check/$userId',
-        requireAuth: true, // 检查关注状态需要认证
-      );
-      final isFollowing = response['data'] ?? false;
-      
-      return isFollowing;
+      return await _followRepository.isFollowing(userId: userId);
     } catch (e) {
       logger.log('检查关注状态失败: $e');
       return false;
@@ -126,18 +93,16 @@ class FollowService {
     required int followingId,
   }) async {
     try {
-      final response = await _apiService.get(
-        '/users/$followerId/follow-relation/$followingId',
-        requireAuth: true, // 获取关注关系需要认证
+      final result = await _followRepository.getFollowRelation(
+        followerId: followerId,
+        followingId: followingId,
       );
-      final data = response['data'];
       
-      if (data != null) {
+      if (result != null) {
         logger.log('获取关注关系成功: $followerId -> $followingId');
-        return Follow.fromJson(data);
       }
       
-      return null;
+      return result;
     } catch (e) {
       logger.log('获取关注关系失败: $e');
       return null;
@@ -147,20 +112,11 @@ class FollowService {
   /// 获取用户的关注统计信息
   static Future<Map<String, int>> getFollowStats(int userId) async {
     try {
-      final response = await _apiService.get(
-        '/users/$userId/follow-stats',
-        requireAuth: true, // 获取关注统计需要认证
-      );
-      final data = response['data'] ?? {};
+      final result = await _followRepository.getFollowStats(userId);
       
-      final stats = <String, int>{
-        'following': (data['following'] ?? 0) as int,
-        'followers': (data['followers'] ?? 0) as int,
-      };
+      logger.log('获取用户关注统计成功: $result');
       
-      logger.log('获取用户关注统计成功: $stats');
-      
-      return stats;
+      return result;
     } catch (e) {
       logger.log('获取用户关注统计失败: $e');
       // 如果API调用失败，返回默认值
@@ -192,7 +148,7 @@ class FollowService {
       return follows;
     } catch (e) {
       logger.log('批量关注用户失败: $e');
-      throw Exception('批量关注用户失败: $e');
+      rethrow;
     }
   }
 }

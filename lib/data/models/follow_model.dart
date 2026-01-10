@@ -1,83 +1,35 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'user_model.dart';
 
-/// 用户关注关系模型
-class Follow {
-  final int id;
-  final int followerId; // 关注者ID
-  final int followingId; // 被关注者ID
-  final DateTime? createdAt;
-  final User? follower; // 关注者用户信息
-  final User? following; // 被关注者用户信息
+part 'follow_model.freezed.dart';
 
-  Follow({
-    required this.id,
-    required this.followerId,
-    required this.followingId,
-    this.createdAt,
-    this.follower,
-    this.following,
-  });
+/// 用户关注关系模型
+@freezed
+class Follow with _$Follow {
+  const factory Follow({
+    required int id,
+    required int followerId, // 关注者ID
+    required int followingId, // 被关注者ID
+    DateTime? createdAt,
+    User? follower, // 关注者用户信息
+    User? following, // 被关注者用户信息
+  }) = _Follow;
 
   factory Follow.fromJson(Map<String, dynamic> json) {
+    // 手动处理嵌套的User对象
     return Follow(
-      id: json['id'] ?? 0,
-      followerId: json['followerId'] ?? 0,
-      followingId: json['followingId'] ?? 0,
+      id: json['id'] as int,
+      followerId: json['followerId'] as int,
+      followingId: json['followingId'] as int,
       createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
+          ? DateTime.parse(json['createdAt'] as String)
           : null,
       follower: json['follower'] != null
-          ? User.fromJson(json['follower'])
+          ? User.fromJson(json['follower'] as Map<String, dynamic>)
           : null,
       following: json['following'] != null
-          ? User.fromJson(json['following'])
+          ? User.fromJson(json['following'] as Map<String, dynamic>)
           : null,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'followerId': followerId,
-      'followingId': followingId,
-      'createdAt': createdAt?.toIso8601String(),
-      if (follower != null) 'follower': follower!.toJson(),
-      if (following != null) 'following': following!.toJson(),
-    };
-  }
-
-  Follow copyWith({
-    int? id,
-    int? followerId,
-    int? followingId,
-    DateTime? createdAt,
-    User? follower,
-    User? following,
-  }) {
-    return Follow(
-      id: id ?? this.id,
-      followerId: followerId ?? this.followerId,
-      followingId: followingId ?? this.followingId,
-      createdAt: createdAt ?? this.createdAt,
-      follower: follower ?? this.follower,
-      following: following ?? this.following,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Follow &&
-        other.id == id &&
-        other.followerId == followerId &&
-        other.followingId == followingId;
-  }
-
-  @override
-  int get hashCode => id.hashCode ^ followerId.hashCode ^ followingId.hashCode;
-
-  @override
-  String toString() {
-    return 'Follow{id: $id, followerId: $followerId, followingId: $followingId}';
   }
 }

@@ -541,18 +541,9 @@ abstract class _UserRecommendation extends UserRecommendation {
       throw _privateConstructorUsedError;
 }
 
-RecommendationStatusRequest _$RecommendationStatusRequestFromJson(
-  Map<String, dynamic> json,
-) {
-  return _RecommendationStatusRequest.fromJson(json);
-}
-
 /// @nodoc
 mixin _$RecommendationStatusRequest {
   RecommendationStatus get status => throw _privateConstructorUsedError;
-
-  /// Serializes this RecommendationStatusRequest to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of RecommendationStatusRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -647,14 +638,10 @@ class __$$RecommendationStatusRequestImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$RecommendationStatusRequestImpl
     implements _RecommendationStatusRequest {
   const _$RecommendationStatusRequestImpl({required this.status});
-
-  factory _$RecommendationStatusRequestImpl.fromJson(
-    Map<String, dynamic> json,
-  ) => _$$RecommendationStatusRequestImplFromJson(json);
 
   @override
   final RecommendationStatus status;
@@ -672,7 +659,6 @@ class _$RecommendationStatusRequestImpl
             (identical(other.status, status) || other.status == status));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, status);
 
@@ -686,11 +672,6 @@ class _$RecommendationStatusRequestImpl
       __$$RecommendationStatusRequestImplCopyWithImpl<
         _$RecommendationStatusRequestImpl
       >(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$RecommendationStatusRequestImplToJson(this);
-  }
 }
 
 abstract class _RecommendationStatusRequest
@@ -698,9 +679,6 @@ abstract class _RecommendationStatusRequest
   const factory _RecommendationStatusRequest({
     required final RecommendationStatus status,
   }) = _$RecommendationStatusRequestImpl;
-
-  factory _RecommendationStatusRequest.fromJson(Map<String, dynamic> json) =
-      _$RecommendationStatusRequestImpl.fromJson;
 
   @override
   RecommendationStatus get status;
@@ -713,16 +691,9 @@ abstract class _RecommendationStatusRequest
   get copyWith => throw _privateConstructorUsedError;
 }
 
-BatchViewedRequest _$BatchViewedRequestFromJson(Map<String, dynamic> json) {
-  return _BatchViewedRequest.fromJson(json);
-}
-
 /// @nodoc
 mixin _$BatchViewedRequest {
   List<int> get recommendationIds => throw _privateConstructorUsedError;
-
-  /// Serializes this BatchViewedRequest to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of BatchViewedRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -806,13 +777,10 @@ class __$$BatchViewedRequestImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$BatchViewedRequestImpl implements _BatchViewedRequest {
   const _$BatchViewedRequestImpl({required final List<int> recommendationIds})
     : _recommendationIds = recommendationIds;
-
-  factory _$BatchViewedRequestImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BatchViewedRequestImplFromJson(json);
 
   final List<int> _recommendationIds;
   @override
@@ -839,7 +807,6 @@ class _$BatchViewedRequestImpl implements _BatchViewedRequest {
             ));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
     runtimeType,
@@ -856,20 +823,12 @@ class _$BatchViewedRequestImpl implements _BatchViewedRequest {
         this,
         _$identity,
       );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$BatchViewedRequestImplToJson(this);
-  }
 }
 
 abstract class _BatchViewedRequest implements BatchViewedRequest {
   const factory _BatchViewedRequest({
     required final List<int> recommendationIds,
   }) = _$BatchViewedRequestImpl;
-
-  factory _BatchViewedRequest.fromJson(Map<String, dynamic> json) =
-      _$BatchViewedRequestImpl.fromJson;
 
   @override
   List<int> get recommendationIds;
@@ -882,10 +841,6 @@ abstract class _BatchViewedRequest implements BatchViewedRequest {
       throw _privateConstructorUsedError;
 }
 
-RecommendationStats _$RecommendationStatsFromJson(Map<String, dynamic> json) {
-  return _RecommendationStats.fromJson(json);
-}
-
 /// @nodoc
 mixin _$RecommendationStats {
   int get totalRecommendations => throw _privateConstructorUsedError; // 总推荐数
@@ -893,9 +848,6 @@ mixin _$RecommendationStats {
   int get interestedCount => throw _privateConstructorUsedError; // 感兴趣数
   int get notInterestedCount => throw _privateConstructorUsedError; // 不感兴趣数
   double get averageScore => throw _privateConstructorUsedError;
-
-  /// Serializes this RecommendationStats to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of RecommendationStats
   /// with the given fields replaced by the non-null parameter values.
@@ -1035,7 +987,7 @@ class __$$RecommendationStatsImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$RecommendationStatsImpl implements _RecommendationStats {
   const _$RecommendationStatsImpl({
     required this.totalRecommendations,
@@ -1044,9 +996,6 @@ class _$RecommendationStatsImpl implements _RecommendationStats {
     required this.notInterestedCount,
     required this.averageScore,
   });
-
-  factory _$RecommendationStatsImpl.fromJson(Map<String, dynamic> json) =>
-      _$$RecommendationStatsImplFromJson(json);
 
   @override
   final int totalRecommendations;
@@ -1085,7 +1034,6 @@ class _$RecommendationStatsImpl implements _RecommendationStats {
                 other.averageScore == averageScore));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
     runtimeType,
@@ -1106,11 +1054,6 @@ class _$RecommendationStatsImpl implements _RecommendationStats {
         this,
         _$identity,
       );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$RecommendationStatsImplToJson(this);
-  }
 }
 
 abstract class _RecommendationStats implements RecommendationStats {
@@ -1121,9 +1064,6 @@ abstract class _RecommendationStats implements RecommendationStats {
     required final int notInterestedCount,
     required final double averageScore,
   }) = _$RecommendationStatsImpl;
-
-  factory _RecommendationStats.fromJson(Map<String, dynamic> json) =
-      _$RecommendationStatsImpl.fromJson;
 
   @override
   int get totalRecommendations; // 总推荐数

@@ -1,39 +1,27 @@
-class Restaurant {
-  final int id;
-  final String name;
-  final String type;
-  final String distance;
-  final String description;
-  final String address;
-  final String phone;
-  final String hours;
-  final double rating;
-  final int reviewCount;
-  final bool isOpen;
-  final String? imageUrl; // 改为可空类型，与API保持一致
-  final List<String> recommendedDishes;
-  final double? averagePrice;
-  final String? createdAt;
-  final String? updatedAt;
-  
-  Restaurant({
-    required this.id,
-    required this.name,
-    required this.type,
-    required this.distance,
-    required this.description,
-    required this.address,
-    required this.phone,
-    required this.hours,
-    required this.rating,
-    required this.reviewCount,
-    required this.isOpen,
-    this.imageUrl, // 改为可选参数
-    required this.recommendedDishes,
-    this.averagePrice, // 人均消费价格，可选参数
-    this.createdAt,
-    this.updatedAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'restaurant_model.freezed.dart';
+
+@freezed
+class Restaurant with _$Restaurant {
+  const factory Restaurant({
+    required int id,
+    required String name,
+    required String type,
+    required String distance,
+    required String description,
+    required String address,
+    required String phone,
+    required String hours,
+    required double rating,
+    required int reviewCount,
+    required bool isOpen,
+    String? imageUrl, // 改为可空类型，与API保持一致
+    @Default([]) List<String> recommendedDishes,
+    double? averagePrice,
+    String? createdAt,
+    String? updatedAt,
+  }) = _Restaurant;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
     // 处理recommendedDishes字段，可能是字符串列表或对象列表
@@ -54,81 +42,22 @@ class Restaurant {
     }
 
     return Restaurant(
-      id: json['id'], // 提供默认值
-      name: json['name'],
-      type: json['type'],
-      distance: json['distance'],
-      description: json['description'],
-      address: json['address'],
-      phone: json['phone'] ,
-      hours: json['hours'],
-      rating: (json['rating'] ?? 0.0).toDouble(),
-      reviewCount: json['reviewCount'] ?? 0,
-      isOpen: json['isOpen'] ?? false,
-      imageUrl: json['imageUrl'], // 直接使用，允许为null
+      id: json['id'] as int,
+      name: json['name'] as String,
+      type: json['type'] as String,
+      distance: json['distance'] as String,
+      description: json['description'] as String,
+      address: json['address'] as String,
+      phone: json['phone'] as String,
+      hours: json['hours'] as String,
+      rating: (json['rating'] as num).toDouble(),
+      reviewCount: json['reviewCount'] as int,
+      isOpen: json['isOpen'] as bool,
+      imageUrl: json['imageUrl'] as String?,
       recommendedDishes: recommendedDishes,
-      averagePrice: json['averagePrice']?.toDouble(), // 从API获取人均消费价格
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'type': type,
-      'distance': distance,
-      'description': description,
-      'address': address,
-      'phone': phone,
-      'hours': hours,
-      'rating': rating,
-      'reviewCount': reviewCount,
-      'isOpen': isOpen,
-      'imageUrl': imageUrl,
-      'recommendedDishes': recommendedDishes,
-      'averagePrice': averagePrice,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-    };
-  }
-
-  Restaurant copyWith({
-    int? id,
-    String? name,
-    String? type,
-    String? distance,
-    String? description,
-    String? address,
-    String? phone,
-    String? hours,
-    double? rating,
-    int? reviewCount,
-    bool? isOpen,
-    String? imageUrl,
-    List<String>? recommendedDishes,
-    double? averagePrice,
-    String? createdAt,
-    String? updatedAt,
-  }) {
-    return Restaurant(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      type: type ?? this.type,
-      distance: distance ?? this.distance,
-      description: description ?? this.description,
-      address: address ?? this.address,
-      phone: phone ?? this.phone,
-      hours: hours ?? this.hours,
-      rating: rating ?? this.rating,
-      reviewCount: reviewCount ?? this.reviewCount,
-      isOpen: isOpen ?? this.isOpen,
-      imageUrl: imageUrl ?? this.imageUrl,
-      recommendedDishes: recommendedDishes ?? this.recommendedDishes,
-      averagePrice: averagePrice ?? this.averagePrice,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
+      averagePrice: json['averagePrice'] as double?,
+      createdAt: json['createdAt'] as String?,
+      updatedAt: json['updatedAt'] as String?,
     );
   }
 }

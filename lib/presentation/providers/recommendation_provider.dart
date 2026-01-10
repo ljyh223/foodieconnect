@@ -11,17 +11,18 @@ class RecommendationProvider with ChangeNotifier {
   bool _hasMore = true;
   int _currentPage = 0;
   final int _pageSize = 10;
-  
+
   // 缓存相关
   DateTime? _lastFetchTime;
   static const Duration _cacheTimeout = Duration(minutes: 30);
-  
+
   // 筛选和排序状态
   RecommendationStatus? _filterStatus;
   String _sortBy = 'score';
 
   /// 获取推荐列表
-  List<UserRecommendation> get recommendations => List.unmodifiable(_recommendations);
+  List<UserRecommendation> get recommendations =>
+      List.unmodifiable(_recommendations);
 
   /// 是否正在加载
   bool get isLoading => _isLoading;
@@ -43,13 +44,12 @@ class RecommendationProvider with ChangeNotifier {
       .length;
 
   /// 获取高推荐度用户
-  List<UserRecommendation> get highRecommendations => _recommendations
-      .where((r) => r.isHighRecommendation)
-      .toList();
-    
+  List<UserRecommendation> get highRecommendations =>
+      _recommendations.where((r) => r.isHighRecommendation).toList();
+
   /// 获取当前筛选状态
   RecommendationStatus? get filterStatus => _filterStatus;
-  
+
   /// 获取当前排序方式
   String get sortBy => _sortBy;
 
@@ -96,16 +96,17 @@ class RecommendationProvider with ChangeNotifier {
       notifyListeners();
 
       logger.log('开始获取首页推荐，数量: $count');
-      final recommendations = await RecommendationService.getUserRecommendations(
-        algorithm: algorithm,
-        limit: count,
-      );
+      final recommendations =
+          await RecommendationService.getUserRecommendations(
+            algorithm: algorithm,
+            limit: count,
+          );
 
       // 更新缓存
       _recommendations = recommendations;
       _lastFetchTime = DateTime.now();
       _isLoading = false;
-      
+
       logger.log('首页推荐获取成功，数量: ${recommendations.length}');
       notifyListeners();
 
@@ -132,10 +133,11 @@ class RecommendationProvider with ChangeNotifier {
       notifyListeners();
 
       logger.log('开始加载更多推荐，页码: $_currentPage');
-      final newRecommendations = await RecommendationService.getUserRecommendationsPaginated(
-        page: _currentPage,
-        size: _pageSize,
-      );
+      final newRecommendations =
+          await RecommendationService.getUserRecommendationsPaginated(
+            page: _currentPage,
+            size: _pageSize,
+          );
 
       if (newRecommendations.isEmpty) {
         _hasMore = false;
@@ -175,7 +177,9 @@ class RecommendationProvider with ChangeNotifier {
       );
 
       // 更新本地状态
-      final index = _recommendations.indexWhere((r) => r.id == recommendationId);
+      final index = _recommendations.indexWhere(
+        (r) => r.id == recommendationId,
+      );
       if (index != -1) {
         _recommendations[index] = _recommendations[index].copyWith(
           status: status,
@@ -300,12 +304,17 @@ class RecommendationProvider with ChangeNotifier {
   }
 
   /// 根据状态筛选推荐
-  List<UserRecommendation> getRecommendationsByStatus(RecommendationStatus status) {
+  List<UserRecommendation> getRecommendationsByStatus(
+    RecommendationStatus status,
+  ) {
     return _recommendations.where((r) => r.status == status).toList();
   }
 
   /// 根据推荐分数筛选
-  List<UserRecommendation> getRecommendationsByScore(double minScore, double maxScore) {
+  List<UserRecommendation> getRecommendationsByScore(
+    double minScore,
+    double maxScore,
+  ) {
     return _recommendations
         .where((r) => r.score >= minScore && r.score <= maxScore)
         .toList();
@@ -314,36 +323,38 @@ class RecommendationProvider with ChangeNotifier {
   /// 搜索推荐用户
   List<UserRecommendation> searchRecommendations(String query) {
     if (query.isEmpty) return _recommendations;
-    
+
     final lowerQuery = query.toLowerCase();
     return _recommendations.where((r) {
       return r.userName.toLowerCase().contains(lowerQuery);
     }).toList();
   }
-  
+
   /// 设置筛选状态
   void setFilterStatus(RecommendationStatus? status) {
     _filterStatus = status;
     notifyListeners();
   }
-  
+
   /// 设置排序方式
   void setSortBy(String sortBy) {
     _sortBy = sortBy;
     notifyListeners();
   }
-  
+
   /// 获取筛选和排序后的推荐列表
   List<UserRecommendation> get processedRecommendations {
-    List<UserRecommendation> filteredRecommendations = List.from(_recommendations);
-    
+    List<UserRecommendation> filteredRecommendations = List.from(
+      _recommendations,
+    );
+
     // 应用筛选
     if (_filterStatus != null) {
       filteredRecommendations = filteredRecommendations
           .where((r) => r.status == _filterStatus)
           .toList();
     }
-    
+
     // 应用排序
     switch (_sortBy) {
       case 'score':
@@ -365,7 +376,7 @@ class RecommendationProvider with ChangeNotifier {
         });
         break;
     }
-    
+
     return filteredRecommendations;
   }
 }

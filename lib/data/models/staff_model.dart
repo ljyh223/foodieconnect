@@ -1,31 +1,32 @@
-class Staff {
-  final String id;
-  final String name;
-  final String position;
-  final String status;
-  final String experience;
-  final double rating;
-  final String? restaurantId;
-  final String? avatarUrl; // 头像URL字段，与API保持一致
-  final List<String> skills;
-  final List<String> languages;
-  final List<StaffReview> reviews;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Staff({
-    required this.id,
-    required this.name,
-    required this.position,
-    required this.status,
-    required this.experience,
-    required this.rating,
-    this.restaurantId,
-    this.avatarUrl,
-    required this.skills,
-    required this.languages,
-    required this.reviews,
-  });
+part 'staff_model.freezed.dart';
+
+@freezed
+class Staff with _$Staff {
+  const factory Staff({
+    required String id,
+    required String name,
+    required String position,
+    required String status,
+    required String experience,
+    required double rating,
+    String? restaurantId,
+    String? avatarUrl, // 头像URL字段，与API保持一致
+    @Default([]) List<String> skills,
+    @Default([]) List<String> languages,
+    @Default([]) List<StaffReview> reviews,
+  }) = _Staff;
 
   factory Staff.fromJson(Map<String, dynamic> json) {
+    // 处理StaffReview列表
+    List<StaffReview> reviews = [];
+    if (json['reviews'] != null && json['reviews'] is List) {
+      reviews = (json['reviews'] as List<dynamic>)
+          .map((review) => StaffReview.fromJson(review as Map<String, dynamic>))
+          .toList();
+    }
+
     return Staff(
       id: (json['id'] ?? '').toString(),
       name: json['name'] ?? '',
@@ -37,81 +38,24 @@ class Staff {
       avatarUrl: json['avatarUrl'], // 直接使用API返回的avatarUrl字段
       skills: List<String>.from(json['skills'] ?? []),
       languages: List<String>.from(json['languages'] ?? []),
-      reviews:
-          (json['reviews'] as List<dynamic>?)
-              ?.map((review) => StaffReview.fromJson(review))
-              .toList() ??
-          [],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'position': position,
-      'status': status,
-      'experience': experience,
-      'rating': rating,
-      'restaurantId': restaurantId,
-      'avatarUrl': avatarUrl,
-      'skills': skills,
-      'languages': languages,
-      'reviews': reviews.map((review) => review.toJson()).toList(),
-    };
-  }
-
-  Staff copyWith({
-    String? id,
-    String? name,
-    String? position,
-    String? status,
-    String? experience,
-    double? rating,
-    String? restaurantId,
-    String? avatarUrl,
-    List<String>? skills,
-    List<String>? languages,
-    List<StaffReview>? reviews,
-  }) {
-    return Staff(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      position: position ?? this.position,
-      status: status ?? this.status,
-      experience: experience ?? this.experience,
-      rating: rating ?? this.rating,
-      restaurantId: restaurantId ?? this.restaurantId,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      skills: skills ?? this.skills,
-      languages: languages ?? this.languages,
-      reviews: reviews ?? this.reviews,
+      reviews: reviews,
     );
   }
 }
 
-class StaffReview {
-  final String id;
-  final String userName;
-  final String content;
-  final double rating;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final String staffId;
-  final String userId;
-  final String? userAvatar;
-
-  StaffReview({
-    required this.id,
-    required this.userName,
-    required this.content,
-    required this.rating,
-    required this.createdAt,
-    this.updatedAt,
-    required this.staffId,
-    required this.userId,
-    this.userAvatar,
-  });
+@freezed
+class StaffReview with _$StaffReview {
+  const factory StaffReview({
+    required String id,
+    required String userName,
+    required String content,
+    required double rating,
+    required DateTime createdAt,
+    DateTime? updatedAt,
+    required String staffId,
+    required String userId,
+    String? userAvatar,
+  }) = _StaffReview;
 
   factory StaffReview.fromJson(Map<String, dynamic> json) {
     return StaffReview(
@@ -129,19 +73,5 @@ class StaffReview {
       userId: json['userId']?.toString() ?? '',
       userAvatar: json['userAvatar'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'userName': userName,
-      'content': content,
-      'rating': rating,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
-      'staffId': staffId,
-      'userId': userId,
-      'userAvatar': userAvatar,
-    };
   }
 }

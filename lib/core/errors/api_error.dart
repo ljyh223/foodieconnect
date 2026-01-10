@@ -8,13 +8,13 @@ part 'api_error.freezed.dart';
 class ApiError with _$ApiError {
   /// 网络错误
   const factory ApiError.network() = _Network;
-  
+
   /// 服务器错误
   const factory ApiError.server(int code, String message) = _Server;
-  
+
   /// 未知错误
   const factory ApiError.unknown(String message) = _Unknown;
-  
+
   /// 从DioException创建ApiError
   factory ApiError.fromDio(DioException e) {
     if (e.type == DioExceptionType.connectionTimeout ||
@@ -24,16 +24,43 @@ class ApiError with _$ApiError {
         e.type == DioExceptionType.connectionError) {
       return const ApiError.network();
     }
-    
+
     if (e.response != null) {
       final code = e.response!.statusCode ?? 0;
-      final message = e.response?.data?['error']?['message'] as String? ??
+      final message =
+          e.response?.data?['error']?['message'] as String? ??
           e.response?.data?['message'] as String? ??
           e.message ??
           '服务器错误';
       return ApiError.server(code, message);
     }
-    
+
     return ApiError.unknown(e.message ?? '未知错误');
+  }
+
+  /// 从任意异常创建ApiError
+  factory ApiError.fromException(Object e) {
+    if (e is DioException) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.sendTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.cancel ||
+          e.type == DioExceptionType.connectionError) {
+        return const ApiError.network();
+      }
+
+      if (e.response != null) {
+        final code = e.response!.statusCode ?? 0;
+        final message =
+            e.response?.data?['error']?['message'] as String? ??
+            e.response?.data?['message'] as String? ??
+            e.message ??
+            '服务器错误';
+        return ApiError.server(code, message);
+      }
+
+      return ApiError.unknown(e.message ?? '未知错误');
+    }
+    return ApiError.unknown(e.toString());
   }
 }
