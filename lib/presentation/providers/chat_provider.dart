@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../data/models/chat_message_model.dart';
 import '../../core/services/chat_service.dart';
 import '../../core/services/websocket_service.dart';

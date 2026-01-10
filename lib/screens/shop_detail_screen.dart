@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../data/models/restaurant_model.dart';
 import '../data/models/review_model.dart';
 import '../data/models/staff_model.dart';

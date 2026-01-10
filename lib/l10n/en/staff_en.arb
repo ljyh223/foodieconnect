@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk staff localization",
+  "@@context": "FoodieConnect staff localization",
   "staffReviews": "Staff Reviews",
   "@staffReviews": {
     "description": "Staff reviews title"

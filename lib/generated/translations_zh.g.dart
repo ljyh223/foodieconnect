@@ -56,13 +56,13 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	// Translations
 
 	/// 应用标题
-	@override String get appTitle => 'TableTalk';
+	@override String get appTitle => 'FoodieConnect';
 
 	/// 应用英文名称
 	@override String get foodieConnect => 'Foodie Connect';
 
 	/// 应用中文名称
-	@override String get tableTalk => 'TableTalk';
+	@override String get tableTalk => 'FoodieConnect';
 
 	/// 应用副标题
 	@override String get discoverFoodShareExperience => '发现美食，分享体验';
@@ -362,7 +362,7 @@ class _TranslationsAuthZh implements TranslationsAuthEn {
 	@override String get createAccount => '创建账号';
 
 	/// 注册页面副标题
-	@override String get joinTableTalk => '加入TableTalk，发现更多美食';
+	@override String get joinFoodieConnect => '加入FoodieConnect，发现更多美食';
 
 	/// 登录失败提示
 	@override String get loginFailed => '登录失败，请稍后重试';
@@ -939,9 +939,9 @@ class _TranslationsStaffZh implements TranslationsStaffEn {
 extension on TranslationsZh {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'app.appTitle' => 'TableTalk',
+			'app.appTitle' => 'FoodieConnect',
 			'app.foodieConnect' => 'Foodie Connect',
-			'app.tableTalk' => 'TableTalk',
+			'app.tableTalk' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => '发现美食，分享体验',
 			'app.search' => '搜索',
 			'app.home' => '首页',
@@ -1038,7 +1038,7 @@ extension on TranslationsZh {
 			'auth.alreadyHaveAccount' => '已有账号？',
 			'auth.loginNow' => '立即登录',
 			'auth.createAccount' => '创建账号',
-			'auth.joinTableTalk' => '加入TableTalk，发现更多美食',
+			'auth.joinFoodieConnect' => '加入FoodieConnect，发现更多美食',
 			'auth.loginFailed' => '登录失败，请稍后重试',
 			'auth.checkingLoginStatus' => '正在检查登录状态...',
 			'auth.authCheckFailed' => '认证检查失败',

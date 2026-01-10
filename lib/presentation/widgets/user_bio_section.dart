@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 
 /// 用户个人简介组件
 class UserBioSection extends StatelessWidget {
@@ -21,10 +21,7 @@ class UserBioSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          t.profile.personalBio,
-          style: AppTextStyles.titleMedium,
-        ),
+        Text(t.profile.personalBio, style: AppTextStyles.titleMedium),
         const SizedBox(height: 12),
         isEditing && controller != null
             ? TextField(

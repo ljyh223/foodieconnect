@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../data/models/restaurant_model.dart';
 import '../core/services/restaurant_service.dart';
 import '../core/services/api_service.dart';
@@ -9,7 +8,7 @@ import 'dart:math';
 
 class RestaurantInfoScreen extends StatefulWidget {
   final String? restaurantId;
-  
+
   const RestaurantInfoScreen({super.key, this.restaurantId});
 
   @override
@@ -20,7 +19,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
   final Random _random = Random();
   late Future<Restaurant> _restaurantFuture;
   late Future<List<String>> _recommendedDishesFuture;
-  
+
   // 随机在线图片列表
   final List<String> _randomImages = [
     'https://picsum.photos/seed/restaurant1/400/400.jpg',
@@ -55,17 +54,18 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
   }
 
   /// 获取餐厅菜单
-  Future<void> _getRestaurantMenu(BuildContext context, String restaurantId) async {
+  Future<void> _getRestaurantMenu(
+    BuildContext context,
+    String restaurantId,
+  ) async {
     try {
       // 显示加载指示器
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        builder: (context) => const Center(child: CircularProgressIndicator()),
       );
-      
+
       // 调用API获取菜单
       final menuData = await RestaurantService.getMenu(restaurantId);
 
@@ -76,7 +76,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     } catch (e) {
       // 关闭加载指示器（如果还在显示）
       Navigator.of(context).pop();
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('${t.restaurant.getMenuFailed}$e')),
       );
@@ -85,17 +85,27 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final id = widget.restaurantId ?? (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId'] as String? ?? '1';
+    final id =
+        widget.restaurantId ??
+        (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId']
+            as String? ??
+        '1';
 
     return FutureBuilder<Restaurant>(
       future: _restaurantFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
 
         if (snapshot.hasError) {
-          return Scaffold(body: Center(child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}')));
+          return Scaffold(
+            body: Center(
+              child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}'),
+            ),
+          );
         }
 
         final restaurant = snapshot.data!;
@@ -158,7 +168,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 color: Colors.grey[200],
                                 child: Center(
                                   child: Text(
-                                    restaurant.name.isNotEmpty ? restaurant.name.substring(0, 1) : '',
+                                    restaurant.name.isNotEmpty
+                                        ? restaurant.name.substring(0, 1)
+                                        : '',
                                     style: const TextStyle(
                                       fontSize: 48,
                                       fontWeight: FontWeight.bold,
@@ -174,9 +186,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // 营业时间
                 CardWidget(
                   child: Column(
@@ -193,11 +205,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(
-                            Icons.schedule,
-                            color: Colors.blue,
-                            size: 20,
-                          ),
+                          Icon(Icons.schedule, color: Colors.blue, size: 20),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
@@ -213,9 +221,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // 餐厅地址
                 CardWidget(
                   child: Column(
@@ -232,11 +240,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(
-                            Icons.location_on,
-                            color: Colors.blue,
-                            size: 20,
-                          ),
+                          Icon(Icons.location_on, color: Colors.blue, size: 20),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -251,7 +255,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  t.restaurant.distanceFromYou( distance: restaurant.distance),
+                                  t.restaurant.distanceFromYou(
+                                    distance: restaurant.distance,
+                                  ),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey[600],
@@ -265,9 +271,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // 人均消费
                 CardWidget(
                   child: Column(
@@ -305,9 +311,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // 推荐菜品
                 CardWidget(
                   child: Column(
@@ -324,23 +330,23 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.blue,
-                            size: 20,
-                          ),
+                          Icon(Icons.star, color: Colors.blue, size: 20),
                           const SizedBox(width: 12),
                           Expanded(
                             child: FutureBuilder<List<String>>(
                               future: _recommendedDishesFuture,
                               builder: (context, dishesSnapshot) {
                                 List<String> dishes = [];
-                                
-                                if (dishesSnapshot.connectionState == ConnectionState.waiting) {
+
+                                if (dishesSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   dishes = [t.app.loading];
-                                } else if (dishesSnapshot.hasError || dishesSnapshot.data == null || dishesSnapshot.data!.isEmpty) {
+                                } else if (dishesSnapshot.hasError ||
+                                    dishesSnapshot.data == null ||
+                                    dishesSnapshot.data!.isEmpty) {
                                   // 如果API调用失败或没有数据，使用餐厅模型中的推荐菜品或默认菜品
-                                  dishes = restaurant.recommendedDishes.isNotEmpty
+                                  dishes =
+                                      restaurant.recommendedDishes.isNotEmpty
                                       ? restaurant.recommendedDishes
                                       : [
                                           '招牌炒饭',
@@ -352,11 +358,13 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                 } else {
                                   dishes = dishesSnapshot.data!;
                                 }
-                                
+
                                 return Wrap(
                                   spacing: 8,
                                   runSpacing: 8,
-                                  children: dishes.map((dish) => _buildDishChip(dish)).toList(),
+                                  children: dishes
+                                      .map((dish) => _buildDishChip(dish))
+                                      .toList(),
                                 );
                               },
                             ),
@@ -366,9 +374,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // 菜单
                 CardWidget(
                   child: Column(
@@ -385,11 +393,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(
-                            Icons.menu_book,
-                            color: Colors.blue,
-                            size: 20,
-                          ),
+                          Icon(Icons.menu_book, color: Colors.blue, size: 20),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -408,12 +412,17 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       // 调用获取餐厅菜单的方法
-                                      _getRestaurantMenu(context, restaurant.id.toString());
+                                      _getRestaurantMenu(
+                                        context,
+                                        restaurant.id.toString(),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.blue,
                                       foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -435,7 +444,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
               ],
             ),
@@ -452,10 +461,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       decoration: BoxDecoration(
         color: Colors.blue.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.blue.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1),
       ),
       child: Text(
         dishName,
@@ -468,4 +474,3 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     );
   }
 }
-

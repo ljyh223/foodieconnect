@@ -1,6 +1,6 @@
 {
   "@@locale": "zh_TW",
-  "@@context": "TableTalk 店員模組繁體中文本地化",
+  "@@context": "FoodieConnect 店員模組繁體中文本地化",
   "staffReviews": "店員評價",
   "@staffReviews": {
     "description": "店員評價標題"

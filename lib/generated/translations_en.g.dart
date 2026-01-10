@@ -60,8 +60,8 @@ class TranslationsAppEn {
 
 	/// Application title
 	///
-	/// en: 'TableTalk'
-	String get appTitle => 'TableTalk';
+	/// en: 'FoodieConnect'
+	String get appTitle => 'FoodieConnect';
 
 	/// Application English name
 	///
@@ -70,8 +70,8 @@ class TranslationsAppEn {
 
 	/// Application Chinese name
 	///
-	/// en: 'TableTalk'
-	String get tableTalk => 'TableTalk';
+	/// en: 'FoodieConnect'
+	String get tableTalk => 'FoodieConnect';
 
 	/// Application subtitle
 	///
@@ -564,8 +564,8 @@ class TranslationsAuthEn {
 
 	/// Registration page subtitle
 	///
-	/// en: 'Join TableTalk, discover more food'
-	String get joinTableTalk => 'Join TableTalk, discover more food';
+	/// en: 'Join FoodieConnect, discover more food'
+	String get joinFoodieConnect => 'Join FoodieConnect, discover more food';
 
 	/// Login failed prompt
 	///
@@ -1487,9 +1487,9 @@ class TranslationsStaffEn {
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'app.appTitle' => 'TableTalk',
+			'app.appTitle' => 'FoodieConnect',
 			'app.foodieConnect' => 'Foodie Connect',
-			'app.tableTalk' => 'TableTalk',
+			'app.tableTalk' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => 'Discover food, share experiences',
 			'app.search' => 'Search',
 			'app.home' => 'Home',
@@ -1586,7 +1586,7 @@ extension on Translations {
 			'auth.alreadyHaveAccount' => 'Already have an account?',
 			'auth.loginNow' => 'Login Now',
 			'auth.createAccount' => 'Create Account',
-			'auth.joinTableTalk' => 'Join TableTalk, discover more food',
+			'auth.joinFoodieConnect' => 'Join FoodieConnect, discover more food',
 			'auth.loginFailed' => 'Login failed, please try again later',
 			'auth.checkingLoginStatus' => 'Checking login status...',
 			'auth.authCheckFailed' => 'Authentication check failed',

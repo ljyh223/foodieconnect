@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk settings localization",
+  "@@context": "FoodieConnect settings localization",
   "selectLanguage": "Select Language",
   "@selectLanguage": {
     "description": "Select language title"

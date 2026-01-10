@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk restaurant details localization",
+  "@@context": "FoodieConnect restaurant details localization",
   "noRestaurants": "No restaurant information available",
   "@noRestaurants": {
     "description": "No restaurant information prompt"

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../presentation/providers/restaurant_provider.dart';
 import '../presentation/providers/recommendation_provider.dart';
 import '../presentation/widgets/home_recommendation_section.dart';

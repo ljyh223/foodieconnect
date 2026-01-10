@@ -4,7 +4,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

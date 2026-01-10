@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,12 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkAuthStatus() async {
     // 等待一小段时间让UI显示加载状态
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     if (!mounted) return;
-    
+
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     authProvider.setContext(context);
-    
+
     try {
       // 设置超时机制，最多等待5秒
       await _checkAuthWithTimeout(authProvider);
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           duration: const Duration(seconds: 2),
         ),
       );
-      
+
       // 延迟跳转，让用户看到错误信息
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _checkAuthWithTimeout(AuthProvider authProvider) async {
     const timeoutDuration = Duration(seconds: 5);
-    
+
     // 如果AuthProvider还在加载中，等待它完成
     if (authProvider.isLoading) {
       final completer = Completer<void>();
@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
           completer.completeError(TimeoutException(t.auth.authCheckTimeout));
         }
       });
-      
+
       // 监听AuthProvider的状态变化
       VoidCallback? listener;
       listener = () {
@@ -83,11 +83,11 @@ class _SplashScreenState extends State<SplashScreen> {
           }
         }
       };
-      
+
       authProvider.addListener(listener);
       await completer.future;
     }
-    
+
     // 检查认证状态并导航
     _navigateBasedOnAuthStatus(authProvider);
   }

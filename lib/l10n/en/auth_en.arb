@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk authentication localization",
+  "@@context": "FoodieConnect authentication localization",
   "login": "Login",
   "@login": {
     "description": "Login button text"
@@ -65,8 +65,8 @@
   "@createAccount": {
     "description": "Create account title"
   },
-  "joinTableTalk": "Join TableTalk, discover more food",
-  "@joinTableTalk": {
+  "joinFoodieConnect": "Join FoodieConnect, discover more food",
+  "@joinFoodieConnect": {
     "description": "Registration page subtitle"
   },
   "loginFailed": "Login failed, please try again later",

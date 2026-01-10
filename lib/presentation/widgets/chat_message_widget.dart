@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/services/api_service.dart';
 import '../../data/models/chat_message_model.dart';
@@ -32,8 +32,12 @@ class ChatMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 获取发送者信息，确保不为空
-    final senderName = message.senderName.isNotEmpty ? message.senderName : '匿名用户';
-    final senderAvatar = message.senderAvatar?.isNotEmpty == true ? message.senderAvatar : null;
+    final senderName = message.senderName.isNotEmpty
+        ? message.senderName
+        : '匿名用户';
+    final senderAvatar = message.senderAvatar?.isNotEmpty == true
+        ? message.senderAvatar
+        : null;
 
     return Column(
       children: [
@@ -47,20 +51,19 @@ class ChatMessageWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
                     timeSeparatorText!,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
               ],
             ),
           ),
-        
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Row(
-            mainAxisAlignment: message.isSentByUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: message.isSentByUser
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (!message.isSentByUser) ...[
@@ -71,7 +74,7 @@ class ChatMessageWidget extends StatelessWidget {
                       '/other_user_profile',
                       arguments: {'userId': message.senderId},
                     );
-                                    },
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -85,17 +88,57 @@ class ChatMessageWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(18),
                           child: senderAvatar != null
                               ? Image.network(
-                            ApiService.getFullImageUrl(senderAvatar),
-                            width: 36,
-                            height: 36,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: AppColors.primaryContainer,
-                                child: Center(
+                                  ApiService.getFullImageUrl(senderAvatar),
+                                  width: 36,
+                                  height: 36,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      color: AppColors.primaryContainer,
+                                      child: Center(
+                                        child: Text(
+                                          senderName.isNotEmpty
+                                              ? senderName
+                                                    .substring(0, 1)
+                                                    .toUpperCase()
+                                              : '?',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return Container(
+                                          color: AppColors.primaryContainer,
+                                          child: const Center(
+                                            child: SizedBox(
+                                              width: 16,
+                                              height: 16,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                )
+                              : Center(
                                   child: Text(
                                     senderName.isNotEmpty
-                                        ? senderName.substring(0, 1).toUpperCase()
+                                        ? senderName
+                                              .substring(0, 1)
+                                              .toUpperCase()
                                         : '?',
                                     style: const TextStyle(
                                       fontSize: 16,
@@ -104,37 +147,6 @@ class ChatMessageWidget extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                color: AppColors.primaryContainer,
-                                child: const Center(
-                                  child: SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                              : Center(
-                            child: Text(
-                              senderName.isNotEmpty
-                                  ? senderName.substring(0, 1).toUpperCase()
-                                  : '?',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -160,18 +172,26 @@ class ChatMessageWidget extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: message.isSentByUser ? AppColors.primary : AppColors.surfaceVariant,
+                    color: message.isSentByUser
+                        ? AppColors.primary
+                        : AppColors.surfaceVariant,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(12),
                       topRight: const Radius.circular(12),
-                      bottomLeft: message.isSentByUser ? const Radius.circular(12) : const Radius.circular(0),
-                      bottomRight: message.isSentByUser ? const Radius.circular(0) : const Radius.circular(12),
+                      bottomLeft: message.isSentByUser
+                          ? const Radius.circular(12)
+                          : const Radius.circular(0),
+                      bottomRight: message.isSentByUser
+                          ? const Radius.circular(0)
+                          : const Radius.circular(12),
                     ),
                   ),
                   child: Text(
                     message.content,
                     style: TextStyle(
-                      color: message.isSentByUser ? AppColors.onPrimary : AppColors.onSurface,
+                      color: message.isSentByUser
+                          ? AppColors.onPrimary
+                          : AppColors.onSurface,
                       fontSize: 14,
                     ),
                   ),
@@ -201,42 +221,48 @@ class ChatMessageWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(18),
                               child: userAvatar != null && userAvatar.isNotEmpty
                                   ? Image.network(
-                                ApiService.getFullImageUrl(userAvatar),
-                                width: 36,
-                                height: 36,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: AppColors.primary,
-                                    child: const Icon(
+                                      ApiService.getFullImageUrl(userAvatar),
+                                      width: 36,
+                                      height: 36,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Container(
+                                              color: AppColors.primary,
+                                              child: const Icon(
+                                                Icons.person,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                            );
+                                          },
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
+                                            return Container(
+                                              color: AppColors.primary,
+                                              child: const Center(
+                                                child: SizedBox(
+                                                  width: 16,
+                                                  height: 16,
+                                                  child: CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                          Color
+                                                        >(Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                    )
+                                  : const Icon(
                                       Icons.person,
                                       color: Colors.white,
                                       size: 20,
                                     ),
-                                  );
-                                },
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    color: AppColors.primary,
-                                    child: const Center(
-                                      child: SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                                  : const Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 20,
-                              ),
                             ),
                           ),
                           const SizedBox(height: 4),

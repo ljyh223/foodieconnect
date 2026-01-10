@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk chat room localization",
+  "@@context": "FoodieConnect chat room localization",
   "chatRoom": "Chat Room",
   "@chatRoom": {
     "description": "Chat room title"

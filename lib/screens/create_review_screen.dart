@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../presentation/providers/review_provider.dart';
 import '../presentation/providers/auth_provider.dart';
@@ -119,7 +119,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // 评价内容输入
               Expanded(
                 flex: 2,
@@ -132,11 +132,11 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                       children: [
                         Text(
                           t.review.reviewContent,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
                         const SizedBox(height: 8),
                         Expanded(
                           child: TextField(
@@ -156,7 +156,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // 图片上传区域
               Card(
                 color: Colors.white,
@@ -223,9 +223,16 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.add_photo_alternate, size: 32, color: Colors.grey),
+              const Icon(
+                Icons.add_photo_alternate,
+                size: 32,
+                color: Colors.grey,
+              ),
               const SizedBox(height: 4),
-              Text(t.review.addImage, style: const TextStyle(color: Colors.grey)),
+              Text(
+                t.review.addImage,
+                style: const TextStyle(color: Colors.grey),
+              ),
             ],
           ),
         ),
@@ -261,7 +268,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             ),
           );
         }
-        
+
         return Stack(
           children: [
             GestureDetector(
@@ -287,11 +294,7 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
                     color: Colors.black54,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 16,
-                  ),
+                  child: const Icon(Icons.close, color: Colors.white, size: 16),
                 ),
               ),
             ),
@@ -369,16 +372,16 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (images != null) {
         // 处理每个选中的图片，确保格式正确
         final List<File> processedImages = [];
-        
+
         for (final xFile in images) {
           if (processedImages.length >= (9 - _images.length)) break;
-          
+
           final processedImage = await _processImageFile(File(xFile.path));
           if (processedImage != null) {
             processedImages.add(processedImage);
           }
         }
-        
+
         setState(() {
           _images.addAll(processedImages);
         });
@@ -388,7 +391,9 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       if (mounted) {
         debugPrint("选择图片失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${t.review.selectImageFailed}${e.toString()}')),
+          SnackBar(
+            content: Text('${t.review.selectImageFailed}${e.toString()}'),
+          ),
         );
       }
     }
@@ -398,10 +403,8 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
   void _viewImage(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => _ImageViewerScreen(
-          images: _images,
-          initialIndex: index,
-        ),
+        builder: (context) =>
+            _ImageViewerScreen(images: _images, initialIndex: index),
       ),
     );
   }
@@ -417,14 +420,14 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
   Future<void> _submit() async {
     final text = _controller.text.trim();
     final restaurantId = widget.restaurantId;
-    
+
     if (restaurantId == null || restaurantId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t.restaurant.restaurantInfoInvalid)),
       );
       return;
     }
-    
+
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t.review.pleaseEnterReviewContent)),
@@ -433,16 +436,24 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     }
 
     setState(() => _submitting = true);
-    
+
     try {
       // 发布评价（包含图片上传）
-      await Provider.of<ReviewProvider>(context, listen: false)
-          .postReviewWithImageFiles(restaurantId, _rating.toInt(), text, _images, await _getCurrentUserId() ?? 1);
-      
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.review.reviewPublished)),
+      await Provider.of<ReviewProvider>(
+        context,
+        listen: false,
+      ).postReviewWithImageFiles(
+        restaurantId,
+        _rating.toInt(),
+        text,
+        _images,
+        await _getCurrentUserId() ?? 1,
       );
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.review.reviewPublished)));
       Navigator.pop(context);
     } catch (e) {
       if (mounted) {
@@ -462,30 +473,30 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
     try {
       // 获取文件扩展名
       final fileExtension = path.extension(imageFile.path).toLowerCase();
-      
+
       // 如果已经是JPEG格式，直接返回
       if (fileExtension == '.jpg' || fileExtension == '.jpeg') {
         return imageFile;
       }
-      
+
       // 读取图片
       final imageBytes = await imageFile.readAsBytes();
       final originalImage = img.decodeImage(imageBytes);
-      
+
       if (originalImage == null) {
         debugPrint('无法解码图片文件');
         return imageFile; // 返回原文件，让服务器处理
       }
-      
+
       // 创建临时JPEG文件
       final tempDir = Directory.systemTemp;
       final jpegFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
       final jpegFile = File(path.join(tempDir.path, jpegFileName));
-      
+
       // 将图片保存为JPEG格式
       final jpegBytes = img.encodeJpg(originalImage, quality: 85);
       await jpegFile.writeAsBytes(jpegBytes);
-      
+
       debugPrint('图片格式已转换为JPEG: ${jpegFile.path}');
       return jpegFile;
     } catch (e) {
@@ -493,7 +504,6 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
       return imageFile; // 返回原文件，让服务器处理
     }
   }
-
 }
 
 // 图片查看器页面
@@ -501,10 +511,7 @@ class _ImageViewerScreen extends StatefulWidget {
   final List<File> images;
   final int initialIndex;
 
-  const _ImageViewerScreen({
-    required this.images,
-    required this.initialIndex,
-  });
+  const _ImageViewerScreen({required this.images, required this.initialIndex});
 
   @override
   State<_ImageViewerScreen> createState() => _ImageViewerScreenState();
@@ -547,10 +554,7 @@ class _ImageViewerScreenState extends State<_ImageViewerScreen> {
         itemBuilder: (context, index) {
           return Center(
             child: InteractiveViewer(
-              child: Image.file(
-                widget.images[index],
-                fit: BoxFit.contain,
-              ),
+              child: Image.file(widget.images[index], fit: BoxFit.contain),
             ),
           );
         },

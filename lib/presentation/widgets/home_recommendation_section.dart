@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/core/services/api_service.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/core/services/api_service.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../providers/recommendation_provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
@@ -68,7 +68,7 @@ class HomeRecommendationSection extends StatelessWidget {
     RecommendationProvider provider,
   ) {
     final recommendations = provider.recommendations.take(5).toList();
-    
+
     // 如果有推荐数据，直接显示，不显示加载状态
     if (recommendations.isNotEmpty) {
       return SizedBox(
@@ -84,12 +84,12 @@ class HomeRecommendationSection extends StatelessWidget {
         ),
       );
     }
-    
+
     // 只在没有数据且正在加载时显示加载状态
     if (provider.isLoading && recommendations.isEmpty) {
       return _buildLoadingState();
     }
-    
+
     // 没有数据且不在加载中时显示空状态
     return _buildEmptyState();
   }
@@ -135,9 +135,13 @@ class HomeRecommendationSection extends StatelessWidget {
                     color: AppColors.surfaceVariant,
                   ),
                   child: ClipOval(
-                    child: recommendation.userAvatar != null && recommendation.userAvatar!.isNotEmpty
+                    child:
+                        recommendation.userAvatar != null &&
+                            recommendation.userAvatar!.isNotEmpty
                         ? Image.network(
-                            ApiService.getFullImageUrl(recommendation.userAvatar),
+                            ApiService.getFullImageUrl(
+                              recommendation.userAvatar,
+                            ),
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return _buildDefaultAvatar(recommendation);
@@ -252,12 +256,12 @@ class HomeRecommendationSection extends StatelessWidget {
   /// 获取紧凑版推荐理由
   String _getCompactReason(UserRecommendation recommendation) {
     String reasonText = recommendation.recommendationReason;
-    
+
     // 如果推荐理由太长，截取前15个字符
     if (reasonText.length > 15) {
       return '${reasonText.substring(0, 15)}...';
     }
-    
+
     return reasonText;
   }
 
@@ -315,7 +319,6 @@ class HomeRecommendationSection extends StatelessWidget {
       ),
     );
   }
-
 
   /// 处理卡片点击
   void _handleCardTap(BuildContext context, UserRecommendation recommendation) {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tabletalk/core/services/api_service.dart';
-import 'package:tabletalk/generated/translations.g.dart';
-import 'package:tabletalk/core/services/auth_service.dart';
-import 'package:tabletalk/data/models/user_model.dart';
+import 'package:foodieconnect/core/services/api_service.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
+import 'package:foodieconnect/core/services/auth_service.dart';
+import 'package:foodieconnect/data/models/user_model.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/user_service.dart';
@@ -42,7 +42,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() => _isLoading = true);
     try {
       _user = await AuthService.me();
-      _displayNameController = TextEditingController(text: _user.displayName ?? '');
+      _displayNameController = TextEditingController(
+        text: _user.displayName ?? '',
+      );
       _bioController = TextEditingController(text: _user.bio ?? '');
     } catch (e) {
       print('Error initializing user: $e');
@@ -69,7 +71,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // 如果有新头像，先上传头像
       if (_newAvatarFile != null) {
         try {
-          final uploadResponse = await ApiService().uploadImage(_newAvatarFile!);
+          final uploadResponse = await ApiService().uploadImage(
+            _newAvatarFile!,
+          );
           avatarUrlToSave = uploadResponse['url'];
           if (avatarUrlToSave == null || avatarUrlToSave.isEmpty) {
             throw Exception('Avatar upload failed: unable to get image URL');
@@ -81,16 +85,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       }
 
       // 更新用户信息（包含可能的新头像URL）
-      _user = (await UserService.updateUserInfo(
-        displayName: _displayNameController.text.trim().isEmpty ? null : _displayNameController.text.trim(),
-        bio: _bioController.text.trim().isEmpty ? null : _bioController.text.trim(),
-        avatarUrl: avatarUrlToSave,
-      )) as User;
+      _user =
+          (await UserService.updateUserInfo(
+                displayName: _displayNameController.text.trim().isEmpty
+                    ? null
+                    : _displayNameController.text.trim(),
+                bio: _bioController.text.trim().isEmpty
+                    ? null
+                    : _bioController.text.trim(),
+                avatarUrl: avatarUrlToSave,
+              ))
+              as User;
 
       _showSnackBar(t.profile.saveSuccess, AppColors.primary);
       Navigator.of(context).pop(_user);
     } catch (e) {
-      _showSnackBar('${t.profile.saveFailed}: ${e.toString()}', AppColors.error);
+      _showSnackBar(
+        '${t.profile.saveFailed}: ${e.toString()}',
+        AppColors.error,
+      );
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
@@ -113,10 +126,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         title: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 200),
-          child: Text(
-            t.profile.editProfile,
-            overflow: TextOverflow.ellipsis,
-          ),
+          child: Text(t.profile.editProfile, overflow: TextOverflow.ellipsis),
         ),
         backgroundColor: AppColors.surface,
         elevation: 0,
@@ -127,17 +137,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             onPressed: _isSaving ? null : _cancelEdit,
             child: Text(
               t.app.cancel,
-              style: TextStyle(color: _isSaving ? AppColors.onSurfaceVariant : AppColors.primary),
+              style: TextStyle(
+                color: _isSaving
+                    ? AppColors.onSurfaceVariant
+                    : AppColors.primary,
+              ),
             ),
           ),
           TextButton(
             onPressed: _isSaving ? null : _saveUserInfo,
             child: _isSaving
-                ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : Text(
-              t.profile.save,
-              style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
-            ),
+                    t.profile.save,
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
           ),
         ],
       ),
@@ -160,10 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 16),
             _buildAvatarSection(),
             const SizedBox(height: 24),
-            _buildReadOnlyField(
-              label: t.profile.email,
-              value: _user.email,
-            ),
+            _buildReadOnlyField(label: t.profile.email, value: _user.email),
             const SizedBox(height: 16),
             _buildFormField(
               controller: _displayNameController,
@@ -190,21 +208,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: _isSaving
                     ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)),
-                    const SizedBox(width: 12),
-                    Text(t.profile.saving),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(t.profile.saving),
+                        ],
+                      )
                     : Text(
-                  t.profile.save,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
+                        t.profile.save,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 16),
@@ -216,11 +243,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   foregroundColor: AppColors.primary,
                   side: BorderSide(color: AppColors.primary),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: Text(
                   t.app.cancel,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -245,15 +277,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: _newAvatarFile != null
-                  ? Image.file(_newAvatarFile!, width: 100, height: 100, fit: BoxFit.cover)
+                  ? Image.file(
+                      _newAvatarFile!,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    )
                   : (_user.avatarUrl != null && _user.avatarUrl!.isNotEmpty)
                   ? Image.network(
-                _user.avatarUrl!,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => _buildDefaultAvatar(),
-              )
+                      _user.avatarUrl!,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          _buildDefaultAvatar(),
+                    )
                   : _buildDefaultAvatar(),
             ),
           ),
@@ -270,7 +308,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               child: IconButton(
                 padding: EdgeInsets.zero,
-                icon: const Icon(Icons.camera_alt, color: AppColors.onPrimary, size: 16),
+                icon: const Icon(
+                  Icons.camera_alt,
+                  color: AppColors.onPrimary,
+                  size: 16,
+                ),
                 onPressed: _showAvatarOptions,
               ),
             ),
@@ -298,7 +340,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -325,7 +369,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             ListTile(
               leading: Icon(Icons.photo_library, color: AppColors.primary),
-              title: Text(t.profile.selectFromGallery, style: AppTextStyles.bodyLarge),
+              title: Text(
+                t.profile.selectFromGallery,
+                style: AppTextStyles.bodyLarge,
+              ),
               onTap: () {
                 Navigator.pop(context);
                 _pickImage();
@@ -373,8 +420,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<File?> _processImageFile(File imageFile) async {
     try {
       final fileExtension = path.extension(imageFile.path).toLowerCase();
-      if (fileExtension == '.jpg' || fileExtension == '.jpeg' || fileExtension == '.png' ||
-          fileExtension == '.gif' || fileExtension == '.webp') {
+      if (fileExtension == '.jpg' ||
+          fileExtension == '.jpeg' ||
+          fileExtension == '.png' ||
+          fileExtension == '.gif' ||
+          fileExtension == '.webp') {
         return imageFile;
       }
 
@@ -383,7 +433,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (originalImage == null) return imageFile;
 
       final tempDir = Directory.systemTemp;
-      final jpegFile = File(path.join(tempDir.path, '${DateTime.now().millisecondsSinceEpoch}.jpg'));
+      final jpegFile = File(
+        path.join(tempDir.path, '${DateTime.now().millisecondsSinceEpoch}.jpg'),
+      );
       final jpegBytes = img.encodeJpg(originalImage, quality: 85);
       await jpegFile.writeAsBytes(jpegBytes);
       return jpegFile;
@@ -396,7 +448,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          label,
+          style: AppTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         const SizedBox(height: 8),
         Container(
           width: double.infinity,
@@ -406,12 +463,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.outline),
           ),
-          child: Text(value, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.onSurfaceVariant)),
+          child: Text(
+            value,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           t.profile.emailCannotBeChanged,
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.onSurfaceVariant, fontStyle: FontStyle.italic),
+          style: AppTextStyles.bodySmall.copyWith(
+            color: AppColors.onSurfaceVariant,
+            fontStyle: FontStyle.italic,
+          ),
         ),
       ],
     );
@@ -429,7 +494,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          label,
+          style: AppTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -440,11 +510,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           style: AppTextStyles.bodyMedium,
           decoration: InputDecoration(
             hintText: hintText,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.outline)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.outline)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.primary, width: 2)),
-            errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.error, width: 1)),
-            focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.error, width: 2)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.outline),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.outline),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.primary, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.error, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: AppColors.error, width: 2),
+            ),
             contentPadding: const EdgeInsets.all(16),
             fillColor: AppColors.surface,
             filled: true,

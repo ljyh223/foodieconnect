@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk application English localization - Global",
-  "appTitle": "TableTalk",
+  "@@context": "FoodieConnect application English localization - Global",
+  "appTitle": "FoodieConnect",
   "@appTitle": {
     "description": "Application title"
   },
@@ -9,7 +9,7 @@
   "@foodieConnect": {
     "description": "Application English name"
   },
-  "tableTalk": "TableTalk",
+  "tableTalk": "FoodieConnect",
   "@tableTalk": {
     "description": "Application Chinese name"
   },

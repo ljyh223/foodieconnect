@@ -1,7 +1,7 @@
 {
   "@@locale": "zh",
-  "@@context": "TableTalk应用简体中文本地化 - 全局",
-  "appTitle": "TableTalk",
+  "@@context": "FoodieConnect应用简体中文本地化 - 全局",
+  "appTitle": "FoodieConnect",
   "@appTitle": {
     "description": "应用标题"
   },
@@ -9,7 +9,7 @@
   "@foodieConnect": {
     "description": "应用英文名称"
   },
-  "tableTalk": "TableTalk",
+  "tableTalk": "FoodieConnect",
   "@tableTalk": {
     "description": "应用中文名称"
   },

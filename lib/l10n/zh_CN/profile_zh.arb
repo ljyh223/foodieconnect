@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "@@context": "TableTalk应用简体中文本地化 - 用户个人中心",
+  "@@context": "FoodieConnect应用简体中文本地化 - 用户个人中心",
   "profileTitle": "个人主页",
   "@profileTitle": {
     "description": "个人主页标题"

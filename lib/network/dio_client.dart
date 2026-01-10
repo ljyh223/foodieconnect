@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:tabletalk/core/constants/app_constants.dart';
+import 'package:foodieconnect/core/constants/app_constants.dart';
 
 /// 全局Dio客户端配置类
 class DioClient {

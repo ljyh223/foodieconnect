@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk application English localization - User Profile",
+  "@@context": "FoodieConnect application English localization - User Profile",
   "profileTitle": "Profile",
   "@profileTitle": {
     "description": "Profile page title"

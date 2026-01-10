@@ -1,7 +1,7 @@
 import 'dart:developer' as logger;
 
 import 'package:flutter/material.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../data/models/user_model.dart';
 import '../../core/services/auth_service.dart';
 import '../../core/services/api_service.dart';
@@ -28,12 +28,12 @@ class AuthProvider with ChangeNotifier {
       if (userId != null) {
         return userId;
       }
-      
+
       // 如果本地没有，尝试从当前用户对象获取
       if (_user != null) {
         return _user!.id;
       }
-      
+
       // 如果都没有，尝试从API获取并缓存
       debugPrint('本地无用户ID，尝试从API获取');
       final user = await AuthService.me();
@@ -44,6 +44,7 @@ class AuthProvider with ChangeNotifier {
       return null;
     }
   }
+
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get isAuthenticated => _user != null;
@@ -69,7 +70,11 @@ class AuthProvider with ChangeNotifier {
   }
 
   // 使用真实 API 注册，失败时返回错误信息
-  Future<void> register(String email, String password, String displayName) async {
+  Future<void> register(
+    String email,
+    String password,
+    String displayName,
+  ) async {
     _setLoading(true);
     _error = null;
     _registrationSuccess = false;
@@ -131,7 +136,11 @@ class AuthProvider with ChangeNotifier {
   }
 
   // 更新用户信息（本地模拟）
-  Future<void> updateProfile(String displayName, String phone, String? avatarUrl) async {
+  Future<void> updateProfile(
+    String displayName,
+    String phone,
+    String? avatarUrl,
+  ) async {
     _setLoading(true);
     _error = null;
 

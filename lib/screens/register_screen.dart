@@ -5,7 +5,7 @@ import '../presentation/providers/auth_provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/text_field_widget.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -55,19 +55,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await auth.register(
       _emailController.text.trim(),
       _passwordController.text,
-      _displayNameController.text.trim()
+      _displayNameController.text.trim(),
     );
 
     if (!mounted) return;
 
     if (auth.error != null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(
-        SnackBar(
-          content: Text(auth.error!),
-          backgroundColor: Colors.red,
-        ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(auth.error!), backgroundColor: Colors.red),
       );
     } else {
       // 显示注册成功提示
@@ -124,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    t.auth.joinTableTalk,
+                    t.auth.joinFoodieConnect,
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
@@ -167,7 +162,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: Icons.email_outlined,
                       ),
                       const SizedBox(height: 16),
-
 
                       TextFieldWidget(
                         controller: _passwordController,

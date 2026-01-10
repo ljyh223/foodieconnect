@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "@@context": "TableTalk 认证模块简体中文本地化",
+  "@@context": "FoodieConnect 认证模块简体中文本地化",
   "login": "登录",
   "@login": {
     "description": "登录按钮文本"
@@ -65,8 +65,8 @@
   "@createAccount": {
     "description": "创建账号标题"
   },
-  "joinTableTalk": "加入TableTalk，发现更多美食",
-  "@joinTableTalk": {
+  "joinFoodieConnect": "加入FoodieConnect，发现更多美食",
+  "@joinFoodieConnect": {
     "description": "注册页面副标题"
   },
   "loginFailed": "登录失败，请稍后重试",

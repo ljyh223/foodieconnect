@@ -1,14 +1,10 @@
 import 'dart:typed_data';
 import 'package:fixnum/fixnum.dart';
-import 'package:tabletalk/data/models/chat_message_model.dart';
+import 'package:foodieconnect/data/models/chat_message_model.dart';
 import 'chat.pb.dart' as $pb;
 
 /// Protobuf消息类型枚举
-enum MessageType {
-  TEXT,
-  IMAGE,
-  SYSTEM,
-}
+enum MessageType { TEXT, IMAGE, SYSTEM }
 
 /// Protobuf聊天消息类
 class ChatMessageProto {
@@ -130,10 +126,7 @@ class SendMessageRequestProto {
   final Int64 roomId;
   final String content;
 
-  SendMessageRequestProto({
-    required this.roomId,
-    required this.content,
-  });
+  SendMessageRequestProto({required this.roomId, required this.content});
 
   factory SendMessageRequestProto.fromProto($pb.SendMessageRequest proto) {
     return SendMessageRequestProto(
@@ -162,19 +155,14 @@ class SendMessageRequestProto {
 class JoinRoomRequestProto {
   final Int64 roomId;
 
-  JoinRoomRequestProto({
-    required this.roomId,
-  });
+  JoinRoomRequestProto({required this.roomId});
 
   factory JoinRoomRequestProto.fromProto($pb.JoinRoomRequest proto) {
-    return JoinRoomRequestProto(
-      roomId: proto.roomId,
-    );
+    return JoinRoomRequestProto(roomId: proto.roomId);
   }
 
   $pb.JoinRoomRequest toProto() {
-    return $pb.JoinRoomRequest()
-      ..roomId = roomId;
+    return $pb.JoinRoomRequest()..roomId = roomId;
   }
 
   factory JoinRoomRequestProto.fromBuffer(Uint8List data) {
@@ -191,19 +179,14 @@ class JoinRoomRequestProto {
 class LeaveRoomRequestProto {
   final Int64 roomId;
 
-  LeaveRoomRequestProto({
-    required this.roomId,
-  });
+  LeaveRoomRequestProto({required this.roomId});
 
   factory LeaveRoomRequestProto.fromProto($pb.LeaveRoomRequest proto) {
-    return LeaveRoomRequestProto(
-      roomId: proto.roomId,
-    );
+    return LeaveRoomRequestProto(roomId: proto.roomId);
   }
 
   $pb.LeaveRoomRequest toProto() {
-    return $pb.LeaveRoomRequest()
-      ..roomId = roomId;
+    return $pb.LeaveRoomRequest()..roomId = roomId;
   }
 
   factory LeaveRoomRequestProto.fromBuffer(Uint8List data) {
@@ -220,7 +203,8 @@ class LeaveRoomRequestProto {
 class ChatResponseProto {
   final bool success;
   final String errorMessage;
-  final dynamic payload; // ChatMessageProto, JoinRoomResponseProto, or LeaveRoomResponseProto
+  final dynamic
+  payload; // ChatMessageProto, JoinRoomResponseProto, or LeaveRoomResponseProto
 
   ChatResponseProto({
     required this.success,
@@ -284,10 +268,7 @@ class JoinRoomResponseProto {
   final bool success;
   final String message;
 
-  JoinRoomResponseProto({
-    required this.success,
-    required this.message,
-  });
+  JoinRoomResponseProto({required this.success, required this.message});
 
   factory JoinRoomResponseProto.fromProto($pb.JoinRoomResponse proto) {
     return JoinRoomResponseProto(
@@ -317,10 +298,7 @@ class LeaveRoomResponseProto {
   final bool success;
   final String message;
 
-  LeaveRoomResponseProto({
-    required this.success,
-    required this.message,
-  });
+  LeaveRoomResponseProto({required this.success, required this.message});
 
   factory LeaveRoomResponseProto.fromProto($pb.LeaveRoomResponse proto) {
     return LeaveRoomResponseProto(
@@ -350,10 +328,7 @@ class WebSocketMessageProto {
   final String type; // "SEND_MESSAGE", "JOIN_ROOM", "LEAVE_ROOM"
   final Uint8List payload;
 
-  WebSocketMessageProto({
-    required this.type,
-    required this.payload,
-  });
+  WebSocketMessageProto({required this.type, required this.payload});
 
   factory WebSocketMessageProto.fromProto($pb.WebSocketMessage proto) {
     return WebSocketMessageProto(

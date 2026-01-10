@@ -1,6 +1,6 @@
 {
   "@@locale": "zh_TW",
-  "@@context": "TableTalk 餐廳詳情繁體中文本地化",
+  "@@context": "FoodieConnect 餐廳詳情繁體中文本地化",
   "noRestaurants": "暫無餐廳信息",
   "@noRestaurants": {
     "description": "無餐廳信息提示"

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/auth_service.dart';
@@ -41,10 +41,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
 
     try {
       // 并行加载用户信息和推荐餐厅
-      await Future.wait([
-        _loadUserInfo(),
-        _loadRecommendedRestaurants(),
-      ]);
+      await Future.wait([_loadUserInfo(), _loadRecommendedRestaurants()]);
 
       setState(() {
         _isLoading = false;
@@ -74,7 +71,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
       } catch (secondError) {
         throw Exception(t.profile.userNotFound);
       }
-      
+
       throw Exception(t.profile.userNotFound);
     }
   }
@@ -83,7 +80,9 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
   Future<void> _loadRecommendedRestaurants() async {
     try {
       if (_user != null) {
-        _recommendedRestaurants = await ReviewService.getRecommendedRestaurants(_user!.id);
+        _recommendedRestaurants = await ReviewService.getRecommendedRestaurants(
+          _user!.id,
+        );
       }
     } catch (e) {
       // 如果获取失败，使用空列表
@@ -94,10 +93,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
   /// 导航到编辑个人资料页面
   void _navigateToEditProfile() {
     if (_user != null) {
-      Navigator.pushNamed(
-        context,
-        '/edit_profile',
-      ).then((result) {
+      Navigator.pushNamed(context, '/edit_profile').then((result) {
         // 从编辑页面返回后刷新数据
         _loadUserData();
       });
@@ -131,10 +127,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
 
   /// 导航到设置页面
   void _navigateToSettings() {
-    Navigator.pushNamed(
-      context,
-      '/settings',
-    );
+    Navigator.pushNamed(context, '/settings');
   }
 
   @override
@@ -160,17 +153,13 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: _buildContent(),
-      ),
+      body: SafeArea(child: _buildContent()),
     );
   }
 
   Widget _buildContent() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_error != null) {
@@ -178,16 +167,11 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              t.profile.loadingFailed,
-              style: AppTextStyles.titleMedium,
-            ),
+            Text(t.profile.loadingFailed, style: AppTextStyles.titleMedium),
             const SizedBox(height: 8),
             Text(
               _error!,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.error,
-              ),
+              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -201,10 +185,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
 
     if (_user == null) {
       return Center(
-        child: Text(
-          t.profile.userNotFound,
-          style: AppTextStyles.titleMedium,
-        ),
+        child: Text(t.profile.userNotFound, style: AppTextStyles.titleMedium),
       );
     }
 
@@ -214,23 +195,17 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 用户头像和基本信息
-          UserProfileHeader(
-            user: _user!,
-            isEditing: false,
-          ),
+          UserProfileHeader(user: _user!, isEditing: false),
           const SizedBox(height: 24),
-          
+
           // 喜好食物标签
           _buildFoodPreferences(),
           const SizedBox(height: 24),
-          
+
           // 个人简介
-          UserBioSection(
-            bio: _user!.bio,
-            isEditing: false,
-          ),
+          UserBioSection(bio: _user!.bio, isEditing: false),
           const SizedBox(height: 24),
-          
+
           // 推荐餐厅
           RecommendedRestaurantsGrid(
             restaurants: _recommendedRestaurants,
@@ -244,7 +219,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
   /// 构建喜好食物部分
   Widget _buildFoodPreferences() {
     final favoriteFoods = _user?.favoriteFoods ?? [];
-    
+
     if (favoriteFoods.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -265,10 +240,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          t.profile.foodPreferences,
-          style: AppTextStyles.titleMedium,
-        ),
+        Text(t.profile.foodPreferences, style: AppTextStyles.titleMedium),
         const SizedBox(height: 12),
         Wrap(
           spacing: 8,

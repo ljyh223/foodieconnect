@@ -56,13 +56,13 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	// Translations
 
 	/// 應用標題
-	@override String get appTitle => 'TableTalk';
+	@override String get appTitle => 'FoodieConnect';
 
 	/// 應用英文名稱
 	@override String get foodieConnect => 'Foodie Connect';
 
 	/// 應用中文名稱
-	@override String get tableTalk => 'TableTalk';
+	@override String get tableTalk => 'FoodieConnect';
 
 	/// 應用副標題
 	@override String get discoverFoodShareExperience => '發現美食，分享體驗';
@@ -362,7 +362,7 @@ class _TranslationsAuthZhTw implements TranslationsAuthEn {
 	@override String get createAccount => '創建帳號';
 
 	/// 註冊頁面副標題
-	@override String get joinTableTalk => '加入TableTalk，發現更多美食';
+	@override String get joinFoodieConnect => '加入FoodieConnect，發現更多美食';
 
 	/// 登入失敗提示
 	@override String get loginFailed => '登入失敗，請稍後重試';
@@ -939,9 +939,9 @@ class _TranslationsStaffZhTw implements TranslationsStaffEn {
 extension on TranslationsZhTw {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
-			'app.appTitle' => 'TableTalk',
+			'app.appTitle' => 'FoodieConnect',
 			'app.foodieConnect' => 'Foodie Connect',
-			'app.tableTalk' => 'TableTalk',
+			'app.tableTalk' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => '發現美食，分享體驗',
 			'app.search' => '搜尋',
 			'app.home' => '首頁',
@@ -1038,7 +1038,7 @@ extension on TranslationsZhTw {
 			'auth.alreadyHaveAccount' => '已有帳號？',
 			'auth.loginNow' => '立即登入',
 			'auth.createAccount' => '創建帳號',
-			'auth.joinTableTalk' => '加入TableTalk，發現更多美食',
+			'auth.joinFoodieConnect' => '加入FoodieConnect，發現更多美食',
 			'auth.loginFailed' => '登入失敗，請稍後重試',
 			'auth.checkingLoginStatus' => '正在檢查登入狀態...',
 			'auth.authCheckFailed' => '認證檢查失敗',

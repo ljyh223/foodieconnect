@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../providers/recommendation_provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
@@ -22,7 +22,10 @@ class RecommendedUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recommendationProvider = Provider.of<RecommendationProvider>(context, listen: false);
+    final recommendationProvider = Provider.of<RecommendationProvider>(
+      context,
+      listen: false,
+    );
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -59,9 +62,13 @@ class RecommendedUserCard extends StatelessWidget {
                         color: AppColors.surfaceVariant,
                       ),
                       child: ClipOval(
-                        child: recommendation.userAvatar != null && recommendation.userAvatar!.isNotEmpty
+                        child:
+                            recommendation.userAvatar != null &&
+                                recommendation.userAvatar!.isNotEmpty
                             ? Image.network(
-                                ApiService.getFullImageUrl(recommendation.userAvatar),
+                                ApiService.getFullImageUrl(
+                                  recommendation.userAvatar,
+                                ),
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return _buildDefaultAvatar();
@@ -72,7 +79,7 @@ class RecommendedUserCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  
+
                   // 用户昵称和推荐分数
                   Expanded(
                     child: Column(
@@ -123,20 +130,21 @@ class RecommendedUserCard extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 8),
-              
+
               // 推荐理由
               _buildRecommendationReason(),
-              
+
               // 共同餐厅信息（如果有）
-              if (recommendation.commonRestaurants != null && recommendation.commonRestaurants!.isNotEmpty) ...[
+              if (recommendation.commonRestaurants != null &&
+                  recommendation.commonRestaurants!.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 _buildCommonRestaurants(),
               ],
-              
+
               const SizedBox(height: 12),
-              
+
               // 操作按钮
               _buildActionButtons(context, recommendationProvider),
             ],
@@ -190,7 +198,7 @@ class RecommendedUserCard extends StatelessWidget {
   Widget _buildCommonRestaurants() {
     final restaurants = recommendation.commonRestaurants!;
     final displayCount = restaurants.length > 2 ? 2 : restaurants.length;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,23 +212,28 @@ class RecommendedUserCard extends StatelessWidget {
         const SizedBox(height: 4),
         Row(
           children: [
-            ...restaurants.take(displayCount).map((restaurant) =>
-              Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryContainer.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  restaurant.name,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.primary,
-                    fontSize: 11,
+            ...restaurants
+                .take(displayCount)
+                .map(
+                  (restaurant) => Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryContainer.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      restaurant.name,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.primary,
+                        fontSize: 11,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
             if (restaurants.length > 2)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -243,7 +256,10 @@ class RecommendedUserCard extends StatelessWidget {
   }
 
   /// 构建操作按钮
-  Widget _buildActionButtons(BuildContext context, RecommendationProvider provider) {
+  Widget _buildActionButtons(
+    BuildContext context,
+    RecommendationProvider provider,
+  ) {
     return Row(
       children: [
         // 关注按钮
@@ -271,9 +287,9 @@ class RecommendedUserCard extends StatelessWidget {
             ),
           ),
         ),
-        
+
         const SizedBox(width: 8),
-        
+
         // 不感兴趣按钮
         Expanded(
           child: SizedBox(
@@ -282,7 +298,9 @@ class RecommendedUserCard extends StatelessWidget {
               onPressed: () => _handleNotInterestedTap(context, provider),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.onSurfaceVariant,
-                side: BorderSide(color: AppColors.outline.withValues(alpha: 0.5)),
+                side: BorderSide(
+                  color: AppColors.outline.withValues(alpha: 0.5),
+                ),
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 shape: RoundedRectangleBorder(
@@ -325,13 +343,16 @@ class RecommendedUserCard extends StatelessWidget {
   }
 
   /// 处理关注按钮点击
-  Future<void> _handleFollowTap(BuildContext context, RecommendationProvider provider) async {
+  Future<void> _handleFollowTap(
+    BuildContext context,
+    RecommendationProvider provider,
+  ) async {
     if (!context.mounted) return;
-    
+
     try {
       // 标记为感兴趣
       final success = await provider.markAsInterested(recommendation.id);
-      
+
       if (success && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -339,7 +360,7 @@ class RecommendedUserCard extends StatelessWidget {
             duration: const Duration(seconds: 1),
           ),
         );
-        
+
         // 可以在这里添加关注逻辑
         // await FollowService.followUser(recommendation.userId);
       }
@@ -356,13 +377,16 @@ class RecommendedUserCard extends StatelessWidget {
   }
 
   /// 处理不感兴趣按钮点击
-  Future<void> _handleNotInterestedTap(BuildContext context, RecommendationProvider provider) async {
+  Future<void> _handleNotInterestedTap(
+    BuildContext context,
+    RecommendationProvider provider,
+  ) async {
     if (!context.mounted) return;
-    
+
     try {
       // 标记为不感兴趣
       final success = await provider.markAsNotInterested(recommendation.id);
-      
+
       if (success && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

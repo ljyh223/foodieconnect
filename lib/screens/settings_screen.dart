@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../presentation/providers/language_provider.dart';
 import '../presentation/providers/auth_provider.dart';
 import '../presentation/widgets/language_selector_widget.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -41,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // 账户设置部分
           _buildSection(
             context,
@@ -53,9 +53,9 @@ class SettingsScreen extends StatelessWidget {
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到个人资料页面
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.setting.profile)),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(t.setting.profile)));
                 },
               ),
               ListTile(
@@ -64,9 +64,9 @@ class SettingsScreen extends StatelessWidget {
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   // TODO: 导航到隐私设置页面
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.setting.privacy)),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(t.setting.privacy)));
                 },
               ),
               ListTile(
@@ -82,7 +82,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // 关于部分
           _buildSection(
             context,
@@ -95,7 +95,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // 退出登录按钮
           const SizedBox(height: 20),
           Padding(
@@ -121,7 +121,11 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, {required String title, required List<Widget> children}) {
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required List<Widget> children,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -138,9 +142,7 @@ class SettingsScreen extends StatelessWidget {
         ),
         Container(
           color: AppColors.surface,
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         ),
         const SizedBox(height: 8),
       ],
@@ -164,7 +166,7 @@ class SettingsScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                var auth =Provider.of<AuthProvider>(context, listen: false);
+                var auth = Provider.of<AuthProvider>(context, listen: false);
                 auth.setContext(context);
                 auth.logout();
                 Navigator.pushReplacementNamed(context, '/login');

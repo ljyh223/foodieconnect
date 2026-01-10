@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/api_service.dart';
@@ -13,10 +13,7 @@ import '../presentation/widgets/app_bar_widget.dart';
 class OtherUserProfileScreen extends StatefulWidget {
   final int userId;
 
-  const OtherUserProfileScreen({
-    super.key,
-    required this.userId,
-  });
+  const OtherUserProfileScreen({super.key, required this.userId});
 
   @override
   State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
@@ -64,7 +61,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   /// 关注/取消关注用户
   Future<void> _toggleFollow() async {
     if (_user == null) return;
-    
+
     try {
       final currentUserId = await AuthService.getCurrentUserId();
       if (currentUserId == null) {
@@ -94,13 +91,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
       setState(() {
         _user = _user!.copyWith(isFollowing: _user!.isFollowing);
       });
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text((_user!.isFollowing ?? false)
-                ? t.profile.unfollowFailed
-                : t.profile.followFailed),
+            content: Text(
+              (_user!.isFollowing ?? false)
+                  ? t.profile.unfollowFailed
+                  : t.profile.followFailed,
+            ),
             backgroundColor: AppColors.error,
           ),
         );
@@ -116,17 +115,13 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
         title: t.profile.otherProfileTitle,
         showBackButton: true,
       ),
-      body: SafeArea(
-        child: _buildContent(),
-      ),
+      body: SafeArea(child: _buildContent()),
     );
   }
 
   Widget _buildContent() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_error != null) {
@@ -134,16 +129,11 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              t.profile.loadingFailed,
-              style: AppTextStyles.titleMedium,
-            ),
+            Text(t.profile.loadingFailed, style: AppTextStyles.titleMedium),
             const SizedBox(height: 8),
             Text(
               _error!,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.error,
-              ),
+              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -157,10 +147,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
     if (_user == null) {
       return Center(
-        child: Text(
-          t.profile.userNotFound,
-          style: AppTextStyles.titleMedium,
-        ),
+        child: Text(t.profile.userNotFound, style: AppTextStyles.titleMedium),
       );
     }
 
@@ -172,11 +159,11 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           // 用户头像和基本信息
           _buildUserInfo(),
           const SizedBox(height: 24),
-          
+
           // 喜好食物标签
           _buildFoodPreferences(),
           const SizedBox(height: 32),
-          
+
           // 连接按钮
           _buildConnectButton(),
         ],
@@ -195,28 +182,24 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           decoration: BoxDecoration(
             color: AppColors.primaryContainer,
             borderRadius: BorderRadius.circular(50),
-            border: Border.all(
-              color: AppColors.outline,
-              width: 1,
-            ),
+            border: Border.all(color: AppColors.outline, width: 1),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: _user!.avatarUrl != null && _user!.avatarUrl!.isNotEmpty
                 ? Image.network(
-              ApiService.getFullImageUrl(_user!.avatarUrl!),
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return _buildDefaultAvatar();
-              },
-            )
+                    ApiService.getFullImageUrl(_user!.avatarUrl!),
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return _buildDefaultAvatar();
+                    },
+                  )
                 : _buildDefaultAvatar(),
           ),
         ),
         const SizedBox(width: 16), // 水平间距
-
         // 昵称和邮箱（右侧，垂直排列）
         Column(
           crossAxisAlignment: CrossAxisAlignment.start, // 左对齐
@@ -244,7 +227,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   Widget _buildDefaultAvatar() {
     return Center(
       child: Text(
-        _user!.displayName?.isNotEmpty == true 
+        _user!.displayName?.isNotEmpty == true
             ? _user!.displayName!.substring(0, 1).toUpperCase()
             : 'U',
         style: AppTextStyles.headlineMedium.copyWith(
@@ -257,7 +240,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
   Widget _buildFoodPreferences() {
     final favoriteFoods = _user?.favoriteFoods ?? [];
-    
+
     if (favoriteFoods.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -278,10 +261,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          t.profile.foodPreferences,
-          style: AppTextStyles.titleMedium,
-        ),
+        Text(t.profile.foodPreferences, style: AppTextStyles.titleMedium),
         const SizedBox(height: 12),
         Wrap(
           spacing: 8,
@@ -314,22 +294,22 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
   Widget _buildConnectButton() {
     final isFollowing = _user?.isFollowing ?? false;
-    
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: _toggleFollow,
         style: ElevatedButton.styleFrom(
           backgroundColor: isFollowing ? AppColors.surface : AppColors.primary,
-          foregroundColor: isFollowing ? AppColors.primary : AppColors.onPrimary,
+          foregroundColor: isFollowing
+              ? AppColors.primary
+              : AppColors.onPrimary,
           side: BorderSide(
             color: isFollowing ? AppColors.primary : Colors.transparent,
             width: 1,
           ),
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Text(
           isFollowing ? t.profile.following : t.profile.connect,

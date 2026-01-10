@@ -1,6 +1,6 @@
 {
   "@@locale": "zh_TW",
-  "@@context": "TableTalk 評論模組繁體中文本地化",
+  "@@context": "FoodieConnect 評論模組繁體中文本地化",
   "userComments": "用戶評論",
   "@userComments": {
     "description": "用戶評論標題"

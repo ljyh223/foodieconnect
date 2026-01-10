@@ -1,6 +1,6 @@
 {
   "@@locale": "zh",
-  "@@context": "TableTalk 聊天功能简体中文本地化",
+  "@@context": "FoodieConnect 聊天功能简体中文本地化",
   "chatRoom": "聊天室",
   "@chatRoom": {
     "description": "聊天室标题"

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../data/models/review_model.dart';
 import '../../core/services/review_service.dart';
 import 'dart:io';
@@ -25,7 +25,11 @@ class ReviewProvider with ChangeNotifier {
     }
   }
 
-  Future<void> postReview(String restaurantId, int rating, String comment) async {
+  Future<void> postReview(
+    String restaurantId,
+    int rating,
+    String comment,
+  ) async {
     _setLoading(true);
     _error = null;
     try {
@@ -39,11 +43,22 @@ class ReviewProvider with ChangeNotifier {
   }
 
   /// 发布带图片的评价
-  Future<void> postReviewWithImages(String restaurantId, int rating, String comment, List<String> imageUrls, int userId) async {
+  Future<void> postReviewWithImages(
+    String restaurantId,
+    int rating,
+    String comment,
+    List<String> imageUrls,
+    int userId,
+  ) async {
     _setLoading(true);
     _error = null;
     try {
-      final review = await ReviewService.postWithImages(restaurantId, rating, comment, imageUrls);
+      final review = await ReviewService.postWithImages(
+        restaurantId,
+        rating,
+        comment,
+        imageUrls,
+      );
       _reviews.insert(0, review);
     } catch (e) {
       _error = t.review.postReviewFail(error: e.toString());
@@ -53,11 +68,22 @@ class ReviewProvider with ChangeNotifier {
   }
 
   /// 上传图片并发布评价
-  Future<void> postReviewWithImageFiles(String restaurantId, int rating, String comment, List<File> imageFiles, int userId) async {
+  Future<void> postReviewWithImageFiles(
+    String restaurantId,
+    int rating,
+    String comment,
+    List<File> imageFiles,
+    int userId,
+  ) async {
     _setLoading(true);
     _error = null;
     try {
-      final review = await ReviewService.postWithImageFiles(restaurantId, rating, comment, imageFiles);
+      final review = await ReviewService.postWithImageFiles(
+        restaurantId,
+        rating,
+        comment,
+        imageFiles,
+      );
       _reviews.insert(0, review);
     } catch (e) {
       _error = t.review.postReviewFail(error: e.toString());

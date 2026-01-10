@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../data/models/restaurant_model.dart';
 import '../../core/services/restaurant_service.dart';
 
@@ -36,7 +36,10 @@ class RestaurantProvider with ChangeNotifier {
 
       if (keyword != null && keyword.isNotEmpty) {
         _restaurants = _restaurants
-            .where((r) => r.name.contains(keyword) || r.description.contains(keyword))
+            .where(
+              (r) =>
+                  r.name.contains(keyword) || r.description.contains(keyword),
+            )
             .toList();
       }
     } catch (e) {

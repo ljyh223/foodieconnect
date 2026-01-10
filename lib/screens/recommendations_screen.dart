@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../data/models/user_recommendation_model.dart';
 import '../presentation/providers/recommendation_provider.dart';
 import '../presentation/widgets/recommended_user_card.dart';
@@ -48,8 +48,11 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
 
   /// 加载初始推荐
   Future<void> _loadInitialRecommendations() async {
-    final provider = Provider.of<RecommendationProvider>(context, listen: false);
-    
+    final provider = Provider.of<RecommendationProvider>(
+      context,
+      listen: false,
+    );
+
     if (provider.recommendations.isEmpty) {
       await provider.refreshRecommendations();
     }
@@ -57,8 +60,11 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
 
   /// 加载更多推荐
   Future<void> _loadMoreRecommendations() async {
-    final provider = Provider.of<RecommendationProvider>(context, listen: false);
-    
+    final provider = Provider.of<RecommendationProvider>(
+      context,
+      listen: false,
+    );
+
     if (!provider.isLoading && provider.hasMore) {
       await provider.loadMoreRecommendations();
     }
@@ -67,7 +73,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   /// 下拉刷新
   Future<void> _onRefresh() async {
     try {
-      final provider = Provider.of<RecommendationProvider>(context, listen: false);
+      final provider = Provider.of<RecommendationProvider>(
+        context,
+        listen: false,
+      );
       await provider.refreshRecommendations();
     } catch (e) {
       // 错误已在Provider中处理
@@ -100,10 +109,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _onRefresh,
-            child: Text(t.app.retry),
-          ),
+          ElevatedButton(onPressed: _onRefresh, child: Text(t.app.retry)),
         ],
       ),
     );
@@ -115,31 +121,20 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.red,
-          ),
+          Icon(Icons.error_outline, size: 64, color: Colors.red),
           const SizedBox(height: 16),
           Text(
             t.app.loadingFailed,
-            style: AppTextStyles.titleMedium.copyWith(
-              color: Colors.red,
-            ),
+            style: AppTextStyles.titleMedium.copyWith(color: Colors.red),
           ),
           const SizedBox(height: 8),
           Text(
             error,
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: Colors.red,
-            ),
+            style: AppTextStyles.bodyMedium.copyWith(color: Colors.red),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _onRefresh,
-            child: Text(t.app.retry),
-          ),
+          ElevatedButton(onPressed: _onRefresh, child: Text(t.app.retry)),
         ],
       ),
     );
@@ -147,9 +142,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
 
   /// 构建加载状态
   Widget _buildLoadingState() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 
   /// 构建推荐列表
@@ -159,13 +152,13 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
       child: ListView.builder(
         controller: _scrollController,
         padding: const EdgeInsets.symmetric(vertical: 8),
-        itemCount: recommendations.length + (Provider.of<RecommendationProvider>(context).hasMore ? 1 : 0),
+        itemCount:
+            recommendations.length +
+            (Provider.of<RecommendationProvider>(context).hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index < recommendations.length) {
             final recommendation = recommendations[index];
-            return RecommendedUserCard(
-              recommendation: recommendation,
-            );
+            return RecommendedUserCard(recommendation: recommendation);
           } else {
             // 底部加载指示器
             return Container(
@@ -208,9 +201,9 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
             ),
           ),
-          
+
           const SizedBox(width: 12),
-          
+
           // 排序按钮
           OutlinedButton.icon(
             onPressed: _showSortDialog,
@@ -220,9 +213,9 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
             ),
           ),
-          
+
           const Spacer(),
-          
+
           // 统计信息
           Consumer<RecommendationProvider>(
             builder: (context, provider, child) {
@@ -252,8 +245,14 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             _buildFilterOption(t.app.all, null),
             _buildFilterOption(t.app.unviewed, RecommendationStatus.unviewed),
             _buildFilterOption(t.app.viewed, RecommendationStatus.viewed),
-            _buildFilterOption(t.app.interested, RecommendationStatus.interested),
-            _buildFilterOption(t.app.notInterested, RecommendationStatus.notInterested),
+            _buildFilterOption(
+              t.app.interested,
+              RecommendationStatus.interested,
+            ),
+            _buildFilterOption(
+              t.app.notInterested,
+              RecommendationStatus.notInterested,
+            ),
           ],
         ),
         actions: [
@@ -267,7 +266,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   }
 
   /// 构建筛选选项
-  Widget _buildFilterOption(String title, RecommendationStatus? selectedStatus) {
+  Widget _buildFilterOption(
+    String title,
+    RecommendationStatus? selectedStatus,
+  ) {
     return Consumer<RecommendationProvider>(
       builder: (context, provider, child) {
         return RadioListTile<RecommendationStatus?>(
@@ -365,7 +367,9 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             children: [
               _buildFilterOptions(),
               Expanded(
-                child: _buildRecommendationsList(provider.processedRecommendations),
+                child: _buildRecommendationsList(
+                  provider.processedRecommendations,
+                ),
               ),
             ],
           );
@@ -389,7 +393,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           TextButton(
             onPressed: () async {
               Navigator.of(context).pop();
-              final provider = Provider.of<RecommendationProvider>(context, listen: false);
+              final provider = Provider.of<RecommendationProvider>(
+                context,
+                listen: false,
+              );
               await provider.clearAllRecommendations();
             },
             child: Text(t.app.confirm),

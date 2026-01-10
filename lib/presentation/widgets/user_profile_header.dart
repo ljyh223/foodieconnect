@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/services/api_service.dart';
-import 'package:tabletalk/generated/translations.g.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../data/models/user_model.dart';
 
 /// 用户个人主页头部组件
@@ -29,10 +29,7 @@ class UserProfileHeader extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.primaryContainer,
             borderRadius: BorderRadius.circular(50),
-            border: Border.all(
-              color: AppColors.outline,
-              width: 1,
-            ),
+            border: Border.all(color: AppColors.outline, width: 1),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
@@ -69,9 +66,6 @@ class UserProfileHeader extends StatelessWidget {
             ),
           ],
         ),
-
-        
-
       ],
     );
   }
@@ -79,7 +73,7 @@ class UserProfileHeader extends StatelessWidget {
   Widget _buildDefaultAvatar() {
     return Center(
       child: Text(
-        user.displayName?.isNotEmpty == true 
+        user.displayName?.isNotEmpty == true
             ? user.displayName!.substring(0, 1).toUpperCase()
             : 'U',
         style: AppTextStyles.headlineMedium.copyWith(

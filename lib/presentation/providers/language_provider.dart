@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tabletalk/generated/translations.g.dart'; // 引入 slangs 生成的翻译
+import 'package:foodieconnect/generated/translations.g.dart'; // 引入 slangs 生成的翻译
 
 /// 语言设置提供者
 class LanguageProvider extends ChangeNotifier {

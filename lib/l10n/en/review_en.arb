@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@context": "TableTalk review and user comment localization",
+  "@@context": "FoodieConnect review and user comment localization",
   "userComments": "User Comments",
   "@userComments": {
     "description": "User comments title"
