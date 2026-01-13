@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navigateToShops() {
-    Navigator.pushReplacementNamed(context, '/shops');
+    Navigator.pushReplacementNamed(context, '/main');
   }
 
   Future<void> _login() async {

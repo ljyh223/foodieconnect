@@ -58,9 +58,6 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 应用标题
 	@override String get appTitle => 'FoodieConnect';
 
-	/// 应用英文名称
-	@override String get foodieConnect => 'Foodie Connect';
-
 	/// 应用中文名称
 	@override String get foodieConnect => 'FoodieConnect';
 
@@ -940,7 +937,6 @@ extension on TranslationsZh {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.appTitle' => 'FoodieConnect',
-			'app.foodieConnect' => 'Foodie Connect',
 			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => '发现美食，分享体验',
 			'app.search' => '搜索',

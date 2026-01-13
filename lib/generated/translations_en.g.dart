@@ -63,11 +63,6 @@ class TranslationsAppEn {
 	/// en: 'FoodieConnect'
 	String get appTitle => 'FoodieConnect';
 
-	/// Application English name
-	///
-	/// en: 'Foodie Connect'
-	String get foodieConnect => 'Foodie Connect';
-
 	/// Application Chinese name
 	///
 	/// en: 'FoodieConnect'
@@ -1488,7 +1483,6 @@ extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.appTitle' => 'FoodieConnect',
-			'app.foodieConnect' => 'Foodie Connect',
 			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => 'Discover food, share experiences',
 			'app.search' => 'Search',
