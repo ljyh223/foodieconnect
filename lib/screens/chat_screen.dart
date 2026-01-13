@@ -133,13 +133,10 @@ class _ChatScreenState extends State<ChatScreen> {
     // 使用延迟确保UI完全更新后再滚动
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && _scrollController.hasClients) {
-        // 强制重新计算布局
-        _scrollController.position.notifyListeners();
-
         // 平滑滚动到底部，使用动画效果
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
         );
       }
@@ -162,6 +159,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
       // 设置新消息回调
       provider.setNewMessageCallback(_handleNewMessages);
+
+      // 先设置currentRoomId，这样initialize方法就能正确传递roomId参数
+      provider.currentRoomId = roomId;
 
       // 获取历史消息
       await provider.fetchMessages(roomId, currentUserId: userIdStr);
@@ -228,10 +228,8 @@ class _ChatScreenState extends State<ChatScreen> {
       });
     } else {
       // 如果在底部，直接滚动到最新消息
-      // 使用更长的延迟确保消息列表完全更新
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) _scrollToBottom();
-      });
+      // 不再需要额外的延迟，因为 _scrollToBottom 方法中已经使用了 addPostFrameCallback
+      _scrollToBottom();
     }
   }
 
@@ -242,27 +240,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _unreadMessageCount = 0;
     });
 
-    // 使用延迟确保状态更新后再滚动
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _scrollController.hasClients) {
-        // 强制重新计算布局
-        _scrollController.position.notifyListeners();
-
-        // 直接跳转到底部，不使用动画
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-
-        // 多次延迟确保滚动到真正的底部
-        for (int i = 0; i < 3; i++) {
-          Future.delayed(Duration(milliseconds: 100 * (i + 1)), () {
-            if (mounted && _scrollController.hasClients) {
-              _scrollController.jumpTo(
-                _scrollController.position.maxScrollExtent,
-              );
-            }
-          });
-        }
-      }
-    });
+    // 直接调用 _scrollToBottom 方法，复用平滑滚动实现
+    _scrollToBottom();
   }
 
   /// 处理返回按钮

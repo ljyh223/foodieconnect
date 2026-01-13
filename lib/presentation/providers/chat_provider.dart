@@ -25,16 +25,23 @@ class ChatProvider with ChangeNotifier {
   String? get currentRoomId => _currentRoomId;
   bool get isConnected => WebSocketService.isConnected;
 
+  /// 设置当前聊天室ID
+  set currentRoomId(String? roomId) {
+    _currentRoomId = roomId;
+    notifyListeners();
+  }
+
   /// 初始化WebSocket连接
   Future<void> initialize(String tempToken, {String? userId}) async {
     try {
       // 保存当前用户ID
       _currentUserId = userId;
 
-      // 使用原生WebSocket二进制端点，并传递用户ID
+      // 使用原生WebSocket二进制端点，并传递用户ID和房间ID
       final connected = await WebSocketService.connect(
         tempToken: tempToken,
         userId: userId,
+        roomId: _currentRoomId, // 传递当前房间ID
       );
 
       if (connected) {

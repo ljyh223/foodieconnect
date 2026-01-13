@@ -11,6 +11,7 @@ import '../../protos/chat_proto.dart';
 /// WebSocket服务类，使用Protobuf进行通信
 class WebSocketService {
   static WebSocketChannel? _channel;
+  static bool _isConnected = false;
   static final StreamController<ChatMessage> _messageStreamController =
       StreamController<ChatMessage>.broadcast();
   static final StreamController<Map<String, dynamic>>
@@ -18,6 +19,10 @@ class WebSocketService {
       StreamController<Map<String, dynamic>>.broadcast();
   static String? _currentRoomId;
   static String? _currentUserId;
+  static String? _lastTempToken;
+  static int _retryCount = 0;
+  static const int _maxRetries = 3;
+  static Timer? _retryTimer;
 
   /// 获取消息流
   static Stream<ChatMessage> get messageStream =>
@@ -28,23 +33,79 @@ class WebSocketService {
       _notificationStreamController.stream;
 
   /// 连接WebSocket
-  static Future<bool> connect({String? tempToken, String? userId}) async {
+  static Future<bool> connect({
+    String? tempToken,
+    String? userId,
+    String? roomId,
+  }) async {
+    _lastTempToken = tempToken;
+    _retryCount = 0;
+    // 保存房间ID，用于观察者模式连接
+    if (roomId != null) {
+      _currentRoomId = roomId;
+      debugPrint('保存房间ID: $_currentRoomId');
+    }
+    return _connectWithRetry(tempToken, userId, roomId);
+  }
+
+  /// 带有重试机制的连接方法
+  static Future<bool> _connectWithRetry(
+    String? tempToken,
+    String? userId,
+    String? roomId,
+  ) async {
     try {
       // 保存用户ID
       _currentUserId = userId;
       debugPrint('设置当前用户ID: $_currentUserId');
 
-      // 使用原生WebSocket二进制端点
-      String wsUrl = '${AppConstants.wsBaseUrl}/api/v1/ws/chat-bin';
+      // 确保房间ID正确保存
+      if (roomId != null) {
+        _currentRoomId = roomId;
+        debugPrint('在_retryConnect中保存房间ID: $_currentRoomId');
+      }
+
+
+      // 确保有房间ID
+      String? effectiveRoomId = roomId ?? _currentRoomId;
+      if (effectiveRoomId == null) {
+        debugPrint('错误：没有提供房间ID，无法构建正确的WebSocket URL');
+        return false;
+      }
+
+      // 构建WebSocket URL，roomId放在路径中
+      String wsUrl =
+          '${AppConstants.wsBaseUrl}/api/v1/ws/chat-bin/$effectiveRoomId';
+      debugPrint('构建WebSocket URL路径: $wsUrl');
+
+      // 构建查询参数
+      final queryParams = <String, String>{};
+
+      // 添加token参数（如果有）
       if (tempToken != null && tempToken.isNotEmpty) {
-        wsUrl += '?token=$tempToken';
+        queryParams['token'] = tempToken;
+        debugPrint('添加token到查询参数');
       } else {
         // 空token表示以观察者模式连接
         debugPrint('使用空token连接，将以观察者模式进入聊天室');
       }
-      debugPrint('尝试连接原生WebSocket二进制端点: $wsUrl (使用protobuf)');
-      debugPrint('AppConstants.wsBaseUrl = ${AppConstants.wsBaseUrl}');
-      debugPrint('tempToken = $tempToken');
+
+      // 添加查询参数到URL
+      if (queryParams.isNotEmpty) {
+        final params = queryParams.entries
+            .map((e) => '${e.key}=${e.value}')
+            .join('&');
+        wsUrl += '?$params';
+        debugPrint('添加查询参数到URL: $params');
+      }
+
+
+      // 先断开现有连接（如果有）
+      if (_channel != null) {
+        _channel?.sink.close();
+        _channel = null;
+        _isConnected = false;
+      }
 
       // 创建连接
       _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
@@ -52,15 +113,18 @@ class WebSocketService {
       // 等待连接建立
       await Future.delayed(Duration(milliseconds: 100));
 
+      // 立即将连接状态设为true，因为WebSocketChannel.connect会立即返回
+      _isConnected = true;
+
       _channel!.stream.listen(
         _handleProtobufMessage,
         onError: (error) {
           debugPrint('WebSocket错误: $error');
+          _handleConnectionError(tempToken, userId);
         },
         onDone: () {
           debugPrint('WebSocket连接已关闭');
-          _channel = null;
-          _currentUserId = null;
+          _handleConnectionClosed(tempToken, userId);
         },
       );
 
@@ -68,9 +132,45 @@ class WebSocketService {
       return true;
     } catch (e) {
       debugPrint('WebSocket连接失败: $e');
-      _channel = null;
-      _currentUserId = null;
-      return false;
+      return _handleConnectionError(tempToken, userId);
+    }
+  }
+
+  /// 处理连接错误
+  static bool _handleConnectionError(String? tempToken, String? userId) {
+    _isConnected = false;
+    _channel = null;
+
+    // 重试连接，传递当前房间ID
+    return _retryConnection(tempToken, userId);
+  }
+
+  /// 处理连接关闭
+  static void _handleConnectionClosed(String? tempToken, String? userId) {
+    _isConnected = false;
+    _channel = null;
+    // 不要清除currentUserId和currentRoomId，以便重试时使用
+
+    // 重试连接，传递当前房间ID
+    _retryConnection(tempToken, userId);
+  }
+
+  /// 重试连接
+  static bool _retryConnection(String? tempToken, String? userId) {
+    _retryCount++;
+    if (_retryCount <= _maxRetries) {
+      debugPrint('WebSocket连接失败，尝试重试 $_retryCount/$_maxRetries');
+      debugPrint('重试连接时的房间ID: $_currentRoomId');
+
+      // 延迟后重试连接，传递当前房间ID
+      _retryTimer = Timer(Duration(seconds: _retryCount), () {
+        _connectWithRetry(tempToken, userId, _currentRoomId);
+      });
+
+      return true; // 表示会重试连接
+    } else {
+      debugPrint('WebSocket连接失败，已达到最大重试次数');
+      return false; // 表示重试失败
     }
   }
 
@@ -80,10 +180,17 @@ class WebSocketService {
       leaveRoom(_currentRoomId!);
     }
 
+    // 取消重试定时器
+    _retryTimer?.cancel();
+    _retryTimer = null;
+    _retryCount = 0;
+
     _channel?.sink.close();
     _channel = null;
+    _isConnected = false;
     _currentRoomId = null;
     _currentUserId = null;
+    _lastTempToken = null;
     debugPrint('WebSocket已断开连接');
   }
 
@@ -180,7 +287,8 @@ class WebSocketService {
   /// 离开聊天室
   static Future<void> leaveRoom(String roomId) async {
     if (_channel == null) {
-      throw Exception('WebSocket未连接');
+      debugPrint('WebSocket未连接，无法离开聊天室: $roomId');
+      return;
     }
 
     // 使用protobuf格式
@@ -302,7 +410,13 @@ class WebSocketService {
   }
 
   /// 检查连接状态
-  static bool get isConnected => _channel != null;
+  /// 注意：对于观察者模式，我们允许连接状态显示为已连接，即使连接可能已经关闭
+  /// 因为服务器可能会自动处理观察者模式的连接，即使WebSocket连接显示关闭，仍然可以收到消息
+  static bool get isConnected {
+    // 对于观察者模式（空token），我们假设连接是活跃的，除非明确知道它已关闭
+    // 这是因为服务器可能会自动处理观察者模式的连接
+    return _channel != null;
+  }
 
   /// 获取当前聊天室ID
   static String? get currentRoomId => _currentRoomId;

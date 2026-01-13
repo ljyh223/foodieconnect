@@ -41,15 +41,21 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
   Future<void> _getCurrentUserAvatar() async {
     try {
       final user = await AuthService.me();
-      setState(() {
-        _currentUserAvatar = user.avatarUrl;
-        _isLoading = false;
-      });
+      // 检查widget是否仍然mounted，避免在dispose后调用setState
+      if (mounted) {
+        setState(() {
+          _currentUserAvatar = user.avatarUrl;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       debugPrint('获取用户头像失败: $e');
-      setState(() {
-        _isLoading = false;
-      });
+      // 检查widget是否仍然mounted，避免在dispose后调用setState
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
