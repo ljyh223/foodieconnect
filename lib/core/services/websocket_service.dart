@@ -11,45 +11,47 @@ import '../../protos/chat_proto.dart';
 /// WebSocket服务类，使用Protobuf进行通信
 class WebSocketService {
   static WebSocketChannel? _channel;
-  static final StreamController<ChatMessage> _messageStreamController = StreamController<ChatMessage>.broadcast();
-  static final StreamController<Map<String, dynamic>> _notificationStreamController = StreamController<Map<String, dynamic>>.broadcast();
+  static final StreamController<ChatMessage> _messageStreamController =
+      StreamController<ChatMessage>.broadcast();
+  static final StreamController<Map<String, dynamic>>
+  _notificationStreamController =
+      StreamController<Map<String, dynamic>>.broadcast();
   static String? _currentRoomId;
   static String? _currentUserId;
 
   /// 获取消息流
-  static Stream<ChatMessage> get messageStream => _messageStreamController.stream;
+  static Stream<ChatMessage> get messageStream =>
+      _messageStreamController.stream;
 
   /// 获取通知流
-  static Stream<Map<String, dynamic>> get notificationStream => _notificationStreamController.stream;
+  static Stream<Map<String, dynamic>> get notificationStream =>
+      _notificationStreamController.stream;
 
   /// 连接WebSocket
   static Future<bool> connect({String? tempToken, String? userId}) async {
     try {
-      // 检查tempToken是否有效
-      if (tempToken == null || tempToken.isEmpty) {
-        debugPrint('WebSocket连接失败: tempToken为空');
-        return false;
-      }
-      
       // 保存用户ID
       _currentUserId = userId;
       debugPrint('设置当前用户ID: $_currentUserId');
-      
+
       // 使用原生WebSocket二进制端点
       String wsUrl = '${AppConstants.wsBaseUrl}/api/v1/ws/chat-bin';
-      if (tempToken.isNotEmpty) {
+      if (tempToken != null && tempToken.isNotEmpty) {
         wsUrl += '?token=$tempToken';
+      } else {
+        // 空token表示以观察者模式连接
+        debugPrint('使用空token连接，将以观察者模式进入聊天室');
       }
       debugPrint('尝试连接原生WebSocket二进制端点: $wsUrl (使用protobuf)');
       debugPrint('AppConstants.wsBaseUrl = ${AppConstants.wsBaseUrl}');
       debugPrint('tempToken = $tempToken');
-      
+
       // 创建连接
       _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
-      
+
       // 等待连接建立
       await Future.delayed(Duration(milliseconds: 100));
-      
+
       _channel!.stream.listen(
         _handleProtobufMessage,
         onError: (error) {
@@ -61,7 +63,7 @@ class WebSocketService {
           _currentUserId = null;
         },
       );
-      
+
       debugPrint('WebSocket已连接 (使用原生二进制端点)');
       return true;
     } catch (e) {
@@ -77,7 +79,7 @@ class WebSocketService {
     if (_currentRoomId != null) {
       leaveRoom(_currentRoomId!);
     }
-    
+
     _channel?.sink.close();
     _channel = null;
     _currentRoomId = null;
@@ -88,7 +90,7 @@ class WebSocketService {
   /// 处理接收到的protobuf消息
   static void _handleProtobufMessage(dynamic message) {
     debugPrint('收到WebSocket消息，类型: ${message.runtimeType}');
-    
+
     if (message is Uint8List) {
       // 处理二进制protobuf消息
       try {
@@ -102,7 +104,8 @@ class WebSocketService {
             final joinResponse = chatResponse.payload as JoinRoomResponseProto;
             debugPrint('加入房间响应: ${joinResponse.message}');
           } else if (chatResponse.payload is LeaveRoomResponseProto) {
-            final leaveResponse = chatResponse.payload as LeaveRoomResponseProto;
+            final leaveResponse =
+                chatResponse.payload as LeaveRoomResponseProto;
             debugPrint('离开房间响应: ${leaveResponse.message}');
           }
         } else {
@@ -156,15 +159,14 @@ class WebSocketService {
   /// 加入聊天室
   static Future<void> joinRoom(String roomId) async {
     if (_channel == null) {
-      throw Exception('WebSocket not connected');
+      debugPrint('WebSocket未连接，无法加入聊天室: $roomId');
+      return;
     }
 
     _currentRoomId = roomId;
 
     // 使用protobuf格式
-    final request = JoinRoomRequestProto(
-      roomId: Int64.parseInt(roomId),
-    );
+    final request = JoinRoomRequestProto(roomId: Int64.parseInt(roomId));
 
     final webSocketMessage = WebSocketMessageProto(
       type: 'JOIN_ROOM',
@@ -182,9 +184,7 @@ class WebSocketService {
     }
 
     // 使用protobuf格式
-    final request = LeaveRoomRequestProto(
-      roomId: Int64.parseInt(roomId),
-    );
+    final request = LeaveRoomRequestProto(roomId: Int64.parseInt(roomId));
 
     final webSocketMessage = WebSocketMessageProto(
       type: 'LEAVE_ROOM',
@@ -192,7 +192,7 @@ class WebSocketService {
     );
 
     _channel!.sink.add(webSocketMessage.toBuffer());
-    
+
     if (_currentRoomId == roomId) {
       _currentRoomId = null;
     }
@@ -229,14 +229,17 @@ class WebSocketService {
   /// 订阅个人通知
   static Future<void> subscribeToNotifications(String userId) async {
     if (_channel == null) {
-      throw Exception('WebSocket未连接');
+      debugPrint('WebSocket未连接，无法订阅个人通知');
+      return;
     }
 
     _currentUserId = userId;
 
     final webSocketMessage = WebSocketMessageProto(
       type: 'SUBSCRIBE',
-      payload: Uint8List.fromList(utf8.encode('/user/$userId/queue/notifications')),
+      payload: Uint8List.fromList(
+        utf8.encode('/user/$userId/queue/notifications'),
+      ),
     );
 
     _channel!.sink.add(webSocketMessage.toBuffer());
@@ -249,7 +252,9 @@ class WebSocketService {
 
     final webSocketMessage = WebSocketMessageProto(
       type: 'UNSUBSCRIBE',
-      payload: Uint8List.fromList(utf8.encode('/user/$_currentUserId/queue/notifications')),
+      payload: Uint8List.fromList(
+        utf8.encode('/user/$_currentUserId/queue/notifications'),
+      ),
     );
 
     _channel!.sink.add(webSocketMessage.toBuffer());
@@ -263,9 +268,11 @@ class WebSocketService {
     final currentUserId = _currentUserId;
     final senderId = proto.senderId.toString();
     final isSentByUser = currentUserId != null && senderId == currentUserId;
-    
-    debugPrint('消息转换: senderId=$senderId, currentUserId=$currentUserId, isSentByUser=$isSentByUser');
-    
+
+    debugPrint(
+      '消息转换: senderId=$senderId, currentUserId=$currentUserId, isSentByUser=$isSentByUser',
+    );
+
     return ChatMessage(
       id: proto.id.toString(),
       roomId: proto.roomId.toString(),

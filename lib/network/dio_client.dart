@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foodieconnect/core/constants/app_constants.dart';
+import 'package:foodieconnect/core/utils/token_storage.dart';
 
 /// 全局Dio客户端配置类
 class DioClient {
@@ -7,7 +9,7 @@ class DioClient {
   static final Dio dio =
       Dio(
           BaseOptions(
-            baseUrl: AppConstants.baseUrl, // 替换为实际的API地址
+            baseUrl: AppConstants.baseUrl,
             connectTimeout: const Duration(seconds: 5),
             receiveTimeout: const Duration(seconds: 5),
             sendTimeout: const Duration(seconds: 5),
@@ -33,12 +35,17 @@ class DioClient {
 /// 认证拦截器
 class AuthInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // 这里可以添加认证逻辑，例如从本地存储获取token
-    // final token = await FlutterSecureStorage().read(key: 'token');
-    // if (token != null) {
-    //   options.headers['Authorization'] = 'Bearer $token';
-    // }
+    final token = await TokenStorage.readAccessToken();
+    if (token != null && token.isNotEmpty) {
+      // 确保只添加一次Bearer前缀
+      final authToken = token.startsWith('Bearer ') ? token : 'Bearer $token';
+      options.headers['Authorization'] = authToken;
+    }
     super.onRequest(options, handler);
   }
 }

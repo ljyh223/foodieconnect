@@ -136,19 +136,12 @@ class _ChatScreenState extends State<ChatScreen> {
         // 强制重新计算布局
         _scrollController.position.notifyListeners();
 
-        // 直接跳转到底部，不使用动画
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-
-        // 多次延迟确保滚动到真正的底部
-        for (int i = 0; i < 3; i++) {
-          Future.delayed(Duration(milliseconds: 100 * (i + 1)), () {
-            if (mounted && _scrollController.hasClients) {
-              _scrollController.jumpTo(
-                _scrollController.position.maxScrollExtent,
-              );
-            }
-          });
-        }
+        // 平滑滚动到底部，使用动画效果
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       }
     });
   }
@@ -180,20 +173,16 @@ class _ChatScreenState extends State<ChatScreen> {
         await provider.initialize('');
       }
 
-      // 等待WebSocket连接完成
-      await Future.delayed(const Duration(milliseconds: 500));
-
       // 加入聊天室，无论是只读还是普通模式都需要加入才能接收消息
-      if (provider.isConnected) {
-        // 只需要加入聊天室（如果还没有加入）
-        if (provider.currentRoomId != roomId) {
+      if (provider.currentRoomId != roomId) {
+        // 直接调用joinRoom方法，它会自动设置currentRoomId
+        // 这里使用try-catch来捕获可能的错误，避免影响用户体验
+        try {
           provider.joinRoom(roomId);
+        } catch (e) {
+          debugPrint('加入聊天室失败: $e');
+          // 不要显示错误提示，避免影响用户体验
         }
-      } else if (mounted) {
-        // 如果WebSocket连接失败，显示错误提示
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(t.chat.websocketNotConnected)));
       }
     } catch (e) {
       debugPrint('初始化聊天室失败: $e');
@@ -385,7 +374,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             return false;
                           },
                           child: ListView.builder(
-                            key: ValueKey(messages.length),
+                            key: const ValueKey('chat_messages_list'),
                             controller: _scrollController,
                             itemCount: messages.length,
                             reverse: false,
@@ -417,6 +406,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               }
 
                               return ChatMessageWidget(
+                                key: ValueKey(message.id),
                                 message: message,
                                 showTimeSeparator: showTimeSeparator,
                                 timeSeparatorText: timeSeparatorText,

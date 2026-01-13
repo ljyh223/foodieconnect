@@ -69,21 +69,14 @@ class _AppInitializerState extends State<AppInitializer> {
     if (_initialized) return;
 
     try {
-      // 获取ChatProvider并初始化WebSocket连接
-      final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-      // 注意：现在initialize方法需要tempToken参数，这里先传空字符串
-      // 实际使用时需要从认证服务获取token
-      await chatProvider.initialize('');
-
-      // 获取当前用户ID并订阅通知
-      if (!mounted) return;
-
+      // 获取当前用户ID
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       authProvider.setContext(context);
       final userId = await authProvider.getCurrentUserId();
-      if (userId != null && mounted) {
-        await chatProvider.subscribeToNotifications(userId.toString());
-      }
+      
+      // 注意：移除了自动初始化WebSocket连接的代码
+      // WebSocket连接应该只在用户明确需要使用聊天功能时才建立
+      // 比如进入聊天室页面时
 
       _initialized = true;
     } catch (e) {

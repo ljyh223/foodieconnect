@@ -185,25 +185,20 @@ class ChatProvider with ChangeNotifier {
     _error = null;
 
     try {
-      // 通过HTTP API以观察者模式加入聊天室并获取临时token
+      // 根据新的API设计，观察者模式直接通过WebSocket连接，不需要HTTP API验证
+      // 1. 首先获取聊天室信息
       final result = await ChatService.joinAsObserver(restaurantId);
 
-      // 从响应中获取聊天室信息和临时token
-      final chatRoomData = result['chatRoom'] as Map<String, dynamic>?;
-      if (chatRoomData != null) {
-        _currentRoomId = chatRoomData['id']?.toString();
-      }
+      // 2. 从响应中获取聊天室信息
+      final chatRoomData =
+          result['chatRoom'] as Map<String, dynamic>? ?? result;
+      _currentRoomId = chatRoomData['id']?.toString();
 
-      final tempToken = result['tempToken']?.toString() ?? '';
-      if (tempToken.isNotEmpty && _currentRoomId != null) {
-        // 获取用户ID
-        final userId = await AuthService.getCurrentUserId();
-        final userIdStr = userId?.toString();
+      if (_currentRoomId != null) {
+        // 3. 直接初始化WebSocket连接，不带token，服务端会自动视为观察者视角
+        await initialize(''); // 使用空token，服务端会自动处理为观察者模式
 
-        // 使用临时token初始化WebSocket连接
-        await initialize(tempToken, userId: userIdStr);
-
-        // 等待WebSocket连接完成
+        // 4. 等待WebSocket连接完成
         await _waitForConnection();
 
         if (!isConnected) {
@@ -212,20 +207,20 @@ class ChatProvider with ChangeNotifier {
           return;
         }
 
-        // 额外等待一段时间，确保连接完全建立
+        // 5. 额外等待一段时间，确保连接完全建立
         await Future.delayed(const Duration(milliseconds: 300));
 
-        // 再次检查连接状态
+        // 6. 再次检查连接状态
         if (!isConnected) {
           _error = t.chat.stompNotConnected;
           notifyListeners();
           return;
         }
 
-        // 获取历史消息
-        await fetchMessages(_currentRoomId!, currentUserId: userIdStr);
+        // 7. 获取历史消息
+        await fetchMessages(_currentRoomId!);
 
-        // 然后通过WebSocket加入聊天室
+        // 8. 通过WebSocket加入聊天室
         await joinRoom(_currentRoomId!);
       } else {
         _error = t.chat.verifyFailNoRoomOrToken;
@@ -243,6 +238,11 @@ class ChatProvider with ChangeNotifier {
   /// 加入聊天室（仅WebSocket操作）
   Future<void> joinRoom(String roomId) async {
     try {
+      // 更新ChatProvider的currentRoomId
+      _currentRoomId = roomId;
+      // 通知监听器，currentRoomId已经更新
+      notifyListeners();
+      // 调用WebSocketService的joinRoom方法
       WebSocketService.joinRoom(roomId);
     } catch (e) {
       _error = t.chat.joinRoomFail(error: e.toString());
@@ -331,6 +331,11 @@ class ChatProvider with ChangeNotifier {
   /// 订阅用户通知
   Future<void> subscribeToNotifications(String userId) async {
     try {
+      // 检查WebSocket是否已连接
+      if (!isConnected) {
+        debugPrint('WebSocket未连接，无法订阅通知');
+        return;
+      }
       WebSocketService.subscribeToNotifications(userId);
     } catch (e) {
       _error = t.chat.subscribeNotificationFail(error: e.toString());

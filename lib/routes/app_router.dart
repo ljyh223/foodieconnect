@@ -64,6 +64,7 @@ class AppRouter {
           builder: (_) => ChatScreen(
             restaurantId: args?['restaurantId'],
             roomId: args?['roomId'],
+            isReadOnly: args?['isReadOnly'] ?? false,
           ),
         );
       case '/staff_detail':

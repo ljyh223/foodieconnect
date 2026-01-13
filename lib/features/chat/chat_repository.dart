@@ -15,11 +15,21 @@ class ChatRepository {
         restaurantId,
         verificationCode,
       );
-      final dynamic payload = response['data'] ?? response;
+      // 安全地处理响应数据
+      final dynamic payload;
+      if (response is Map<String, dynamic> && response.containsKey('data')) {
+        payload = response['data'];
+      } else {
+        payload = response;
+      }
+      
       if (payload is Map<String, dynamic>) {
         return payload;
+      } else if (payload == null) {
+        return {};
+      } else {
+        throw Exception('Chat room verification failed: Invalid response format');
       }
-      throw Exception('Chat room verification failed');
     } on DioException catch (e) {
       throw ApiError.fromDio(e);
     } catch (e) {
@@ -29,13 +39,15 @@ class ChatRepository {
 
   /// 以观察者模式加入聊天室（只读模式）
   Future<Map<String, dynamic>> joinAsObserver(String restaurantId) async {
+    // 根据新的API设计，观察者模式直接通过WebSocket连接，不需要HTTP API
+    // 这里我们只需要获取聊天室信息，然后通过WebSocket直接连接
     try {
-      final response = await ChatApi.joinAsObserver(restaurantId);
-      final dynamic payload = response['data'] ?? response;
+      final roomInfo = await ChatApi.getRestaurantChatRoom(restaurantId);
+      final dynamic payload = roomInfo['data'] ?? roomInfo;
       if (payload is Map<String, dynamic>) {
         return payload;
       }
-      throw Exception('Failed to join chat room as observer');
+      throw Exception('Failed to get chat room information');
     } on DioException catch (e) {
       throw ApiError.fromDio(e);
     } catch (e) {

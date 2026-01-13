@@ -15,18 +15,14 @@ class ChatApi {
         'verificationCode': verificationCode,
       },
     );
-    return response.data;
-  }
-
-  /// 以观察者模式加入聊天室（只读模式）
-  static Future<Map<String, dynamic>> joinAsObserver(
-    String restaurantId,
-  ) async {
-    final response = await DioClient.dio.get(
-      '/chat-rooms/join-as-observer',
-      queryParameters: {'restaurantId': restaurantId},
-    );
-    return response.data;
+    // 确保返回的数据是 Map<String, dynamic> 类型
+    if (response.data is Map<String, dynamic>) {
+      return response.data as Map<String, dynamic>;
+    } else if (response.data == null) {
+      return {};
+    } else {
+      throw Exception('Invalid response format: ${response.data}');
+    }
   }
 
   /// 获取餐厅聊天室信息
