@@ -982,6 +982,16 @@ class TranslationsProfileEn {
 	/// en: 'Recommended Restaurants'
 	String get recommendedRestaurants => 'Recommended Restaurants';
 
+	/// My recommended restaurants title
+	///
+	/// en: 'My Recommended Restaurants'
+	String get myRecommendedRestaurants => 'My Recommended Restaurants';
+
+	/// User recommended restaurants title
+	///
+	/// en: 'User Recommended Restaurants'
+	String get userRecommendedRestaurants => 'User Recommended Restaurants';
+
 	/// Error message shown to user
 	///
 	/// en: 'update failed'
@@ -1205,6 +1215,21 @@ class TranslationsRestaurantEn {
 	///
 	/// en: 'Failed to load restaurants: {error: String}'
 	String loadRestaurantFail({required String error}) => 'Failed to load restaurants: ${error}';
+
+	/// Recommend restaurant button tooltip
+	///
+	/// en: 'Recommend Restaurant'
+	String get recommendRestaurant => 'Recommend Restaurant';
+
+	/// Recommendation success message
+	///
+	/// en: 'Recommendation successful'
+	String get recommendSuccess => 'Recommendation successful';
+
+	/// Recommendation failed message
+	///
+	/// en: 'Recommendation failed: '
+	String get recommendFailed => 'Recommendation failed: ';
 }
 
 // Path: review
@@ -1663,6 +1688,8 @@ extension on Translations {
 			'profile.followFailed' => 'Follow failed',
 			'profile.unfollowFailed' => 'Unfollow failed',
 			'profile.recommendedRestaurants' => 'Recommended Restaurants',
+			'profile.myRecommendedRestaurants' => 'My Recommended Restaurants',
+			'profile.userRecommendedRestaurants' => 'User Recommended Restaurants',
 			'profile.updateFailed' => 'update failed',
 			'profile.editProfile' => 'Edit Profile',
 			'profile.email' => 'Email',
@@ -1706,6 +1733,9 @@ extension on Translations {
 			'restaurant.viewMenuDishes' => 'View Menu',
 			'restaurant.browseAllDishes' => 'Browse all dishes',
 			'restaurant.loadRestaurantFail' => ({required String error}) => 'Failed to load restaurants: ${error}',
+			'restaurant.recommendRestaurant' => 'Recommend Restaurant',
+			'restaurant.recommendSuccess' => 'Recommendation successful',
+			'restaurant.recommendFailed' => 'Recommendation failed: ',
 			'review.userComments' => 'User Comments',
 			'review.publishReview' => 'Publish Review',
 			'review.ratingScore' => 'Rating',

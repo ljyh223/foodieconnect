@@ -4,9 +4,9 @@ import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/auth_service.dart';
 import '../core/services/user_service.dart';
-import '../core/services/review_service.dart';
+import '../core/services/restaurant_recommendation_service.dart';
 import '../data/models/user_model.dart';
-import '../data/models/restaurant_model.dart';
+import '../data/models/recommendation_model.dart';
 import '../presentation/widgets/user_profile_header.dart';
 import '../presentation/widgets/user_bio_section.dart';
 import '../presentation/widgets/recommended_restaurants_grid.dart';
@@ -22,7 +22,7 @@ class ProfileViewScreen extends StatefulWidget {
 
 class _ProfileViewScreenState extends State<ProfileViewScreen> {
   User? _user;
-  List<Restaurant> _recommendedRestaurants = [];
+  List<RecommendationWithRestaurant> _myRecommendations = [];
   bool _isLoading = true;
   String? _error;
 
@@ -40,8 +40,8 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
     });
 
     try {
-      // 并行加载用户信息和推荐餐厅
-      await Future.wait([_loadUserInfo(), _loadRecommendedRestaurants()]);
+      // 并行加载用户信息和我的推荐餐厅
+      await Future.wait([_loadUserInfo(), _loadMyRecommendations()]);
 
       setState(() {
         _isLoading = false;
@@ -76,17 +76,14 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
     }
   }
 
-  /// 加载推荐餐厅
-  Future<void> _loadRecommendedRestaurants() async {
+  /// 加载我的推荐餐厅列表
+  Future<void> _loadMyRecommendations() async {
     try {
-      if (_user != null) {
-        _recommendedRestaurants = await ReviewService.getRecommendedRestaurants(
-          _user!.id,
-        );
-      }
+      _myRecommendations =
+          await RestaurantRecommendationService.getMyRecommendations();
     } catch (e) {
       // 如果获取失败，使用空列表
-      _recommendedRestaurants = [];
+      _myRecommendations = [];
     }
   }
 
@@ -206,11 +203,36 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
           UserBioSection(bio: _user!.bio, isEditing: false),
           const SizedBox(height: 24),
 
-          // 推荐餐厅
-          RecommendedRestaurantsGrid(
-            restaurants: _recommendedRestaurants,
-            onFollowingTap: _navigateToFollowingList,
-          ),
+          // 我的推荐餐厅
+          if (_myRecommendations.isNotEmpty)
+            RecommendedRestaurantsGrid(
+              recommendations: _myRecommendations,
+              title: t.profile.myRecommendedRestaurants,
+              onFollowingTap: _navigateToFollowingList,
+              onDeleteRecommendation: (recommendationId) async {
+                try {
+                  await RestaurantRecommendationService.deleteRecommendation(
+                    recommendationId,
+                  );
+                  setState(() {
+                    _myRecommendations.removeWhere(
+                      (r) => r.recommendation.id == recommendationId,
+                    );
+                  });
+                  if (mounted) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('删除推荐成功')));
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('删除推荐失败: $e')));
+                  }
+                }
+              },
+            ),
         ],
       ),
     );

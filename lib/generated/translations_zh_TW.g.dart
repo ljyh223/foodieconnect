@@ -618,6 +618,12 @@ class _TranslationsProfileZhTw implements TranslationsProfileEn {
 	/// 推薦餐廳標題
 	@override String get recommendedRestaurants => '推薦餐廳';
 
+	/// 我的推薦餐廳標題
+	@override String get myRecommendedRestaurants => '我的推薦餐廳';
+
+	/// 用戶推薦餐廳標題
+	@override String get userRecommendedRestaurants => '用戶推薦餐廳';
+
 	/// Prefix when update throws
 	@override String get updateFailed => '更新失敗';
 
@@ -755,6 +761,15 @@ class _TranslationsRestaurantZhTw implements TranslationsRestaurantEn {
 
 	/// Hint when RestaurantService.list throws
 	@override String loadRestaurantFail({required String error}) => '取得餐廳失敗：${error}';
+
+	/// 推薦餐廳按鈕提示
+	@override String get recommendRestaurant => '推薦餐廳';
+
+	/// 推薦成功提示
+	@override String get recommendSuccess => '推薦成功';
+
+	/// 推薦失敗提示
+	@override String get recommendFailed => '推薦失敗：';
 }
 
 // Path: review
@@ -1117,6 +1132,8 @@ extension on TranslationsZhTw {
 			'profile.followFailed' => '關注失敗',
 			'profile.unfollowFailed' => '取消關注失敗',
 			'profile.recommendedRestaurants' => '推薦餐廳',
+			'profile.myRecommendedRestaurants' => '我的推薦餐廳',
+			'profile.userRecommendedRestaurants' => '用戶推薦餐廳',
 			'profile.updateFailed' => '更新失敗',
 			'profile.editProfile' => '編輯個人資料',
 			'profile.email' => '郵箱',
@@ -1160,6 +1177,9 @@ extension on TranslationsZhTw {
 			'restaurant.viewMenuDishes' => '查看菜單',
 			'restaurant.browseAllDishes' => '瀏覽所有菜品',
 			'restaurant.loadRestaurantFail' => ({required String error}) => '取得餐廳失敗：${error}',
+			'restaurant.recommendRestaurant' => '推薦餐廳',
+			'restaurant.recommendSuccess' => '推薦成功',
+			'restaurant.recommendFailed' => '推薦失敗：',
 			'review.userComments' => '用戶評論',
 			'review.publishReview' => '發布評價',
 			'review.ratingScore' => '評分',

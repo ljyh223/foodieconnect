@@ -119,5 +119,17 @@
   "@loadRestaurantFail": {
     "description": "Hint when RestaurantService.list throws",
     "placeholders": { "error": { "type": "String" } }
+  },
+  "recommendRestaurant": "Recommend Restaurant",
+  "@recommendRestaurant": {
+    "description": "Recommend restaurant button tooltip"
+  },
+  "recommendSuccess": "Recommendation successful",
+  "@recommendSuccess": {
+    "description": "Recommendation success message"
+  },
+  "recommendFailed": "Recommendation failed: ",
+  "@recommendFailed": {
+    "description": "Recommendation failed message"
   }
 }

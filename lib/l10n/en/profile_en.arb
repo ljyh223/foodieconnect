@@ -87,6 +87,14 @@
   "@recommendedRestaurants": {
     "description": "Recommended restaurants title"
   },
+  "myRecommendedRestaurants": "My Recommended Restaurants",
+  "@myRecommendedRestaurants": {
+    "description": "My recommended restaurants title"
+  },
+  "userRecommendedRestaurants": "User Recommended Restaurants",
+  "@userRecommendedRestaurants": {
+    "description": "User recommended restaurants title"
+  },
     "updateFailed":"update failed",
     "@updateFailed": {
       "description": "Error message shown to user"

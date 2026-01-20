@@ -5,9 +5,12 @@ import '../core/constants/app_text_styles.dart';
 import '../core/services/api_service.dart';
 import '../core/services/user_service.dart';
 import '../core/services/follow_service.dart';
+import '../core/services/restaurant_recommendation_service.dart';
 import '../core/services/auth_service.dart';
 import '../data/models/user_model.dart';
+import '../data/models/recommendation_model.dart';
 import '../presentation/widgets/app_bar_widget.dart';
+import '../presentation/widgets/recommended_restaurants_grid.dart';
 
 /// 其他用户个人主页界面
 class OtherUserProfileScreen extends StatefulWidget {
@@ -21,6 +24,7 @@ class OtherUserProfileScreen extends StatefulWidget {
 
 class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   User? _user;
+  List<RecommendationWithRestaurant> _userRecommendations = [];
   bool _isLoading = true;
   String? _error;
 
@@ -39,7 +43,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
     try {
       // 加载用户信息，包含喜欢的食物和关注状态
-      await _loadUserInfo();
+      await Future.wait([_loadUserInfo(), _loadUserRecommendations()]);
 
       setState(() {
         _isLoading = false;
@@ -56,6 +60,19 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
   Future<User> _loadUserInfo() async {
     _user = await UserService.getUserInfo(widget.userId);
     return _user!;
+  }
+
+  /// 加载用户的推荐餐厅列表
+  Future<void> _loadUserRecommendations() async {
+    try {
+      _userRecommendations =
+          await RestaurantRecommendationService.getUserRecommendations(
+            widget.userId,
+          );
+    } catch (e) {
+      // 如果获取失败，使用空列表
+      _userRecommendations = [];
+    }
   }
 
   /// 关注/取消关注用户
@@ -166,6 +183,15 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
           // 连接按钮
           _buildConnectButton(),
+          const SizedBox(height: 32),
+
+          // 用户推荐餐厅
+          if (_userRecommendations.isNotEmpty)
+            RecommendedRestaurantsGrid(
+              recommendations: _userRecommendations,
+              title: t.profile.userRecommendedRestaurants,
+              onFollowingTap: () {},
+            ),
         ],
       ),
     );

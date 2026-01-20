@@ -119,5 +119,17 @@
   "@loadRestaurantFail": {
     "description": "Hint when RestaurantService.list throws",
     "placeholders": { "error": { "type": "String" } }
+  },
+  "recommendRestaurant": "推薦餐廳",
+  "@recommendRestaurant": {
+    "description": "推薦餐廳按鈕提示"
+  },
+  "recommendSuccess": "推薦成功",
+  "@recommendSuccess": {
+    "description": "推薦成功提示"
+  },
+  "recommendFailed": "推薦失敗：",
+  "@recommendFailed": {
+    "description": "推薦失敗提示"
   }
 }

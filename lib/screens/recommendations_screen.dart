@@ -195,10 +195,18 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           // 筛选按钮
           OutlinedButton.icon(
             onPressed: _showFilterDialog,
-            icon: const Icon(Icons.filter_list, size: 16),
-            label: Text(t.app.filter),
+            icon: const Icon(
+              Icons.filter_list,
+              size: 16,
+              color: AppColors.onSurface,
+            ),
+            label: Text(
+              t.app.filter,
+              style: TextStyle(color: AppColors.onSurface),
+            ),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12),
+              foregroundColor: AppColors.onSurface,
             ),
           ),
 
@@ -207,10 +215,14 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           // 排序按钮
           OutlinedButton.icon(
             onPressed: _showSortDialog,
-            icon: const Icon(Icons.sort, size: 16),
-            label: Text(t.app.sort),
+            icon: const Icon(Icons.sort, size: 16, color: AppColors.onSurface),
+            label: Text(
+              t.app.sort,
+              style: TextStyle(color: AppColors.onSurface),
+            ),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 12),
+              foregroundColor: AppColors.onSurface,
             ),
           ),
 
@@ -238,7 +250,11 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(filterByStatus),
+        backgroundColor: AppColors.surface,
+        title: Text(
+          filterByStatus,
+          style: TextStyle(color: AppColors.onSurface),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -258,7 +274,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.app.cancel),
+            child: Text(
+              t.app.cancel,
+              style: TextStyle(color: AppColors.primary),
+            ),
           ),
         ],
       ),
@@ -273,7 +292,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     return Consumer<RecommendationProvider>(
       builder: (context, provider, child) {
         return RadioListTile<RecommendationStatus?>(
-          title: Text(title),
+          title: Text(title, style: TextStyle(color: AppColors.onSurface)),
           value: selectedStatus,
           groupValue: provider.filterStatus,
           onChanged: (value) {
@@ -290,7 +309,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(t.app.sortBy),
+        backgroundColor: AppColors.surface,
+        title: Text(t.app.sortBy, style: TextStyle(color: AppColors.onSurface)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -302,7 +322,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.app.cancel),
+            child: Text(
+              t.app.cancel,
+              style: TextStyle(color: AppColors.primary),
+            ),
           ),
         ],
       ),
@@ -314,7 +337,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     return Consumer<RecommendationProvider>(
       builder: (context, provider, child) {
         return RadioListTile<String>(
-          title: Text(title),
+          title: Text(title, style: TextStyle(color: AppColors.onSurface)),
           value: sortBy,
           groupValue: provider.sortBy,
           onChanged: (value) {
@@ -383,12 +406,22 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(t.app.clearAll),
-        content: Text(t.app.clearAllConfirm),
+        backgroundColor: AppColors.surface,
+        title: Text(
+          t.app.clearAll,
+          style: TextStyle(color: AppColors.onSurface),
+        ),
+        content: Text(
+          t.app.clearAllConfirm,
+          style: TextStyle(color: AppColors.onSurfaceVariant),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.app.cancel),
+            child: Text(
+              t.app.cancel,
+              style: TextStyle(color: AppColors.primary),
+            ),
           ),
           TextButton(
             onPressed: () async {
@@ -399,7 +432,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
               );
               await provider.clearAllRecommendations();
             },
-            child: Text(t.app.confirm),
+            child: Text(
+              t.app.confirm,
+              style: TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),

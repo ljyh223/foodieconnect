@@ -6,6 +6,7 @@ import '../data/models/staff_model.dart';
 import '../core/services/restaurant_service.dart';
 import '../core/services/review_service.dart';
 import '../core/services/staff_service.dart';
+import '../core/services/restaurant_recommendation_service.dart';
 import '../core/services/api_service.dart';
 import 'dart:math';
 
@@ -100,6 +101,25 @@ class ShopDetailScreen extends StatelessWidget {
           );
         }
 
+        void recommendRestaurant() async {
+          try {
+            await RestaurantRecommendationService.recommendRestaurant(
+              restaurantId: restaurant.id.toString(),
+            );
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(t.restaurant.recommendSuccess)),
+              );
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${t.restaurant.recommendFailed}$e')),
+              );
+            }
+          }
+        }
+
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -118,6 +138,13 @@ class ShopDetailScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => Navigator.pop(context),
             ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.recommend, color: Colors.black),
+                onPressed: recommendRestaurant,
+                tooltip: t.restaurant.recommendRestaurant,
+              ),
+            ],
           ),
           body: SafeArea(
             child: SingleChildScrollView(

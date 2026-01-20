@@ -34,6 +34,7 @@ class HomeRecommendationSection extends StatelessWidget {
                     style: AppTextStyles.titleMedium.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: AppColors.onSurface,
                     ),
                   ),
                   TextButton(

@@ -2,48 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:foodieconnect/generated/translations.g.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
-import '../../data/models/restaurant_model.dart';
+import '../../data/models/recommendation_model.dart';
 import 'recommended_restaurant_card.dart';
 
 /// 推荐餐厅网格组件
 class RecommendedRestaurantsGrid extends StatelessWidget {
-  final List<Restaurant> restaurants;
+  final List<RecommendationWithRestaurant> recommendations;
+  final String? title;
   final VoidCallback? onFollowingTap;
+  final Function(int)? onDeleteRecommendation;
 
   const RecommendedRestaurantsGrid({
     super.key,
-    required this.restaurants,
+    required this.recommendations,
+    this.title,
     this.onFollowingTap,
+    this.onDeleteRecommendation,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (restaurants.isEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            t.profile.recommendedRestaurants,
-            style: AppTextStyles.titleMedium,
-          ),
-          const SizedBox(height: 12),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.outline),
-            ),
-            child: Text(
-              t.profile.noFoodPreferences,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-          ),
-        ],
-      );
+    if (recommendations.isEmpty) {
+      return const SizedBox.shrink();
     }
 
     return Column(
@@ -53,7 +33,7 @@ class RecommendedRestaurantsGrid extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              t.profile.recommendedRestaurants,
+              title ?? t.profile.recommendedRestaurants,
               style: AppTextStyles.titleMedium,
             ),
             if (onFollowingTap != null)
@@ -74,14 +54,28 @@ class RecommendedRestaurantsGrid extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.8,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.65,
           ),
-          itemCount: restaurants.length,
+          itemCount: recommendations.length,
           itemBuilder: (context, index) {
-            final restaurant = restaurants[index];
-            return RecommendedRestaurantCard(restaurant: restaurant);
+            final recommendationWithRestaurant = recommendations[index];
+            final restaurant = recommendationWithRestaurant.restaurant;
+            final recommendation = recommendationWithRestaurant.recommendation;
+            return RecommendedRestaurantCard(
+              recommendationWithRestaurant: recommendationWithRestaurant,
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/shop_detail',
+                  arguments: {'restaurantId': restaurant.id.toString()},
+                );
+              },
+              onDelete: onDeleteRecommendation != null
+                  ? () => onDeleteRecommendation!(recommendation.id)
+                  : null,
+            );
           },
         ),
       ],

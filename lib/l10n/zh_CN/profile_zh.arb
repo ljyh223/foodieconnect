@@ -87,6 +87,14 @@
   "@recommendedRestaurants": {
     "description": "推荐餐厅标题"
   },
+  "myRecommendedRestaurants": "我的推荐餐厅",
+  "@myRecommendedRestaurants": {
+    "description": "我的推荐餐厅标题"
+  },
+  "userRecommendedRestaurants": "用户推荐餐厅",
+  "@userRecommendedRestaurants": {
+    "description": "用户推荐餐厅标题"
+  },
     "updateFailed":"更新失败",
     "@updateFailed": {
       "description": "Prefix when update throws"

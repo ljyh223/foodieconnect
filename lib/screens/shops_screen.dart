@@ -6,6 +6,7 @@ import '../presentation/providers/recommendation_provider.dart';
 import '../presentation/widgets/home_recommendation_section.dart';
 import '../core/services/api_service.dart';
 import 'dart:math';
+import 'dart:async';
 
 class ShopsScreen extends StatefulWidget {
   const ShopsScreen({super.key});
@@ -17,6 +18,7 @@ class ShopsScreen extends StatefulWidget {
 class _ShopsScreenState extends State<ShopsScreen> {
   final TextEditingController _searchController = TextEditingController();
   final Random _random = Random();
+  Timer? _debounce;
 
   // 随机在线图片列表
   final List<String> _randomImages = [
@@ -39,6 +41,28 @@ class _ShopsScreenState extends State<ShopsScreen> {
         context,
         listen: false,
       ).getHomeRecommendations();
+    });
+    
+    // 添加搜索监听器
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  /// 搜索输入变化处理（带防抖）
+  void _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      final query = _searchController.text.trim();
+      Provider.of<RestaurantProvider>(
+        context,
+        listen: false,
+      ).fetchRestaurants(keyword: query);
     });
   }
 
