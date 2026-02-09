@@ -12,6 +12,8 @@ import 'presentation/providers/staff_provider.dart';
 import 'presentation/providers/chat_provider.dart';
 import 'presentation/providers/language_provider.dart';
 import 'presentation/providers/recommendation_provider.dart';
+import 'presentation/providers/dish_review_provider.dart';
+import 'presentation/providers/menu_item_provider.dart';
 import 'core/theme/app_theme.dart';
 
 void main() async {
@@ -35,6 +37,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()..init()),
         ChangeNotifierProvider(create: (_) => RecommendationProvider()),
+        ChangeNotifierProvider(create: (_) => DishReviewProvider()),
+        ChangeNotifierProvider(create: (_) => MenuItemProvider()),
       ],
       child: const MyApp(),
     ),
@@ -72,8 +76,8 @@ class _AppInitializerState extends State<AppInitializer> {
       // 获取当前用户ID
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       authProvider.setContext(context);
-      final userId = await authProvider.getCurrentUserId();
-      
+      await authProvider.getCurrentUserId();
+
       // 注意：移除了自动初始化WebSocket连接的代码
       // WebSocket连接应该只在用户明确需要使用聊天功能时才建立
       // 比如进入聊天室页面时

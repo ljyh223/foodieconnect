@@ -60,7 +60,11 @@ class RestaurantApi {
   /// 获取餐厅菜单
   static Future<Map<String, dynamic>> getMenu(String restaurantId) async {
     final response = await DioClient.dio.get(
-      '${AppConstants.restaurantsEndpoint}/$restaurantId/menu',
+      '${AppConstants.restaurantsEndpoint}/$restaurantId/menu-items',
+      queryParameters: {
+        'page': 0,
+        'size': 100,
+      },
     );
     return response.data;
   }

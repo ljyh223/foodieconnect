@@ -20,6 +20,11 @@ import '../screens/other_user_profile_screen.dart';
 import '../screens/following_list_screen.dart';
 import '../screens/recommendations_screen.dart';
 import '../screens/main_tab_screen.dart';
+import '../screens/dish_reviews_screen.dart';
+import '../screens/create_dish_review_screen.dart';
+import '../screens/dish_detail_screen.dart';
+import '../screens/dish_list_screen.dart';
+import '../data/models/recommended_dish_model.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -108,6 +113,41 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const RecommendationsScreen());
       case '/main':
         return MaterialPageRoute(builder: (_) => const MainTabScreen());
+      case '/dish_reviews':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => DishReviewsScreen(
+            restaurantId: args?['restaurantId'],
+            menuItemId: args?['menuItemId'],
+            itemName: args?['itemName'],
+          ),
+        );
+      case '/create_dish_review':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => CreateDishReviewScreen(
+            restaurantId: args?['restaurantId'],
+            menuItemId: args?['menuItemId'],
+            itemName: args?['itemName'],
+            reviewId: args?['reviewId'],
+          ),
+        );
+      case '/dish_detail':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => DishDetailScreen(
+            restaurantId: args?['restaurantId'],
+            dish: args?['dish'] as RecommendedDish,
+          ),
+        );
+      case '/dish_list':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => DishListScreen(
+            restaurantId: args?['restaurantId'],
+            restaurantName: args?['restaurantName'],
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
