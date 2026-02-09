@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:foodieconnect/generated/translations.g.dart';
-import '../core/constants/app_colors.dart';
 import '../presentation/providers/dish_review_provider.dart';
-import '../presentation/providers/auth_provider.dart';
+import '../presentation/widgets/review_image_grid.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as img;
@@ -51,222 +50,36 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
     super.dispose();
   }
 
-  /// 加载现有评价数据
   Future<void> _loadExistingReview() async {
-    // TODO: 从API加载现有评价数据
-    // 暂时使用默认值
     setState(() {
       _controller.text = '';
       _rating = 5.0;
     });
   }
 
-  /// 获取当前用户ID
-  Future<int?> _getCurrentUserId() async {
-    try {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      authProvider.setContext(context);
-      final userId = await authProvider.getCurrentUserId();
-      return userId;
-    } catch (e) {
-      debugPrint('获取用户ID失败: $e');
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final args =
-        widget.restaurantId != null
-            ? null
-            : (ModalRoute.of(context)?.settings.arguments as Map?);
-    final restaurantId = widget.restaurantId ?? args?['restaurantId'] as String?;
-    final menuItemId = widget.menuItemId ?? args?['menuItemId'] as String?;
+    final args = widget.restaurantId != null
+        ? null
+        : (ModalRoute.of(context)?.settings.arguments as Map?);
     final itemName = widget.itemName ?? args?['itemName'] as String?;
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          _isEditing
-              ? t.review.publishReview
-              : '${t.review.publishReview} - ${itemName ?? ''}',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          TextButton(
-            onPressed: _submitting ? null : _submit,
-            child: _submitting
-                ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-                : Text(_isEditing ? t.review.publish : t.review.publish),
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,
+      appBar: _buildAppBar(itemName),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 菜品信息
-              if (itemName != null)
-                Card(
-                  color: Colors.blue.shade50,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.restaurant_menu, color: Colors.blue),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            '评价菜品: $itemName',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              if (itemName != null) const SizedBox(height: 16),
-
-              // 评分选择
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.review.ratingScore,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: List.generate(5, (index) {
-                          return IconButton(
-                            icon: Icon(
-                              index < _rating ? Icons.star : Icons.star_border,
-                              color: Colors.amber,
-                              size: 32,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _rating = (index + 1).toDouble();
-                              });
-                            },
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              if (itemName != null) _buildDishInfo(itemName),
+              _buildRatingSection(),
               const SizedBox(height: 16),
-
-              // 评价内容输入
-              Expanded(
-                flex: 2,
-                child: Card(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.review.reviewContent,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Expanded(
-                          child: TextField(
-                            controller: _controller,
-                            maxLines: null,
-                            expands: true,
-                            textAlignVertical: TextAlignVertical.top,
-                            decoration: InputDecoration(
-                              hintText: t.review.shareDiningExperience,
-                              border: const OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              _buildCommentSection(),
               const SizedBox(height: 16),
-
-              // 图片上传区域
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.review.addImages,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      if (_images.isEmpty)
-                        _buildEmptyImageGrid()
-                      else
-                        _buildImageGrid(),
-                      const SizedBox(height: 8),
-                      if (_images.length < 9)
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: _pickImageFromCamera,
-                                icon: const Icon(Icons.camera_alt),
-                                label: Text(t.review.takePhoto),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: _pickImageFromGallery,
-                                icon: const Icon(Icons.photo_library),
-                                label: Text(t.review.selectFromGallery),
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
-              ),
+              _buildImageSection(),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -274,132 +87,231 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
     );
   }
 
-  /// 构建空图片网格
-  Widget _buildEmptyImageGrid() {
-    return GestureDetector(
-      onTap: _showImagePickerOptions,
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
+  PreferredSizeWidget _buildAppBar(String? itemName) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      centerTitle: true,
+      title: Text(
+        _isEditing ? t.review.publishReview : '评价菜品 - ${itemName ?? ''}',
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _submitting ? null : _submit,
+          child: _submitting
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(
+                  _isEditing ? t.review.publish : t.review.publish,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDishInfo(String itemName) {
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.restaurant_menu, size: 20, color: Colors.black87),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '评价菜品: $itemName',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRatingSection() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '评分',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: List.generate(5, (index) {
+              return IconButton(
+                icon: Icon(
+                  index < _rating ? Icons.star : Icons.star_border,
+                  color: Colors.orange,
+                  size: 32,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _rating = (index + 1).toDouble();
+                  });
+                },
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCommentSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '评价内容',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          constraints: const BoxConstraints(minHeight: 150),
+          decoration: BoxDecoration(
+            color: Colors.grey[50],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextField(
+            controller: _controller,
+            maxLines: null,
+            expands: false,
+            textAlignVertical: TextAlignVertical.top,
+            decoration: const InputDecoration(
+              hintText: '分享您的用餐体验...',
+              hintStyle: TextStyle(color: Colors.grey),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.all(12.0),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '添加图片 (最多9张)',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ReviewImageGrid(
+          images: _images,
+          onAddImage: _showImagePickerOptions,
+          onRemoveImage: _removeImage,
+        ),
+        if (_images.length < 9) ...[
+          const SizedBox(height: 12),
+          Row(
             children: [
-              const Icon(
-                Icons.add_photo_alternate,
-                size: 32,
-                color: Colors.grey,
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _pickImageFromCamera,
+                  icon: const Icon(Icons.camera_alt, size: 18),
+                  label: const Text('拍照'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                t.review.addImage,
-                style: const TextStyle(color: Colors.grey),
+              const SizedBox(width: 12),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _pickImageFromGallery,
+                  icon: const Icon(Icons.photo_library, size: 18),
+                  label: const Text('相册'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                ),
               ),
             ],
           ),
-        ),
-      ),
+        ],
+      ],
     );
   }
 
-  /// 构建图片网格
-  Widget _buildImageGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 1.0,
-      ),
-      itemCount: _images.length < 9 ? _images.length + 1 : _images.length,
-      itemBuilder: (context, index) {
-        if (index == _images.length && _images.length < 9) {
-          // 添加图片按钮
-          return GestureDetector(
-            onTap: _showImagePickerOptions,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Center(
-                child: Icon(Icons.add, size: 32, color: Colors.grey),
-              ),
-            ),
-          );
-        }
-
-        return Stack(
-          children: [
-            GestureDetector(
-              onTap: () => _viewImage(index),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  _images[index],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 4,
-              right: 4,
-              child: GestureDetector(
-                onTap: () => _removeImage(index),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.black54,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.close, color: Colors.white, size: 16),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  /// 显示图片选择器选项
   void _showImagePickerOptions() {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(t.review.takePhoto),
+              leading: const Icon(Icons.camera_alt, color: Colors.black),
+              title: const Text('拍照',
+                  style: TextStyle(fontWeight: FontWeight.w500)),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromCamera();
               },
             ),
             ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(t.review.selectFromAlbum),
+              leading: const Icon(Icons.photo_library, color: Colors.black),
+              title: const Text('从相册选择',
+                  style: TextStyle(fontWeight: FontWeight.w500)),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromGallery();
               },
             ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
     );
   }
 
-  /// 从相机拍照
   Future<void> _pickImageFromCamera() async {
     try {
       final XFile? image = await _picker.pickImage(
@@ -417,73 +329,53 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
       }
     } catch (e) {
       if (mounted) {
-        debugPrint("拍照失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${t.review.takePhotoFailed}$e')),
+          SnackBar(content: Text('拍照失败: $e')),
         );
       }
     }
   }
 
-  /// 从相册选择图片
   Future<void> _pickImageFromGallery() async {
     try {
-      final List<XFile>? images = await _picker.pickMultiImage(
+      final images = await _picker.pickMultiImage(
         imageQuality: 80,
       );
-      if (images != null) {
-        final List<File> processedImages = [];
+      final List<File> processedImages = [];
 
-        for (final xFile in images) {
-          if (processedImages.length >= (9 - _images.length)) break;
+      for (final xFile in images) {
+        if (processedImages.length >= (9 - _images.length)) break;
 
-          final processedImage = await _processImageFile(File(xFile.path));
-          if (processedImage != null) {
-            processedImages.add(processedImage);
-          }
+        final processedImage = await _processImageFile(File(xFile.path));
+        if (processedImage != null) {
+          processedImages.add(processedImage);
         }
-
-        setState(() {
-          _images.addAll(processedImages);
-        });
       }
+
+      setState(() {
+        _images.addAll(processedImages);
+      });
     } catch (e) {
       if (mounted) {
-        debugPrint("选择图片失败$e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${t.review.selectImageFailed}$e')),
+          SnackBar(content: Text('选择图片失败: $e')),
         );
       }
     }
   }
 
-  /// 查看图片
-  void _viewImage(int index) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => _ImageViewerScreen(
-          images: _images,
-          initialIndex: index,
-        ),
-      ),
-    );
-  }
-
-  /// 删除图片
   void _removeImage(int index) {
     setState(() {
       _images.removeAt(index);
     });
   }
 
-  /// 提交评价
   Future<void> _submit() async {
     final text = _controller.text.trim();
 
-    final args =
-        widget.restaurantId != null
-            ? null
-            : (ModalRoute.of(context)?.settings.arguments as Map?);
+    final args = widget.restaurantId != null
+        ? null
+        : (ModalRoute.of(context)?.settings.arguments as Map?);
     final restaurantId = widget.restaurantId ?? args?['restaurantId'] as String?;
     final menuItemId = widget.menuItemId ?? args?['menuItemId'] as String?;
     final reviewId = widget.reviewId ?? args?['reviewId'] as String?;
@@ -497,7 +389,7 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
 
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.review.pleaseEnterReviewContent)),
+        const SnackBar(content: Text('请输入评价内容')),
       );
       return;
     }
@@ -511,7 +403,6 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
       );
 
       if (_isEditing && reviewId != null) {
-        // 更新评价
         await provider.updateReviewWithImageFiles(
           restaurantId,
           reviewId,
@@ -520,7 +411,6 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
           _images,
         );
       } else {
-        // 创建评价
         await provider.createReviewWithImageFiles(
           restaurantId,
           menuItemId,
@@ -548,7 +438,6 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
     }
   }
 
-  /// 处理图片文件，确保格式为JPEG
   Future<File?> _processImageFile(File imageFile) async {
     try {
       final fileExtension = path.extension(imageFile.path).toLowerCase();
@@ -561,7 +450,6 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
       final originalImage = img.decodeImage(imageBytes);
 
       if (originalImage == null) {
-        debugPrint('无法解码图片文件');
         return imageFile;
       }
 
@@ -572,68 +460,9 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
       final jpegBytes = img.encodeJpg(originalImage, quality: 85);
       await jpegFile.writeAsBytes(jpegBytes);
 
-      debugPrint('图片格式已转换为JPEG: ${jpegFile.path}');
       return jpegFile;
     } catch (e) {
-      debugPrint('处理图片格式失败: $e');
       return imageFile;
     }
-  }
-}
-
-/// 图片查看器页面
-class _ImageViewerScreen extends StatefulWidget {
-  final List<File> images;
-  final int initialIndex;
-
-  const _ImageViewerScreen({required this.images, required this.initialIndex});
-
-  @override
-  State<_ImageViewerScreen> createState() => _ImageViewerScreenState();
-}
-
-class _ImageViewerScreenState extends State<_ImageViewerScreen> {
-  late PageController _pageController;
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = widget.initialIndex;
-    _pageController = PageController(initialPage: widget.initialIndex);
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: Text('${_currentIndex + 1} / ${widget.images.length}'),
-      ),
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: widget.images.length,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        itemBuilder: (context, index) {
-          return Center(
-            child: InteractiveViewer(
-              child: Image.file(widget.images[index], fit: BoxFit.contain),
-            ),
-          );
-        },
-      ),
-    );
   }
 }
