@@ -30,14 +30,30 @@ class RestaurantRepository {
 
       // 统一 payload：优先使用 res['data']，否则使用 res
       final dynamic payload = response['data'] ?? response;
-      final content = payload['records'] as List<dynamic>? ?? [];
+
+      List<dynamic> content = [];
+      if (payload is List) {
+        // 如果 data 直接是数组
+        content = payload;
+      } else if (payload is Map<String, dynamic>) {
+        // 如果 data 是对象，尝试获取 records 或 content
+        if (payload.containsKey('records')) {
+          content = payload['records'] as List<dynamic>? ?? [];
+        } else if (payload.containsKey('content')) {
+          content = payload['content'] as List<dynamic>? ?? [];
+        }
+      }
+
       final restaurants = content
           .map((e) => Restaurant.fromJson(e as Map<String, dynamic>))
           .toList();
+
       final metaKeys = ['totalElements', 'totalPages', 'currentPage', 'size'];
       final meta = <String, dynamic>{};
-      for (final k in metaKeys) {
-        if (payload.containsKey(k)) meta[k] = payload[k];
+      if (payload is Map<String, dynamic>) {
+        for (final k in metaKeys) {
+          if (payload.containsKey(k)) meta[k] = payload[k];
+        }
       }
       return {'content': restaurants, 'meta': meta};
     } on DioException catch (e) {
@@ -59,19 +75,17 @@ class RestaurantRepository {
 
       // 根据API文档，data字段包含餐厅信息
       // 尝试获取推荐菜品（如果API返回了）
-      List<String> recommendedDishes = [];
+      List<dynamic> recommendedDishes = [];
       if (payload.containsKey('recommendedDishes')) {
         final dishes = payload['recommendedDishes'] as List<dynamic>?;
         if (dishes != null) {
           for (var dish in dishes) {
             if (dish is String) {
+              // 兼容旧格式，只有名称的情况
               recommendedDishes.add(dish);
             } else if (dish is Map<String, dynamic>) {
-              // 如果是对象，尝试提取name字段
-              final name = dish['name'] ?? dish['dishName'] ?? '';
-              if (name.isNotEmpty) {
-                recommendedDishes.add(name);
-              }
+              // 新格式：完整的菜品对象，直接保存
+              recommendedDishes.add(dish);
             }
           }
         }

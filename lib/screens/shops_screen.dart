@@ -333,7 +333,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
-                                        dish,
+                                        dish.name,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey[700],

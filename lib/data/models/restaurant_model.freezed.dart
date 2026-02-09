@@ -29,7 +29,8 @@ mixin _$Restaurant {
   int get reviewCount => throw _privateConstructorUsedError;
   bool get isOpen => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError; // 改为可空类型，与API保持一致
-  List<String> get recommendedDishes => throw _privateConstructorUsedError;
+  List<RecommendedDish> get recommendedDishes =>
+      throw _privateConstructorUsedError;
   double? get averagePrice => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
   String? get updatedAt => throw _privateConstructorUsedError;
@@ -61,7 +62,7 @@ abstract class $RestaurantCopyWith<$Res> {
     int reviewCount,
     bool isOpen,
     String? imageUrl,
-    List<String> recommendedDishes,
+    List<RecommendedDish> recommendedDishes,
     double? averagePrice,
     String? createdAt,
     String? updatedAt,
@@ -153,7 +154,7 @@ class _$RestaurantCopyWithImpl<$Res, $Val extends Restaurant>
             recommendedDishes: null == recommendedDishes
                 ? _value.recommendedDishes
                 : recommendedDishes // ignore: cast_nullable_to_non_nullable
-                      as List<String>,
+                      as List<RecommendedDish>,
             averagePrice: freezed == averagePrice
                 ? _value.averagePrice
                 : averagePrice // ignore: cast_nullable_to_non_nullable
@@ -194,7 +195,7 @@ abstract class _$$RestaurantImplCopyWith<$Res>
     int reviewCount,
     bool isOpen,
     String? imageUrl,
-    List<String> recommendedDishes,
+    List<RecommendedDish> recommendedDishes,
     double? averagePrice,
     String? createdAt,
     String? updatedAt,
@@ -285,7 +286,7 @@ class __$$RestaurantImplCopyWithImpl<$Res>
         recommendedDishes: null == recommendedDishes
             ? _value._recommendedDishes
             : recommendedDishes // ignore: cast_nullable_to_non_nullable
-                  as List<String>,
+                  as List<RecommendedDish>,
         averagePrice: freezed == averagePrice
             ? _value.averagePrice
             : averagePrice // ignore: cast_nullable_to_non_nullable
@@ -319,7 +320,7 @@ class _$RestaurantImpl implements _Restaurant {
     required this.reviewCount,
     required this.isOpen,
     this.imageUrl,
-    final List<String> recommendedDishes = const [],
+    final List<RecommendedDish> recommendedDishes = const [],
     this.averagePrice,
     this.createdAt,
     this.updatedAt,
@@ -350,11 +351,11 @@ class _$RestaurantImpl implements _Restaurant {
   @override
   final String? imageUrl;
   // 改为可空类型，与API保持一致
-  final List<String> _recommendedDishes;
+  final List<RecommendedDish> _recommendedDishes;
   // 改为可空类型，与API保持一致
   @override
   @JsonKey()
-  List<String> get recommendedDishes {
+  List<RecommendedDish> get recommendedDishes {
     if (_recommendedDishes is EqualUnmodifiableListView)
       return _recommendedDishes;
     // ignore: implicit_dynamic_type
@@ -450,7 +451,7 @@ abstract class _Restaurant implements Restaurant {
     required final int reviewCount,
     required final bool isOpen,
     final String? imageUrl,
-    final List<String> recommendedDishes,
+    final List<RecommendedDish> recommendedDishes,
     final double? averagePrice,
     final String? createdAt,
     final String? updatedAt,
@@ -481,7 +482,7 @@ abstract class _Restaurant implements Restaurant {
   @override
   String? get imageUrl; // 改为可空类型，与API保持一致
   @override
-  List<String> get recommendedDishes;
+  List<RecommendedDish> get recommendedDishes;
   @override
   double? get averagePrice;
   @override

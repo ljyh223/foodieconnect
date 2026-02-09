@@ -5,6 +5,7 @@ import '../core/services/restaurant_service.dart';
 import '../core/services/api_service.dart';
 import '../presentation/widgets/card_widget.dart';
 import 'dart:math';
+import 'dart:convert';
 
 class RestaurantInfoScreen extends StatefulWidget {
   final String? restaurantId;
@@ -347,7 +348,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                   // 如果API调用失败或没有数据，使用餐厅模型中的推荐菜品或默认菜品
                                   dishes =
                                       restaurant.recommendedDishes.isNotEmpty
-                                      ? restaurant.recommendedDishes
+                                      ? restaurant.recommendedDishes.map((d) => d.name).toList()
                                       : [
                                           '招牌炒饭',
                                           '秘制烤鸭',
@@ -363,7 +364,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                                   spacing: 8,
                                   runSpacing: 8,
                                   children: dishes
-                                      .map((dish) => _buildDishChip(dish))
+                                      .map((dish) => _buildDishChip(dish, restaurant.id.toString()))
                                       .toList(),
                                 );
                               },
@@ -378,6 +379,83 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 const SizedBox(height: 16),
 
                 // 菜单
+                CardWidget(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        t.restaurant.menu,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Icon(Icons.restaurant_menu, color: Colors.blue, size: 20),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '查看菜品评价',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          // 跳转到菜品评价页面
+                                          Navigator.of(context).pushNamed(
+                                            '/dish_reviews',
+                                            arguments: {
+                                              'restaurantId': restaurant.id.toString(),
+                                              'menuItemId': null,
+                                              'itemName': null,
+                                            },
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.orange,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          '查看菜品评价',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // 原菜单按钮（保留）
                 CardWidget(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -455,22 +533,57 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
   }
 
   /// 构建菜品标签
-  Widget _buildDishChip(String dishName) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1),
-      ),
-      child: Text(
-        dishName,
-        style: const TextStyle(
-          fontSize: 14,
-          color: Colors.blue,
-          fontWeight: FontWeight.w500,
+  Widget _buildDishChip(String dishName, String restaurantId) {
+    return InkWell(
+      onTap: () => _navigateToDishReview(context, restaurantId, dishName),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              dishName,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.blue,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(
+              Icons.reviews,
+              size: 12,
+              color: Colors.blue,
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  /// 导航到菜品评价页面
+  void _navigateToDishReview(
+    BuildContext context,
+    String restaurantId,
+    String dishName,
+  ) {
+    // 生成简单的菜单项ID（基于菜品名称的哈希值）
+    // 注意：实际应用中应该从菜单API获取真实的menuItemId
+    final menuItemId = dishName.hashCode.toSigned(32).abs().toString();
+
+    Navigator.of(context).pushNamed(
+      '/dish_reviews',
+      arguments: {
+        'restaurantId': restaurantId,
+        'menuItemId': menuItemId,
+        'itemName': dishName,
+      },
     );
   }
 }
