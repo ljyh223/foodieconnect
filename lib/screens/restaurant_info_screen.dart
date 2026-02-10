@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodieconnect/generated/translations.g.dart';
+import '../data/models/recommended_dish_model.dart';
 import '../data/models/restaurant_model.dart';
 import '../core/services/restaurant_service.dart';
 import '../core/services/api_service.dart';
@@ -118,9 +119,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     return Container(
       width: double.infinity,
       height: 250,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Image.network(
@@ -131,7 +130,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
               color: Colors.grey[200],
               child: Center(
                 child: Text(
-                  restaurant.name.isNotEmpty ? restaurant.name.substring(0, 1) : '',
+                  restaurant.name.isNotEmpty
+                      ? restaurant.name.substring(0, 1)
+                      : '',
                   style: const TextStyle(
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
@@ -152,10 +153,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       icon: Icons.schedule,
       child: Text(
         restaurant.hours,
-        style: const TextStyle(
-          fontSize: 15,
-          color: Colors.black87,
-        ),
+        style: const TextStyle(fontSize: 15, color: Colors.black87),
       ),
     );
   }
@@ -169,18 +167,12 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         children: [
           Text(
             restaurant.address,
-            style: const TextStyle(
-              fontSize: 15,
-              color: Colors.black87,
-            ),
+            style: const TextStyle(fontSize: 15, color: Colors.black87),
           ),
           const SizedBox(height: 4),
           Text(
             t.restaurant.distanceFromYou(distance: restaurant.distance),
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -195,10 +187,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         restaurant.averagePrice != null
             ? '¥${restaurant.averagePrice!.toStringAsFixed(0)}'
             : '¥${(restaurant.rating * 20).toStringAsFixed(0)}',
-        style: const TextStyle(
-          fontSize: 15,
-          color: Colors.black87,
-        ),
+        style: const TextStyle(fontSize: 15, color: Colors.black87),
       ),
     );
   }
@@ -210,25 +199,18 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       child: FutureBuilder<List<String>>(
         future: _recommendedDishesFuture,
         builder: (context, dishesSnapshot) {
-          List<String> dishes = [];
+          List<RecommendedDish> dishes = [];
 
-          if (dishesSnapshot.connectionState == ConnectionState.waiting) {
-            dishes = [t.app.loading];
-          } else if (dishesSnapshot.hasError ||
+          if (dishesSnapshot.hasError ||
               dishesSnapshot.data == null ||
               dishesSnapshot.data!.isEmpty) {
-            dishes = restaurant.recommendedDishes.isNotEmpty
-                ? restaurant.recommendedDishes.map((d) => d.name).toList()
-                : ['招牌炒饭', '秘制烤鸭', '麻辣香锅', '清蒸鲈鱼', '糖醋排骨'];
-          } else {
-            dishes = dishesSnapshot.data!;
+            dishes = restaurant.recommendedDishes;
           }
-
           return Wrap(
             spacing: 8,
             runSpacing: 8,
             children: dishes
-                .map((dish) => _buildDishChip(dish, restaurant.id.toString()))
+                .map((dish) => _buildDishChip(restaurant.id.toString(), dish.id.toString(), dish.name))
                 .toList(),
           );
         },
@@ -245,10 +227,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         children: [
           Text(
             '查看菜品评价',
-            style: const TextStyle(
-              fontSize: 15,
-              color: Colors.black87,
-            ),
+            style: const TextStyle(fontSize: 15, color: Colors.black87),
           ),
           const SizedBox(height: 12),
           SizedBox(
@@ -274,10 +253,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
               ),
               child: const Text(
                 '查看菜品列表',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -286,9 +262,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     );
   }
 
-  Widget _buildDishChip(String dishName, String restaurantId) {
+  Widget _buildDishChip( String restaurantId, String menuItemId, String dishName) {
     return InkWell(
-      onTap: () => _navigateToDishReview(context, restaurantId, dishName),
+      onTap: () => _navigateToDishDetail(context, restaurantId, menuItemId),
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -308,31 +284,21 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(
-              Icons.reviews,
-              size: 12,
-              color: Colors.black54,
-            ),
+            const Icon(Icons.reviews, size: 12, color: Colors.black54),
           ],
         ),
       ),
     );
   }
 
-  void _navigateToDishReview(
+  void _navigateToDishDetail(
     BuildContext context,
     String restaurantId,
-    String dishName,
+    String menuItemId,
   ) {
-    final menuItemId = dishName.hashCode.toSigned(32).abs().toString();
-
     Navigator.of(context).pushNamed(
-      '/dish_reviews',
-      arguments: {
-        'restaurantId': restaurantId,
-        'menuItemId': menuItemId,
-        'itemName': dishName,
-      },
+      '/dish_detail',
+      arguments: {'restaurantId': restaurantId, 'menuItemId': menuItemId},
     );
   }
 }
