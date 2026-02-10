@@ -51,8 +51,22 @@ class RecommendationApi {
   }) async {
     await DioClient.dio.put(
       '/api/user-recommendations/$recommendationId/status',
-      data: {'status': status.name},
+      data: {'status': _statusToString(status)},
     );
+  }
+
+  /// 将RecommendationStatus枚举转换为API字符串格式
+  static String _statusToString(RecommendationStatus status) {
+    switch (status) {
+      case RecommendationStatus.unviewed:
+        return 'UNVIEWED';
+      case RecommendationStatus.viewed:
+        return 'VIEWED';
+      case RecommendationStatus.interested:
+        return 'INTERESTED';
+      case RecommendationStatus.notInterested:
+        return 'NOT_INTERESTED';
+    }
   }
 
   /// 标记多个推荐为已查看

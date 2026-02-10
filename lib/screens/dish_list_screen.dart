@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../data/models/menu_item_model.dart';
 import '../presentation/providers/menu_item_provider.dart';
 import '../presentation/widgets/dish_list_item_widget.dart';
@@ -222,7 +223,7 @@ class _DishListScreenState extends State<DishListScreen> {
             controller: _searchController,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
-              hintText: '搜索菜品...',
+              hintText: t.app.searchDish,
               prefixIcon: const Icon(Icons.search),
               suffixIcon: provider.searchKeyword.isNotEmpty
                   ? IconButton(
@@ -277,7 +278,7 @@ class _DishListScreenState extends State<DishListScreen> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: FilterChip(
-                    label: const Text('全部'),
+                    label: Text(t.app.allCategories),
                     selected: isSelected,
                     onSelected: (_) {
                       _onCategorySelected(null);

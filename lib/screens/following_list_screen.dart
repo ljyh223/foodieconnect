@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/services/api_service.dart';
@@ -95,8 +96,8 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('已取消关注'),
+          SnackBar(
+            content: Text(t.app.disconnectSuccess),
             backgroundColor: AppColors.primary,
           ),
         );
@@ -105,7 +106,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('取消关注失败: $e'),
+            content: Text(t.app.operationFailed(error: e.toString())),
             backgroundColor: AppColors.error,
           ),
         );
@@ -119,12 +120,12 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('取消关注'),
-          content: Text('确定要取消关注 ${user.displayName ?? user.email} 吗？'),
+          title: Text(t.app.disconnect),
+          content: Text(t.app.disconnectConfirm(username: user.displayName ?? user.email)),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('取消'),
+              child: Text(t.app.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -132,7 +133,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                 _unfollowUser(user);
               },
               child: Text(
-                '确定',
+                t.app.confirm,
                 style: TextStyle(color: AppColors.error),
               ),
             ),
@@ -147,8 +148,8 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(
-        title: widget.userId == null ? '我的关注' : '关注列表',
-        showBackButton: true,
+        title: widget.userId == null ? t.app.myConnections : t.app.connectionsList,
+        showBackButton: false,
       ),
       body: SafeArea(
         child: _buildContent(),
@@ -169,7 +170,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '加载失败',
+              t.app.loadingFailed,
               style: AppTextStyles.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -182,7 +183,7 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadFollowingList,
-              child: const Text('重试'),
+              child: Text(t.app.retry),
             ),
           ],
         ),
@@ -201,14 +202,14 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              '暂无关注',
+              t.app.noConnections,
               style: AppTextStyles.titleMedium.copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              '去发现感兴趣的用户吧',
+              t.app.discoverUsers,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.onSurfaceVariant,
               ),
@@ -292,9 +293,9 @@ class _FollowingListScreenState extends State<FollowingListScreen> {
                     }
                   },
                   itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem<String>(
+                    PopupMenuItem<String>(
                       value: 'unfollow',
-                      child: Text('取消关注'),
+                      child: Text(t.app.disconnect),
                     ),
                   ],
                 )

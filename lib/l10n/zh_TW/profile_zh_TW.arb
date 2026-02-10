@@ -166,5 +166,19 @@
       "saving": "儲存中...",
       "@saving": {
         "description": "儲存中提示"
+      },
+      "deleteRecommendationSuccess": "推薦已刪除",
+      "@deleteRecommendationSuccess": {
+        "description": "刪除推薦成功提示"
+      },
+      "deleteRecommendationFailed": "刪除推薦失敗: {error}",
+      "@deleteRecommendationFailed": {
+        "description": "刪除推薦失敗提示",
+        "placeholders": {
+          "error": {
+            "type": "String",
+            "description": "錯誤信息"
+          }
+        }
       }
   }

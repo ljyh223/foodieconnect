@@ -67,10 +67,13 @@ class _CreateStaffReviewScreenState extends State<CreateStaffReviewScreen>
                     _rating = value;
                   });
                 },
+                title: t.review.ratingScore,
               ),
               const SizedBox(height: 16),
               buildReviewCommentSection(
                 controller: _controller,
+                title: t.review.reviewContent,
+                hintText: t.review.shareDiningExperience,
               ),
             ],
           ),
@@ -85,7 +88,7 @@ class _CreateStaffReviewScreenState extends State<CreateStaffReviewScreen>
       elevation: 0,
       centerTitle: true,
       title: Text(
-        '评价服务员 - ${staffName ?? ''}',
+        t.review.reviewStaff(staffName: staffName ?? ''),
         style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -130,7 +133,7 @@ class _CreateStaffReviewScreenState extends State<CreateStaffReviewScreen>
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              '评价服务员: $staffName',
+              t.review.reviewingStaff(staffName: staffName),
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -153,14 +156,14 @@ class _CreateStaffReviewScreenState extends State<CreateStaffReviewScreen>
 
     if (staffId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('缺少服务员ID')),
+        SnackBar(content: Text(t.review.missingStaffId)),
       );
       return;
     }
 
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请输入评价内容')),
+        SnackBar(content: Text(t.review.pleaseEnterReviewContent)),
       );
       return;
     }
@@ -176,13 +179,13 @@ class _CreateStaffReviewScreenState extends State<CreateStaffReviewScreen>
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('评价已发布')),
+        SnackBar(content: Text(t.review.reviewPublished)),
       );
       Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('评价失败: $e')),
+          SnackBar(content: Text(t.review.publishReviewFailed(error: e.toString()))),
         );
       }
     } finally {

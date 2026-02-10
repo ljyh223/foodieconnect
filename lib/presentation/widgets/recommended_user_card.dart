@@ -6,9 +6,11 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../data/models/user_recommendation_model.dart';
 import '../../core/services/api_service.dart';
+import '../../core/services/follow_service.dart';
+import '../../core/services/auth_service.dart';
 
 /// 推荐用户卡片组件 - 极简设计
-class RecommendedUserCard extends StatelessWidget {
+class RecommendedUserCard extends StatefulWidget {
   final UserRecommendation recommendation;
   final VoidCallback? onTap;
   final VoidCallback? onUserTap;
@@ -19,6 +21,40 @@ class RecommendedUserCard extends StatelessWidget {
     this.onTap,
     this.onUserTap,
   });
+
+  @override
+  State<RecommendedUserCard> createState() => _RecommendedUserCardState();
+}
+
+class _RecommendedUserCardState extends State<RecommendedUserCard> {
+  bool _isFollowing = false;
+  bool _isCheckingFollow = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFollowStatus();
+  }
+
+  Future<void> _checkFollowStatus() async {
+    try {
+      final isFollowing = await FollowService.isFollowing(
+        userId: widget.recommendation.userId,
+      );
+      if (mounted) {
+        setState(() {
+          _isFollowing = isFollowing;
+          _isCheckingFollow = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isCheckingFollow = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +77,7 @@ class RecommendedUserCard extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: onTap ?? () => _handleCardTap(context),
+        onTap: widget.onTap ?? () => _handleCardTap(context),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -53,7 +89,7 @@ class RecommendedUserCard extends StatelessWidget {
                 children: [
                   // 用户头像
                   GestureDetector(
-                    onTap: onUserTap ?? () => _handleUserTap(context),
+                    onTap: widget.onUserTap ?? () => _handleUserTap(context),
                     child: Container(
                       width: 40,
                       height: 40,
@@ -63,11 +99,11 @@ class RecommendedUserCard extends StatelessWidget {
                       ),
                       child: ClipOval(
                         child:
-                            recommendation.userAvatar != null &&
-                                recommendation.userAvatar!.isNotEmpty
+                            widget.recommendation.userAvatar != null &&
+                                widget.recommendation.userAvatar!.isNotEmpty
                             ? Image.network(
                                 ApiService.getFullImageUrl(
-                                  recommendation.userAvatar,
+                                  widget.recommendation.userAvatar,
                                 ),
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
@@ -86,7 +122,7 @@ class RecommendedUserCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          recommendation.userName,
+                          widget.recommendation.userName,
                           style: AppTextStyles.titleMedium.copyWith(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -98,7 +134,7 @@ class RecommendedUserCard extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              recommendation.starRatingString,
+                              widget.recommendation.starRatingString,
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Color(0xFFFFD700),
@@ -106,17 +142,17 @@ class RecommendedUserCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              '(${recommendation.score.toStringAsFixed(1)})',
+                              '(${widget.recommendation.score.toStringAsFixed(1)})',
                               style: AppTextStyles.bodySmall.copyWith(
                                 color: AppColors.onSurfaceVariant,
                                 fontSize: 11,
                               ),
                             ),
                             // 显示相似度（如果有）
-                            if (recommendation.similarity != null) ...[
+                            if (widget.recommendation.similarity != null) ...[
                               const SizedBox(width: 8),
                               Text(
-                                '相似度: ${recommendation.similarityPercentage}',
+                                '相似度: ${widget.recommendation.similarityPercentage}',
                                 style: AppTextStyles.bodySmall.copyWith(
                                   color: AppColors.onSurfaceVariant,
                                   fontSize: 11,
@@ -137,8 +173,8 @@ class RecommendedUserCard extends StatelessWidget {
               _buildRecommendationReason(),
 
               // 共同餐厅信息（如果有）
-              if (recommendation.commonRestaurants != null &&
-                  recommendation.commonRestaurants!.isNotEmpty) ...[
+              if (widget.recommendation.commonRestaurants != null &&
+                  widget.recommendation.commonRestaurants!.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 _buildCommonRestaurants(),
               ],
@@ -160,8 +196,8 @@ class RecommendedUserCard extends StatelessWidget {
       color: AppColors.primaryContainer,
       child: Center(
         child: Text(
-          recommendation.userName.isNotEmpty
-              ? recommendation.userName[0].toUpperCase()
+          widget.recommendation.userName.isNotEmpty
+              ? widget.recommendation.userName[0].toUpperCase()
               : 'U',
           style: AppTextStyles.titleMedium.copyWith(
             color: AppColors.primary,
@@ -174,7 +210,7 @@ class RecommendedUserCard extends StatelessWidget {
 
   /// 构建推荐理由
   Widget _buildRecommendationReason() {
-    String reasonText = recommendation.recommendationReason;
+    String reasonText = widget.recommendation.recommendationReason;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -196,7 +232,7 @@ class RecommendedUserCard extends StatelessWidget {
 
   /// 构建共同餐厅信息
   Widget _buildCommonRestaurants() {
-    final restaurants = recommendation.commonRestaurants!;
+    final restaurants = widget.recommendation.commonRestaurants!;
     final displayCount = restaurants.length > 2 ? 2 : restaurants.length;
 
     return Column(
@@ -262,29 +298,51 @@ class RecommendedUserCard extends StatelessWidget {
   ) {
     return Row(
       children: [
-        // 关注按钮
+        // 关注/取消关注按钮
         Expanded(
           child: SizedBox(
             height: 32,
-            child: ElevatedButton(
-              onPressed: () => _handleFollowTap(context, provider),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: Text(
-                t.app.connect,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            child: _isFollowing
+                ? OutlinedButton(
+                    onPressed: _isCheckingFollow ? null : () => _handleFollowTap(context, provider),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.onSurfaceVariant,
+                      side: BorderSide(
+                        color: AppColors.outline.withValues(alpha: 0.5),
+                      ),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      t.app.disconnect,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
+                : ElevatedButton(
+                    onPressed: _isCheckingFollow ? null : () => _handleFollowTap(context, provider),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      t.app.connect,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
           ),
         ),
 
@@ -338,7 +396,7 @@ class RecommendedUserCard extends StatelessWidget {
     Navigator.pushNamed(
       context,
       '/other_user_profile',
-      arguments: {'userId': recommendation.userId},
+      arguments: {'userId': widget.recommendation.userId},
     );
   }
 
@@ -350,19 +408,50 @@ class RecommendedUserCard extends StatelessWidget {
     if (!context.mounted) return;
 
     try {
-      // 标记为感兴趣
-      final success = await provider.markAsInterested(recommendation.id);
+      final currentUserId = await AuthService.getCurrentUserId();
+      if (currentUserId == null) {
+        throw Exception('未找到当前用户信息');
+      }
 
-      if (success && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(t.app.markAsInterested),
-            duration: const Duration(seconds: 1),
-          ),
+      // 使用本地状态而不是再次查询API
+      final wasFollowing = _isFollowing;
+
+      if (wasFollowing) {
+        // 已关注，取消关注
+        await FollowService.unfollowUser(
+          followerId: currentUserId,
+          followingId: widget.recommendation.userId,
         );
 
-        // 可以在这里添加关注逻辑
-        // await FollowService.followUser(recommendation.userId);
+        if (context.mounted) {
+          setState(() {
+            _isFollowing = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(t.app.disconnectSuccess),
+              duration: const Duration(seconds: 1),
+            ),
+          );
+        }
+      } else {
+        // 未关注，执行关注
+        await FollowService.followUser(
+          followerId: currentUserId,
+          followingId: widget.recommendation.userId,
+        );
+
+        if (context.mounted) {
+          setState(() {
+            _isFollowing = true;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(t.app.connectSuccess),
+              duration: const Duration(seconds: 1),
+            ),
+          );
+        }
       }
     } catch (e) {
       if (context.mounted) {
@@ -384,8 +473,21 @@ class RecommendedUserCard extends StatelessWidget {
     if (!context.mounted) return;
 
     try {
+      // 检查是否有有效的推荐记录ID
+      if (widget.recommendation.recommendationId == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(t.app.operationFailed(error: '缺少推荐记录ID')),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
       // 标记为不感兴趣
-      final success = await provider.markAsNotInterested(recommendation.id);
+      final success = await provider.markAsNotInterested(widget.recommendation.recommendationId!);
 
       if (success && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

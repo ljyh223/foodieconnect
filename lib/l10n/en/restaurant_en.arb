@@ -55,6 +55,14 @@
   "@menu": {
     "description": "Menu title"
   },
+  "viewDishReviews": "View Dish Reviews",
+  "@viewDishReviews": {
+    "description": "View dish reviews text"
+  },
+  "viewDishList": "View Dish List",
+  "@viewDishList": {
+    "description": "View dish list button"
+  },
   "viewFullMenu": "View Full Menu",
   "@viewFullMenu": {
     "description": "View full menu text"

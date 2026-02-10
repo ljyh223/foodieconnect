@@ -343,7 +343,7 @@ class HomeRecommendationSection extends StatelessWidget {
     );
 
     try {
-      final success = await provider.markAsInterested(recommendation.id);
+      final success = await provider.markAsInterested(recommendation.id!);
 
       if (success && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

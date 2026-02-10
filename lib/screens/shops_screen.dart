@@ -177,19 +177,17 @@ class _ShopsScreenState extends State<ShopsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 餐厅大图，占宽度2/3
+                      // 餐厅大图，占满宽度
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Image.network(
                           _getRestaurantImageUrl(restaurant.imageUrl),
-                          width:
-                              MediaQuery.of(context).size.width *
-                              0.67, // 占宽度2/3
+                          width: double.infinity, // 占满宽度
                           height: 200,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
-                              width: MediaQuery.of(context).size.width * 0.67,
+                              width: double.infinity,
                               height: 200,
                               color: Colors.grey[200],
                               child: Center(

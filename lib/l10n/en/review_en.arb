@@ -93,5 +93,66 @@
 "dishReviews": "Dish Reviews",
 "@dishReviews": {
   "description": "Dish reviews title"
+},
+"reviewDish": "Review Dish - {itemName}",
+"@reviewDish": {
+  "description": "Review dish screen title",
+  "placeholders": {
+    "itemName": {
+      "type": "String",
+      "example": "Kung Pao Chicken"
+    }
+  }
+},
+"reviewingDish": "Reviewing Dish: {itemName}",
+"@reviewingDish": {
+  "description": "Reviewing dish info text",
+  "placeholders": {
+    "itemName": {
+      "type": "String",
+      "example": "Kung Pao Chicken"
+    }
+  }
+},
+"reviewUpdated": "Review updated",
+"@reviewUpdated": {
+  "description": "Review update success message"
+},
+"parameterError": "Parameter error",
+"@parameterError": {
+  "description": "Parameter error message"
+},
+"reviewStaff": "Review Staff - {staffName}",
+"@reviewStaff": {
+  "description": "Review staff screen title",
+  "placeholders": {
+    "staffName": {
+      "type": "String",
+      "example": "John"
+    }
+  }
+},
+"reviewingStaff": "Reviewing Staff: {staffName}",
+"@reviewingStaff": {
+  "description": "Reviewing staff info text",
+  "placeholders": {
+    "staffName": {
+      "type": "String",
+      "example": "John"
+    }
+  }
+},
+"missingStaffId": "Missing staff ID",
+"@missingStaffId": {
+  "description": "Missing staff ID error message"
+},
+"publishReviewFailed": "Review failed: {error}",
+"@publishReviewFailed": {
+  "description": "Review publish failed message",
+  "placeholders": {
+    "error": {
+      "type": "String"
+    }
+  }
 }
 }

@@ -54,14 +54,15 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
   /// 构建评价内容区域
   Widget buildReviewCommentSection({
     required TextEditingController controller,
+    String title = '评价内容',
     String hintText = '分享您的用餐体验...',
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '评价内容',
-          style: TextStyle(
+        Text(
+          title,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -95,31 +96,35 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
   Widget buildReviewImageSection({
     required VoidCallback onShowPicker,
     bool showButtons = true,
+    String title = '添加图片 (最多9张)',
+    String addImageText = '添加图片',
     String buttonCameraText = '拍照',
     String buttonGalleryText = '相册',
+    String cameraFailedText = '拍照失败',
+    String galleryFailedText = '选择图片失败',
   }) {
     final images = reviewImages;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '添加图片 (最多9张)',
-          style: TextStyle(
+        Text(
+          title,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
         const SizedBox(height: 12),
-        _buildImageGrid(images, onShowPicker),
+        _buildImageGrid(images, onShowPicker, addImageText),
         if (showButtons && images.length < 9) ...[
           const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () => pickImageFromCamera(),
+                  onPressed: () => pickImageFromCamera(failedText: cameraFailedText),
                   icon: const Icon(Icons.camera_alt, size: 18),
                   label: Text(buttonCameraText),
                   style: OutlinedButton.styleFrom(
@@ -131,7 +136,7 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
               const SizedBox(width: 12),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: () => pickImageFromGallery(),
+                  onPressed: () => pickImageFromGallery(failedText: galleryFailedText),
                   icon: const Icon(Icons.photo_library, size: 18),
                   label: Text(buttonGalleryText),
                   style: OutlinedButton.styleFrom(
@@ -147,7 +152,7 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Widget _buildImageGrid(List<File> images, VoidCallback onShowPicker) {
+  Widget _buildImageGrid(List<File> images, VoidCallback onShowPicker, String addImageText) {
     if (images.isEmpty) {
       return GestureDetector(
         onTap: onShowPicker,
@@ -157,13 +162,13 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const Center(
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.add_photo_alternate, size: 32, color: Colors.grey),
                 SizedBox(height: 4),
-                Text('添加图片', style: TextStyle(color: Colors.grey)),
+                Text(addImageText, style: TextStyle(color: Colors.grey)),
               ],
             ),
           ),
@@ -251,7 +256,7 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
   }
 
   /// 从相机拍照
-  Future<void> pickImageFromCamera({int maxImages = 9}) async {
+  Future<void> pickImageFromCamera({String failedText = '拍照失败'}) async {
     try {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.camera,
@@ -260,26 +265,26 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
       );
       if (image != null) {
         final processedImage = await ImageUtils.convertToJpeg(File(image.path));
-        if (reviewImages.length < maxImages) {
+        if (reviewImages.length < 9) {
           setReviewImages([...reviewImages, processedImage]);
         }
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('拍照失败: $e')),
+          SnackBar(content: Text('$failedText: $e')),
         );
       }
     }
   }
 
   /// 从相册选择图片
-  Future<void> pickImageFromGallery({int maxImages = 9}) async {
+  Future<void> pickImageFromGallery({String failedText = '选择图片失败'}) async {
     try {
       final images = await _picker.pickMultiImage(imageQuality: 80);
       final newImages = <File>[];
       for (final xFile in images) {
-        if (reviewImages.length + newImages.length >= maxImages) break;
+        if (reviewImages.length + newImages.length >= 9) break;
         final processedImage = await ImageUtils.convertToJpeg(File(xFile.path));
         newImages.add(processedImage);
       }
@@ -289,7 +294,7 @@ mixin CreateReviewMixin<T extends StatefulWidget> on State<T> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('选择图片失败: $e')),
+          SnackBar(content: Text('$failedText: $e')),
         );
       }
     }

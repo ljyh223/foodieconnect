@@ -226,7 +226,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '查看菜品评价',
+            t.restaurant.viewDishReviews,
             style: const TextStyle(fontSize: 15, color: Colors.black87),
           ),
           const SizedBox(height: 12),
@@ -251,9 +251,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                '查看菜品列表',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              child: Text(
+                t.restaurant.viewDishList,
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               ),
             ),
           ),

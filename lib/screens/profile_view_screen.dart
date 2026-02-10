@@ -222,13 +222,13 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                   if (mounted) {
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('删除推荐成功')));
+                    ).showSnackBar(SnackBar(content: Text(t.profile.deleteRecommendationSuccess)));
                   }
                 } catch (e) {
                   if (mounted) {
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('删除推荐失败: $e')));
+                    ).showSnackBar(SnackBar(content: Text(t.profile.deleteRecommendationFailed(error: e.toString()))));
                   }
                 }
               },

@@ -44,6 +44,7 @@ class UserRecommendation with _$UserRecommendation {
     List<String>? commonRestaurantTypes, // 共同餐厅类型
     double? activityScore, // 活跃度分数
     double? influenceScore, // 影响力分数
+    int? recommendationId, // 推荐记录ID（用于标记不感兴趣等操作）
     // 本地状态字段（API不返回）
     RecommendationStatus? status, // 推荐状态
     DateTime? createdAt, // 创建时间
@@ -51,6 +52,48 @@ class UserRecommendation with _$UserRecommendation {
   }) = _UserRecommendation;
 
   factory UserRecommendation.fromJson(Map<String, dynamic> json) {
+    // 兼容两种不同的API响应格式：
+
+    // 格式1: /api/user-recommendations (首页API) - UserRecommendationScore
+    // 格式2: /api/user-recommendations/paginated (推荐页面API) - UserRecommendationWithUserInfo
+
+    // 提取推荐记录ID（只有格式2才有）
+    int? recommendationId;
+    if (json.containsKey('id')) {
+      // 格式2: UserRecommendationWithUserInfo 有 id 字段
+      recommendationId = json['id'] as int?;
+    } else if (json.containsKey('recommendationId')) {
+      // 如果有 recommendationId 字段
+      recommendationId = json['recommendationId'] as int?;
+    }
+
+    // 提取用户ID
+    int userId;
+    String userName;
+    String? userAvatar;
+
+    if (json.containsKey('recommendedUserId')) {
+      // 格式2: UserRecommendationWithUserInfo
+      userId = json['recommendedUserId'] as int;
+      userName = json['recommendedUserName'] as String? ?? '';
+      userAvatar = json['recommendedUserAvatar'] as String?;
+    } else {
+      // 格式1: UserRecommendationScore
+      userId = json['userId'] as int;
+      userName = json['userName'] as String;
+      userAvatar = json['userAvatar'] as String?;
+    }
+
+    // 提取分数
+    double score;
+    if (json.containsKey('recommendationScore')) {
+      // 格式2: recommendationScore
+      score = (json['recommendationScore'] as num).toDouble();
+    } else {
+      // 格式1: score
+      score = (json['score'] as num).toDouble();
+    }
+
     // 手动处理嵌套的Restaurant对象列表
     List<Restaurant>? commonRestaurantsList;
     if (json['commonRestaurants'] != null &&
@@ -67,12 +110,19 @@ class UserRecommendation with _$UserRecommendation {
     RecommendationStatus? status;
     if (json['status'] != null) {
       try {
-        status = RecommendationStatus.values.byName(json['status'] as String);
+        status = _parseStatusString(json['status'] as String);
       } catch (e) {
         status = RecommendationStatus.unviewed;
       }
     } else {
-      status = RecommendationStatus.unviewed;
+      // 根据isViewed和isInterested推断状态（格式2）
+      if (json['isViewed'] == true) {
+        status = RecommendationStatus.viewed;
+      } else if (json['isInterested'] == true) {
+        status = RecommendationStatus.interested;
+      } else {
+        status = RecommendationStatus.unviewed;
+      }
     }
 
     // 处理DateTime字段
@@ -89,19 +139,20 @@ class UserRecommendation with _$UserRecommendation {
     }
 
     return UserRecommendation(
-      userId: json['userId'] as int,
-      userName: json['userName'] as String,
-      userAvatar: json['userAvatar'] as String?,
-      score: json['score'] as double,
-      algorithmType: json['algorithmType'] as String,
+      userId: userId,
+      userName: userName,
+      userAvatar: userAvatar,
+      score: score,
+      algorithmType: json['algorithmType'] as String? ?? 'WEIGHTED',
       similarity: json['similarity'] as double?,
       socialDistance: json['socialDistance'] as double?,
       mutualFollowsCount: json['mutualFollowsCount'] as int?,
-      recommendationReason: json['recommendationReason'] as String,
+      recommendationReason: json['recommendationReason'] as String? ?? '',
       commonRestaurants: commonRestaurantsList,
       commonRestaurantTypes: json['commonRestaurantTypes'] as List<String>?,
       activityScore: json['activityScore'] as double?,
       influenceScore: json['influenceScore'] as double?,
+      recommendationId: recommendationId,
       status: status,
       createdAt: createdAt,
       viewedAt: viewedAt,
@@ -142,8 +193,11 @@ class UserRecommendation with _$UserRecommendation {
   /// 获取用户头像URL（兼容原有代码）
   String? get avatarUrl => userAvatar;
 
-  /// 获取用户ID（兼容原有代码）
-  int get id => userId;
+  /// 获取推荐记录ID（用于标记不感兴趣等操作）
+  int? get id => recommendationId;
+
+  /// 获取被推荐用户的ID
+  int get recommendedUserId => userId;
 
   /// 获取推荐算法的显示名称
   String get algorithmDisplayName {
@@ -222,6 +276,24 @@ class RecommendationStats with _$RecommendationStats {
       notInterestedCount: json['notInterestedCount'] as int,
       averageScore: (json['averageScore'] as num).toDouble(),
     );
+  }
+}
+
+/// 解析API返回的推荐状态字符串
+RecommendationStatus _parseStatusString(String statusStr) {
+  // 转换为小写并处理下划线
+  final normalized = statusStr.toLowerCase().replaceAll('_', '');
+  switch (normalized) {
+    case 'unviewed':
+      return RecommendationStatus.unviewed;
+    case 'viewed':
+      return RecommendationStatus.viewed;
+    case 'interested':
+      return RecommendationStatus.interested;
+    case 'notinterested':
+      return RecommendationStatus.notInterested;
+    default:
+      throw ArgumentError('Invalid status string: $statusStr');
   }
 }
 

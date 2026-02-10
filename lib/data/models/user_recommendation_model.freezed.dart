@@ -32,6 +32,8 @@ mixin _$UserRecommendation {
       throw _privateConstructorUsedError; // 共同餐厅类型
   double? get activityScore => throw _privateConstructorUsedError; // 活跃度分数
   double? get influenceScore => throw _privateConstructorUsedError; // 影响力分数
+  int? get recommendationId =>
+      throw _privateConstructorUsedError; // 推荐记录ID（用于标记不感兴趣等操作）
   // 本地状态字段（API不返回）
   RecommendationStatus? get status =>
       throw _privateConstructorUsedError; // 推荐状态
@@ -66,6 +68,7 @@ abstract class $UserRecommendationCopyWith<$Res> {
     List<String>? commonRestaurantTypes,
     double? activityScore,
     double? influenceScore,
+    int? recommendationId,
     RecommendationStatus? status,
     DateTime? createdAt,
     DateTime? viewedAt,
@@ -100,6 +103,7 @@ class _$UserRecommendationCopyWithImpl<$Res, $Val extends UserRecommendation>
     Object? commonRestaurantTypes = freezed,
     Object? activityScore = freezed,
     Object? influenceScore = freezed,
+    Object? recommendationId = freezed,
     Object? status = freezed,
     Object? createdAt = freezed,
     Object? viewedAt = freezed,
@@ -158,6 +162,10 @@ class _$UserRecommendationCopyWithImpl<$Res, $Val extends UserRecommendation>
                 ? _value.influenceScore
                 : influenceScore // ignore: cast_nullable_to_non_nullable
                       as double?,
+            recommendationId: freezed == recommendationId
+                ? _value.recommendationId
+                : recommendationId // ignore: cast_nullable_to_non_nullable
+                      as int?,
             status: freezed == status
                 ? _value.status
                 : status // ignore: cast_nullable_to_non_nullable
@@ -199,6 +207,7 @@ abstract class _$$UserRecommendationImplCopyWith<$Res>
     List<String>? commonRestaurantTypes,
     double? activityScore,
     double? influenceScore,
+    int? recommendationId,
     RecommendationStatus? status,
     DateTime? createdAt,
     DateTime? viewedAt,
@@ -232,6 +241,7 @@ class __$$UserRecommendationImplCopyWithImpl<$Res>
     Object? commonRestaurantTypes = freezed,
     Object? activityScore = freezed,
     Object? influenceScore = freezed,
+    Object? recommendationId = freezed,
     Object? status = freezed,
     Object? createdAt = freezed,
     Object? viewedAt = freezed,
@@ -290,6 +300,10 @@ class __$$UserRecommendationImplCopyWithImpl<$Res>
             ? _value.influenceScore
             : influenceScore // ignore: cast_nullable_to_non_nullable
                   as double?,
+        recommendationId: freezed == recommendationId
+            ? _value.recommendationId
+            : recommendationId // ignore: cast_nullable_to_non_nullable
+                  as int?,
         status: freezed == status
             ? _value.status
             : status // ignore: cast_nullable_to_non_nullable
@@ -324,6 +338,7 @@ class _$UserRecommendationImpl extends _UserRecommendation {
     final List<String>? commonRestaurantTypes,
     this.activityScore,
     this.influenceScore,
+    this.recommendationId,
     this.status,
     this.createdAt,
     this.viewedAt,
@@ -390,6 +405,9 @@ class _$UserRecommendationImpl extends _UserRecommendation {
   @override
   final double? influenceScore;
   // 影响力分数
+  @override
+  final int? recommendationId;
+  // 推荐记录ID（用于标记不感兴趣等操作）
   // 本地状态字段（API不返回）
   @override
   final RecommendationStatus? status;
@@ -402,7 +420,7 @@ class _$UserRecommendationImpl extends _UserRecommendation {
 
   @override
   String toString() {
-    return 'UserRecommendation(userId: $userId, userName: $userName, userAvatar: $userAvatar, score: $score, algorithmType: $algorithmType, similarity: $similarity, socialDistance: $socialDistance, mutualFollowsCount: $mutualFollowsCount, recommendationReason: $recommendationReason, commonRestaurants: $commonRestaurants, commonRestaurantTypes: $commonRestaurantTypes, activityScore: $activityScore, influenceScore: $influenceScore, status: $status, createdAt: $createdAt, viewedAt: $viewedAt)';
+    return 'UserRecommendation(userId: $userId, userName: $userName, userAvatar: $userAvatar, score: $score, algorithmType: $algorithmType, similarity: $similarity, socialDistance: $socialDistance, mutualFollowsCount: $mutualFollowsCount, recommendationReason: $recommendationReason, commonRestaurants: $commonRestaurants, commonRestaurantTypes: $commonRestaurantTypes, activityScore: $activityScore, influenceScore: $influenceScore, recommendationId: $recommendationId, status: $status, createdAt: $createdAt, viewedAt: $viewedAt)';
   }
 
   @override
@@ -438,6 +456,8 @@ class _$UserRecommendationImpl extends _UserRecommendation {
                 other.activityScore == activityScore) &&
             (identical(other.influenceScore, influenceScore) ||
                 other.influenceScore == influenceScore) &&
+            (identical(other.recommendationId, recommendationId) ||
+                other.recommendationId == recommendationId) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -461,6 +481,7 @@ class _$UserRecommendationImpl extends _UserRecommendation {
     const DeepCollectionEquality().hash(_commonRestaurantTypes),
     activityScore,
     influenceScore,
+    recommendationId,
     status,
     createdAt,
     viewedAt,
@@ -493,6 +514,7 @@ abstract class _UserRecommendation extends UserRecommendation {
     final List<String>? commonRestaurantTypes,
     final double? activityScore,
     final double? influenceScore,
+    final int? recommendationId,
     final RecommendationStatus? status,
     final DateTime? createdAt,
     final DateTime? viewedAt,
@@ -525,6 +547,8 @@ abstract class _UserRecommendation extends UserRecommendation {
   double? get activityScore; // 活跃度分数
   @override
   double? get influenceScore; // 影响力分数
+  @override
+  int? get recommendationId; // 推荐记录ID（用于标记不感兴趣等操作）
   // 本地状态字段（API不返回）
   @override
   RecommendationStatus? get status; // 推荐状态

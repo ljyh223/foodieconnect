@@ -167,7 +167,7 @@ class RecommendedRestaurantCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          '推荐餐厅',
+                          'Recommended',
                           style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.onSurfaceVariant,
                             fontSize: 12,

@@ -23,8 +23,6 @@ void main() async {
     ApiService().setToken(access);
   }
 
-  LocaleSettings.useDeviceLocale();
-
   runApp(
     MultiProvider(
       providers: [

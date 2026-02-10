@@ -33,6 +33,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0, // 扁平化设计，无阴影
       backgroundColor: backgroundColor ?? AppColors.surface,
       surfaceTintColor: Colors.transparent, // 移除表面着色
+      automaticallyImplyLeading: false, // 禁用自动添加返回按钮
       leading: showBackButton
           ? IconButton(
               icon: const Icon(Icons.arrow_back),

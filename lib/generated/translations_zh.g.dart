@@ -67,6 +67,12 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 搜索框提示文本
 	@override String get search => '搜索';
 
+	/// 搜索菜品占位符
+	@override String get searchDish => '搜索菜品...';
+
+	/// 全部分类筛选标签
+	@override String get allCategories => '全部';
+
 	/// 首页标签文本
 	@override String get home => '首页';
 
@@ -665,6 +671,12 @@ class _TranslationsProfileZh implements TranslationsProfileEn {
 
 	/// 保存中提示
 	@override String get saving => '保存中...';
+
+	/// 删除推荐成功提示
+	@override String get deleteRecommendationSuccess => '推荐已删除';
+
+	/// 删除推荐失败提示
+	@override String deleteRecommendationFailed({required String error}) => '删除推荐失败: ${error}';
 }
 
 // Path: restaurant
@@ -710,6 +722,12 @@ class _TranslationsRestaurantZh implements TranslationsRestaurantEn {
 
 	/// 菜单标题
 	@override String get menu => '菜单';
+
+	/// 查看菜品评价文本
+	@override String get viewDishReviews => '查看菜品评价';
+
+	/// 查看菜品列表按钮
+	@override String get viewDishList => '查看菜品列表';
 
 	/// 查看完整菜单文本
 	@override String get viewFullMenu => '查看完整菜单';
@@ -842,6 +860,30 @@ class _TranslationsReviewZh implements TranslationsReviewEn {
 
 	/// Dish reviews title
 	@override String get dishReviews => '菜品评价';
+
+	/// Review dish screen title
+	@override String reviewDish({required String itemName}) => '评价菜品 - ${itemName}';
+
+	/// Reviewing dish info text
+	@override String reviewingDish({required String itemName}) => '评价菜品: ${itemName}';
+
+	/// Review update success message
+	@override String get reviewUpdated => '评价已更新';
+
+	/// Parameter error message
+	@override String get parameterError => '参数错误';
+
+	/// Review staff screen title
+	@override String reviewStaff({required String staffName}) => '评价服务员 - ${staffName}';
+
+	/// Reviewing staff info text
+	@override String reviewingStaff({required String staffName}) => '评价服务员: ${staffName}';
+
+	/// Missing staff ID error message
+	@override String get missingStaffId => '缺少服务员ID';
+
+	/// Review publish failed message
+	@override String publishReviewFailed({required String error}) => '评价失败: ${error}';
 }
 
 // Path: setting
@@ -952,6 +994,8 @@ extension on TranslationsZh {
 			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => '发现美食，分享体验',
 			'app.search' => '搜索',
+			'app.searchDish' => '搜索菜品...',
+			'app.allCategories' => '全部',
 			'app.home' => '首页',
 			'app.loading' => '加载中...',
 			'app.loadingFailed' => '加载失败',
@@ -1145,6 +1189,8 @@ extension on TranslationsZh {
 			'profile.usernameHint' => '请输入用户名',
 			'profile.phoneHint' => '请输入手机号码（可选）',
 			'profile.saving' => '保存中...',
+			'profile.deleteRecommendationSuccess' => '推荐已删除',
+			'profile.deleteRecommendationFailed' => ({required String error}) => '删除推荐失败: ${error}',
 			'restaurant.noRestaurants' => '暂无餐厅信息',
 			'restaurant.basicInfo' => '基础信息',
 			'restaurant.address' => '地址',
@@ -1157,6 +1203,8 @@ extension on TranslationsZh {
 			'restaurant.averagePrice' => '人均消费',
 			'restaurant.recommendedDishes' => '推荐菜品',
 			'restaurant.menu' => '菜单',
+			'restaurant.viewDishReviews' => '查看菜品评价',
+			'restaurant.viewDishList' => '查看菜品列表',
 			'restaurant.viewFullMenu' => '查看完整菜单',
 			'restaurant.viewMenu' => '查看菜单',
 			'restaurant.menuFeatureInDevelopment' => '菜单功能开发中',
@@ -1198,6 +1246,14 @@ extension on TranslationsZh {
 			'review.loadReviewFail' => ({required String error}) => '获取评论失败：${error}',
 			'review.postReviewFail' => ({required String error}) => '发布评论失败：${error}',
 			'review.dishReviews' => '菜品评价',
+			'review.reviewDish' => ({required String itemName}) => '评价菜品 - ${itemName}',
+			'review.reviewingDish' => ({required String itemName}) => '评价菜品: ${itemName}',
+			'review.reviewUpdated' => '评价已更新',
+			'review.parameterError' => '参数错误',
+			'review.reviewStaff' => ({required String staffName}) => '评价服务员 - ${staffName}',
+			'review.reviewingStaff' => ({required String staffName}) => '评价服务员: ${staffName}',
+			'review.missingStaffId' => '缺少服务员ID',
+			'review.publishReviewFailed' => ({required String error}) => '评价失败: ${error}',
 			'setting.selectLanguage' => '选择语言',
 			'setting.close' => '关闭',
 			'setting.settings' => '设置',

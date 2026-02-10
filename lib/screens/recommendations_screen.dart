@@ -53,9 +53,8 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
       listen: false,
     );
 
-    if (provider.recommendations.isEmpty) {
-      await provider.refreshRecommendations();
-    }
+    // 强制刷新，忽略首页缓存的数据
+    await provider.refreshRecommendations();
   }
 
   /// 加载更多推荐
@@ -232,7 +231,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           Consumer<RecommendationProvider>(
             builder: (context, provider, child) {
               return Text(
-                '共 ${provider.recommendations.length} 个推荐',
+                t.app.totalRecommendations(count: provider.recommendations.length),
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -363,7 +362,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           IconButton(
             onPressed: _showClearAllDialog,
             icon: const Icon(Icons.clear_all),
-            tooltip: '清除所有推荐',
+            tooltip: t.app.clearAllRecommendations,
           ),
         ],
       ),

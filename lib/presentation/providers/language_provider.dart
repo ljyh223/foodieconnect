@@ -36,10 +36,8 @@ class LanguageProvider extends ChangeNotifier {
         (locale) => locale.name == savedLocale,
         orElse: () => AppLocale.en,
       );
-    } else {
-      // 如果没有保存的语言，使用设备语言
-      _currentLocale = LocaleSettings.useDeviceLocaleSync();
     }
+    // 如果没有保存的语言，默认使用英语（已在第10行设置为 AppLocale.en）
 
     // 初始化slangs的翻译设置
     await LocaleSettings.setLocale(_currentLocale);

@@ -174,5 +174,19 @@
     "saving": "Saving...",
     "@saving": {
       "description": "Saving message"
+    },
+    "deleteRecommendationSuccess": "Recommendation deleted",
+    "@deleteRecommendationSuccess": {
+      "description": "Delete recommendation success message"
+    },
+    "deleteRecommendationFailed": "Failed to delete recommendation: {error}",
+    "@deleteRecommendationFailed": {
+      "description": "Delete recommendation failed message",
+      "placeholders": {
+        "error": {
+          "type": "String",
+          "description": "Error message"
+        }
+      }
     }
 }

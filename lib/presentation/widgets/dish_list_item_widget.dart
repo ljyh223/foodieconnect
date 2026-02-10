@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodieconnect/generated/translations.g.dart';
 import '../../core/services/api_service.dart';
 import '../../data/models/menu_item_model.dart';
 import '../../data/models/recommended_dish_model.dart';
@@ -128,7 +129,7 @@ class DishListItemWidget extends StatelessWidget {
                         if (item.reviewCount != null && item.reviewCount! > 0) ...[
                           const SizedBox(width: 4),
                           Text(
-                            '(${item.reviewCount}条评价)',
+                            '(${t.review.reviewCount(count: item.reviewCount!)})',
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.black54,

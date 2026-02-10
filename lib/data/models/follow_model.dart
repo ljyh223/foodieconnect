@@ -16,11 +16,11 @@ class Follow with _$Follow {
   }) = _Follow;
 
   factory Follow.fromJson(Map<String, dynamic> json) {
-    // 手动处理嵌套的User对象
+    // 手动处理嵌套的User对象，增加null安全性
     return Follow(
-      id: json['id'] as int,
-      followerId: json['followerId'] as int,
-      followingId: json['followingId'] as int,
+      id: json['id'] as int? ?? 0,
+      followerId: json['followerId'] as int? ?? 0,
+      followingId: json['followingId'] as int? ?? 0,
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'] as String)
           : null,

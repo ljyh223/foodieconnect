@@ -94,5 +94,66 @@
   "dishReviews": "菜品评价",
   "@dishReviews": {
      "description": "Dish reviews title"
+   },
+  "reviewDish": "评价菜品 - {itemName}",
+  "@reviewDish": {
+     "description": "Review dish screen title",
+     "placeholders": {
+       "itemName": {
+         "type": "String",
+         "example": "宫保鸡丁"
+       }
+     }
+   },
+  "reviewingDish": "评价菜品: {itemName}",
+  "@reviewingDish": {
+     "description": "Reviewing dish info text",
+     "placeholders": {
+       "itemName": {
+         "type": "String",
+         "example": "宫保鸡丁"
+       }
+     }
+   },
+  "reviewUpdated": "评价已更新",
+  "@reviewUpdated": {
+     "description": "Review update success message"
+   },
+  "parameterError": "参数错误",
+  "@parameterError": {
+     "description": "Parameter error message"
+   },
+  "reviewStaff": "评价服务员 - {staffName}",
+  "@reviewStaff": {
+     "description": "Review staff screen title",
+     "placeholders": {
+       "staffName": {
+         "type": "String",
+         "example": "张三"
+       }
+     }
+   },
+  "reviewingStaff": "评价服务员: {staffName}",
+  "@reviewingStaff": {
+     "description": "Reviewing staff info text",
+     "placeholders": {
+       "staffName": {
+         "type": "String",
+         "example": "张三"
+       }
+     }
+   },
+  "missingStaffId": "缺少服务员ID",
+  "@missingStaffId": {
+     "description": "Missing staff ID error message"
+   },
+  "publishReviewFailed": "评价失败: {error}",
+  "@publishReviewFailed": {
+     "description": "Review publish failed message",
+     "placeholders": {
+       "error": {
+         "type": "String"
+       }
+     }
    }
 }

@@ -21,6 +21,14 @@
   "@search": {
     "description": "搜尋框提示文本"
   },
+  "searchDish": "搜尋菜品...",
+  "@searchDish": {
+    "description": "搜尋菜品占位符"
+  },
+  "allCategories": "全部",
+  "@allCategories": {
+    "description": "全部分類篩選標籤"
+  },
   "home": "首頁",
   "@home": {
     "description": "首頁標籤文字"

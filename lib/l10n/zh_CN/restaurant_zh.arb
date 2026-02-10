@@ -55,6 +55,14 @@
   "@menu": {
     "description": "菜单标题"
   },
+  "viewDishReviews": "查看菜品评价",
+  "@viewDishReviews": {
+    "description": "查看菜品评价文本"
+  },
+  "viewDishList": "查看菜品列表",
+  "@viewDishList": {
+    "description": "查看菜品列表按钮"
+  },
   "viewFullMenu": "查看完整菜单",
   "@viewFullMenu": {
     "description": "查看完整菜单文本"

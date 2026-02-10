@@ -67,6 +67,12 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	/// 搜尋框提示文本
 	@override String get search => '搜尋';
 
+	/// 搜尋菜品占位符
+	@override String get searchDish => '搜尋菜品...';
+
+	/// 全部分類篩選標籤
+	@override String get allCategories => '全部';
+
 	/// 首頁標籤文字
 	@override String get home => '首頁';
 
@@ -665,6 +671,12 @@ class _TranslationsProfileZhTw implements TranslationsProfileEn {
 
 	/// 儲存中提示
 	@override String get saving => '儲存中...';
+
+	/// 刪除推薦成功提示
+	@override String get deleteRecommendationSuccess => '推薦已刪除';
+
+	/// 刪除推薦失敗提示
+	@override String deleteRecommendationFailed({required String error}) => '刪除推薦失敗: ${error}';
 }
 
 // Path: restaurant
@@ -710,6 +722,12 @@ class _TranslationsRestaurantZhTw implements TranslationsRestaurantEn {
 
 	/// 菜單標題
 	@override String get menu => '菜單';
+
+	/// 查看菜品評價文本
+	@override String get viewDishReviews => '查看菜品評價';
+
+	/// 查看菜品列表按鈕
+	@override String get viewDishList => '查看菜品列表';
 
 	/// 查看完整菜單文本
 	@override String get viewFullMenu => '查看完整菜單';
@@ -842,6 +860,30 @@ class _TranslationsReviewZhTw implements TranslationsReviewEn {
 
 	/// 菜肴點評標題
 	@override String get dishReviews => '菜肴點評';
+
+	/// Review dish screen title
+	@override String reviewDish({required String itemName}) => '評價菜品 - ${itemName}';
+
+	/// Reviewing dish info text
+	@override String reviewingDish({required String itemName}) => '評價菜品: ${itemName}';
+
+	/// Review update success message
+	@override String get reviewUpdated => '評價已更新';
+
+	/// Parameter error message
+	@override String get parameterError => '參數錯誤';
+
+	/// Review staff screen title
+	@override String reviewStaff({required String staffName}) => '評價服務員 - ${staffName}';
+
+	/// Reviewing staff info text
+	@override String reviewingStaff({required String staffName}) => '評價服務員: ${staffName}';
+
+	/// Missing staff ID error message
+	@override String get missingStaffId => '缺少服務員ID';
+
+	/// Review publish failed message
+	@override String publishReviewFailed({required String error}) => '評價失敗: ${error}';
 }
 
 // Path: setting
@@ -952,6 +994,8 @@ extension on TranslationsZhTw {
 			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => '發現美食，分享體驗',
 			'app.search' => '搜尋',
+			'app.searchDish' => '搜尋菜品...',
+			'app.allCategories' => '全部',
 			'app.home' => '首頁',
 			'app.loading' => '載入中...',
 			'app.loadingFailed' => '載入失敗',
@@ -1145,6 +1189,8 @@ extension on TranslationsZhTw {
 			'profile.usernameHint' => '請輸入用戶名',
 			'profile.phoneHint' => '請輸入手機號碼（可選）',
 			'profile.saving' => '儲存中...',
+			'profile.deleteRecommendationSuccess' => '推薦已刪除',
+			'profile.deleteRecommendationFailed' => ({required String error}) => '刪除推薦失敗: ${error}',
 			'restaurant.noRestaurants' => '暫無餐廳信息',
 			'restaurant.basicInfo' => '基礎信息',
 			'restaurant.address' => '地址',
@@ -1157,6 +1203,8 @@ extension on TranslationsZhTw {
 			'restaurant.averagePrice' => '人均消費',
 			'restaurant.recommendedDishes' => '推薦菜品',
 			'restaurant.menu' => '菜單',
+			'restaurant.viewDishReviews' => '查看菜品評價',
+			'restaurant.viewDishList' => '查看菜品列表',
 			'restaurant.viewFullMenu' => '查看完整菜單',
 			'restaurant.viewMenu' => '查看菜單',
 			'restaurant.menuFeatureInDevelopment' => '菜單功能開發中',
@@ -1198,6 +1246,14 @@ extension on TranslationsZhTw {
 			'review.loadReviewFail' => ({required String error}) => '取得評論失敗：${error}',
 			'review.postReviewFail' => ({required String error}) => '發布評論失敗：${error}',
 			'review.dishReviews' => '菜肴點評',
+			'review.reviewDish' => ({required String itemName}) => '評價菜品 - ${itemName}',
+			'review.reviewingDish' => ({required String itemName}) => '評價菜品: ${itemName}',
+			'review.reviewUpdated' => '評價已更新',
+			'review.parameterError' => '參數錯誤',
+			'review.reviewStaff' => ({required String staffName}) => '評價服務員 - ${staffName}',
+			'review.reviewingStaff' => ({required String staffName}) => '評價服務員: ${staffName}',
+			'review.missingStaffId' => '缺少服務員ID',
+			'review.publishReviewFailed' => ({required String error}) => '評價失敗: ${error}',
 			'setting.selectLanguage' => '選擇語言',
 			'setting.close' => '關閉',
 			'setting.settings' => '設定',

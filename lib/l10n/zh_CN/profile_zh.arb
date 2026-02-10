@@ -174,5 +174,19 @@
     "saving": "保存中...",
     "@saving": {
       "description": "保存中提示"
+    },
+    "deleteRecommendationSuccess": "推荐已删除",
+    "@deleteRecommendationSuccess": {
+      "description": "删除推荐成功提示"
+    },
+    "deleteRecommendationFailed": "删除推荐失败: {error}",
+    "@deleteRecommendationFailed": {
+      "description": "删除推荐失败提示",
+      "placeholders": {
+        "error": {
+          "type": "String",
+          "description": "错误信息"
+        }
+      }
     }
 }

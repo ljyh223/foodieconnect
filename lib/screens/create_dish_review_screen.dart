@@ -89,14 +89,23 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
                     _rating = value;
                   });
                 },
+                title: t.review.ratingScore,
               ),
               const SizedBox(height: 16),
               buildReviewCommentSection(
                 controller: _controller,
+                title: t.review.reviewContent,
+                hintText: t.review.shareDiningExperience,
               ),
               const SizedBox(height: 16),
               buildReviewImageSection(
                 onShowPicker: _showImagePickerOptions,
+                title: t.review.addImages,
+                addImageText: t.review.addImage,
+                buttonCameraText: t.review.takePhoto,
+                buttonGalleryText: t.review.selectFromAlbum,
+                cameraFailedText: t.review.takePhotoFailed,
+                galleryFailedText: t.review.selectImageFailed,
               ),
             ],
           ),
@@ -111,7 +120,7 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
       elevation: 0,
       centerTitle: true,
       title: Text(
-        _isEditing ? t.review.publishReview : '评价菜品 - ${itemName ?? ''}',
+        _isEditing ? t.review.publishReview : t.review.reviewDish(itemName: itemName ?? ''),
         style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -156,7 +165,7 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              '评价菜品: $itemName',
+              t.review.reviewingDish(itemName: itemName),
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -171,8 +180,10 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
 
   void _showImagePickerOptions() {
     showImagePicker(
-      onCameraSelected: () => pickImageFromCamera(),
-      onGallerySelected: () => pickImageFromGallery(),
+      onCameraSelected: () => pickImageFromCamera(failedText: t.review.takePhotoFailed),
+      onGallerySelected: () => pickImageFromGallery(failedText: t.review.selectImageFailed),
+      cameraText: t.review.takePhoto,
+      galleryText: t.review.selectFromAlbum,
     );
   }
 
@@ -188,14 +199,14 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
 
     if (restaurantId == null || menuItemId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('参数错误')),
+        SnackBar(content: Text(t.review.parameterError)),
       );
       return;
     }
 
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请输入评价内容')),
+        SnackBar(content: Text(t.review.pleaseEnterReviewContent)),
       );
       return;
     }
@@ -228,13 +239,13 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_isEditing ? '评价已更新' : t.review.reviewPublished)),
+        SnackBar(content: Text(_isEditing ? t.review.reviewUpdated : t.review.reviewPublished)),
       );
       Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${t.review.publishFailed}$e')),
+          SnackBar(content: Text(t.review.publishReviewFailed(error: e.toString()))),
         );
       }
     } finally {

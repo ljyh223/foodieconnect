@@ -101,14 +101,23 @@ class _CreateReviewScreenState extends State<CreateReviewScreen>
                     _rating = value;
                   });
                 },
+                title: t.review.ratingScore,
               ),
               const SizedBox(height: 16),
               buildReviewCommentSection(
                 controller: _controller,
+                title: t.review.reviewContent,
+                hintText: t.review.shareDiningExperience,
               ),
               const SizedBox(height: 16),
               buildReviewImageSection(
                 onShowPicker: _showImagePickerOptions,
+                title: t.review.addImages,
+                addImageText: t.review.addImage,
+                buttonCameraText: t.review.takePhoto,
+                buttonGalleryText: t.review.selectFromAlbum,
+                cameraFailedText: t.review.takePhotoFailed,
+                galleryFailedText: t.review.selectImageFailed,
               ),
             ],
           ),
@@ -119,8 +128,10 @@ class _CreateReviewScreenState extends State<CreateReviewScreen>
 
   void _showImagePickerOptions() {
     showImagePicker(
-      onCameraSelected: () => pickImageFromCamera(),
-      onGallerySelected: () => pickImageFromGallery(),
+      onCameraSelected: () => pickImageFromCamera(failedText: t.review.takePhotoFailed),
+      onGallerySelected: () => pickImageFromGallery(failedText: t.review.selectImageFailed),
+      cameraText: t.review.takePhoto,
+      galleryText: t.review.selectFromAlbum,
     );
   }
 

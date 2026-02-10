@@ -210,10 +210,18 @@ class RecommendationProvider with ChangeNotifier {
 
   /// 标记为不感兴趣
   Future<bool> markAsNotInterested(int recommendationId) async {
-    return markRecommendationStatus(
+    final success = await markRecommendationStatus(
       recommendationId: recommendationId,
       status: RecommendationStatus.notInterested,
     );
+
+    // 从列表中移除该推荐
+    if (success) {
+      _recommendations.removeWhere((r) => r.recommendationId == recommendationId);
+      notifyListeners();
+    }
+
+    return success;
   }
 
   /// 标记为已查看

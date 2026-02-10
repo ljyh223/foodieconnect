@@ -21,6 +21,14 @@
   "@search": {
     "description": "Search box prompt text"
   },
+  "searchDish": "Search dishes...",
+  "@searchDish": {
+    "description": "Search dishes placeholder"
+  },
+  "allCategories": "All",
+  "@allCategories": {
+    "description": "All categories filter label"
+  },
   "home": "Home",
   "@home": {
     "description": "Home tab text"

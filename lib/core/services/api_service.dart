@@ -540,19 +540,27 @@ class ApiService {
 
   /// 便捷方法：批量上传图片并返回成功的URL列表
   /// 如果只需要成功的URL，可以使用这个方法
+  /// 改为循环调用单个图片上传，避免批量上传API的问题
   Future<List<String>> uploadImagesAndGetUrls(List<File> imageFiles) async {
-    final result = await uploadImages(imageFiles);
+    final List<String> urls = [];
 
-    if (result['success'] != null &&
-        result['success'] is Map<String, dynamic>) {
-      final successFiles = result['success'] as Map<String, dynamic>;
-      // 提取所有成功的URL
-      final urls = successFiles.values.whereType<String>().toList();
-      logger.log('成功上传的图片URL列表: $urls');
-      return urls;
+    for (final imageFile in imageFiles) {
+      try {
+        final result = await uploadImage(imageFile);
+        if (result['url'] != null && result['url']!.isNotEmpty) {
+          urls.add(result['url']!);
+          logger.log('图片上传成功: ${result['url']}');
+        } else {
+          logger.log('图片上传失败: 未返回URL');
+        }
+      } catch (e) {
+        logger.log('图片上传异常: $e');
+        // 继续上传其他图片，不中断整个流程
+      }
     }
 
-    return [];
+    logger.log('批量上传完成: 成功${urls.length}/${imageFiles.length}');
+    return urls;
   }
 }
 

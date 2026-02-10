@@ -78,6 +78,16 @@ class TranslationsAppEn {
 	/// en: 'Search'
 	String get search => 'Search';
 
+	/// Search dishes placeholder
+	///
+	/// en: 'Search dishes...'
+	String get searchDish => 'Search dishes...';
+
+	/// All categories filter label
+	///
+	/// en: 'All'
+	String get allCategories => 'All';
+
 	/// Home tab text
 	///
 	/// en: 'Home'
@@ -1061,6 +1071,16 @@ class TranslationsProfileEn {
 	///
 	/// en: 'Saving...'
 	String get saving => 'Saving...';
+
+	/// Delete recommendation success message
+	///
+	/// en: 'Recommendation deleted'
+	String get deleteRecommendationSuccess => 'Recommendation deleted';
+
+	/// Delete recommendation failed message
+	///
+	/// en: 'Failed to delete recommendation: {error: String}'
+	String deleteRecommendationFailed({required String error}) => 'Failed to delete recommendation: ${error}';
 }
 
 // Path: restaurant
@@ -1130,6 +1150,16 @@ class TranslationsRestaurantEn {
 	///
 	/// en: 'Menu'
 	String get menu => 'Menu';
+
+	/// View dish reviews text
+	///
+	/// en: 'View Dish Reviews'
+	String get viewDishReviews => 'View Dish Reviews';
+
+	/// View dish list button
+	///
+	/// en: 'View Dish List'
+	String get viewDishList => 'View Dish List';
 
 	/// View full menu text
 	///
@@ -1344,6 +1374,46 @@ class TranslationsReviewEn {
 	///
 	/// en: 'Dish Reviews'
 	String get dishReviews => 'Dish Reviews';
+
+	/// Review dish screen title
+	///
+	/// en: 'Review Dish - {itemName: String}'
+	String reviewDish({required String itemName}) => 'Review Dish - ${itemName}';
+
+	/// Reviewing dish info text
+	///
+	/// en: 'Reviewing Dish: {itemName: String}'
+	String reviewingDish({required String itemName}) => 'Reviewing Dish: ${itemName}';
+
+	/// Review update success message
+	///
+	/// en: 'Review updated'
+	String get reviewUpdated => 'Review updated';
+
+	/// Parameter error message
+	///
+	/// en: 'Parameter error'
+	String get parameterError => 'Parameter error';
+
+	/// Review staff screen title
+	///
+	/// en: 'Review Staff - {staffName: String}'
+	String reviewStaff({required String staffName}) => 'Review Staff - ${staffName}';
+
+	/// Reviewing staff info text
+	///
+	/// en: 'Reviewing Staff: {staffName: String}'
+	String reviewingStaff({required String staffName}) => 'Reviewing Staff: ${staffName}';
+
+	/// Missing staff ID error message
+	///
+	/// en: 'Missing staff ID'
+	String get missingStaffId => 'Missing staff ID';
+
+	/// Review publish failed message
+	///
+	/// en: 'Review failed: {error: String}'
+	String publishReviewFailed({required String error}) => 'Review failed: ${error}';
 }
 
 // Path: setting
@@ -1506,6 +1576,8 @@ extension on Translations {
 			'app.foodieConnect' => 'FoodieConnect',
 			'app.discoverFoodShareExperience' => 'Discover food, share experiences',
 			'app.search' => 'Search',
+			'app.searchDish' => 'Search dishes...',
+			'app.allCategories' => 'All',
 			'app.home' => 'Home',
 			'app.loading' => 'Loading...',
 			'app.loadingFailed' => 'Loading failed',
@@ -1699,6 +1771,8 @@ extension on Translations {
 			'profile.usernameHint' => 'Please enter username',
 			'profile.phoneHint' => 'Please enter phone number (optional)',
 			'profile.saving' => 'Saving...',
+			'profile.deleteRecommendationSuccess' => 'Recommendation deleted',
+			'profile.deleteRecommendationFailed' => ({required String error}) => 'Failed to delete recommendation: ${error}',
 			'restaurant.noRestaurants' => 'No restaurant information available',
 			'restaurant.basicInfo' => 'Basic Information',
 			'restaurant.address' => 'Address',
@@ -1711,6 +1785,8 @@ extension on Translations {
 			'restaurant.averagePrice' => 'Average Price',
 			'restaurant.recommendedDishes' => 'Recommended Dishes',
 			'restaurant.menu' => 'Menu',
+			'restaurant.viewDishReviews' => 'View Dish Reviews',
+			'restaurant.viewDishList' => 'View Dish List',
 			'restaurant.viewFullMenu' => 'View Full Menu',
 			'restaurant.viewMenu' => 'View Menu',
 			'restaurant.menuFeatureInDevelopment' => 'Menu feature in development',
@@ -1752,6 +1828,14 @@ extension on Translations {
 			'review.loadReviewFail' => ({required String error}) => 'Failed to load reviews: ${error}',
 			'review.postReviewFail' => ({required String error}) => 'Failed to post review: ${error}',
 			'review.dishReviews' => 'Dish Reviews',
+			'review.reviewDish' => ({required String itemName}) => 'Review Dish - ${itemName}',
+			'review.reviewingDish' => ({required String itemName}) => 'Reviewing Dish: ${itemName}',
+			'review.reviewUpdated' => 'Review updated',
+			'review.parameterError' => 'Parameter error',
+			'review.reviewStaff' => ({required String staffName}) => 'Review Staff - ${staffName}',
+			'review.reviewingStaff' => ({required String staffName}) => 'Reviewing Staff: ${staffName}',
+			'review.missingStaffId' => 'Missing staff ID',
+			'review.publishReviewFailed' => ({required String error}) => 'Review failed: ${error}',
 			'setting.selectLanguage' => 'Select Language',
 			'setting.close' => 'Close',
 			'setting.settings' => 'Settings',
