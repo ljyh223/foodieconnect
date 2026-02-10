@@ -53,25 +53,21 @@
   "@otherUserProfile": {
     "description": "其他用户主页标题"
   },
-  "followingList": "关注列表",
-  "@followingList": {
-    "description": "关注列表标题"
+  "connectionsList": "连接列表",
+  "@connectionsList": {
+    "description": "连接列表标题"
   },
-  "myFollowing": "我的关注",
-  "@myFollowing": {
-    "description": "我的关注标题"
+  "myConnections": "我的连接",
+  "@myConnections": {
+    "description": "我的连接标题"
   },
-  "connect": "Connect",
+  "connect": "连接",
   "@connect": {
     "description": "连接按钮文本"
   },
-  "follow": "关注",
-  "@follow": {
-    "description": "关注按钮文本"
-  },
-  "following": "已关注",
-  "@following": {
-    "description": "已关注状态文本"
+  "connected": "已连接",
+  "@connected": {
+    "description": "已连接状态文本"
   },
   "enterReadOnlyMode": "以只读模式进入",
   "@enterReadOnlyMode": {
@@ -85,13 +81,13 @@
   "@readOnlyModeTip": {
     "description": "只读模式底部提示"
   },
-  "unfollow": "取消关注",
-  "@unfollow": {
-    "description": "取消关注按钮文本"
+  "disconnect": "断开连接",
+  "@disconnect": {
+    "description": "断开连接按钮文本"
   },
-  "unfollowConfirm": "确定要取消关注 {username} 吗？",
-  "@unfollowConfirm": {
-    "description": "取消关注确认对话框"
+  "disconnectConfirm": "确定要断开与 {username} 的连接吗？",
+  "@disconnectConfirm": {
+    "description": "断开连接确认对话框"
   },
   "foodPreferences": "喜好食物",
   "@foodPreferences": {
@@ -117,9 +113,9 @@
   "@noRecommendedRestaurants": {
     "description": "无推荐餐厅提示"
   },
-  "noFollowing": "暂无关注",
-  "@noFollowing": {
-    "description": "无关注提示"
+  "noConnections": "暂无连接",
+  "@noConnections": {
+    "description": "无连接提示"
   },
   "discoverUsers": "去发现感兴趣的用户吧",
   "@discoverUsers": {
@@ -141,21 +137,21 @@
   "@saveFailed": {
     "description": "保存失败提示"
   },
-  "followSuccess": "关注成功",
-  "@followSuccess": {
-    "description": "关注成功提示"
+  "connectSuccess": "连接成功",
+  "@connectSuccess": {
+    "description": "连接成功提示"
   },
-  "followFailed": "关注失败",
-  "@followFailed": {
-    "description": "关注失败提示"
+  "connectFailed": "连接失败",
+  "@connectFailed": {
+    "description": "连接失败提示"
   },
-  "unfollowSuccess": "已取消关注",
-  "@unfollowSuccess": {
-    "description": "取消关注成功提示"
+  "disconnectSuccess": "已断开连接",
+  "@disconnectSuccess": {
+    "description": "断开连接成功提示"
   },
-  "unfollowFailed": "取消关注失败",
-  "@unfollowFailed": {
-    "description": "取消关注失败提示"
+  "disconnectFailed": "断开连接失败",
+  "@disconnectFailed": {
+    "description": "断开连接失败提示"
   },
   "userNotFound": "用户不存在",
   "@userNotFound": {
@@ -221,7 +217,7 @@
   "@collaborativeRecommendation": {
     "description": "协同过滤推荐理由"
   },
-  "socialRecommendation": "您关注的人也关注了TA",
+  "socialRecommendation": "您连接的用户也连接了TA",
   "@socialRecommendation": {
     "description": "社交推荐理由"
   },
@@ -360,9 +356,5 @@
   "similarity": "相似度",
   "@similarity": {
     "description": "相似度标签"
-  },
-  "follow": "关注",
-  "@follow": {
-    "description": "关注按钮文本"
   }
 }

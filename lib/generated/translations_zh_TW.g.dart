@@ -91,20 +91,17 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	/// 其他使用者個人資料標題
 	@override String get otherUserProfile => '使用者資料';
 
-	/// 追蹤列表標題
-	@override String get followingList => '追蹤列表';
+	/// 連接列表標題
+	@override String get connectionsList => '連接列表';
 
-	/// 我的追蹤標題
-	@override String get myFollowing => '我的追蹤';
+	/// 我的連接標題
+	@override String get myConnections => '我的連接';
 
 	/// 連接按鈕文字
 	@override String get connect => '連接';
 
-	/// 關注按鈕文字
-	@override String get follow => '關注';
-
-	/// 已追蹤狀態文字
-	@override String get following => '已追蹤';
+	/// 已連接狀態文字
+	@override String get connected => '已連接';
 
 	/// 以唯讀模式進入聊天室按鈕文字
 	@override String get enterReadOnlyMode => '以唯讀模式進入';
@@ -115,11 +112,11 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	/// 唯讀模式底部提示
 	@override String get readOnlyModeTip => '唯讀模式：您可以查看訊息，但無法發送';
 
-	/// 取消追蹤按鈕文字
-	@override String get unfollow => '取消追蹤';
+	/// 斷開連接按鈕文字
+	@override String get disconnect => '斷開連接';
 
-	/// 取消追蹤確認對話框
-	@override String unfollowConfirm({required Object username}) => '確定要取消追蹤 ${username} 嗎？';
+	/// 斷開連接確認對話框
+	@override String disconnectConfirm({required Object username}) => '確定要斷開與 ${username} 的連接嗎？';
 
 	/// 飲食偏好標題
 	@override String get foodPreferences => '飲食偏好';
@@ -139,8 +136,8 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	/// 無推薦餐廳訊息
 	@override String get noRecommendedRestaurants => '無推薦餐廳';
 
-	/// 無追蹤對象訊息
-	@override String get noFollowing => '尚未追蹤任何人';
+	/// 無連接對象訊息
+	@override String get noConnections => '尚未連接任何人';
 
 	/// 探索使用者提示訊息
 	@override String get discoverUsers => '快去探索有趣的使用者吧！';
@@ -157,17 +154,17 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	/// 儲存失敗訊息
 	@override String get saveFailed => '儲存失敗';
 
-	/// 追蹤成功訊息
-	@override String get followSuccess => '追蹤成功';
+	/// 連接成功訊息
+	@override String get connectSuccess => '連接成功';
 
-	/// 追蹤失敗訊息
-	@override String get followFailed => '追蹤失敗';
+	/// 連接失敗訊息
+	@override String get connectFailed => '連接失敗';
 
-	/// 取消追蹤成功訊息
-	@override String get unfollowSuccess => '已取消追蹤';
+	/// 斷開連接成功訊息
+	@override String get disconnectSuccess => '已斷開連接';
 
-	/// 取消追蹤失敗訊息
-	@override String get unfollowFailed => '取消追蹤失敗';
+	/// 斷開連接失敗訊息
+	@override String get disconnectFailed => '斷開連接失敗';
 
 	/// 使用者不存在訊息
 	@override String get userNotFound => '找不到該使用者';
@@ -239,7 +236,7 @@ class _TranslationsAppZhTw implements TranslationsAppEn {
 	@override String get collaborativeRecommendation => '基於共同喜好推薦';
 
 	/// 社交推薦理由
-	@override String get socialRecommendation => '您關注的人也關注了TA';
+	@override String get socialRecommendation => '您連接的使用者也連接了TA';
 
 	/// 混合推薦理由
 	@override String get hybridRecommendation => '綜合推薦';
@@ -600,8 +597,8 @@ class _TranslationsProfileZhTw implements TranslationsProfileEn {
 	/// 連接按鈕文本
 	@override String get connect => 'Connect';
 
-	/// 已關注狀態文本
-	@override String get following => '已關注';
+	/// 已連接狀態文本
+	@override String get connected => '已連接';
 
 	/// 保存成功提示
 	@override String get saveSuccess => '保存成功';
@@ -609,11 +606,11 @@ class _TranslationsProfileZhTw implements TranslationsProfileEn {
 	/// 保存失敗提示
 	@override String saveFailed({required String error}) => '保存失敗: ${error}';
 
-	/// 關注失敗提示
-	@override String get followFailed => '關注失敗';
+	/// 連接失敗提示
+	@override String get connectFailed => '連接失敗';
 
-	/// 取消關注失敗提示
-	@override String get unfollowFailed => '取消關注失敗';
+	/// 斷開連接失敗提示
+	@override String get disconnectFailed => '斷開連接失敗';
 
 	/// 推薦餐廳標題
 	@override String get recommendedRestaurants => '推薦餐廳';
@@ -963,32 +960,31 @@ extension on TranslationsZhTw {
 			'app.closed' => '已打烊',
 			'app.userProfile' => '個人資料',
 			'app.otherUserProfile' => '使用者資料',
-			'app.followingList' => '追蹤列表',
-			'app.myFollowing' => '我的追蹤',
+			'app.connectionsList' => '連接列表',
+			'app.myConnections' => '我的連接',
 			'app.connect' => '連接',
-			'app.follow' => '關注',
-			'app.following' => '已追蹤',
+			'app.connected' => '已連接',
 			'app.enterReadOnlyMode' => '以唯讀模式進入',
 			'app.readOnlyModeNotice' => '您目前處於唯讀模式，只能查看訊息，無法發送訊息',
 			'app.readOnlyModeTip' => '唯讀模式：您可以查看訊息，但無法發送',
-			'app.unfollow' => '取消追蹤',
-			'app.unfollowConfirm' => ({required Object username}) => '確定要取消追蹤 ${username} 嗎？',
+			'app.disconnect' => '斷開連接',
+			'app.disconnectConfirm' => ({required Object username}) => '確定要斷開與 ${username} 的連接嗎？',
 			'app.foodPreferences' => '飲食偏好',
 			'app.noFoodPreferences' => '無飲食偏好',
 			'app.personalBio' => '個人簡介',
 			'app.noBio' => '這個人太懶了，什麼都沒留下……',
 			'app.recommendedRestaurants' => '推薦餐廳',
 			'app.noRecommendedRestaurants' => '無推薦餐廳',
-			'app.noFollowing' => '尚未追蹤任何人',
+			'app.noConnections' => '尚未連接任何人',
 			'app.discoverUsers' => '快去探索有趣的使用者吧！',
 			'app.save' => '儲存',
 			'app.edit' => '編輯',
 			'app.saveSuccess' => '儲存成功',
 			'app.saveFailed' => '儲存失敗',
-			'app.followSuccess' => '追蹤成功',
-			'app.followFailed' => '追蹤失敗',
-			'app.unfollowSuccess' => '已取消追蹤',
-			'app.unfollowFailed' => '取消追蹤失敗',
+			'app.connectSuccess' => '連接成功',
+			'app.connectFailed' => '連接失敗',
+			'app.disconnectSuccess' => '已斷開連接',
+			'app.disconnectFailed' => '斷開連接失敗',
 			'app.userNotFound' => '找不到該使用者',
 			'app.unknownUser' => '未知使用者',
 			'app.introduceYourself' => '告訴我們關於你自己的事……',
@@ -1012,7 +1008,7 @@ extension on TranslationsZhTw {
 			'app.recommendationScore' => '推薦分數',
 			'app.recommendationReason' => '推薦理由',
 			'app.collaborativeRecommendation' => '基於共同喜好推薦',
-			'app.socialRecommendation' => '您關注的人也關注了TA',
+			'app.socialRecommendation' => '您連接的使用者也連接了TA',
 			'app.hybridRecommendation' => '綜合推薦',
 			'app.commonInterests' => ({required String interests}) => '共同喜歡${interests}',
 			'app.commonVisits' => ({required int count}) => '共同訪問過${count}家餐廳',
@@ -1126,11 +1122,11 @@ extension on TranslationsZhTw {
 			'profile.personalBio' => '個人簡介',
 			'profile.introduceYourself' => '介紹一下自己...',
 			'profile.connect' => 'Connect',
-			'profile.following' => '已關注',
+			'profile.connected' => '已連接',
 			'profile.saveSuccess' => '保存成功',
 			'profile.saveFailed' => ({required String error}) => '保存失敗: ${error}',
-			'profile.followFailed' => '關注失敗',
-			'profile.unfollowFailed' => '取消關注失敗',
+			'profile.connectFailed' => '連接失敗',
+			'profile.disconnectFailed' => '斷開連接失敗',
 			'profile.recommendedRestaurants' => '推薦餐廳',
 			'profile.myRecommendedRestaurants' => '我的推薦餐廳',
 			'profile.userRecommendedRestaurants' => '用戶推薦餐廳',

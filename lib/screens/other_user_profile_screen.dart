@@ -114,8 +114,8 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           SnackBar(
             content: Text(
               (_user!.isFollowing ?? false)
-                  ? t.profile.unfollowFailed
-                  : t.profile.followFailed,
+                  ? t.profile.disconnectFailed
+                  : t.profile.connectFailed,
             ),
             backgroundColor: AppColors.error,
           ),
@@ -338,7 +338,7 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Text(
-          isFollowing ? t.profile.following : t.profile.connect,
+          isFollowing ? t.profile.connected : t.profile.connect,
           style: AppTextStyles.button.copyWith(
             color: isFollowing ? AppColors.primary : AppColors.onPrimary,
           ),

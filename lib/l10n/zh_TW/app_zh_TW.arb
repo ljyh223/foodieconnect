@@ -53,25 +53,21 @@
   "@otherUserProfile": {
     "description": "其他使用者個人資料標題"
   },
-  "followingList": "追蹤列表",
-  "@followingList": {
-    "description": "追蹤列表標題"
+  "connectionsList": "連接列表",
+  "@connectionsList": {
+    "description": "連接列表標題"
   },
-  "myFollowing": "我的追蹤",
-  "@myFollowing": {
-    "description": "我的追蹤標題"
+  "myConnections": "我的連接",
+  "@myConnections": {
+    "description": "我的連接標題"
   },
   "connect": "連接",
   "@connect": {
     "description": "連接按鈕文字"
   },
-  "follow": "追蹤",
-  "@follow": {
-    "description": "追蹤按鈕文字"
-  },
-  "following": "已追蹤",
-  "@following": {
-    "description": "已追蹤狀態文字"
+  "connected": "已連接",
+  "@connected": {
+    "description": "已連接狀態文字"
   },
   "enterReadOnlyMode": "以唯讀模式進入",
   "@enterReadOnlyMode": {
@@ -85,13 +81,13 @@
   "@readOnlyModeTip": {
     "description": "唯讀模式底部提示"
   },
-  "unfollow": "取消追蹤",
-  "@unfollow": {
-    "description": "取消追蹤按鈕文字"
+  "disconnect": "斷開連接",
+  "@disconnect": {
+    "description": "斷開連接按鈕文字"
   },
-  "unfollowConfirm": "確定要取消追蹤 {username} 嗎？",
-  "@unfollowConfirm": {
-    "description": "取消追蹤確認對話框"
+  "disconnectConfirm": "確定要斷開與 {username} 的連接嗎？",
+  "@disconnectConfirm": {
+    "description": "斷開連接確認對話框"
   },
   "foodPreferences": "飲食偏好",
   "@foodPreferences": {
@@ -117,9 +113,9 @@
   "@noRecommendedRestaurants": {
     "description": "無推薦餐廳訊息"
   },
-  "noFollowing": "尚未追蹤任何人",
-  "@noFollowing": {
-    "description": "無追蹤對象訊息"
+  "noConnections": "尚未連接任何人",
+  "@noConnections": {
+    "description": "無連接對象訊息"
   },
   "discoverUsers": "快去探索有趣的使用者吧！",
   "@discoverUsers": {
@@ -141,21 +137,21 @@
   "@saveFailed": {
     "description": "儲存失敗訊息"
   },
-  "followSuccess": "追蹤成功",
-  "@followSuccess": {
-    "description": "追蹤成功訊息"
+  "connectSuccess": "連接成功",
+  "@connectSuccess": {
+    "description": "連接成功訊息"
   },
-  "followFailed": "追蹤失敗",
-  "@followFailed": {
-    "description": "追蹤失敗訊息"
+  "connectFailed": "連接失敗",
+  "@connectFailed": {
+    "description": "連接失敗訊息"
   },
-  "unfollowSuccess": "已取消追蹤",
-  "@unfollowSuccess": {
-    "description": "取消追蹤成功訊息"
+  "disconnectSuccess": "已斷開連接",
+  "@disconnectSuccess": {
+    "description": "斷開連接成功訊息"
   },
-  "unfollowFailed": "取消追蹤失敗",
-  "@unfollowFailed": {
-    "description": "取消追蹤失敗訊息"
+  "disconnectFailed": "斷開連接失敗",
+  "@disconnectFailed": {
+    "description": "斷開連接失敗訊息"
   },
   "userNotFound": "找不到該使用者",
   "@userNotFound": {
@@ -249,7 +245,7 @@
   "@collaborativeRecommendation": {
     "description": "協同過濾推薦理由"
   },
-  "socialRecommendation": "您關注的人也關注了TA",
+  "socialRecommendation": "您連接的使用者也連接了TA",
   "@socialRecommendation": {
     "description": "社交推薦理由"
   },
@@ -360,9 +356,5 @@
     "similarity": "相似度",
     "@similarity": {
       "description": "相似度標籤"
-    },
-    "follow": "關注",
-    "@follow": {
-      "description": "關注按鈕文字"
     }
 }

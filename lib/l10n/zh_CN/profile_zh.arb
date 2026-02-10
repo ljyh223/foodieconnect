@@ -57,9 +57,9 @@
   "@connect": {
     "description": "连接按钮文本"
   },
-  "following": "已关注",
-  "@following": {
-    "description": "已关注状态文本"
+  "connected": "已连接",
+  "@connected": {
+    "description": "已连接状态文本"
   },
   "saveSuccess": "保存成功",
   "@saveSuccess": {
@@ -75,13 +75,13 @@
       }
     }
   },
-  "followFailed": "关注失败",
-  "@followFailed": {
-    "description": "关注失败提示"
+  "connectFailed": "连接失败",
+  "@connectFailed": {
+    "description": "连接失败提示"
   },
-  "unfollowFailed": "取消关注失败",
-  "@unfollowFailed": {
-    "description": "取消关注失败提示"
+  "disconnectFailed": "断开连接失败",
+  "@disconnectFailed": {
+    "description": "断开连接失败提示"
   },
   "recommendedRestaurants": "推荐餐厅",
   "@recommendedRestaurants": {

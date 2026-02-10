@@ -74,10 +74,10 @@ class _MainTabScreenState extends State<MainTabScreen>
                 icon: const Icon(Icons.people_alt_outlined),
                 text: t.app.recommendations,
               ),
-              // 关注列表Tab
+              // 连接列表Tab
               Tab(
                 icon: const Icon(Icons.favorite_outline),
-                text: t.app.following,
+                text: t.app.connectionsList,
               ),
               // 个人中心Tab
               Tab(icon: const Icon(Icons.person), text: t.app.userProfile),

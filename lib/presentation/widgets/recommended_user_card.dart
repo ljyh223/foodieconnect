@@ -278,7 +278,7 @@ class RecommendedUserCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                t.app.follow,
+                t.app.connect,
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,

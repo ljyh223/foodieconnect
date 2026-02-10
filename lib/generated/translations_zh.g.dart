@@ -91,20 +91,17 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 其他用户主页标题
 	@override String get otherUserProfile => '用户主页';
 
-	/// 关注列表标题
-	@override String get followingList => '关注列表';
+	/// 连接列表标题
+	@override String get connectionsList => '连接列表';
 
-	/// 我的关注标题
-	@override String get myFollowing => '我的关注';
+	/// 我的连接标题
+	@override String get myConnections => '我的连接';
 
 	/// 连接按钮文本
-	@override String get connect => 'Connect';
+	@override String get connect => '连接';
 
-	/// 关注按钮文本
-	@override String get follow => '关注';
-
-	/// 已关注状态文本
-	@override String get following => '已关注';
+	/// 已连接状态文本
+	@override String get connected => '已连接';
 
 	/// 以只读模式进入聊天室按钮文本
 	@override String get enterReadOnlyMode => '以只读模式进入';
@@ -115,11 +112,11 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 只读模式底部提示
 	@override String get readOnlyModeTip => '只读模式：您可以查看消息，但无法发送';
 
-	/// 取消关注按钮文本
-	@override String get unfollow => '取消关注';
+	/// 断开连接按钮文本
+	@override String get disconnect => '断开连接';
 
-	/// 取消关注确认对话框
-	@override String unfollowConfirm({required Object username}) => '确定要取消关注 ${username} 吗？';
+	/// 断开连接确认对话框
+	@override String disconnectConfirm({required Object username}) => '确定要断开与 ${username} 的连接吗？';
 
 	/// 喜好食物标题
 	@override String get foodPreferences => '喜好食物';
@@ -139,8 +136,8 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 无推荐餐厅提示
 	@override String get noRecommendedRestaurants => '暂无推荐餐厅';
 
-	/// 无关注提示
-	@override String get noFollowing => '暂无关注';
+	/// 无连接提示
+	@override String get noConnections => '暂无连接';
 
 	/// 发现用户提示
 	@override String get discoverUsers => '去发现感兴趣的用户吧';
@@ -157,17 +154,17 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	/// 保存失败提示
 	@override String get saveFailed => '保存失败';
 
-	/// 关注成功提示
-	@override String get followSuccess => '关注成功';
+	/// 连接成功提示
+	@override String get connectSuccess => '连接成功';
 
-	/// 关注失败提示
-	@override String get followFailed => '关注失败';
+	/// 连接失败提示
+	@override String get connectFailed => '连接失败';
 
-	/// 取消关注成功提示
-	@override String get unfollowSuccess => '已取消关注';
+	/// 断开连接成功提示
+	@override String get disconnectSuccess => '已断开连接';
 
-	/// 取消关注失败提示
-	@override String get unfollowFailed => '取消关注失败';
+	/// 断开连接失败提示
+	@override String get disconnectFailed => '断开连接失败';
 
 	/// 用户不存在提示
 	@override String get userNotFound => '用户不存在';
@@ -218,7 +215,7 @@ class _TranslationsAppZh implements TranslationsAppEn {
 	@override String get collaborativeRecommendation => '基于共同喜好推荐';
 
 	/// 社交推荐理由
-	@override String get socialRecommendation => '您关注的人也关注了TA';
+	@override String get socialRecommendation => '您连接的用户也连接了TA';
 
 	/// 混合推荐理由
 	@override String get hybridRecommendation => '综合推荐';
@@ -600,8 +597,8 @@ class _TranslationsProfileZh implements TranslationsProfileEn {
 	/// 连接按钮文本
 	@override String get connect => 'Connect';
 
-	/// 已关注状态文本
-	@override String get following => '已关注';
+	/// 已连接状态文本
+	@override String get connected => '已连接';
 
 	/// 保存成功提示
 	@override String get saveSuccess => '保存成功';
@@ -609,11 +606,11 @@ class _TranslationsProfileZh implements TranslationsProfileEn {
 	/// 保存失败提示
 	@override String saveFailed({required String error}) => '保存失败: ${error}';
 
-	/// 关注失败提示
-	@override String get followFailed => '关注失败';
+	/// 连接失败提示
+	@override String get connectFailed => '连接失败';
 
-	/// 取消关注失败提示
-	@override String get unfollowFailed => '取消关注失败';
+	/// 断开连接失败提示
+	@override String get disconnectFailed => '断开连接失败';
 
 	/// 推荐餐厅标题
 	@override String get recommendedRestaurants => '推荐餐厅';
@@ -963,32 +960,31 @@ extension on TranslationsZh {
 			'app.closed' => '已打烊',
 			'app.userProfile' => '个人主页',
 			'app.otherUserProfile' => '用户主页',
-			'app.followingList' => '关注列表',
-			'app.myFollowing' => '我的关注',
-			'app.connect' => 'Connect',
-			'app.follow' => '关注',
-			'app.following' => '已关注',
+			'app.connectionsList' => '连接列表',
+			'app.myConnections' => '我的连接',
+			'app.connect' => '连接',
+			'app.connected' => '已连接',
 			'app.enterReadOnlyMode' => '以只读模式进入',
 			'app.readOnlyModeNotice' => '您当前处于只读模式，只能查看消息，无法发送消息',
 			'app.readOnlyModeTip' => '只读模式：您可以查看消息，但无法发送',
-			'app.unfollow' => '取消关注',
-			'app.unfollowConfirm' => ({required Object username}) => '确定要取消关注 ${username} 吗？',
+			'app.disconnect' => '断开连接',
+			'app.disconnectConfirm' => ({required Object username}) => '确定要断开与 ${username} 的连接吗？',
 			'app.foodPreferences' => '喜好食物',
 			'app.noFoodPreferences' => '暂无喜好食物信息',
 			'app.personalBio' => '个人简介',
 			'app.noBio' => '这个人很懒，什么都没有留下...',
 			'app.recommendedRestaurants' => '推荐餐厅',
 			'app.noRecommendedRestaurants' => '暂无推荐餐厅',
-			'app.noFollowing' => '暂无关注',
+			'app.noConnections' => '暂无连接',
 			'app.discoverUsers' => '去发现感兴趣的用户吧',
 			'app.save' => '保存',
 			'app.edit' => '编辑',
 			'app.saveSuccess' => '保存成功',
 			'app.saveFailed' => '保存失败',
-			'app.followSuccess' => '关注成功',
-			'app.followFailed' => '关注失败',
-			'app.unfollowSuccess' => '已取消关注',
-			'app.unfollowFailed' => '取消关注失败',
+			'app.connectSuccess' => '连接成功',
+			'app.connectFailed' => '连接失败',
+			'app.disconnectSuccess' => '已断开连接',
+			'app.disconnectFailed' => '断开连接失败',
 			'app.userNotFound' => '用户不存在',
 			'app.unknownUser' => '未知用户',
 			'app.introduceYourself' => '介绍一下自己...',
@@ -1005,7 +1001,7 @@ extension on TranslationsZh {
 			'app.recommendationScore' => '推荐分数',
 			'app.recommendationReason' => '推荐理由',
 			'app.collaborativeRecommendation' => '基于共同喜好推荐',
-			'app.socialRecommendation' => '您关注的人也关注了TA',
+			'app.socialRecommendation' => '您连接的用户也连接了TA',
 			'app.hybridRecommendation' => '综合推荐',
 			'app.commonInterests' => ({required String interests}) => '共同喜欢${interests}',
 			'app.commonVisits' => ({required int count}) => '共同访问过${count}家餐厅',
@@ -1126,11 +1122,11 @@ extension on TranslationsZh {
 			'profile.personalBio' => '个人简介',
 			'profile.introduceYourself' => '介绍一下自己...',
 			'profile.connect' => 'Connect',
-			'profile.following' => '已关注',
+			'profile.connected' => '已连接',
 			'profile.saveSuccess' => '保存成功',
 			'profile.saveFailed' => ({required String error}) => '保存失败: ${error}',
-			'profile.followFailed' => '关注失败',
-			'profile.unfollowFailed' => '取消关注失败',
+			'profile.connectFailed' => '连接失败',
+			'profile.disconnectFailed' => '断开连接失败',
 			'profile.recommendedRestaurants' => '推荐餐厅',
 			'profile.myRecommendedRestaurants' => '我的推荐餐厅',
 			'profile.userRecommendedRestaurants' => '用户推荐餐厅',

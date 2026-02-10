@@ -118,30 +118,25 @@ class TranslationsAppEn {
 	/// en: 'User Profile'
 	String get otherUserProfile => 'User Profile';
 
-	/// Following list title
+	/// Connections list title
 	///
-	/// en: 'Following List'
-	String get followingList => 'Following List';
+	/// en: 'Connections'
+	String get connectionsList => 'Connections';
 
-	/// My following title
+	/// My connections title
 	///
-	/// en: 'My Following'
-	String get myFollowing => 'My Following';
+	/// en: 'My Connections'
+	String get myConnections => 'My Connections';
 
 	/// Connect button text
 	///
 	/// en: 'Connect'
 	String get connect => 'Connect';
 
-	/// Follow button text
+	/// Connected status text
 	///
-	/// en: 'Follow'
-	String get follow => 'Follow';
-
-	/// Following status text
-	///
-	/// en: 'Following'
-	String get following => 'Following';
+	/// en: 'Connected'
+	String get connected => 'Connected';
 
 	/// Button text to enter chat room in read-only mode
 	///
@@ -158,15 +153,15 @@ class TranslationsAppEn {
 	/// en: 'Read-only mode: You can view messages, but cannot send'
 	String get readOnlyModeTip => 'Read-only mode: You can view messages, but cannot send';
 
-	/// Unfollow button text
+	/// Disconnect button text
 	///
-	/// en: 'Unfollow'
-	String get unfollow => 'Unfollow';
+	/// en: 'Disconnect'
+	String get disconnect => 'Disconnect';
 
-	/// Unfollow confirmation dialog
+	/// Disconnect confirmation dialog
 	///
-	/// en: 'Are you sure you want to unfollow {username}?'
-	String unfollowConfirm({required Object username}) => 'Are you sure you want to unfollow ${username}?';
+	/// en: 'Are you sure you want to disconnect from {username}?'
+	String disconnectConfirm({required Object username}) => 'Are you sure you want to disconnect from ${username}?';
 
 	/// Food preferences title
 	///
@@ -198,10 +193,10 @@ class TranslationsAppEn {
 	/// en: 'No recommended restaurants'
 	String get noRecommendedRestaurants => 'No recommended restaurants';
 
-	/// No following message
+	/// No connections message
 	///
-	/// en: 'No following'
-	String get noFollowing => 'No following';
+	/// en: 'No connections'
+	String get noConnections => 'No connections';
 
 	/// Discover users message
 	///
@@ -228,25 +223,25 @@ class TranslationsAppEn {
 	/// en: 'Save failed'
 	String get saveFailed => 'Save failed';
 
-	/// Follow success message
+	/// Connect success message
 	///
-	/// en: 'Followed successfully'
-	String get followSuccess => 'Followed successfully';
+	/// en: 'Connected successfully'
+	String get connectSuccess => 'Connected successfully';
 
-	/// Follow failed message
+	/// Connect failed message
 	///
-	/// en: 'Follow failed'
-	String get followFailed => 'Follow failed';
+	/// en: 'Connect failed'
+	String get connectFailed => 'Connect failed';
 
-	/// Unfollow success message
+	/// Disconnect success message
 	///
-	/// en: 'Unfollowed'
-	String get unfollowSuccess => 'Unfollowed';
+	/// en: 'Disconnected'
+	String get disconnectSuccess => 'Disconnected';
 
-	/// Unfollow failed message
+	/// Disconnect failed message
 	///
-	/// en: 'Unfollow failed'
-	String get unfollowFailed => 'Unfollow failed';
+	/// en: 'Disconnect failed'
+	String get disconnectFailed => 'Disconnect failed';
 
 	/// User not found message
 	///
@@ -330,8 +325,8 @@ class TranslationsAppEn {
 
 	/// Social recommendation reason
 	///
-	/// en: 'People you follow also follow them'
-	String get socialRecommendation => 'People you follow also follow them';
+	/// en: 'People you connect with also connect with them'
+	String get socialRecommendation => 'People you connect with also connect with them';
 
 	/// Hybrid recommendation reason
 	///
@@ -952,10 +947,10 @@ class TranslationsProfileEn {
 	/// en: 'Connect'
 	String get connect => 'Connect';
 
-	/// Following status text
+	/// Connected status text
 	///
-	/// en: 'Following'
-	String get following => 'Following';
+	/// en: 'Connected'
+	String get connected => 'Connected';
 
 	/// Save success message
 	///
@@ -967,15 +962,15 @@ class TranslationsProfileEn {
 	/// en: 'Save failed: {error: String}'
 	String saveFailed({required String error}) => 'Save failed: ${error}';
 
-	/// Follow failed message
+	/// Connect failed message
 	///
-	/// en: 'Follow failed'
-	String get followFailed => 'Follow failed';
+	/// en: 'Connect failed'
+	String get connectFailed => 'Connect failed';
 
-	/// Unfollow failed message
+	/// Disconnect failed message
 	///
-	/// en: 'Unfollow failed'
-	String get unfollowFailed => 'Unfollow failed';
+	/// en: 'Disconnect failed'
+	String get disconnectFailed => 'Disconnect failed';
 
 	/// Recommended restaurants title
 	///
@@ -1519,32 +1514,31 @@ extension on Translations {
 			'app.closed' => 'Closed',
 			'app.userProfile' => 'Profile',
 			'app.otherUserProfile' => 'User Profile',
-			'app.followingList' => 'Following List',
-			'app.myFollowing' => 'My Following',
+			'app.connectionsList' => 'Connections',
+			'app.myConnections' => 'My Connections',
 			'app.connect' => 'Connect',
-			'app.follow' => 'Follow',
-			'app.following' => 'Following',
+			'app.connected' => 'Connected',
 			'app.enterReadOnlyMode' => 'Enter Read-only Mode',
 			'app.readOnlyModeNotice' => 'You are currently in read-only mode, you can only view messages, not send them',
 			'app.readOnlyModeTip' => 'Read-only mode: You can view messages, but cannot send',
-			'app.unfollow' => 'Unfollow',
-			'app.unfollowConfirm' => ({required Object username}) => 'Are you sure you want to unfollow ${username}?',
+			'app.disconnect' => 'Disconnect',
+			'app.disconnectConfirm' => ({required Object username}) => 'Are you sure you want to disconnect from ${username}?',
 			'app.foodPreferences' => 'Food Preferences',
 			'app.noFoodPreferences' => 'No food preferences',
 			'app.personalBio' => 'Personal Bio',
 			'app.noBio' => 'This person is lazy and left nothing...',
 			'app.recommendedRestaurants' => 'Recommended Restaurants',
 			'app.noRecommendedRestaurants' => 'No recommended restaurants',
-			'app.noFollowing' => 'No following',
+			'app.noConnections' => 'No connections',
 			'app.discoverUsers' => 'Go discover interesting users',
 			'app.save' => 'Save',
 			'app.edit' => 'Edit',
 			'app.saveSuccess' => 'Saved successfully',
 			'app.saveFailed' => 'Save failed',
-			'app.followSuccess' => 'Followed successfully',
-			'app.followFailed' => 'Follow failed',
-			'app.unfollowSuccess' => 'Unfollowed',
-			'app.unfollowFailed' => 'Unfollow failed',
+			'app.connectSuccess' => 'Connected successfully',
+			'app.connectFailed' => 'Connect failed',
+			'app.disconnectSuccess' => 'Disconnected',
+			'app.disconnectFailed' => 'Disconnect failed',
 			'app.userNotFound' => 'User not found',
 			'app.unknownUser' => 'Unknown User',
 			'app.introduceYourself' => 'Tell us about yourself...',
@@ -1561,7 +1555,7 @@ extension on Translations {
 			'app.recommendationScore' => 'Recommendation Score',
 			'app.recommendationReason' => 'Recommendation Reason',
 			'app.collaborativeRecommendation' => 'Recommended based on common preferences',
-			'app.socialRecommendation' => 'People you follow also follow them',
+			'app.socialRecommendation' => 'People you connect with also connect with them',
 			'app.hybridRecommendation' => 'Comprehensive recommendation',
 			'app.commonInterests' => ({required String interests}) => 'Common interests: ${interests}',
 			'app.commonVisits' => ({required int count}) => 'Visited ${count} restaurants together',
@@ -1682,11 +1676,11 @@ extension on Translations {
 			'profile.personalBio' => 'Personal Bio',
 			'profile.introduceYourself' => 'Tell us about yourself...',
 			'profile.connect' => 'Connect',
-			'profile.following' => 'Following',
+			'profile.connected' => 'Connected',
 			'profile.saveSuccess' => 'Saved successfully',
 			'profile.saveFailed' => ({required String error}) => 'Save failed: ${error}',
-			'profile.followFailed' => 'Follow failed',
-			'profile.unfollowFailed' => 'Unfollow failed',
+			'profile.connectFailed' => 'Connect failed',
+			'profile.disconnectFailed' => 'Disconnect failed',
 			'profile.recommendedRestaurants' => 'Recommended Restaurants',
 			'profile.myRecommendedRestaurants' => 'My Recommended Restaurants',
 			'profile.userRecommendedRestaurants' => 'User Recommended Restaurants',

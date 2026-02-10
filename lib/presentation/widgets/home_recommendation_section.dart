@@ -221,7 +221,7 @@ class HomeRecommendationSection extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    t.app.follow,
+                    t.app.connect,
                     style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,

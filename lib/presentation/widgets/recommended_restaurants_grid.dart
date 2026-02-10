@@ -40,7 +40,7 @@ class RecommendedRestaurantsGrid extends StatelessWidget {
               TextButton(
                 onPressed: onFollowingTap,
                 child: Text(
-                  t.profile.following,
+                  t.profile.connected,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.primary,
                   ),

@@ -57,9 +57,9 @@
   "@connect": {
     "description": "Connect button text"
   },
-  "following": "Following",
-  "@following": {
-    "description": "Following status text"
+  "connected": "Connected",
+  "@connected": {
+    "description": "Connected status text"
   },
   "saveSuccess": "Saved successfully",
   "@saveSuccess": {
@@ -75,13 +75,13 @@
       }
     }
   },
-  "followFailed": "Follow failed",
-  "@followFailed": {
-    "description": "Follow failed message"
+  "connectFailed": "Connect failed",
+  "@connectFailed": {
+    "description": "Connect failed message"
   },
-  "unfollowFailed": "Unfollow failed",
-  "@unfollowFailed": {
-    "description": "Unfollow failed message"
+  "disconnectFailed": "Disconnect failed",
+  "@disconnectFailed": {
+    "description": "Disconnect failed message"
   },
   "recommendedRestaurants": "Recommended Restaurants",
   "@recommendedRestaurants": {

@@ -53,25 +53,21 @@
   "@otherUserProfile": {
     "description": "Other user profile title"
   },
-  "followingList": "Following List",
-  "@followingList": {
-    "description": "Following list title"
+  "connectionsList": "Connections",
+  "@connectionsList": {
+    "description": "Connections list title"
   },
-  "myFollowing": "My Following",
-  "@myFollowing": {
-    "description": "My following title"
+  "myConnections": "My Connections",
+  "@myConnections": {
+    "description": "My connections title"
   },
   "connect": "Connect",
   "@connect": {
     "description": "Connect button text"
   },
-  "follow": "Follow",
-  "@follow": {
-    "description": "Follow button text"
-  },
-  "following": "Following",
-  "@following": {
-    "description": "Following status text"
+  "connected": "Connected",
+  "@connected": {
+    "description": "Connected status text"
   },
   "enterReadOnlyMode": "Enter Read-only Mode",
   "@enterReadOnlyMode": {
@@ -85,13 +81,13 @@
   "@readOnlyModeTip": {
     "description": "Read-only mode bottom tip"
   },
-  "unfollow": "Unfollow",
-  "@unfollow": {
-    "description": "Unfollow button text"
+  "disconnect": "Disconnect",
+  "@disconnect": {
+    "description": "Disconnect button text"
   },
-  "unfollowConfirm": "Are you sure you want to unfollow {username}?",
-  "@unfollowConfirm": {
-    "description": "Unfollow confirmation dialog"
+  "disconnectConfirm": "Are you sure you want to disconnect from {username}?",
+  "@disconnectConfirm": {
+    "description": "Disconnect confirmation dialog"
   },
   "foodPreferences": "Food Preferences",
   "@foodPreferences": {
@@ -117,9 +113,9 @@
   "@noRecommendedRestaurants": {
     "description": "No recommended restaurants message"
   },
-  "noFollowing": "No following",
-  "@noFollowing": {
-    "description": "No following message"
+  "noConnections": "No connections",
+  "@noConnections": {
+    "description": "No connections message"
   },
   "discoverUsers": "Go discover interesting users",
   "@discoverUsers": {
@@ -141,21 +137,21 @@
   "@saveFailed": {
     "description": "Save failed message"
   },
-  "followSuccess": "Followed successfully",
-  "@followSuccess": {
-    "description": "Follow success message"
+  "connectSuccess": "Connected successfully",
+  "@connectSuccess": {
+    "description": "Connect success message"
   },
-  "followFailed": "Follow failed",
-  "@followFailed": {
-    "description": "Follow failed message"
+  "connectFailed": "Connect failed",
+  "@connectFailed": {
+    "description": "Connect failed message"
   },
-  "unfollowSuccess": "Unfollowed",
-  "@unfollowSuccess": {
-    "description": "Unfollow success message"
+  "disconnectSuccess": "Disconnected",
+  "@disconnectSuccess": {
+    "description": "Disconnect success message"
   },
-  "unfollowFailed": "Unfollow failed",
-  "@unfollowFailed": {
-    "description": "Unfollow failed message"
+  "disconnectFailed": "Disconnect failed",
+  "@disconnectFailed": {
+    "description": "Disconnect failed message"
   },
   "userNotFound": "User not found",
   "@userNotFound": {
@@ -221,7 +217,7 @@
   "@collaborativeRecommendation": {
     "description": "Collaborative filtering recommendation reason"
   },
-  "socialRecommendation": "People you follow also follow them",
+  "socialRecommendation": "People you connect with also connect with them",
   "@socialRecommendation": {
     "description": "Social recommendation reason"
   },
@@ -360,9 +356,5 @@
   "similarity": "Similarity",
   "@similarity": {
     "description": "Similarity label"
-  },
-  "follow": "Follow",
-  "@follow": {
-    "description": "Follow button text"
   }
 }
