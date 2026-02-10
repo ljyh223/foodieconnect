@@ -24,6 +24,7 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
   bool _isLoadingReviews = false;
   int _reviewPage = 0;
   final int _reviewPageSize = 5;
+  bool _hasLoadedReviews = false;
 
   @override
   void initState() {
@@ -174,11 +175,12 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
         }
 
         // 加载店员评价
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_reviews.isEmpty && !_isLoadingReviews) {
+        if (!_hasLoadedReviews) {
+          _hasLoadedReviews = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             _loadStaffReviews(staff.id, isRefresh: true);
-          }
-        });
+          });
+        }
 
         return NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
