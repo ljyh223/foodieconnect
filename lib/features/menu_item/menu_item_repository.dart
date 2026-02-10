@@ -70,4 +70,16 @@ class MenuItemRepository {
       throw ApiError.unknown(e.toString());
     }
   }
+
+  /// 获取菜品详情
+  Future<MenuItem> fetchMenuItemDetail(String menuItemId) async {
+    try {
+      final response = await MenuItemApi.getMenuItemDetail(menuItemId);
+      return response;
+    } on DioException catch (e) {
+      throw ApiError.fromDio(e);
+    } catch (e) {
+      throw ApiError.unknown(e.toString());
+    }
+  }
 }

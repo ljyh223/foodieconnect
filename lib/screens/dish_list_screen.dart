@@ -325,13 +325,12 @@ class _DishListScreenState extends State<DishListScreen> {
   }
 
   void _navigateToDishDetail(MenuItem item) {
-    final dish = DishListItemWidget.convertToRecommendedDish(item);
     Navigator.pushNamed(
       context,
       '/dish_detail',
       arguments: {
         'restaurantId': _restaurantId,
-        'dish': dish,
+        'dishId': item.id.toString(),
       },
     );
   }

@@ -136,8 +136,8 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
           builder: (_) => DishDetailScreen(
-            restaurantId: args?['restaurantId'],
-            dish: args?['dish'] as RecommendedDish,
+            restaurantId: args?['restaurantId']?.toString() ?? '',
+            menuItemId: args?['dishId']?.toString() ?? args?['menuItemId']?.toString(),
           ),
         );
       case '/dish_list':

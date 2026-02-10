@@ -176,4 +176,14 @@ class MenuItemApi {
 
     return menuItems;
   }
+
+  /// 获取菜品详情
+  static Future<MenuItem> getMenuItemDetail(String menuItemId) async {
+    final response = await DioClient.dio.get(
+      '/menu-items/$menuItemId',
+    );
+
+    final dynamic payload = response.data['data'] ?? response.data;
+    return MenuItem.fromJson(payload is Map<String, dynamic> ? payload : payload['data']);
+  }
 }

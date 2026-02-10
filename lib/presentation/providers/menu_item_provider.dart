@@ -89,6 +89,16 @@ class MenuItemProvider with ChangeNotifier {
     }
   }
 
+  /// 获取单个菜品详情
+  Future<MenuItem?> fetchMenuItemDetail(String menuItemId) async {
+    try {
+      return await _repository.fetchMenuItemDetail(menuItemId);
+    } catch (e) {
+      _error = e.toString();
+      return null;
+    }
+  }
+
   void clearCategoryFilter() {
     _selectedCategoryId = null;
     _isAllSelected = true;

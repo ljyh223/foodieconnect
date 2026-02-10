@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/models/recommended_dish_model.dart';
+import '../data/models/menu_item_model.dart';
 import '../data/models/dish_review_model.dart';
 import '../core/services/api_service.dart';
 import '../presentation/providers/dish_review_provider.dart';
+import '../presentation/providers/menu_item_provider.dart';
+import '../presentation/widgets/dish_review_card.dart';
 
-/// 菜品详情页面 - 包含菜品信息和评价
+/// 菜品详情页面
 class DishDetailScreen extends StatefulWidget {
   final String restaurantId;
-  final RecommendedDish dish;
+  final String? menuItemId;
 
   const DishDetailScreen({
     super.key,
     required this.restaurantId,
-    required this.dish,
+    this.menuItemId,
   });
 
   @override
@@ -21,38 +23,85 @@ class DishDetailScreen extends StatefulWidget {
 }
 
 class _DishDetailScreenState extends State<DishDetailScreen> {
+  MenuItem? _dish;
   DishReviewStats? _stats;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData();
+    });
   }
 
   Future<void> _loadData() async {
-    final provider = Provider.of<DishReviewProvider>(context, listen: false);
-    await provider.fetchByMenuItem(
+    final args = ModalRoute.of(context)?.settings.arguments as Map?;
+    final menuItemId = widget.menuItemId ?? args?['dishId']?.toString();
+
+    if (menuItemId == null) {
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    try {
+      final provider = Provider.of<MenuItemProvider>(context, listen: false);
+      final dish = await provider.fetchMenuItemDetail(menuItemId);
+
+      if (dish != null && mounted) {
+        setState(() {
+          _dish = dish;
+          _isLoading = false;
+        });
+        _loadReviews(menuItemId);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _loadReviews(String menuItemId) async {
+    final reviewProvider = Provider.of<DishReviewProvider>(context, listen: false);
+    await reviewProvider.fetchByMenuItem(
       widget.restaurantId,
-      widget.dish.id.toString(),
+      menuItemId,
     );
-    await provider.fetchStats(
+    await reviewProvider.fetchStats(
       widget.restaurantId,
-      widget.dish.id.toString(),
+      menuItemId,
     );
     if (mounted) {
       setState(() {
-        _stats = provider.stats;
+        _stats = reviewProvider.stats;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_dish == null) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _buildAppBar(),
+        body: const Center(
+          child: Text('菜品信息加载失败'),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
-          // 菜品图片 Header
           SliverAppBar(
             expandedHeight: 250,
             pinned: true,
@@ -65,155 +114,70 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
               onPressed: () => Navigator.pop(context),
             ),
           ),
-
-          // 菜品信息
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 菜品名称和价格
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.dish.name,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      if (widget.dish.price > 0) ...[
-                        const SizedBox(width: 16),
-                        Text(
-                          '¥${widget.dish.price.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-
+                  _buildHeader(),
                   const SizedBox(height: 12),
-
-                  // 评分统计
                   if (_stats != null) _buildRatingStats(),
-
                   const SizedBox(height: 12),
-
-                  // 描述
-                  if (widget.dish.description.isNotEmpty) ...[
+                  if (_dish!.description != null && _dish!.description!.isNotEmpty) ...[
                     Text(
-                      widget.dish.description,
+                      _dish!.description!,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         color: Colors.grey[700],
                         height: 1.5,
                       ),
                     ),
                     const SizedBox(height: 16),
                   ],
-
-                  // 其他信息
                   _buildDishInfo(),
-
                   const SizedBox(height: 24),
-
-                  // 评价部分标题
-                  Row(
-                    children: [
-                      const Text(
-                        'Reviews',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Spacer(),
-                      if (_stats != null)
-                        Text(
-                          '${_stats!.totalReviews} reviews',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                    ],
-                  ),
-
+                  _buildReviewsHeader(),
                   const SizedBox(height: 16),
                 ],
               ),
             ),
           ),
-
-          // 评价列表
-          Consumer<DishReviewProvider>(
-            builder: (context, provider, child) {
-              final reviews = provider.reviews;
-
-              if (provider.isLoading) {
-                return const SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(32.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                );
-              }
-
-              if (reviews.isEmpty) {
-                return SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Text(
-                        'No reviews yet',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return _buildReviewCard(reviews[index]);
-                  },
-                  childCount: reviews.length,
-                ),
-              );
-            },
-          ),
+          _buildReviewsList(),
         ],
       ),
-
-      // 写评价按钮
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _navigateToCreateReview(),
+        onPressed: _navigateToCreateReview,
         backgroundColor: Colors.black,
         child: const Icon(Icons.edit, color: Colors.white),
       ),
     );
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      centerTitle: true,
+      title: Text(
+        _dish?.name ?? '菜品详情',
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
+        ),
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
+  }
+
   Widget _buildDishImage() {
     String displayImageUrl = '';
-    if (widget.dish.imageUrl != null && widget.dish.imageUrl!.isNotEmpty) {
-      displayImageUrl = ApiService.getFullImageUrl(widget.dish.imageUrl!);
+    if (_dish?.imageUrl != null && _dish!.imageUrl!.isNotEmpty) {
+      displayImageUrl = ApiService.getFullImageUrl(_dish!.imageUrl!);
     }
 
     return Stack(
@@ -223,21 +187,18 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
             ? Image.network(
                 displayImageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildPlaceholderImage();
-                },
+                errorBuilder: (context, error, stackTrace) => _buildPlaceholderImage(),
               )
             : _buildPlaceholderImage(),
-        // 渐变遮罩
         Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black.withOpacity(0.3),
+                Colors.black.withValues(alpha: 0.3),
                 Colors.transparent,
-                Colors.black.withOpacity(0.5),
+                Colors.black.withValues(alpha: 0.5),
               ],
             ),
           ),
@@ -251,7 +212,7 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
       color: Colors.grey[200],
       child: Center(
         child: Text(
-          widget.dish.name.isNotEmpty ? widget.dish.name.substring(0, 1) : '',
+          _dish?.name.isNotEmpty == true ? _dish!.name.substring(0, 1) : '',
           style: const TextStyle(
             fontSize: 80,
             fontWeight: FontWeight.bold,
@@ -262,10 +223,38 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
     );
   }
 
+  Widget _buildHeader() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Text(
+            _dish!.name,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        if (_dish!.price > 0) ...[
+          const SizedBox(width: 16),
+          Text(
+            '¥${_dish!.price.toStringAsFixed(0)}',
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
   Widget _buildRatingStats() {
     return Row(
       children: [
-        // 平均评分
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
@@ -274,12 +263,12 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
           ),
           child: Row(
             children: [
-              const Icon(Icons.star, color: Colors.orange, size: 20),
+              const Icon(Icons.star, color: Colors.orange, size: 18),
               const SizedBox(width: 4),
               Text(
                 _stats!.averageRating.toStringAsFixed(1),
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color: Colors.orange,
                 ),
@@ -288,11 +277,10 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
           ),
         ),
         const SizedBox(width: 12),
-        // 评价数量
         Text(
           '${_stats!.totalReviews} reviews',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 13,
             color: Colors.grey[600],
           ),
         ),
@@ -305,27 +293,30 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
       spacing: 8,
       runSpacing: 8,
       children: [
-        if (widget.dish.spiceLevel != null && widget.dish.spiceLevel!.isNotEmpty)
-          _buildInfoChip(_getSpiceLevelIcon(widget.dish.spiceLevel!), _getSpiceLevelText(widget.dish.spiceLevel!)),
-        if (widget.dish.preparationTime != null && widget.dish.preparationTime! > 0)
-          _buildInfoChip(Icons.schedule, '${widget.dish.preparationTime} min'),
-        if (widget.dish.calories != null && widget.dish.calories! > 0)
-          _buildInfoChip(Icons.local_fire_department, '${widget.dish.calories} cal'),
+        if (_dish!.spiceLevel != null && _dish!.spiceLevel!.isNotEmpty)
+          _buildInfoChip(
+            _getSpiceLevelIcon(_dish!.spiceLevel!),
+            _getSpiceLevelText(_dish!.spiceLevel!),
+          ),
+        if (_dish!.preparationTime != null && _dish!.preparationTime! > 0)
+          _buildInfoChip(Icons.schedule, '${_dish!.preparationTime} min'),
+        if (_dish!.calories != null && _dish!.calories! > 0)
+          _buildInfoChip(Icons.local_fire_department, '${_dish!.calories} cal'),
       ],
     );
   }
 
   Widget _buildInfoChip(IconData icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: Colors.grey[700]),
+          Icon(icon, size: 14, color: const Color(0xFF616161)),
           const SizedBox(width: 4),
           Text(
             label,
@@ -369,147 +360,72 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
     }
   }
 
-  Widget _buildReviewCard(DishReview review) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 用户信息和评分
-          Row(
-            children: [
-              _buildUserAvatar(review.userAvatar, review.userName),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      review.userName,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      children: [
-                        ...List.generate(5, (index) {
-                          return Icon(
-                            index < review.rating ? Icons.star : Icons.star_border,
-                            color: Colors.orange,
-                            size: 14,
-                          );
-                        }),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                _formatDate(review.createdAt),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[500],
-                ),
-              ),
-            ],
+  Widget _buildReviewsHeader() {
+    return Row(
+      children: [
+        const Text(
+          'Reviews',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
           ),
-
-          if (review.comment.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Text(
-              review.comment,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.black87,
-                height: 1.4,
-              ),
+        ),
+        const Spacer(),
+        if (_stats != null)
+          Text(
+            '${_stats!.totalReviews} reviews',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey[600],
             ),
-          ],
-
-          if (review.images.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 80,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: review.images.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        ApiService.getFullImageUrl(review.images[index]),
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 80,
-                            height: 80,
-                            color: Colors.grey[200],
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ],
-      ),
+          ),
+      ],
     );
   }
 
-  Widget _buildUserAvatar(String? avatar, String name) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: avatar != null && avatar.isNotEmpty
-            ? Image.network(
-                ApiService.getFullImageUrl(avatar),
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(
-                    child: Text(
-                      name.isNotEmpty ? name.substring(0, 1) : '',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  );
-                },
-              )
-            : Center(
+  Widget _buildReviewsList() {
+    return Consumer<DishReviewProvider>(
+      builder: (context, provider, child) {
+        final reviews = provider.reviews;
+
+        if (provider.isLoading && _dish == null) {
+          return const SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(32.0),
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+
+        if (reviews.isEmpty) {
+          return const SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(32.0),
                 child: Text(
-                  name.isNotEmpty ? name.substring(0, 1) : '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                  'No reviews yet',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xFF757575),
                   ),
                 ),
               ),
-      ),
+            ),
+          );
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return DishReviewCard(review: reviews[index]);
+            },
+            childCount: reviews.length,
+          ),
+        );
+      },
     );
   }
 
@@ -519,30 +435,9 @@ class _DishDetailScreenState extends State<DishDetailScreen> {
       '/create_dish_review',
       arguments: {
         'restaurantId': widget.restaurantId,
-        'menuItemId': widget.dish.id.toString(),
-        'itemName': widget.dish.name,
+        'menuItemId': _dish!.id.toString(),
+        'itemName': _dish!.name,
       },
     ).then((_) => _loadData());
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-
-    if (difference.inDays == 0) {
-      if (difference.inHours == 0) {
-        if (difference.inMinutes == 0) {
-          return 'Just now';
-        }
-        return '${difference.inMinutes}m ago';
-      }
-      return '${difference.inHours}h ago';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
-    } else {
-      return '${date.month}/${date.day}/${date.year}';
-    }
   }
 }

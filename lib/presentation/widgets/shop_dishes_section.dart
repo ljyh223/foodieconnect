@@ -178,7 +178,7 @@ class ShopDishesSection extends StatelessWidget {
       '/dish_detail',
       arguments: {
         'restaurantId': restaurantId,
-        'dish': dish,
+        'dishId': dish.id.toString(),
       },
     );
   }

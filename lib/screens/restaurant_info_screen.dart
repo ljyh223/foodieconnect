@@ -3,9 +3,8 @@ import 'package:foodieconnect/generated/translations.g.dart';
 import '../data/models/restaurant_model.dart';
 import '../core/services/restaurant_service.dart';
 import '../core/services/api_service.dart';
-import '../presentation/widgets/card_widget.dart';
+import '../presentation/widgets/restaurant_info_card.dart';
 import 'dart:math';
-import 'dart:convert';
 
 class RestaurantInfoScreen extends StatefulWidget {
   final String? restaurantId;
@@ -21,16 +20,12 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
   late Future<Restaurant> _restaurantFuture;
   late Future<List<String>> _recommendedDishesFuture;
 
-  // 随机在线图片列表
   final List<String> _randomImages = [
     'https://picsum.photos/seed/restaurant1/400/400.jpg',
     'https://picsum.photos/seed/restaurant2/400/400.jpg',
     'https://picsum.photos/seed/restaurant3/400/400.jpg',
     'https://picsum.photos/seed/restaurant4/400/400.jpg',
     'https://picsum.photos/seed/restaurant5/400/400.jpg',
-    'https://picsum.photos/seed/restaurant6/400/400.jpg',
-    'https://picsum.photos/seed/restaurant7/400/400.jpg',
-    'https://picsum.photos/seed/restaurant8/400/400.jpg',
   ];
 
   @override
@@ -41,12 +36,10 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     _recommendedDishesFuture = RestaurantService.getRecommendedDishes(id);
   }
 
-  /// 获取随机图片URL
   String _getRandomImageUrl() {
     return _randomImages[_random.nextInt(_randomImages.length)];
   }
 
-  /// 获取餐厅图片URL，如果没有则使用随机图片
   String _getRestaurantImageUrl(String? avatar) {
     if (avatar != null && avatar.isNotEmpty) {
       return ApiService.getFullImageUrl(avatar);
@@ -54,55 +47,21 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     return _getRandomImageUrl();
   }
 
-  /// 获取餐厅菜单
-  Future<void> _getRestaurantMenu(
-    BuildContext context,
-    String restaurantId,
-  ) async {
-    try {
-      // 显示加载指示器
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
-      );
-
-      // 调用API获取菜单
-      final menuData = await RestaurantService.getMenu(restaurantId);
-
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(t.restaurant.menuFeatureInDevelopment)),
-      );
-    } catch (e) {
-      // 关闭加载指示器（如果还在显示）
-      Navigator.of(context).pop();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${t.restaurant.getMenuFailed}$e')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final id =
-        widget.restaurantId ??
-        (ModalRoute.of(context)?.settings.arguments as Map?)?['restaurantId']
-            as String? ??
-        '1';
-
     return FutureBuilder<Restaurant>(
       future: _restaurantFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
+            backgroundColor: Colors.white,
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
         if (snapshot.hasError) {
           return Scaffold(
+            backgroundColor: Colors.white,
             body: Center(
               child: Text('${t.restaurant.getShopInfoFailed}${snapshot.error}'),
             ),
@@ -112,7 +71,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
         final restaurant = snapshot.data!;
 
         return Scaffold(
-          backgroundColor: Colors.grey[50],
+          backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
@@ -135,394 +94,17 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 餐厅图片 - 圆角正方形
-                CardWidget(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          t.restaurant.restaurantImages,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 300,
-                        margin: const EdgeInsets.only(bottom: 16),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(12),
-                            bottomRight: Radius.circular(12),
-                          ),
-                          child: Image.network(
-                            _getRestaurantImageUrl(restaurant.imageUrl),
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[200],
-                                child: Center(
-                                  child: Text(
-                                    restaurant.name.isNotEmpty
-                                        ? restaurant.name.substring(0, 1)
-                                        : '',
-                                    style: const TextStyle(
-                                      fontSize: 48,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildRestaurantImage(restaurant),
                 const SizedBox(height: 16),
-
-                // 营业时间
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.restaurant.businessHours,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(Icons.schedule, color: Colors.blue, size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              restaurant.hours,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildHoursSection(restaurant),
                 const SizedBox(height: 16),
-
-                // 餐厅地址
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.restaurant.address,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: Colors.blue, size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  restaurant.address,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  t.restaurant.distanceFromYou(
-                                    distance: restaurant.distance,
-                                  ),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildAddressSection(restaurant),
                 const SizedBox(height: 16),
-
-                // 人均消费
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.restaurant.averagePrice,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.attach_money,
-                            color: Colors.blue,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            // 如果API返回了人均消费价格，使用实际价格；否则基于评分估算
-                            restaurant.averagePrice != null
-                                ? '¥${restaurant.averagePrice!.toStringAsFixed(0)}'
-                                : '¥${(restaurant.rating * 20).toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildPriceSection(restaurant),
                 const SizedBox(height: 16),
-
-                // 推荐菜品
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.restaurant.recommendedDishes,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(Icons.star, color: Colors.blue, size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: FutureBuilder<List<String>>(
-                              future: _recommendedDishesFuture,
-                              builder: (context, dishesSnapshot) {
-                                List<String> dishes = [];
-
-                                if (dishesSnapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  dishes = [t.app.loading];
-                                } else if (dishesSnapshot.hasError ||
-                                    dishesSnapshot.data == null ||
-                                    dishesSnapshot.data!.isEmpty) {
-                                  // 如果API调用失败或没有数据，使用餐厅模型中的推荐菜品或默认菜品
-                                  dishes =
-                                      restaurant.recommendedDishes.isNotEmpty
-                                      ? restaurant.recommendedDishes.map((d) => d.name).toList()
-                                      : [
-                                          '招牌炒饭',
-                                          '秘制烤鸭',
-                                          '麻辣香锅',
-                                          '清蒸鲈鱼',
-                                          '糖醋排骨',
-                                        ];
-                                } else {
-                                  dishes = dishesSnapshot.data!;
-                                }
-
-                                return Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: dishes
-                                      .map((dish) => _buildDishChip(dish, restaurant.id.toString()))
-                                      .toList(),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildRecommendedDishesSection(restaurant),
                 const SizedBox(height: 16),
-
-                // 菜单
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.restaurant.menu,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(Icons.restaurant_menu, color: Colors.blue, size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '查看菜品评价',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          // 跳转到菜品评价页面
-                                          Navigator.of(context).pushNamed(
-                                            '/dish_reviews',
-                                            arguments: {
-                                              'restaurantId': restaurant.id.toString(),
-                                              'menuItemId': null,
-                                              'itemName': null,
-                                            },
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.orange,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          '查看菜品评价',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // 原菜单按钮（保留）
-                CardWidget(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.restaurant.menu,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Icon(Icons.menu_book, color: Colors.blue, size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  t.restaurant.viewFullMenu,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // 调用获取餐厅菜单的方法
-                                      _getRestaurantMenu(
-                                        context,
-                                        restaurant.id.toString(),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      t.restaurant.viewMenu,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildMenuSection(restaurant),
                 const SizedBox(height: 20),
               ],
             ),
@@ -532,7 +114,178 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     );
   }
 
-  /// 构建菜品标签
+  Widget _buildRestaurantImage(Restaurant restaurant) {
+    return Container(
+      width: double.infinity,
+      height: 250,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          _getRestaurantImageUrl(restaurant.imageUrl),
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: Colors.grey[200],
+              child: Center(
+                child: Text(
+                  restaurant.name.isNotEmpty ? restaurant.name.substring(0, 1) : '',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHoursSection(Restaurant restaurant) {
+    return RestaurantInfoCard(
+      title: t.restaurant.businessHours,
+      icon: Icons.schedule,
+      child: Text(
+        restaurant.hours,
+        style: const TextStyle(
+          fontSize: 15,
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddressSection(Restaurant restaurant) {
+    return RestaurantInfoCard(
+      title: t.restaurant.address,
+      icon: Icons.location_on,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            restaurant.address,
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            t.restaurant.distanceFromYou(distance: restaurant.distance),
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey[600],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPriceSection(Restaurant restaurant) {
+    return RestaurantInfoCard(
+      title: t.restaurant.averagePrice,
+      icon: Icons.attach_money,
+      child: Text(
+        restaurant.averagePrice != null
+            ? '¥${restaurant.averagePrice!.toStringAsFixed(0)}'
+            : '¥${(restaurant.rating * 20).toStringAsFixed(0)}',
+        style: const TextStyle(
+          fontSize: 15,
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecommendedDishesSection(Restaurant restaurant) {
+    return RestaurantInfoCard(
+      title: t.restaurant.recommendedDishes,
+      icon: Icons.star,
+      child: FutureBuilder<List<String>>(
+        future: _recommendedDishesFuture,
+        builder: (context, dishesSnapshot) {
+          List<String> dishes = [];
+
+          if (dishesSnapshot.connectionState == ConnectionState.waiting) {
+            dishes = [t.app.loading];
+          } else if (dishesSnapshot.hasError ||
+              dishesSnapshot.data == null ||
+              dishesSnapshot.data!.isEmpty) {
+            dishes = restaurant.recommendedDishes.isNotEmpty
+                ? restaurant.recommendedDishes.map((d) => d.name).toList()
+                : ['招牌炒饭', '秘制烤鸭', '麻辣香锅', '清蒸鲈鱼', '糖醋排骨'];
+          } else {
+            dishes = dishesSnapshot.data!;
+          }
+
+          return Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: dishes
+                .map((dish) => _buildDishChip(dish, restaurant.id.toString()))
+                .toList(),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildMenuSection(Restaurant restaurant) {
+    return RestaurantInfoCard(
+      title: t.restaurant.menu,
+      icon: Icons.restaurant_menu,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '查看菜品评价',
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/dish_list',
+                  arguments: {
+                    'restaurantId': restaurant.id.toString(),
+                    'restaurantName': restaurant.name,
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                '查看菜品列表',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDishChip(String dishName, String restaurantId) {
     return InkWell(
       onTap: () => _navigateToDishReview(context, restaurantId, dishName),
@@ -540,9 +293,8 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.1),
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -550,8 +302,8 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
             Text(
               dishName,
               style: const TextStyle(
-                fontSize: 14,
-                color: Colors.blue,
+                fontSize: 13,
+                color: Colors.black87,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -559,7 +311,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
             const Icon(
               Icons.reviews,
               size: 12,
-              color: Colors.blue,
+              color: Colors.black54,
             ),
           ],
         ),
@@ -567,14 +319,11 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
     );
   }
 
-  /// 导航到菜品评价页面
   void _navigateToDishReview(
     BuildContext context,
     String restaurantId,
     String dishName,
   ) {
-    // 生成简单的菜单项ID（基于菜品名称的哈希值）
-    // 注意：实际应用中应该从菜单API获取真实的menuItemId
     final menuItemId = dishName.hashCode.toSigned(32).abs().toString();
 
     Navigator.of(context).pushNamed(
