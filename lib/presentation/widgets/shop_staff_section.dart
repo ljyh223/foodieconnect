@@ -8,12 +8,14 @@ class ShopStaffSection extends StatelessWidget {
   final String restaurantId;
   final Future<List<Staff>> Function() loadStaff;
   final VoidCallback onViewAllStaff;
+  final void Function(Staff staff)? onStaffTap;
 
   const ShopStaffSection({
     super.key,
     required this.restaurantId,
     required this.loadStaff,
     required this.onViewAllStaff,
+    this.onStaffTap,
   });
 
   @override
@@ -57,7 +59,7 @@ class ShopStaffSection extends StatelessWidget {
 
               return Column(
                 children: [
-                  ...staffList.map((staff) => _buildStaffCard(staff)),
+                  ...staffList.map((staff) => _buildStaffCard(context, staff)),
                   const SizedBox(height: 12),
                   _buildViewAllButton(),
                 ],
@@ -105,18 +107,28 @@ class ShopStaffSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStaffCard(Staff staff) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildStaffAvatar(staff),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStaffInfo(staff),
-          ),
-        ],
+  Widget _buildStaffCard(BuildContext context, Staff staff) {
+    return InkWell(
+      onTap: onStaffTap != null ? () => onStaffTap!(staff) : null,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildStaffAvatar(staff),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildStaffInfo(staff),
+            ),
+            if (onStaffTap != null)
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey[400],
+                size: 20,
+              ),
+          ],
+        ),
       ),
     );
   }

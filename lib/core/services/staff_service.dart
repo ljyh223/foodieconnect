@@ -48,4 +48,17 @@ class StaffService {
       return <StaffReview>[];
     }
   }
+
+  /// 创建店员评价
+  static Future<StaffReview> createReview(
+    String staffId, {
+    required double rating,
+    required String content,
+  }) async {
+    return await _staffRepository.createReview(
+      staffId,
+      rating: rating,
+      content: content,
+    );
+  }
 }

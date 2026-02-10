@@ -92,6 +92,7 @@ class ShopDetailScreen extends StatelessWidget {
                     restaurantId: restaurant.id.toString(),
                     loadStaff: () => StaffService.listByRestaurant(restaurant.id.toString()),
                     onViewAllStaff: () => _navigateToStaff(context, restaurant.id.toString()),
+                    onStaffTap: (staff) => _navigateToStaffDetail(context, staff.id),
                   ),
 
                   const SizedBox(height: 20),
@@ -165,6 +166,14 @@ class ShopDetailScreen extends StatelessWidget {
       context,
       '/staff',
       arguments: {'restaurantId': restaurantId},
+    );
+  }
+
+  void _navigateToStaffDetail(BuildContext context, String staffId) {
+    Navigator.pushNamed(
+      context,
+      '/staff_detail',
+      arguments: {'staffId': staffId},
     );
   }
 

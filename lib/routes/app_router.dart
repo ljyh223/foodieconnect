@@ -24,7 +24,7 @@ import '../screens/dish_reviews_screen.dart';
 import '../screens/create_dish_review_screen.dart';
 import '../screens/dish_detail_screen.dart';
 import '../screens/dish_list_screen.dart';
-import '../data/models/recommended_dish_model.dart';
+import '../screens/create_staff_review_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -130,6 +130,14 @@ class AppRouter {
             menuItemId: args?['menuItemId'],
             itemName: args?['itemName'],
             reviewId: args?['reviewId'],
+          ),
+        );
+      case '/create_staff_review':
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (_) => CreateStaffReviewScreen(
+            staffId: args?['staffId'],
+            staffName: args?['staffName'],
           ),
         );
       case '/dish_detail':

@@ -97,4 +97,26 @@ class StaffApi {
 
     return reviews;
   }
+
+  /// 创建店员评价
+  static Future<StaffReview> createReview(
+    String staffId, {
+    required double rating,
+    required String content,
+  }) async {
+    final endpoint = '/staff/$staffId/reviews';
+    final response = await DioClient.dio.post(
+      endpoint,
+      data: {
+        'rating': rating,
+        'content': content,
+      },
+    );
+
+    final dynamic payload = response.data['data'] ?? response.data;
+    if (payload is Map<String, dynamic>) {
+      return StaffReview.fromJson(payload);
+    }
+    throw Exception('Failed to create staff review');
+  }
 }

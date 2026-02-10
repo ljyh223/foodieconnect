@@ -42,4 +42,21 @@ class StaffRepository {
       throw ApiError.fromException(e);
     }
   }
+
+  /// 创建店员评价
+  Future<StaffReview> createReview(
+    String staffId, {
+    required double rating,
+    required String content,
+  }) async {
+    try {
+      return await StaffApi.createReview(
+        staffId,
+        rating: rating,
+        content: content,
+      );
+    } catch (e) {
+      throw ApiError.fromException(e);
+    }
+  }
 }

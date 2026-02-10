@@ -112,6 +112,21 @@ class _StaffDetailScreenState extends State<StaffDetailScreen> {
       backgroundColor: AppColors.surface,
       appBar: AppBarWidget(title: t.staff.staffDetails, showBackButton: true),
       body: SafeArea(child: _buildContent()),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final staffId = widget.staffId ??
+              (ModalRoute.of(context)?.settings.arguments as Map?)?['staffId'] as String?;
+          if (staffId != null) {
+            Navigator.of(context).pushNamed(
+              '/create_staff_review',
+              arguments: {
+                'staffId': staffId,
+              },
+            );
+          }
+        },
+        child: const Icon(Icons.edit),
+      ),
     );
   }
 
