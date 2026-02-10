@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:foodieconnect/core/services/api_service.dart';
-import 'package:foodieconnect/core/services/auth_service.dart';
 import 'package:foodieconnect/generated/translations.g.dart';
 import '../data/models/review_model.dart';
 import '../core/constants/app_colors.dart';
@@ -9,6 +7,9 @@ import '../core/constants/app_text_styles.dart';
 import '../presentation/widgets/app_bar_widget.dart';
 import '../presentation/widgets/card_widget.dart';
 import '../presentation/providers/review_provider.dart';
+import '../presentation/widgets/review/rating_display_widget.dart';
+import '../presentation/widgets/review/user_avatar_widget.dart';
+import '../mixins/review_list_mixin.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final String? restaurantId;
@@ -19,7 +20,8 @@ class ReviewsScreen extends StatefulWidget {
   State<ReviewsScreen> createState() => _ReviewsScreenState();
 }
 
-class _ReviewsScreenState extends State<ReviewsScreen> {
+class _ReviewsScreenState extends State<ReviewsScreen>
+    with ReviewListMixin, UserAvatarHandlerMixin {
   @override
   void initState() {
     super.initState();
@@ -73,99 +75,78 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               return Column(
                 children: [
                   Expanded(
-                    child: ListView.builder(
+                    child: ListView.separated(
                       itemCount: reviews.length,
+                      separatorBuilder: (context, index) => const SizedBox(height: 12),
                       itemBuilder: (context, index) {
                         final review = reviews[index];
+                        final imageUrls = review.images
+                            .map((img) => img.imageUrl)
+                            .toList();
+
                         return CardWidget(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () =>
-                                        _handleAvatarTap(review.userId),
-                                    borderRadius: BorderRadius.circular(24),
-                                    // 保持圆形水波纹
-                                    child: CircleAvatar(
-                                      radius: 24,
-                                      backgroundImage:
-                                          review.userAvatar.isNotEmpty
-                                          ? NetworkImage(
-                                              ApiService.getFullImageUrl(
-                                                review.userAvatar,
-                                              ),
-                                            )
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  children: [
+                                    UserAvatarWidget(
+                                      avatarUrl: review.userAvatar.isNotEmpty
+                                          ? review.userAvatar
                                           : null,
-                                      backgroundColor:
-                                          AppColors.primaryContainer,
-                                      child: review.userAvatar.isEmpty
-                                          ? Center(
-                                              child: Text(
-                                                review.userName.isNotEmpty
-                                                    ? review.userName[0]
-                                                    : '',
-                                                style: TextStyle(
-                                                  color: AppColors
-                                                      .onPrimaryContainer,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            )
-                                          : null,
+                                      userName: review.userName,
+                                      onTap: () => handleAvatarTap(review.userId),
                                     ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        review.userName,
-                                        style: AppTextStyles.titleMedium,
-                                      ),
-                                      Row(
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            _buildRatingStars(
-                                              review.rating.toDouble(),
-                                            ),
-                                            style: TextStyle(
-                                              color: AppColors.ratingStar,
-                                              fontSize: 12,
-                                            ),
+                                            review.userName,
+                                            style: AppTextStyles.titleMedium,
                                           ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            review.date
-                                                .toIso8601String()
-                                                .split('T')
-                                                .first,
-                                            style: AppTextStyles.bodySmall
-                                                .copyWith(
+                                          Row(
+                                            children: [
+                                              RatingDisplayWidget(
+                                                rating: review.rating.toDouble(),
+                                                size: 12,
+                                                color: AppColors.ratingStar,
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                review.date
+                                                    .toIso8601String()
+                                                    .split('T')
+                                                    .first,
+                                                style: AppTextStyles.bodySmall
+                                                    .copyWith(
                                                   color: AppColors
                                                       .onSurfaceVariant,
                                                 ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                review.comment,
-                                style: AppTextStyles.bodyMedium,
-                              ),
-                              // 显示评价图片
-                              if (review.images.isNotEmpty) ...[
+                                    ),
+                                  ],
+                                ),
                                 const SizedBox(height: 12),
-                                _buildImageGrid(review.images),
+                                Text(
+                                  review.comment,
+                                  style: AppTextStyles.bodyMedium,
+                                ),
+                                // 显示评价图片
+                                if (imageUrls.isNotEmpty) ...[
+                                  const SizedBox(height: 12),
+                                  buildReviewImageGrid(imageUrls),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         );
                       },
@@ -176,269 +157,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             },
           ),
         ),
-      ),
-    );
-  }
-
-  String _buildRatingStars(double rating) {
-    String stars = '';
-    for (int i = 1; i <= 5; i++) {
-      if (i <= rating) {
-        stars += '★';
-      } else if (i - 0.5 <= rating) {
-        stars += '☆';
-      } else {
-        stars += '☆';
-      }
-    }
-    return stars;
-  }
-
-  /// 处理头像点击事件，根据用户类型跳转到相应的个人中心
-  Future<void> _handleAvatarTap(int userId) async {
-    try {
-      final currentUserId = await AuthService.getCurrentUserId();
-
-      if (currentUserId != null && userId == currentUserId) {
-        // 跳转到自己的个人中心
-        Navigator.of(context).pushNamed('/user_profile');
-      } else {
-        // 跳转到他人的个人中心
-        Navigator.of(
-          context,
-        ).pushNamed('/other_user_profile', arguments: {'userId': userId});
-      }
-    } catch (e) {
-      // 处理错误，显示一个提示
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('跳转失败: $e')));
-      }
-    }
-  }
-
-  // 构建图片网格显示
-  Widget _buildImageGrid(List<ReviewImage> images) {
-    final int imageCount = images.length;
-    final List<String> imageUrls = images
-        .map((image) => image.imageUrl)
-        .toList();
-
-    if (imageCount == 1) {
-      // 单张图片，显示较大尺寸
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(
-          ApiService.getFullImageUrl(imageUrls[0]),
-          height: 200,
-          width: double.infinity,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              height: 200,
-              color: AppColors.surfaceVariant,
-              child: const Center(
-                child: Icon(Icons.broken_image, color: Colors.grey),
-              ),
-            );
-          },
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Container(
-              height: 200,
-              color: AppColors.surfaceVariant,
-              child: const Center(child: CircularProgressIndicator()),
-            );
-          },
-        ),
-      );
-    } else if (imageCount <= 3) {
-      // 2-3张图片，水平排列
-      return SizedBox(
-        height: 120,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          itemCount: imageCount,
-          separatorBuilder: (context, index) => const SizedBox(width: 8),
-          itemBuilder: (context, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                ApiService.getFullImageUrl(imageUrls[index]),
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 120,
-                    height: 120,
-                    color: AppColors.surfaceVariant,
-                    child: const Center(
-                      child: Icon(Icons.broken_image, color: Colors.grey),
-                    ),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    width: 120,
-                    height: 120,
-                    color: AppColors.surfaceVariant,
-                    child: const Center(child: CircularProgressIndicator()),
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      );
-    } else {
-      // 多张图片，使用网格布局
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 1.0,
-        ),
-        itemCount: imageCount > 9 ? 9 : imageCount,
-        itemBuilder: (context, index) {
-          if (index == 8 && imageCount > 9) {
-            // 第9个位置显示剩余图片数量
-            return GestureDetector(
-              onTap: () {
-                _showImageViewer(context, imageUrls, index);
-              },
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.6),
-                child: Center(
-                  child: Text(
-                    '+${imageCount - 9}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }
-
-          return GestureDetector(
-            onTap: () {
-              _showImageViewer(context, imageUrls, index);
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                ApiService.getFullImageUrl(imageUrls[index]),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: AppColors.surfaceVariant,
-                    child: const Center(
-                      child: Icon(Icons.broken_image, color: Colors.grey),
-                    ),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    color: AppColors.surfaceVariant,
-                    child: const Center(child: CircularProgressIndicator()),
-                  );
-                },
-              ),
-            ),
-          );
-        },
-      );
-    }
-  }
-
-  // 显示图片查看器
-  void _showImageViewer(
-    BuildContext context,
-    List<String> images,
-    int initialIndex,
-  ) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) =>
-            _ImageViewerScreen(images: images, initialIndex: initialIndex),
-      ),
-    );
-  }
-}
-
-// 图片查看器页面
-class _ImageViewerScreen extends StatefulWidget {
-  final List<String> images;
-  final int initialIndex;
-
-  const _ImageViewerScreen({required this.images, required this.initialIndex});
-
-  @override
-  State<_ImageViewerScreen> createState() => _ImageViewerScreenState();
-}
-
-class _ImageViewerScreenState extends State<_ImageViewerScreen> {
-  late PageController _pageController;
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = widget.initialIndex;
-    _pageController = PageController(initialPage: widget.initialIndex);
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: Text('${_currentIndex + 1} / ${widget.images.length}'),
-      ),
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: widget.images.length,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        itemBuilder: (context, index) {
-          return Center(
-            child: InteractiveViewer(
-              child: Image.network(
-                ApiService.getFullImageUrl(widget.images[index]),
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Icon(
-                      Icons.broken_image,
-                      color: Colors.white,
-                      size: 64,
-                    ),
-                  );
-                },
-              ),
-            ),
-          );
-        },
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'image_viewer_screen.dart';
+import 'review/image_viewer_screen.dart';
 
 /// 菜品评价图片网格组件
 class ReviewImageGrid extends StatelessWidget {

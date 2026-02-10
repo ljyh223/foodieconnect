@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:foodieconnect/generated/translations.g.dart';
 import '../presentation/providers/dish_review_provider.dart';
-import '../presentation/widgets/review_image_grid.dart';
+import '../mixins/create_review_mixin.dart';
 import 'dart:io';
-import 'package:path/path.dart' as path;
-import 'package:image/image.dart' as img;
 
 /// 创建/编辑菜品评价页面
 class CreateDishReviewScreen extends StatefulWidget {
@@ -27,14 +24,31 @@ class CreateDishReviewScreen extends StatefulWidget {
   State<CreateDishReviewScreen> createState() => _CreateDishReviewScreenState();
 }
 
-class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
+class _CreateDishReviewScreenState extends State<CreateDishReviewScreen>
+    with CreateReviewMixin {
   final TextEditingController _controller = TextEditingController();
   double _rating = 5.0;
   bool _submitting = false;
   final List<File> _images = [];
-  final ImagePicker _picker = ImagePicker();
 
   bool get _isEditing => widget.reviewId != null;
+
+  @override
+  List<File> get reviewImages => _images;
+
+  @override
+  void setReviewImages(List<File> images) {
+    setState(() {
+      _images.clear();
+      _images.addAll(images);
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -42,12 +56,6 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
     if (_isEditing) {
       _loadExistingReview();
     }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   Future<void> _loadExistingReview() async {
@@ -74,12 +82,22 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (itemName != null) _buildDishInfo(itemName),
-              _buildRatingSection(),
+              buildReviewRatingSection(
+                rating: _rating,
+                onRatingChanged: (value) {
+                  setState(() {
+                    _rating = value;
+                  });
+                },
+              ),
               const SizedBox(height: 16),
-              _buildCommentSection(),
+              buildReviewCommentSection(
+                controller: _controller,
+              ),
               const SizedBox(height: 16),
-              _buildImageSection(),
-              const SizedBox(height: 16),
+              buildReviewImageSection(
+                onShowPicker: _showImagePickerOptions,
+              ),
             ],
           ),
         ),
@@ -151,223 +169,11 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
     );
   }
 
-  Widget _buildRatingSection() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '评分',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: List.generate(5, (index) {
-              return IconButton(
-                icon: Icon(
-                  index < _rating ? Icons.star : Icons.star_border,
-                  color: Colors.orange,
-                  size: 32,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _rating = (index + 1).toDouble();
-                  });
-                },
-              );
-            }),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCommentSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '评价内容',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          constraints: const BoxConstraints(minHeight: 150),
-          decoration: BoxDecoration(
-            color: Colors.grey[50],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TextField(
-            controller: _controller,
-            maxLines: null,
-            expands: false,
-            textAlignVertical: TextAlignVertical.top,
-            decoration: const InputDecoration(
-              hintText: '分享您的用餐体验...',
-              hintStyle: TextStyle(color: Colors.grey),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(12.0),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildImageSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '添加图片 (最多9张)',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ReviewImageGrid(
-          images: _images,
-          onAddImage: _showImagePickerOptions,
-          onRemoveImage: _removeImage,
-        ),
-        if (_images.length < 9) ...[
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _pickImageFromCamera,
-                  icon: const Icon(Icons.camera_alt, size: 18),
-                  label: const Text('拍照'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    side: const BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _pickImageFromGallery,
-                  icon: const Icon(Icons.photo_library, size: 18),
-                  label: const Text('相册'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    side: const BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ],
-    );
-  }
-
   void _showImagePickerOptions() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt, color: Colors.black),
-              title: const Text('拍照',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImageFromCamera();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library, color: Colors.black),
-              title: const Text('从相册选择',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImageFromGallery();
-              },
-            ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
+    showImagePicker(
+      onCameraSelected: () => pickImageFromCamera(),
+      onGallerySelected: () => pickImageFromGallery(),
     );
-  }
-
-  Future<void> _pickImageFromCamera() async {
-    try {
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 80,
-        preferredCameraDevice: CameraDevice.rear,
-      );
-      if (image != null) {
-        final processedImage = await _processImageFile(File(image.path));
-        if (processedImage != null) {
-          setState(() {
-            _images.add(processedImage);
-          });
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('拍照失败: $e')),
-        );
-      }
-    }
-  }
-
-  Future<void> _pickImageFromGallery() async {
-    try {
-      final images = await _picker.pickMultiImage(
-        imageQuality: 80,
-      );
-      final List<File> processedImages = [];
-
-      for (final xFile in images) {
-        if (processedImages.length >= (9 - _images.length)) break;
-
-        final processedImage = await _processImageFile(File(xFile.path));
-        if (processedImage != null) {
-          processedImages.add(processedImage);
-        }
-      }
-
-      setState(() {
-        _images.addAll(processedImages);
-      });
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('选择图片失败: $e')),
-        );
-      }
-    }
-  }
-
-  void _removeImage(int index) {
-    setState(() {
-      _images.removeAt(index);
-    });
   }
 
   Future<void> _submit() async {
@@ -435,34 +241,6 @@ class _CreateDishReviewScreenState extends State<CreateDishReviewScreen> {
       if (mounted) {
         setState(() => _submitting = false);
       }
-    }
-  }
-
-  Future<File?> _processImageFile(File imageFile) async {
-    try {
-      final fileExtension = path.extension(imageFile.path).toLowerCase();
-
-      if (fileExtension == '.jpg' || fileExtension == '.jpeg') {
-        return imageFile;
-      }
-
-      final imageBytes = await imageFile.readAsBytes();
-      final originalImage = img.decodeImage(imageBytes);
-
-      if (originalImage == null) {
-        return imageFile;
-      }
-
-      final tempDir = Directory.systemTemp;
-      final jpegFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final jpegFile = File(path.join(tempDir.path, jpegFileName));
-
-      final jpegBytes = img.encodeJpg(originalImage, quality: 85);
-      await jpegFile.writeAsBytes(jpegBytes);
-
-      return jpegFile;
-    } catch (e) {
-      return imageFile;
     }
   }
 }
